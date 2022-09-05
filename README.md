@@ -36,8 +36,5 @@ List of Feature below -
 ## Commands
 
 ```
-yarn run build
-mv ./out/_next ./out/next
-cd ./out && grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
-cd .. && clear
+yarn install && npx tailwindcss -i ./css/input.css -o ./css/output.css --watch
 ```
