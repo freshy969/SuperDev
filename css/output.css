@@ -588,10 +588,6 @@ video {
        column-gap: 1rem;
 }
 
-.rounded-lg {
-  border-radius: 0.5rem;
-}
-
 .rounded-\[6px\] {
   border-radius: 6px;
 }
@@ -635,8 +631,8 @@ video {
 }
 
 .from-bodyOne {
-  --tw-gradient-from: #F4F4F6FF99;
-  --tw-gradient-to: rgb(255 255 255 / 0);
+  --tw-gradient-from: #F4F4F6FF;
+  --tw-gradient-to: rgb(244 244 246 / 0);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
@@ -651,7 +647,7 @@ video {
 }
 
 .to-bodyTwo {
-  --tw-gradient-to: #F4F4F6FF99;
+  --tw-gradient-to: #F4F4F6FF;
 }
 
 .to-btnTwo {
