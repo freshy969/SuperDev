@@ -37,9 +37,5 @@ List of Feature below -
 ## Commands
 
 ```
-rm -rf .next/ out/;
 yarn run build;
-mv ./out/_next ./out/next
-cd ./out && grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
-cd .. && clear
 ```
