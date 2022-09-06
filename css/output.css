@@ -551,8 +551,16 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.block {
+  display: block;
 }
 
 .flex {
@@ -563,8 +571,16 @@ video {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .h-\[625px\] {
   height: 625px;
+}
+
+.h-\[580px\] {
+  height: 580px;
 }
 
 .w-\[412px\] {

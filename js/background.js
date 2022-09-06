@@ -8,16 +8,14 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 function popup() {
-	if (document.getElementById('iframeOne') !== null) {
-		document.getElementById('iframeOne').remove();
+	if (document.getElementById('superDev') !== null) {
+		document.getElementById('superDev').remove();
 	} else {
 		let iframe = document.createElement('iframe');
 		iframe.src = chrome.runtime.getURL('../popups/index.html');
-		iframe.id = 'iframeOne';
+		iframe.id = 'superDev';
+		iframe.style.cssText =
+			'position: fixed !important; animation-duration: 0.5s !important; animation-timing-function: ease-in-out !important; animation-fill-mode: forwards !important; top: 18px !important; right: 18px !important; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09) !important; width: 412px !important; height: 625px !important; border: 0 !important; border-radius: 8px !important; transition: 1s !important; transition-timing-function: ease-out; display: block !important; z-index: 99999999 !important;';
 		document.body.appendChild(iframe);
-
-		chrome.storage.sync.get(['indexDim', 'indexPos'], function (result) {
-			iframe.style.cssText = `position: fixed; width: ${result.indexDim[0]}px; height: ${result.indexDim[1]}px; top: ${result.indexPos[0]}px; right: ${result.indexPos[0]}px; border: 0; border-radius: 8px; display: block; z-index: 99999999; transition: 1s; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09); transition-timing-function: ease-out; animation-duration: 0.5s; animation-timing-function: ease-in-out; animation-fill-mode: forwards;`;
-		});
 	}
 }
