@@ -579,6 +579,10 @@ video {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-between {
   justify-content: space-between;
 }
@@ -684,6 +688,18 @@ video {
 .px-\[5px\] {
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.pl-1 {
+  padding-left: 0.25rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
 }
 
 .text-left {

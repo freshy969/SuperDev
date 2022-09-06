@@ -16,10 +16,8 @@ function popup() {
 		iframe.id = 'iframeOne';
 		document.body.appendChild(iframe);
 
-		chrome.storage.sync.get(['indexDim'], function (resultOne) {
-			chrome.storage.sync.get(['indexPos'], function (resultTwo) {
-				iframe.style.cssText = `position: fixed; width: ${resultOne.indexDim[0]}px; height: ${resultOne.indexDim[1]}px; top: ${resultTwo.indexPos[0]}px; right: ${resultTwo.indexPos[0]}px; border: 0; border-radius: 8px; display: block; z-index: 99999999; transition: 1s; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09); transition-timing-function: ease-out; animation-duration: 0.5s; animation-timing-function: ease-in-out; animation-fill-mode: forwards;`;
-			});
+		chrome.storage.sync.get(['indexDim', 'indexPos'], function (result) {
+			iframe.style.cssText = `position: fixed; width: ${result.indexDim[0]}px; height: ${result.indexDim[1]}px; top: ${result.indexPos[0]}px; right: ${result.indexPos[0]}px; border: 0; border-radius: 8px; display: block; z-index: 99999999; transition: 1s; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09); transition-timing-function: ease-out; animation-duration: 0.5s; animation-timing-function: ease-in-out; animation-fill-mode: forwards;`;
 		});
 	}
 }
