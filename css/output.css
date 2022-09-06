@@ -551,16 +551,8 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.fixed {
-  position: fixed;
-}
-
 .mb-4 {
   margin-bottom: 1rem;
-}
-
-.block {
-  display: block;
 }
 
 .flex {
@@ -571,32 +563,12 @@ video {
   display: grid;
 }
 
-.hidden {
-  display: none;
-}
-
-.h-\[625px\] {
-  height: 625px;
-}
-
-.h-\[580px\] {
-  height: 580px;
-}
-
-.w-\[412px\] {
-  width: 412px;
-}
-
 .cursor-move {
   cursor: move;
 }
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.justify-end {
-  justify-content: flex-end;
 }
 
 .justify-between {
@@ -610,11 +582,6 @@ video {
 
 .rounded-\[6px\] {
   border-radius: 6px;
-}
-
-.rounded-t-lg {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
 }
 
 .rounded-b-lg {
@@ -644,12 +611,6 @@ video {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
-.from-navOne {
-  --tw-gradient-from: #181818EE;
-  --tw-gradient-to: rgb(24 24 24 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
 .from-bodyOne {
   --tw-gradient-from: #F4F4F6FF;
   --tw-gradient-to: rgb(244 244 246 / 0);
@@ -662,8 +623,10 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
-.to-navTwo {
-  --tw-gradient-to: #000000EE;
+.from-navOne {
+  --tw-gradient-from: #181818EE;
+  --tw-gradient-to: rgb(24 24 24 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
 .to-bodyTwo {
@@ -672,6 +635,10 @@ video {
 
 .to-btnTwo {
   --tw-gradient-to: #3B82F6FF;
+}
+
+.to-navTwo {
+  --tw-gradient-to: #000000EE;
 }
 
 .p-5 {
@@ -684,6 +651,11 @@ video {
 
 .p-2 {
   padding: 0.5rem;
+}
+
+.px-\[5px\] {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .py-\[12px\] {
@@ -701,19 +673,6 @@ video {
   padding-right: 3px;
 }
 
-.px-\[5px\] {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.pl-1 {
-  padding-left: 0.25rem;
-}
-
-.pl-2 {
-  padding-left: 0.5rem;
-}
-
 .pl-3 {
   padding-left: 0.75rem;
 }
@@ -726,6 +685,10 @@ video {
   text-align: right;
 }
 
+.text-\[13px\] {
+  font-size: 13px;
+}
+
 .text-\[14px\] {
   font-size: 14px;
 }
@@ -735,19 +698,15 @@ video {
   line-height: 1.25rem;
 }
 
-.text-\[13px\] {
-  font-size: 13px;
-}
-
 .font-normal {
   font-weight: 400;
 }
 
-.text-navText {
+.text-bodyText {
   color: #F3F3F3FF;
 }
 
-.text-bodyText {
+.text-navText {
   color: #F3F3F3FF;
 }
 
