@@ -50,7 +50,7 @@
 	"web_accessible_resources": [
 		{
 			"matches": ["file:///*", "http://*/*", "https://*/*"],
-			"resources": ["css/*", "fonts/*", "icons/*", "js/*", "libs/*", "popups/*"]
+			"resources": ["css/*", "fonts/*", "icons/*", "js/*", "libs/*", "pages/*"]
 		}
 	],
 	"manifest_version": 3

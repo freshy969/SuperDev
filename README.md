@@ -27,6 +27,7 @@ List of Feature below -
 ```
 
 ## Screenshots
+
 <p align="center">
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png" width="273">
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/2.png" width="273">
@@ -36,5 +37,9 @@ List of Feature below -
 ## Commands
 
 ```
-yarn install && npx tailwindcss -i ./css/input.css -o ./css/output.css --watch
+rm -rf .next/ out/;
+yarn next build;
+mv ./out/_next ./out/next
+cd ./out && grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
+cd .. && clear
 ```
