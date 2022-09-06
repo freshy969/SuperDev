@@ -1,3 +1,4 @@
+// On Extention Icon Click, Run Popup Function
 chrome.action.onClicked.addListener((tab) => {
 	if (!tab.url.includes('chrome://')) {
 		chrome.scripting.executeScript({
@@ -8,26 +9,32 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 function popup() {
-	if (document.getElementById('superDevIframe') !== null) {
-		document.getElementById('superDevIframe').remove();
-		document.getElementById('superDevHandler').remove();
-	} else {
+	// If Popup Exists, Remove Everything on Extension Icon Click
+	if (document.getElementById('superDev') !== null) {
+		document.getElementById('superDev').remove();
+	}
+
+	// Create Create a Popup
+	else {
+		// Creating Parent Div of Drag Button & Iframe
 		let superDev = document.createElement('div');
 		superDev.id = 'superDev';
 		document.body.appendChild(superDev);
 
+		// Parent Div Position from Top & Right
 		let topScroll = window.scrollY;
-
 		superDev.style.cssText = `
 		position: fixed !important;
 		top: ${topScroll + 32}px !important;
 		right: 18px !important;
 		z-index: 2147483646 !important;`;
 
+		// Creating Drag Button
 		let superDevHandler = document.createElement('div');
 		superDevHandler.id = 'superDevHandler';
 		document.getElementById('superDev').appendChild(superDevHandler);
 
+		// Styling Drag Button
 		superDevHandler.style.cssText = `
 		position: relative !important;
 		cursor: move !important;
@@ -38,11 +45,13 @@ function popup() {
 		margin-bottom: -33px !important;
 		z-index: 2147483647 !important;`;
 
+		// Adding Iframe to Website's DOM
 		let superDevIframe = document.createElement('iframe');
 		superDevIframe.src = chrome.runtime.getURL('../popups/index.html');
 		superDevIframe.id = 'superDevIframe';
 		document.getElementById('superDev').appendChild(superDevIframe);
 
+		// Styling Iframe
 		superDevIframe.style.cssText = `
 		animation-duration: 0.5s !important;
 		animation-timing-function: ease-in-out !important;
@@ -56,6 +65,7 @@ function popup() {
 		display: block !important;
 		z-index: 2147483646 !important;`;
 
+		// Draggable Using JQuery and JQuery UI
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
 			cursor: 'move',

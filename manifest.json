@@ -2,7 +2,28 @@
 	"name": "SuperDev",
 	"version": "1.0.0",
 	"description": "SuperDev is Chrome Extension for Developers and Designers that Adds 20+ Extension Feature into a Single one.",
-	"permissions": ["storage", "tabs", "activeTab", "scripting", "webRequest", "webNavigation"],
+	"permissions": [
+		"storage",
+		"tabs",
+		"activeTab",
+		"scripting",
+		"webRequest",
+		"webNavigation",
+		"privacy",
+		"contextMenus",
+		"cookies",
+		"browsingData",
+		"history",
+		"notifications",
+		"desktopCapture",
+		"clipboardWrite",
+		"unlimitedStorage",
+		"nativeMessaging",
+		"alarms",
+		"fontSettings",
+		"contentSettings",
+		"proxy"
+	],
 	"background": {
 		"service_worker": "js/background.js"
 	},
@@ -22,7 +43,7 @@
 	},
 	"content_scripts": [
 		{
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
+			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js"],
 			"matches": ["file:///*", "http://*/*", "https://*/*"]
 		}
 	],
