@@ -10,24 +10,31 @@ chrome.action.onClicked.addListener((tab) => {
 function popup() {
 	if (document.getElementById('superDevIframe') !== null) {
 		document.getElementById('superDevIframe').remove();
+		document.getElementById('superDevHandler').remove();
 	} else {
 		let superDev = document.createElement('div');
 		superDev.id = 'superDev';
 		document.body.appendChild(superDev);
+
+		superDev.style.cssText = `
+		position: absolute !important;
+		top: 18px !important;
+		right: 18px !important;
+		z-index: 2147483646 !important;`;
 
 		let superDevHandler = document.createElement('div');
 		superDevHandler.id = 'superDevHandler';
 		document.getElementById('superDev').appendChild(superDevHandler);
 
 		superDevHandler.style.cssText = `
-		position: relative !important;
-		width: 15px !important;
-		background: red !important;
-		border-radius: 8px !important;
+		position: fixed !important;
+		cursor: move !important;
+		width: 18px !important;
+		background: rgba(0,0,0,0.001) !important;
 		height: 20px !important;
-		margin-left:323px !important;
-		margin-bottom: -31px !important;
-		z-index: 100000000 !important;`;
+		margin-left:322px !important;
+		margin-top: 12px !important;
+		z-index: 2147483647 !important;`;
 
 		let superDevIframe = document.createElement('iframe');
 		superDevIframe.src = chrome.runtime.getURL('../popups/index.html');
@@ -47,7 +54,7 @@ function popup() {
 		border-radius: 8px !important;
 		transition: all 1s ease 0s !important;
 		display: block !important;
-		z-index: 99999999 !important;`;
+		z-index: 2147483646 !important;`;
 
 		$('#superDev').draggable({
 			handle: '#superDevHandler',

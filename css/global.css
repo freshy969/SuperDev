@@ -44,15 +44,3 @@ p {
 	font-weight: 700;
 	font-style: normal;
 }
-
-.draggable {
-	position: absolute;
-	z-index: 100;
-}
-.draggable-handler {
-	cursor: pointer;
-}
-.dragging {
-	cursor: move;
-	z-index: 200 !important;
-}
