@@ -16,9 +16,11 @@ function popup() {
 		superDev.id = 'superDev';
 		document.body.appendChild(superDev);
 
+		let topScroll = window.scrollY;
+
 		superDev.style.cssText = `
-		position: absolute !important;
-		top: 18px !important;
+		position: fixed !important;
+		top: ${topScroll + 32}px !important;
 		right: 18px !important;
 		z-index: 2147483646 !important;`;
 
@@ -27,13 +29,13 @@ function popup() {
 		document.getElementById('superDev').appendChild(superDevHandler);
 
 		superDevHandler.style.cssText = `
-		position: fixed !important;
+		position: relative !important;
 		cursor: move !important;
 		width: 18px !important;
-		background: rgba(0,0,0,0.001) !important;
+		background: rgba(0,0,0,0) !important;
 		height: 20px !important;
 		margin-left:322px !important;
-		margin-top: 12px !important;
+		margin-bottom: -33px !important;
 		z-index: 2147483647 !important;`;
 
 		let superDevIframe = document.createElement('iframe');
@@ -45,8 +47,6 @@ function popup() {
 		animation-duration: 0.5s !important;
 		animation-timing-function: ease-in-out !important;
 		animation-fill-mode: forwards !important;
-		top: 18px !important;
-		right: 18px !important;
 		box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
 		width: 412px !important;
 		height: 625px !important;
