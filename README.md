@@ -37,5 +37,14 @@ List of Feature below -
 ## Commands
 
 ```
-yarn run build;
+sudo yarn install
+yarn run build
+mv out/_next out/next
+cd out
+grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
+cd ..
+mv out/next .
+mv out/* .
+rm -rf out
+clear
 ```

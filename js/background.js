@@ -47,7 +47,7 @@ function popup() {
 
 		// Adding Iframe to Website's DOM
 		let superDevIframe = document.createElement('iframe');
-		superDevIframe.src = chrome.runtime.getURL('../out/index.html');
+		superDevIframe.src = chrome.runtime.getURL('../index.html');
 		superDevIframe.id = 'superDevIframe';
 		document.getElementById('superDev').appendChild(superDevIframe);
 
