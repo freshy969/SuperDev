@@ -7,11 +7,16 @@ module.exports = {
 				navOne: '#181818EE',
 				navTwo: '#000000EE',
 				navText: '#F3F3F3FF',
+
 				bodyOne: '#F4F4F6FF',
 				bodyTwo: '#F4F4F6FF',
+				bodyText: '#F3F3F3FF',
+
 				btnOne: '#06B6D4FF',
 				btnTwo: '#3B82F6FF',
-				bodyText: '#F3F3F3FF',
+
+				borderLight: '#DBDBDBFF',
+				borderDark: '#181818FF',
 			},
 		},
 	},

@@ -37,19 +37,5 @@ List of Feature below -
 ## Commands
 
 ```
-sudo rm -rf index.html
-sudo rm -rf 404.html
-sudo rm -rf next
-sudo yarn install
-yarn run build
-mv out/_next out/next
-cd out
-grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
-cd ..
-mv out/next .
-mv out/* .
-sudo rm -rf out
-sudo rm -rf .next
-sudo rm -rf node_modules
-clear
+yarn install && yarn run build && clear
 ```

@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build && next export",
+		"build": "next build && next export -o build && mv build/_next build/next && sed -i '' -e 's/_next|build/next/g' build/**.html && mv build/index.html . && mv build/404.html .",
 		"start": "next start",
 		"lint": "next lint"
 	},
