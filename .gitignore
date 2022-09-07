@@ -12,6 +12,8 @@
 /.next/
 /out/
 /next/
+index.html
+404.html
 
 # production
 /build
