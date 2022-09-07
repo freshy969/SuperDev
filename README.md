@@ -37,6 +37,9 @@ List of Feature below -
 ## Commands
 
 ```
+sudo rm -rf index.html
+sudo rm -rf 404.html
+sudo rm -rf next
 sudo yarn install
 yarn run build
 mv out/_next out/next
