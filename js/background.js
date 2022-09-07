@@ -41,8 +41,8 @@ function popup() {
 		width: 18px !important;
 		background: rgba(0,0,0,0) !important;
 		height: 20px !important;
-		margin-left:318px !important;
-		margin-bottom: -31px !important;
+		margin-left:252px !important;
+		margin-bottom: -29px !important;
 		z-index: 2147483647 !important;`;
 
 		// Adding Iframe to Website's DOM
@@ -57,12 +57,13 @@ function popup() {
 		animation-timing-function: ease-in-out !important;
 		animation-fill-mode: forwards !important;
 		box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
-		width: 412px !important;
-		height: 625px !important;
+		width: 340px !important;
+		height: 537px !important;
 		border: 0px !important;
 		border-radius: 8px !important;
 		transition: all 1s ease 0s !important;
 		display: block !important;
+		box-sizing: border-box;
 		z-index: 2147483646 !important;`;
 
 		// Draggable Using JQuery and JQuery UI

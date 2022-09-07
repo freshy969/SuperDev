@@ -34,14 +34,14 @@ export default function Navbar() {
 	}
 	return (
 		<>
-			<div className='flex justify-between bg-gradient-to-r from-navOne to-navTwo py-[12px] px-5'>
-				<h1 className='text-[14px] text-navText font-regular cursor-default'>
+			<div className='flex justify-between w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo py-[10px] px-[18px] dark:rounded-t-[8px] border border-transparent dark:border-borderLight box-border'>
+				<h1 className='text-[13px] text-navText font-regular cursor-default'>
 					SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
 				</h1>
 				<div>
-					<button className='text-right fa-solid fa-grip-dots-vertical text-navText text-sm'></button>
-					<button className='hidden text-right fa-regular fa-circle-half-stroke text-navText text-sm ml-[18px]' onClick={darkMode}></button>
-					<button className='text-right fa-regular fa-gear text-navText text-sm ml-4'></button>
+					<button className='text-right fa-solid fa-grip-dots-vertical text-navText text-xs'></button>
+					<button className='hidden text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-[18px]' onClick={darkMode}></button>
+					<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
 				</div>
 			</div>
 		</>
