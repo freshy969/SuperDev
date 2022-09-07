@@ -43,13 +43,13 @@
 	},
 	"content_scripts": [
 		{
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js"],
-			"matches": ["file:///*", "http://*/*", "https://*/*"]
+			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "content.js"],
+			"matches": ["file://*/*", "http://*/*", "https://*/*"]
 		}
 	],
 	"web_accessible_resources": [
 		{
-			"matches": ["file:///*", "http://*/*", "https://*/*"],
+			"matches": ["file://*/*", "http://*/*", "https://*/*"],
 			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next"]
 		}
 	],
