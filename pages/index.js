@@ -3,7 +3,7 @@ import Head from 'next/head';
 export default function Home() {
 	return (
 		<>
-			<div className='w-[340px] h-[497px] rounded-b-lg border border-t-0 border-borderLight dark:border-borderDark box-border bg-gradient-to-r from-bodyOne to-bodyTwo dark:from-navOne dark:to-navTwo grid grid-cols-2 gap-x-[14px] p-4'>
+			<div className='w-[340px] h-[497px] rounded-b-lg dark:rounded-b-[0px] border border-t-0 border-borderLight dark:border-borderDark box-border bg-gradient-to-r from-bodyOne to-bodyTwo dark:from-navOne dark:to-navTwo grid grid-cols-2 gap-x-[14px] p-4'>
 				<button className='rounded-[6px] text-left bg-gradient-to-r from-btnOne to-btnTwo shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out hover:scale-[1.03] duration-300'>
 					<i className='fa-regular fa-browsers px-[5px] text-bodyText'></i> Session Manager
 				</button>
