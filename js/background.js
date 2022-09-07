@@ -58,7 +58,7 @@ function popup() {
 		animation-fill-mode: forwards !important;
 		box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
 		width: 340px !important;
-		height: 537px !important;
+		height: 538px !important;
 		border: 0px !important;
 		border-radius: 8px !important;
 		transition: all 1s ease 0s !important;
