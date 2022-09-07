@@ -34,8 +34,8 @@ export default function Navbar() {
 	}
 	return (
 		<>
-			<div className='flex justify-between w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo py-[10px] px-[18px] dark:rounded-t-[8px] border border-transparent dark:border-borderLight box-border'>
-				<h1 className='text-[13px] text-navText font-regular cursor-default'>
+			<div className='flex justify-between w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo py-[10px] px-[18px] dark:rounded-t-[8px] border border-borderDark dark:border-borderDark box-border'>
+				<h1 className='text-[13px] text-navText font-regular cursor-default select-none'>
 					SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
 				</h1>
 				<div>

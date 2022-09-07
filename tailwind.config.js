@@ -16,7 +16,7 @@ module.exports = {
 				btnTwo: '#3B82F6FF',
 
 				borderLight: '#DBDBDBFF',
-				borderDark: '##202020FF',
+				borderDark: '#202020FF',
 			},
 		},
 	},
