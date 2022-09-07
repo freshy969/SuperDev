@@ -7,8 +7,8 @@ export default function Navbar() {
 				</h1>
 				<div>
 					<button className='text-right fa-solid fa-grip-dots-vertical text-navText text-sm'></button>
-					<button className='text-right fa-regular fa-circle-half-stroke text-navText text-sm pl-[14px]'></button>
-					<button className='text-right fa-regular fa-gear text-navText text-sm pl-3'></button>
+					<button className='text-right fa-regular fa-circle-half-stroke text-navText text-sm pl-[18px]'></button>
+					<button className='text-right fa-regular fa-gear text-navText text-sm pl-4'></button>
 				</div>
 			</div>
 		</>

@@ -45,6 +45,8 @@ grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @;
 cd ..
 mv out/next .
 mv out/* .
-rm -rf out
+sudo rm -rf out
+sudo rm -rf .next
+sudo rm -rf node_modules
 clear
 ```
