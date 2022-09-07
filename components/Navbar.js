@@ -39,9 +39,10 @@ export default function Navbar() {
 					SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
 				</h1>
 				<div>
-					<button className='text-right fa-solid fa-grip-dots-vertical text-navText text-xs'></button>
+					<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
 					<button className='hidden text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-[18px]' onClick={darkMode}></button>
 					<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
+					<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4'></button>
 				</div>
 			</div>
 		</>

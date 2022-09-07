@@ -41,8 +41,8 @@ function popup() {
 		width: 18px !important;
 		background: rgba(0,0,0,0) !important;
 		height: 20px !important;
-		margin-left:252px !important;
-		margin-bottom: -29px !important;
+		margin-left:225px !important;
+		margin-bottom: -30px !important;
 		z-index: 2147483647 !important;`;
 
 		// Adding Iframe to Website's DOM
