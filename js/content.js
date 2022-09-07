@@ -1,4 +1,12 @@
 (() => {
+	if (typeof window !== 'undefined') {
+		document.addEventListener('visibilitychange', () => {
+			if (document.getElementById('superDev') !== null) {
+				document.getElementById('superDev').remove();
+			}
+		});
+	}
+
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		console.log('Message Received From BackgroundJs : ', request);
 		console.log('These are the Sender Details :', sender);
