@@ -2,7 +2,7 @@ import features from '../data/features';
 
 export default function Home() {
 	let height = 18 + ((features.length % 2 === 0 && (features.length / 2) * 48) || (features.length % 2 !== 0 && ((features.length - 1) / 2) * 48));
-	console.log(height);
+	console.log('Popup Height : ', height);
 	return (
 		<>
 			<div className={'w-[340px] h-[' + height + '] bg-gradient-to-r from-bodyOne to-bodyTwo dark:from-navOne dark:to-navTwo'}>
