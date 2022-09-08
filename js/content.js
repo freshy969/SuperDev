@@ -2,8 +2,11 @@
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		// Remove Popup on Message from NavbarJs
 		if (request.message === 'removePopup') {
-			console.log('Message Received From NavbarJs : ', request);
-			sendResponse({farewell: 'Popup Removed on Navbar Icon Click'});
+			console.log('Message Received From NavbarJs (removePopup) : ', request);
+			console.log('These are the Sender Details :', sender);
+
+			// Replying NavbarJs
+			sendResponse({farewell: 'Popup Removed on Navbar XMark Icon Click'});
 
 			// Remove Popup
 			if (document.getElementById('superDev') !== null) {
@@ -11,9 +14,24 @@
 			}
 		}
 
+		// Change Popup Height on Message from IndexJs
+		if (request.message === 'changeHeight') {
+			console.log('Message Received From IndexJs : ', request);
+			console.log('These are the Sender Details :', sender);
+
+			// Change Popup Height
+			if (document.getElementById('superDevIframe') !== null) {
+				document.getElementById('superDevIframe').style.height = request.fullHeight;
+			}
+
+			// Replying IndexJs
+			sendResponse({farewell: 'Popup Removed on Navbar Icon Click'});
+		}
+
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
 			console.log('Message Received From BackgroundJs : ', request);
+			console.log('These are the Sender Details :', sender);
 
 			// If Popup Exists, Remove It on Extension Click
 			if (document.getElementById('superDev') !== null) {
