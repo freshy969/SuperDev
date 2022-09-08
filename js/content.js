@@ -87,6 +87,7 @@
 				animation-duration: 0.5s !important;
 				animation-timing-function: ease-in-out !important;
 				animation-fill-mode: forwards !important;
+				box-sizing: border-box;
 				box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
 				width: 340px !important;
 				height: 538.5px !important;
@@ -94,7 +95,6 @@
 				border-radius: 8px !important;
 				transition: all 1s ease 0s !important;
 				display: block !important;
-				box-sizing: border-box;
 				background-color: rgba(0,0,0,0) !important;
 				z-index: 2147483646 !important;`;
 
