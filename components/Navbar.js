@@ -79,7 +79,7 @@ export default function Navbar() {
 							<button className='text-right fa-regular fa-eye-slash text-navText text-xs ml-[18px]' onClick={hideFeature}></button>
 							<button className='text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-4' onClick={darkMode}></button>
 							<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
-							<button className='text-right fa-regular fa-xmark text-navText text-[15px] ml-4 relative top-[1px]' onClick={removePopup}></button>
+							<button className='text-right fa-solid fa-xmark text-navText text-[15px] ml-4 relative top-[1px]' onClick={removePopup}></button>
 						</div>
 					</div>
 				</div>
