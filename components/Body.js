@@ -64,7 +64,7 @@ export default function Body() {
 										id={value.id}
 										onClick={() => hideFeature(value.id)}
 										className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out hover:scale-[1.03] duration-300'>
-										<i className={value.id + ' fa-solid ' + value.closeIcon + ' px-[7px] text-bodyText text-xs'}></i> {value.title}
+										<i className={value.id + ' fa-solid ' + value.closeIcon + ' px-[7px] text-bodyText text-[10px]'}></i> {value.title}
 									</button>
 								);
 							})}
