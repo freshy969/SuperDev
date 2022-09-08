@@ -14,20 +14,6 @@
 			}
 		}
 
-		// Change Popup Height on Message from IndexJs
-		if (request.message === 'changeHeight') {
-			console.log('Message Received From IndexJs : ', request);
-			console.log('These are the Sender Details :', sender);
-
-			// Change Popup Height
-			if (document.getElementById('superDevIframe') !== null) {
-				document.getElementById('superDevIframe').style.height = request.fullHeight;
-			}
-
-			// Replying IndexJs
-			sendResponse({farewell: 'Popup Removed on Navbar Icon Click'});
-		}
-
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
 			console.log('Message Received From BackgroundJs : ', request);

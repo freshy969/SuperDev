@@ -46,6 +46,7 @@ export default function Navbar() {
 	}
 
 	function hideFeature() {
+		// Show/hide Main/Edit Popup and Features
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			document.getElementById('mainBody').classList.remove('hidden');
 			document.getElementById('hideFeature').classList.add('hidden');
