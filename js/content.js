@@ -70,7 +70,7 @@
 				position: relative !important;
 				cursor: move !important;
 				width: 18px !important;
-				background: rgba(0,0,0,0) !important;
+				background-color: rgba(0,0,0,0) !important;
 				height: 20px !important;
 				margin-left:194px !important;
 				margin-bottom: -30px !important;
