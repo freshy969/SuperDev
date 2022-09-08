@@ -14,6 +14,27 @@
 			}
 		}
 
+		// Height Change
+		if (request.message === 'changeHeight') {
+			console.log(request.height);
+			superDevIframe.style.cssText = `
+			animation-duration: 0s !important;
+			animation-timing-function: ease-in-out !important;
+			aimation-fill-mode: forwards !important;
+			box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
+			width: 340px !important;
+			height: ${request.height}px !important;
+			border: 0px !important;
+			border-radius: 8px !important;
+			transition: all 0s ease 0s !important;
+			display: block !important;
+			box-sizing: border-box;
+			background-color: rgba(0,0,0,0) !important;
+			z-index: 2147483646 !important;
+			`;
+			sendResponse({farewell: 'Height Changed Successfully'});
+		}
+
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
 			console.log('Message Received From BackgroundJs : ', request);
@@ -32,11 +53,11 @@
 				document.body.appendChild(superDev);
 
 				// Parent Div Position from Top & Right
-				let topScroll = window.scrollY;
 				superDev.style.cssText = `
 				position: fixed !important;
 				top: 32px !important;
 				right: 18px !important;
+				background-color: rgba(0,0,0,0) !important;
 				z-index: 2147483646 !important;`;
 
 				// Creating Drag Button
@@ -74,6 +95,7 @@
 				transition: all 1s ease 0s !important;
 				display: block !important;
 				box-sizing: border-box;
+				background-color: rgba(0,0,0,0) !important;
 				z-index: 2147483646 !important;`;
 
 				// Draggable Using JQuery and JQuery UI

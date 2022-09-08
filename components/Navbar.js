@@ -50,9 +50,19 @@ export default function Navbar() {
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			document.getElementById('mainBody').classList.remove('hidden');
 			document.getElementById('hideFeature').classList.add('hidden');
+			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40.5}, function (response) {
+					console.log('Response Received from Content Script : ', response.farewell);
+				});
+			});
 		} else {
 			document.getElementById('mainBody').classList.add('hidden');
 			document.getElementById('hideFeature').classList.remove('hidden');
+			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 538.5}, function (response) {
+					console.log('Response Received from Content Script : ', response.farewell);
+				});
+			});
 		}
 	}
 
