@@ -1,6 +1,8 @@
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 
 export default function Navbar() {
+	const [isLoading, setIsLoading] = useState(true);
+
 	useEffect(() => {
 		// On Pageload or When Changing Themes.
 		if (localStorage.getItem('colorTheme') === 'dark' || (!('colorTheme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -8,6 +10,8 @@ export default function Navbar() {
 		} else {
 			document.documentElement.classList.remove('dark');
 		}
+
+		setIsLoading(false);
 	}, []);
 
 	function darkMode() {
@@ -51,22 +55,24 @@ export default function Navbar() {
 		}
 	}
 
-	return (
-		<>
-			<div className='w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo'>
-				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[10px] px-[18px]'>
-					<h1 className='text-[13px] text-navText font-regular cursor-default select-none'>
-						SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
-					</h1>
-					<div>
-						<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
-						<button className='text-right fa-regular fa-eye-slash text-navText text-xs ml-[18px]' onClick={hideFeature}></button>
-						<button className='text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-4' onClick={darkMode}></button>
-						<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
-						<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4' onClick={removePopup}></button>
+	if (!isLoading) {
+		return (
+			<>
+				<div className='w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo'>
+					<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[10px] px-[18px]'>
+						<h1 className='text-[13px] text-navText font-regular cursor-default select-none'>
+							SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
+						</h1>
+						<div>
+							<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
+							<button className='text-right fa-regular fa-eye-slash text-navText text-xs ml-[18px]' onClick={hideFeature}></button>
+							<button className='text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-4' onClick={darkMode}></button>
+							<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
+							<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4' onClick={removePopup}></button>
+						</div>
 					</div>
 				</div>
-			</div>
-		</>
-	);
+			</>
+		);
+	}
 }
