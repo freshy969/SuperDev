@@ -1,16 +1,28 @@
 (() => {
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-		console.log('Message Received From BackgroundJs : ', request);
-		console.log('These are the Sender Details :', sender);
+		// Remove Popup on Message from NavbarJs
+		if (request.message === 'removePopup') {
+			console.log('Message Received From NavbarJs : ', request);
+			sendResponse({farewell: 'Popup Removed on Navbar Icon Click'});
+
+			// Remove Popup
+			if (document.getElementById('superDev') !== null) {
+				document.getElementById('superDev').remove();
+			}
+		}
+
+		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
-			// If Popup Exists, Remove Everything on Extension Icon Click
+			console.log('Message Received From BackgroundJs : ', request);
+
+			// If Popup Exists, Remove It on Extension Click
 			if (document.getElementById('superDev') !== null) {
 				document.getElementById('superDev').remove();
 			}
 
-			// Create Create a Popup
+			// Creating a Popup
 			else {
-				// Creating Parent Div of Drag Button & Iframe
+				// Parent Div of Drag Button & Iframe
 				let superDev = document.createElement('div');
 				superDev.id = 'superDev';
 				document.body.appendChild(superDev);
@@ -67,7 +79,9 @@
 					iframeFix: true,
 				});
 			}
-			sendResponse({farewell: 'Farewell'});
+
+			// Replying BackgroundJs
+			sendResponse({farewell: 'Popup Created/Removed on Extension Icon Click'});
 		}
 	});
 })();

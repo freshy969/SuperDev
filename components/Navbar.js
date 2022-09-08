@@ -33,6 +33,14 @@ export default function Navbar() {
 		}
 	}
 
+	function removePopup() {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {message: 'removePopup'}, function (response) {
+				console.log('Response Receied from Content Script : ', response.farewell);
+			});
+		});
+	}
+
 	return (
 		<>
 			<div className='w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo'>
@@ -44,7 +52,7 @@ export default function Navbar() {
 						<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
 						<button className='hidden text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-[18px]' onClick={darkMode}></button>
 						<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
-						<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4'></button>
+						<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4' onClick={removePopup}></button>
 					</div>
 				</div>
 			</div>
