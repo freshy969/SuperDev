@@ -65,7 +65,7 @@
 				width: 18px !important;
 				background: rgba(0,0,0,0) !important;
 				height: 20px !important;
-				margin-left:225px !important;
+				margin-left:194px !important;
 				margin-bottom: -30px !important;
 				z-index: 2147483647 !important;`;
 

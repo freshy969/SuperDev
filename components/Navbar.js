@@ -41,6 +41,16 @@ export default function Navbar() {
 		});
 	}
 
+	function hideFeature() {
+		if (document.getElementById('mainBody').classList.contains('hidden')) {
+			document.getElementById('mainBody').classList.remove('hidden');
+			document.getElementById('hideFeature').classList.add('hidden');
+		} else {
+			document.getElementById('mainBody').classList.add('hidden');
+			document.getElementById('hideFeature').classList.remove('hidden');
+		}
+	}
+
 	return (
 		<>
 			<div className='w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo'>
@@ -50,7 +60,8 @@ export default function Navbar() {
 					</h1>
 					<div>
 						<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
-						<button className='hidden text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-[18px]' onClick={darkMode}></button>
+						<button className='text-right fa-regular fa-eye-slash text-navText text-xs ml-[18px]' onClick={hideFeature}></button>
+						<button className='text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-4' onClick={darkMode}></button>
 						<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
 						<button className='text-right fa-solid fa-xmark-large text-navText text-[11px] ml-4' onClick={removePopup}></button>
 					</div>

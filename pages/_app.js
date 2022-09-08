@@ -2,7 +2,6 @@ import '../css/global.css';
 import '../libs/css/font-awesome/css/pro.min.css';
 
 import Head from 'next/head';
-import Navbar from '../components/Navbar';
 
 function MyApp({Component, pageProps}) {
 	return (
@@ -10,7 +9,6 @@ function MyApp({Component, pageProps}) {
 			<Head>
 				<title>SuperDev</title>
 			</Head>
-			<Navbar />
 			<main>
 				<Component {...pageProps} />
 			</main>
