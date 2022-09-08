@@ -58,8 +58,8 @@ export default function Navbar() {
 	if (!isLoading) {
 		return (
 			<>
-				<div className='w-[340px] h-[40px] bg-gradient-to-r from-navOne to-navTwo'>
-					<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[10px] px-[18px]'>
+				<div className='bg-gradient-to-r from-navOne to-navTwo'>
+					<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[10px] px-[18px]'>
 						<h1 className='text-[13px] text-navText font-regular cursor-default select-none'>
 							SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
 						</h1>

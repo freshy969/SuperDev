@@ -44,7 +44,7 @@ export default function Body() {
 		return (
 			<>
 				<div className={'bg-gradient-to-r from-bodyOne to-bodyTwo dark:from-navOne dark:to-navTwo'}>
-					<section id='mainBody' className='w-[340px] h-[498px]'>
+					<section id='mainBody'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{enabledFeatures.map((value, index) => {
 								if (value.isEnabled !== false) {
@@ -75,7 +75,7 @@ export default function Body() {
 							})}
 						</div>
 					</section>
-					<section id='hideFeature' className='hidden w-[340px] h-[498px]'>
+					<section id='hideFeature' className='hidden'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{enabledFeatures.map((value, index) => {
 								if (value.isEnabled !== false) {
