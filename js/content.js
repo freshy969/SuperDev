@@ -88,7 +88,6 @@
 				animation-timing-function: ease-in-out !important;
 				animation-fill-mode: forwards !important;
 				box-sizing: border-box;
-				box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 12px 0px !important;
 				width: 340px !important;
 				height: 538.5px !important;
 				border: 0px !important;
