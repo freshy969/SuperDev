@@ -48,3 +48,7 @@ p {
 	font-weight: 700;
 	font-style: normal;
 }
+
+.scaleButton:hover {
+	transform: perspective(1px) scale(1.03);
+}
