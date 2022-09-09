@@ -29,7 +29,7 @@ List of Feature below -
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/2.png">
+  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png">
 </p>
 
 ## Commands
