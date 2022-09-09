@@ -92,12 +92,6 @@
 
 				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Non Existent, Adding Hidden One', request.message);
 
-				// setTimeout(iframeVisible, 100);
-				// function iframeVisible() {
-				// 	document.getElementById('superDevIframe').style.visibility = 'visible';
-				// 	console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Existent, Adding Visibility After 100ms', request.message);
-				// }
-
 				// Draggable Using JQuery and JQuery UI
 				$('#superDev').draggable({
 					handle: '#superDevHandler',
