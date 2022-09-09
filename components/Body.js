@@ -48,7 +48,7 @@ export default function Body() {
 		});
 		return (
 			<>
-				<div className={'bg-gradient-to-r from-bodyOne to-bodyTwo dark:from-navOne dark:to-navTwo'}>
+				<div>
 					<section id='mainBody'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{enabledFeatures.map((value, index) => {
