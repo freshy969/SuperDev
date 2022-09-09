@@ -8,10 +8,10 @@ export default function Body() {
 		//Add All Features to LocalStorage
 		if (localStorage.getItem('enabledFeatures') === null) {
 			localStorage.setItem('enabledFeatures', JSON.stringify(features));
-			console.log('All Features Added to LocalStorage : ', localStorage.getItem('enabledFeatures'));
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage, BodyJs', 'New Intall');
 			setIsLoading(false);
 		} else {
-			console.log('The Existent One, If Any : ', localStorage.getItem('enabledFeatures'));
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage, BodyJs', 'Old Install');
 			setIsLoading(false);
 		}
 	}, []);
@@ -23,19 +23,18 @@ export default function Body() {
 		enabledFeatures.map((value, index) => {
 			if (value.id === featureId) {
 				if (value.isEnabled === false) {
-					console.log('Found Disabled Feature : ', featureId);
-					console.log(document.getElementsByClassName(featureId));
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Found Disabled Feature', value.title);
 					document.getElementsByClassName(featureId)[0].classList.remove('hidden');
 					document.getElementsByClassName(featureId)[1].classList.replace(value.addIcon, value.closeIcon);
 					value.isEnabled = true;
 					localStorage.setItem('enabledFeatures', JSON.stringify(enabledFeatures));
-					console.log('Feature Added to LocalStorage : ', localStorage.getItem('enabledFeatures'));
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Enabled on LocalStorage', value.title);
 				} else {
 					document.getElementsByClassName(featureId)[0].classList.add('hidden');
 					document.getElementsByClassName(featureId)[1].classList.replace(value.closeIcon, value.addIcon);
 					value.isEnabled = false;
 					localStorage.setItem('enabledFeatures', JSON.stringify(enabledFeatures));
-					console.log('Feature Removed from LocalStorage : ', localStorage.getItem('enabledFeatures'));
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Disabled on LocalStorage', value.title);
 				}
 			}
 		});
@@ -44,7 +43,7 @@ export default function Body() {
 		// Height on First Load
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40.5}, function (response) {
-				console.log('Response Received from Content Script : ', response.farewell);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'BodyJs Received from ContentJS', response.farewell);
 			});
 		});
 		return (

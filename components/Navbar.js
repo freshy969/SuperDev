@@ -40,27 +40,32 @@ export default function Navbar() {
 	function removePopup() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {message: 'removePopup'}, function (response) {
-				console.log('Response Received from Content Script : ', response.farewell);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 			});
 		});
 	}
 
 	function hideFeature() {
 		// Show/hide Main/Edit Popup and Features
+
+		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hide/Show Icon Clicked, NavbarJs');
+
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			document.getElementById('mainBody').classList.remove('hidden');
 			document.getElementById('hideFeature').classList.add('hidden');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Hidden Main Body, NavbarJs');
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40.5}, function (response) {
-					console.log('Response Received from Content Script : ', response.farewell);
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 				});
 			});
 		} else {
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Existent Main Body, NavbarJs');
 			document.getElementById('mainBody').classList.add('hidden');
 			document.getElementById('hideFeature').classList.remove('hidden');
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 538.5}, function (response) {
-					console.log('Response Received from Content Script : ', response.farewell);
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 				});
 			});
 		}
