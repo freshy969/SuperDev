@@ -8,10 +8,10 @@ export default function Body() {
 		//Add All Features to LocalStorage
 		if (localStorage.getItem('enabledFeatures') === null) {
 			localStorage.setItem('enabledFeatures', JSON.stringify(features));
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage, BodyJs', 'New Intall');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage, BodyJs', 'BodyJs');
 			setIsLoading(false);
 		} else {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage, BodyJs', 'Old Install');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage', 'BodyJs');
 			setIsLoading(false);
 		}
 	}, []);

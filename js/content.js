@@ -1,13 +1,9 @@
 (() => {
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-		// Remove Popup on Message from NavbarJs
+		// Popup Removed on Navbar Click
 		if (request.message === 'removePopup') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From NavbarJs', request.message);
-
-			// Replying NavbarJs
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received From NavbarJs', request.message);
 			sendResponse({farewell: 'Popup Removed on Navbar Click'});
-
-			// Remove Popup
 			if (document.getElementById('superDev') !== null) {
 				document.getElementById('superDev').remove();
 			}
@@ -15,32 +11,19 @@
 
 		// Height Change
 		if (request.message === 'changeHeight') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Change Height Listener Received Height', request.height);
-
-			superDevIframe.style.cssText = `
-			width: 345px !important;
-			height: ${request.height}px !important;
-			border: 0px !important;
-			border-radius: 8px !important;
-			display: block !important;
-			background-color: rgba(0,0,0,0) !important;
-			z-index: 2147483646 !important;
-			visibility: hidden !important;`;
-
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Changing Height + Hiding Existent Popup', request.message);
-
-			setTimeout(iframeVisible, 100);
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Height From Body/Navbar', request.height);
+			setTimeout(iframeVisible, 0);
 			function iframeVisible() {
+				document.getElementById('superDevIframe').style.height = `${request.height}px`;
 				document.getElementById('superDevIframe').style.visibility = 'visible';
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Existent, Adding Visibility After 100ms', request.message);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Visible + Height Change After 100ms', request.message);
 			}
-
 			sendResponse({farewell: 'Height Changed'});
 		}
 
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From BackgroundJs', request.message);
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received From BackgroundJs', request.message);
 
 			// If Popup Exists, Remove It on Extension Click
 			if (document.getElementById('superDev') !== null) {
@@ -79,6 +62,7 @@
 				let superDevIframe = document.createElement('iframe');
 				superDevIframe.src = chrome.runtime.getURL('index.html');
 				superDevIframe.id = 'superDevIframe';
+				superDevIframe.scrolling = 'no';
 				superDevIframe.style.cssText = `
 				width: 345px !important;
 				height: 538.5px !important;
@@ -87,6 +71,7 @@
 				display: block !important;
 				background-color: rgba(0,0,0,0) !important;
 				z-index: 2147483646 !important;
+				overflow: hidden !important;
 				visibility: hidden !important;`;
 				document.getElementById('superDev').appendChild(superDevIframe);
 
