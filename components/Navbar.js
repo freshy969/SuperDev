@@ -46,11 +46,25 @@ export default function Navbar() {
 	}
 
 	function hideFeature() {
+		// Calculate Height Start
+		let enabledFeatures = JSON.parse(localStorage.getItem('enabledFeatures'));
+		let count = 0;
+		let height = 0;
+		enabledFeatures.map((value, index) => {
+			if (value.isEnabled === true) count = count + 1;
+		});
+		if (count % 2 === 0) {
+			height = 40.5 + 18 + (count / 2) * 48;
+		} else {
+			height = 40.5 + 18 + ((count + 1) / 2) * 48;
+		}
+		// Calculating Height End
+
 		// Show/hide Main/Edit Popup and Features
 		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hide/Show Icon Clicked, NavbarJs');
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40.5}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 					document.getElementById('mainBody').classList.remove('hidden');
 					document.getElementById('hideFeature').classList.add('hidden');
