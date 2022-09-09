@@ -31,7 +31,7 @@ List of Feature below -
 <p align="center">
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png" width="273">
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/2.png" width="273">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.1.png" width="273">
+  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/3.png" width="273">
 </p>
 
 ## Commands
