@@ -29,9 +29,8 @@ List of Feature below -
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png" width="273">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/2.png" width="273">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/3.png" width="273">
+  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png" width="410">
+  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/2.png" width="410">
 </p>
 
 ## Commands
