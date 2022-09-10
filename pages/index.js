@@ -91,7 +91,7 @@ export default function Home() {
 	}
 
 	function showSettings() {
-		// Calculate Height Start
+		// Calculate Settings Height Start
 		let count = 0;
 		let height = 0;
 		allFeatures.map((value, index) => {
@@ -102,12 +102,26 @@ export default function Home() {
 		} else {
 			height = 41 + 18 + ((count + 1) / 2) * 48;
 		}
-		// Calculating Height End
+		// Calculating Settings Height End
+
+		// Calculate Enabled Features Height Start
+		let countt = 0;
+		let heightt = 0;
+		allFeatures.map((value, index) => {
+			if (value.isEnabled === true) countt = countt + 1;
+		});
+		if (countt % 2 === 0) {
+			heightt = 41 + 18 + (countt / 2) * 48;
+		} else {
+			heightt = 41 + 18 + ((countt + 1) / 2) * 48;
+		}
+		// Calculating Enabled Features Height End
+
 		// Show/hide Main/Edit Popup and Features
 		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hide/Show Icon Clicked, NavbarJs');
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 539}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 					document.getElementById('mainBody').classList.remove('hidden');
 					document.getElementById('showSettings').classList.add('hidden');
@@ -118,6 +132,7 @@ export default function Home() {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
+					document.getElementById('hideFeature').classList.add('hidden');
 					document.getElementById('mainBody').classList.add('hidden');
 					document.getElementById('showSettings').classList.remove('hidden');
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Existent Main Body, NavbarJs');
