@@ -32,12 +32,12 @@ const features = [
 		id: 'textEditor',
 	},
 	{
-		title: 'Lorem Ipsum',
-		icon: 'fa-text-size',
+		title: 'Font Changer',
+		icon: 'fa-font-case',
 		closeIcon: 'fa-eye',
 		addIcon: 'fa-eye-slash',
 		isEnabled: true,
-		id: 'loremIpsum',
+		id: 'fontChanger',
 	},
 	{
 		title: 'Take Screenshot',
@@ -96,12 +96,12 @@ const features = [
 		id: 'cssEditor',
 	},
 	{
-		title: 'Fake Form Filler',
-		icon: 'fa-message-lines',
+		title: 'Code Screenshot',
+		icon: 'fa-window',
 		closeIcon: 'fa-eye',
 		addIcon: 'fa-eye-slash',
 		isEnabled: true,
-		id: 'fakeFormFiller',
+		id: 'codeScreenshot',
 	},
 	{
 		title: 'Go Incognito',

@@ -63,9 +63,9 @@ export default function Home() {
 			if (value.isEnabled === true) count = count + 1;
 		});
 		if (count % 2 === 0) {
-			height = 40.5 + 18 + (count / 2) * 48;
+			height = 40 + 18 + (count / 2) * 48;
 		} else {
-			height = 40.5 + 18 + ((count + 1) / 2) * 48;
+			height = 40 + 18 + ((count + 1) / 2) * 48;
 		}
 		// Calculating Height End
 		console.log(2);
@@ -84,7 +84,7 @@ export default function Home() {
 		} else {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				console.log(4);
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 538.5}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 538}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
 					document.getElementById('mainBody').classList.add('hidden');
 					document.getElementById('hideFeature').classList.remove('hidden');
@@ -119,23 +119,24 @@ export default function Home() {
 		enabledFeatures = JSON.parse(localStorage.getItem('enabledFeatures'));
 		// Height on First Load
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40.5}, function (response) {
+			chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 40}, function (response) {
 				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'BodyJs Received from ContentJS', response.farewell);
 			});
 		});
 		return (
 			<>
 				<div className='bg-gradient-to-r from-navOne to-navTwo'>
-					<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[10px] px-[18px]'>
-						<h1 className='text-[13px] text-navText font-regular cursor-default select-none'>
-							SuperDev Pro <i className='fa-regular fa-window px-[3px]'></i>
+					<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
+						<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
+							SuperDev <i className='fa-regular fa-window px-[3px]'></i>
 						</h1>
 						<div>
-							<button className='text-right fa-solid fa-grip-vertical text-navText text-xs'></button>
-							<button className='text-right fa-regular fa-eye-slash text-navText text-xs ml-[18px]' onClick={hideFeature}></button>
-							<button className='text-right fa-regular fa-circle-half-stroke text-navText text-xs ml-4' onClick={darkMode}></button>
-							<button className='text-right fa-regular fa-gear text-navText text-xs ml-4'></button>
-							<button className='text-right fa-solid fa-xmark text-navText text-[15px] ml-4 relative top-[1px]' onClick={removePopup}></button>
+							<button className='text-navText text-right fa-solid fa-expand text-xs p-1'></button>
+							<button className='text-navText text-right fa-solid fa-grip-vertical text-xs ml-[10px] p-1'></button>
+							<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={hideFeature}></button>
+							<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
+							<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1'></button>
+							<button className='text-navText text-right fa-solid fa-xmark text-[15px] ml-2 p-1 relative top-[1.2px]' onClick={removePopup}></button>
 						</div>
 					</div>
 				</div>
