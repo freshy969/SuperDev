@@ -2,7 +2,7 @@
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		// Popup Removed on Navbar Click
 		if (request.message === 'removePopup') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received From NavbarJs', request.message);
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From NavbarJs', request.message);
 			sendResponse({farewell: 'Popup Removed on Navbar Click'});
 			if (document.getElementById('superDev') !== null) {
 				document.getElementById('superDev').remove();
@@ -11,19 +11,19 @@
 
 		// Height Change
 		if (request.message === 'changeHeight') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Height From Body/Navbar', request.height);
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received Height From IndexJs', request.height);
 			setTimeout(iframeVisible, 0);
 			function iframeVisible() {
 				document.getElementById('superDevIframe').style.height = `${request.height}px`;
 				document.getElementById('superDevIframe').style.visibility = 'visible';
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Visible + Height Change After 100ms', request.message);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Now Visible + Height Changed', request.message);
 			}
 			sendResponse({farewell: 'Height Changed'});
 		}
 
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received From BackgroundJs', request.message);
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From BackgroundJs', request.message);
 
 			// If Popup Exists, Remove It on Extension Click
 			if (document.getElementById('superDev') !== null) {

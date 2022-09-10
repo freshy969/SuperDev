@@ -5,26 +5,32 @@ export default function Home() {
 	let allFeatures = [];
 	const [isLoading, setIsLoading] = useState(true);
 	useEffect(() => {
-		// On Pageload or When Changing Themes.
-		if (localStorage.getItem('colorTheme') === 'dark' || (!('colorTheme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+		// Setting Dark/Light Mode On Pageload, Start
+		// Depending Upon OS Preference or If Exists, User Preference
+		// Sets Dark Mode By Adding .dark Class to <html>
+		if (localStorage.getItem('colorTheme') === 'dark' || (!('colorTheme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))
 			document.documentElement.classList.add('dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-		}
+		else document.documentElement.classList.remove('dark');
+		// Setting Dark/Light Mode On Pageload, End
 
-		//Add All Features to LocalStorage
+		//Adding All Features to LocalStorage If Nonexistent
 		if (localStorage.getItem('allFeatures') === null) {
 			localStorage.setItem('allFeatures', JSON.stringify(features));
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage, BodyJs', 'BodyJs');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage', 'IndexJs');
 			setIsLoading(false);
-		} else {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage', 'BodyJs');
+		}
+		//Adding All Features to LocalStorage If Existent
+		else {
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage', 'IndexJs');
 			setIsLoading(false);
 		}
 	}, []);
 
 	function darkMode() {
+		// Called On Navbar Dark/Light Mode Icon Click
 		// If Set Via LocalStorage Previously
+		// Enable/Disable Dark Mode By Adding/Removing .dark Class to <html>
+		// Also Saves User's Preference on LocalStorage
 		if (localStorage.getItem('colorTheme')) {
 			if (localStorage.getItem('colorTheme') === 'light') {
 				document.documentElement.classList.add('dark');
@@ -33,9 +39,12 @@ export default function Home() {
 				document.documentElement.classList.remove('dark');
 				localStorage.setItem('colorTheme', 'light');
 			}
+		}
 
-			// If Not Set Via LocalStorage Previously
-		} else {
+		// If Set Via OS Preference Previously
+		// Enable/Disable Dark Mode By Adding/Removing .dark Class to <html>
+		// Also Saves User's Preference on LocalStorage
+		else {
 			if (document.documentElement.classList.contains('dark')) {
 				document.documentElement.classList.remove('dark');
 				localStorage.setItem('colorTheme', 'light');
@@ -47,113 +56,144 @@ export default function Home() {
 	}
 
 	function removePopup() {
+		// Gets Called On Navbar Close Icon Click
+		// Close Popup By Sending a Message to ContentJS (Continuously Listening)
+		// ContentJs in Turn Closes Popup (It Has Access to Website's DOM and We Have Not)
+		// NextJS' Has Only Access to the DOM of Its Own Pages/Components
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {message: 'removePopup'}, function (response) {
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Remove Popup', response.farewell);
 			});
 		});
 	}
 
-	function hideFeature() {
-		// Calculate Height Start
-		let count = 0;
-		let height = 0;
-		allFeatures.map((value, index) => {
-			if (value.isEnabled === true) count = count + 1;
-		});
-		if (count % 2 === 0) {
-			height = 41 + 18 + (count / 2) * 48;
-		} else {
-			height = 41 + 18 + ((count + 1) / 2) * 48;
-		}
+	function toggleFeature() {
+		// Calculating Height Based on the Number of Features/Buttons With Available Settings
+		// 41px = Navbar Height
+		// 18px = Border(2px) + Body's Top Padding(16px)
+		// 48px = Button Height(32px) + Margin Bottom (16px)
+		let [count, height] = [0, 0];
+		allFeatures.map((value) => (value.isEnabled === true ? (count = count + 1) : (count = count)));
+		height = count % 2 === 0 ? 41 + 18 + (count / 2) * 48 : 41 + 18 + ((count + 1) / 2) * 48;
 		// Calculating Height End
-		// Show/hide Main/Edit Popup and Features
-		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hide/Show Icon Clicked, NavbarJs');
+
+		// If #mainBody Section is Hidden => #toggleFeature Section is Visible
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
+			// Send Message to ContentJS With Calculated Height
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				// On Successful Height Change By ContentJ
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
+					// Loggin
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+					// Make #mainBody Section Visible
 					document.getElementById('mainBody').classList.remove('hidden');
-					document.getElementById('hideFeature').classList.add('hidden');
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Hidden Main Body, NavbarJs');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Main Body, IndexJs');
+
+					// And Hide #toggleFeature Section
+					document.getElementById('toggleFeature').classList.add('hidden');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Feature Body, IndexJs');
 				});
 			});
-		} else {
+		}
+
+		// If #toggleFeature Section is Hidden => #mainBody Section is Visible
+		else {
+			// Send Message to ContentJS With Constant Height of #toggleFeature = 539px (498px + 41px)
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				// On Successful Height Change By ContentJ
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 539}, function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
+					// Loggin
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+					// Hide #mainBody Section
 					document.getElementById('mainBody').classList.add('hidden');
-					document.getElementById('hideFeature').classList.remove('hidden');
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Existent Main Body, NavbarJs');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Main Body, IndexJs');
+					// Make #toggleFeature Section Visible
+					document.getElementById('toggleFeature').classList.remove('hidden');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Feature Body, IndexJs');
 				});
 			});
 		}
 	}
 
-	function showSettings() {
-		// Calculate Settings Height Start
-		let count = 0;
-		let height = 0;
-		allFeatures.map((value, index) => {
-			if (value.hasSettings === true) count = count + 1;
-		});
-		if (count % 2 === 0) {
-			height = 41 + 18 + (count / 2) * 48;
-		} else {
-			height = 41 + 18 + ((count + 1) / 2) * 48;
-		}
-		// Calculating Settings Height End
+	function toggleSettings() {
+		// Calculating Height Based on the Number of Features/Buttons With Available Settings
+		let [count, height] = [0, 0];
+		allFeatures.map((value) => (value.hasSettings === true ? (count = count + 1) : (count = count)));
+		height = count % 2 === 0 ? 41 + 18 + (count / 2) * 48 : 41 + 18 + ((count + 1) / 2) * 48;
+		// Calculating Height End
 
-		// Calculate Enabled Features Height Start
-		let countt = 0;
-		let heightt = 0;
-		allFeatures.map((value, index) => {
-			if (value.isEnabled === true) countt = countt + 1;
-		});
-		if (countt % 2 === 0) {
-			heightt = 41 + 18 + (countt / 2) * 48;
-		} else {
-			heightt = 41 + 18 + ((countt + 1) / 2) * 48;
-		}
-		// Calculating Enabled Features Height End
+		// Calculating Height Based on the Number of Enabled Features/Buttons
+		let [countt, heightt] = [0, 0];
+		allFeatures.map((value) => (value.isEnabled === true ? (countt = countt + 1) : (countt = countt)));
+		heightt = countt % 2 === 0 ? 41 + 18 + (countt / 2) * 48 : 41 + 18 + ((countt + 1) / 2) * 48;
+		// Calculating Height End
 
-		// Show/hide Main/Edit Popup and Features
-		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hide/Show Icon Clicked, NavbarJs');
+		// If #mainBody Section is Hidden => #toggleSettings Section is Visible
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
+			// Send Message to ContentJS With Calculated Height
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				// On Successful Height Change By ContentJ
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
+					// Loggin
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+					// Make #mainBody Section Visible
 					document.getElementById('mainBody').classList.remove('hidden');
-					document.getElementById('showSettings').classList.add('hidden');
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Hidden Main Body, NavbarJs');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Main Body, IndexJs');
+
+					// Hide #toggleSettings Section
+					document.getElementById('toggleSettings').classList.add('hidden');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Settings Body, IndexJs');
 				});
 			});
-		} else {
+		}
+		// If #toggleFeature Section is Hidden => #mainBody Section is Visible
+		else {
+			// Send Message to ContentJS With Constant Height of #toggleFeature = 539px (498px + 41px)
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				// On Successful Height Change By ContentJ
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavbarJs Received from ContentJS', response.farewell);
-					document.getElementById('hideFeature').classList.add('hidden');
+					// Loggin
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+					// Hide #toggleFeature Section (Edge Case)
+					// Just In Case User Opens #toggleSettings Section with Closing #toggleFeature Section
+					document.getElementById('toggleFeature').classList.add('hidden');
+
+					// Hide #mainBody Section
 					document.getElementById('mainBody').classList.add('hidden');
-					document.getElementById('showSettings').classList.remove('hidden');
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Existent Main Body, NavbarJs');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Main Body, IndexJs');
+
+					// Make #toggleSettings Section Visible
+					document.getElementById('toggleSettings').classList.remove('hidden');
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Showing Settings Body, IndexJs');
 				});
 			});
 		}
 	}
 
-	function hideSingleFeature(featureId) {
+	function toggleSingleFeature(featureId) {
+		// Toggle (Enable/Disable) Single Feature Button On #toggleSettings Page
+		// Called on #disableIcon and #enableIcon Click
 		allFeatures.map((value, index) => {
+			// Matching featureId
 			if (value.id === featureId) {
+				// Is Feature Not Enabled
 				if (value.isEnabled === false) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Found Disabled Feature', value.title);
+					// Enable Feature
 					document.getElementsByClassName(featureId)[0].classList.remove('hidden');
-					document.getElementsByClassName(featureId)[1].classList.replace(value.unhideIcon, value.hideIcon);
+					// And Replace Icon
+					document.getElementsByClassName(featureId)[1].classList.replace(value.enableIcon, value.disableIcon);
+					// Set Feature Enabled On LocalStorage
 					value.isEnabled = true;
 					localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Enabled on LocalStorage', value.title);
-				} else {
+				}
+				// Is Feature Enabled
+				else {
+					// Disable Feature
 					document.getElementsByClassName(featureId)[0].classList.add('hidden');
-					document.getElementsByClassName(featureId)[1].classList.replace(value.hideIcon, value.unhideIcon);
+					// And Replace Icon
+					document.getElementsByClassName(featureId)[1].classList.replace(value.disableIcon, value.enableIcon);
+					// Set Feature Disabled On LocalStorage
 					value.isEnabled = false;
 					localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Disabled on LocalStorage', value.title);
@@ -162,26 +202,7 @@ export default function Home() {
 		});
 	}
 
-	function singleSettingsPage(featureId) {
-		// allFeatures.map((value, index) => {
-		// 	if (value.id === featureId) {
-		// 		if (value.isEnabled === false) {
-		// 			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Found Disabled Feature', value.title);
-		// 			document.getElementsByClassName(featureId)[0].classList.remove('hidden');
-		// 			document.getElementsByClassName(featureId)[1].classList.replace(value.unhideIcon, value.hideIcon);
-		// 			value.isEnabled = true;
-		// 			localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
-		// 			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Enabled on LocalStorage', value.title);
-		// 		} else {
-		// 			document.getElementsByClassName(featureId)[0].classList.add('hidden');
-		// 			document.getElementsByClassName(featureId)[1].classList.replace(value.hideIcon, value.unhideIcon);
-		// 			value.isEnabled = false;
-		// 			localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
-		// 			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Disabled on LocalStorage', value.title);
-		// 		}
-		// 	}
-		// });
-	}
+	function singleSettingsPage(featureId) {}
 
 	if (!isLoading) {
 		// Set allFeatures as soon as useEffect finishes execution
@@ -189,7 +210,7 @@ export default function Home() {
 		// Height on First Load
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: document.getElementById('mainBody').offsetHeight + 41}, function (response) {
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'BodyJs Received from ContentJS', response.farewell);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
 			});
 		});
 		return (
@@ -201,9 +222,9 @@ export default function Home() {
 						</h1>
 						<nav>
 							<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
-							<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={hideFeature}></button>
+							<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={toggleFeature}></button>
 							<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
-							<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={showSettings}></button>
+							<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
 							<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={removePopup}></button>
 						</nav>
 					</div>
@@ -212,7 +233,7 @@ export default function Home() {
 					<section id='mainBody'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{allFeatures.map((value, index) => {
-								if (value.isEnabled !== false) {
+								if (value.isEnabled === true) {
 									return (
 										<button
 											key={index}
@@ -240,17 +261,17 @@ export default function Home() {
 							})}
 						</div>
 					</section>
-					<section id='hideFeature' className='hidden'>
+					<section id='toggleFeature' className='hidden'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{allFeatures.map((value, index) => {
-								if (value.isEnabled !== false) {
+								if (value.isEnabled === true) {
 									return (
 										<button
 											key={index}
 											id={value.id}
-											onClick={() => hideSingleFeature(value.id)}
+											onClick={() => toggleSingleFeature(value.id)}
 											className='rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
-											<i className={value.id + ' fa-regular ' + value.hideIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
+											<i className={value.id + ' fa-regular ' + value.disableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
 										</button>
 									);
 								} else {
@@ -258,19 +279,19 @@ export default function Home() {
 										<button
 											key={index}
 											id={value.id}
-											onClick={() => hideSingleFeature(value.id)}
+											onClick={() => toggleSingleFeature(value.id)}
 											className='rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
-											<i className={value.id + ' fa-regular ' + value.unhideIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
+											<i className={value.id + ' fa-regular ' + value.enableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
 										</button>
 									);
 								}
 							})}
 						</div>
 					</section>
-					<section id='showSettings' className='hidden'>
+					<section id='toggleSettings' className='hidden'>
 						<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 							{allFeatures.map((value, index) => {
-								if (value.hasSettings !== false) {
+								if (value.hasSettings === true) {
 									return (
 										<button
 											key={index}
