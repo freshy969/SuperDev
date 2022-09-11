@@ -262,17 +262,17 @@ export default function Home() {
 		}
 
 		// Session Manager Button Is Clicked
-		if (featureId === 'sessionManager') {
-			chrome.tabs.query({}, function (tabs) {
-				tabs.map((value, index) => {
-					console.log({
-						title: value.title,
-						url: value.url,
-						favicon: value.favIconUrl,
-					});
-				});
-			});
-		}
+		// if (featureId === 'sessionManager') {
+		// 	chrome.tabs.query({}, function (tabs) {
+		// 		tabs.map((value, index) => {
+		// 			console.log({
+		// 				title: value.title,
+		// 				url: value.url,
+		// 				favicon: value.favIconUrl,
+		// 			});
+		// 		});
+		// 	});
+		// }
 	}
 
 	if (!isLoading) {
