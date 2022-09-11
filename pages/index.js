@@ -104,6 +104,11 @@ export default function Home() {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 539}, function (response) {
 					// Loggin
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+
+					// Hide #toggleSettings Section (Edge Case)
+					// Just In Case User Opens #toggleFeature Section Without Closing #toggleSettings Section
+					document.getElementById('toggleSettings').classList.add('hidden');
+
 					// Hide #mainBody Section
 					document.getElementById('mainBody').classList.add('hidden');
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Hiding Main Body, IndexJs');
@@ -154,8 +159,9 @@ export default function Home() {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
 					// Loggin
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
+
 					// Hide #toggleFeature Section (Edge Case)
-					// Just In Case User Opens #toggleSettings Section with Closing #toggleFeature Section
+					// Just In Case User Opens #toggleSettings Section Without Closing #toggleFeature Section
 					document.getElementById('toggleFeature').classList.add('hidden');
 
 					// Hide #mainBody Section
@@ -202,9 +208,7 @@ export default function Home() {
 		});
 	}
 
-	function singleSettingsPage(featureId) {}
-
-	if (!isLoading) {
+	function changeHeight() {
 		// Set allFeatures as soon as useEffect finishes execution
 		allFeatures = JSON.parse(localStorage.getItem('allFeatures'));
 		// Height on First Load
@@ -213,6 +217,43 @@ export default function Home() {
 				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
 			});
 		});
+	}
+
+	function singleSettingsPage(featureId) {}
+
+	function singleFeature(featureId) {
+		// Working Logic of Each Feature
+		// Called on Each Feature Button Click
+
+		// If Text Editor Button Clicked
+		// Sending a Message to ContentJS For Doing the Job
+		// Why ContentJS? NextJS Doesn't Have Access to the Website's DOM
+		if (featureId === 'textEditor') {
+			// Deactivate Text Editor On Second Time Button Click
+			if (document.getElementById(featureId).classList.contains('active')) {
+				document.getElementById(featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+				document.getElementById(featureId).classList.add('from-btnThree', 'to-btnFour');
+				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'deactivate'}, function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Tech Editor', response.farewell);
+					});
+				});
+			}
+			// Activate Text Editor On First Time Button Click
+			else {
+				document.getElementById(featureId).classList.remove('from-btnThree', 'to-btnFour');
+				document.getElementById(featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'activate'}, function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Tech Editor', response.farewell);
+					});
+				});
+			}
+		}
+	}
+
+	if (!isLoading) {
+		changeHeight();
 		return (
 			<>
 				<header className='bg-gradient-to-r from-navOne to-navTwo'>
@@ -238,6 +279,7 @@ export default function Home() {
 										<button
 											key={index}
 											id={value.id}
+											onClick={() => singleFeature(value.id)}
 											className={
 												value.id +
 												' rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'

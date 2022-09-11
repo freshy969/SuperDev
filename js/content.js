@@ -88,5 +88,20 @@
 			// Replying BackgroundJs
 			sendResponse({farewell: 'Popup Created/Removed'});
 		}
+
+		// Text Editor
+		if (request.message === 'textEditor') {
+			// Deactivate Text Editor On Second Time Button Click
+			if (request.action === 'deactivate') {
+				document.querySelector('body').contentEditable = false;
+				sendResponse({farewell: 'Text Uneditable Now'});
+			}
+			// Activate Text Editor On First Time Button Click
+			else if (request.action === 'activate') {
+				document.querySelector('body').contentEditable = true;
+				document.querySelector('body').spellcheck = false;
+				sendResponse({farewell: 'Text Editable Now'});
+			}
+		}
 	});
 })();

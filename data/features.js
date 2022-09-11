@@ -16,7 +16,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: false,
+		hasSettings: true,
 		id: 'colorPicker',
 	},
 	{
@@ -26,7 +26,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: false,
+		hasSettings: true,
 		id: 'colorPalette',
 	},
 	{
@@ -36,7 +36,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: true,
+		hasSettings: false,
 		id: 'textEditor',
 	},
 	{
