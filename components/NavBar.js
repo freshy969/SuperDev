@@ -48,7 +48,7 @@ export default function NavBar() {
 		allFeatures.map((value, index) => (countt = countt + 1));
 		heightt = countt % 2 === 0 ? 41 + 18 + (countt / 2) * 48 : 41 + 18 + ((countt + 1) / 2) * 48;
 
-		if (!document.getElementById('mainBody').classList.contains('hidden')) {
+		if (document.getElementById('toggleFeature').classList.contains('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
@@ -82,7 +82,7 @@ export default function NavBar() {
 		allFeatures.map((value) => (value.hasSettings === true ? (countt = countt + 1) : (countt = countt)));
 		heightt = countt % 2 === 0 ? 41 + 18 + (countt / 2) * 48 : 41 + 18 + ((countt + 1) / 2) * 48;
 
-		if (!document.getElementById('mainBody').classList.contains('hidden')) {
+		if (document.getElementById('toggleSettings').classList.contains('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
