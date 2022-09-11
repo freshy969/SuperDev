@@ -108,7 +108,7 @@ export default function NavBar() {
 
 	if (!isLoading) {
 		return (
-			<header className='bg-navBar'>
+			<header id='navBar' className='bg-navBar'>
 				<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
 					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
 						SuperDev <i className='fa-regular fa-window px-[3px]'></i>
