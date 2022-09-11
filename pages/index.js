@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 export default function Home() {
 	let allFeatures = [];
 	const [isLoading, setIsLoading] = useState(true);
+
 	useEffect(() => {
 		// Setting Dark/Light Mode On Pageload, Start
 		// Depending Upon OS Preference or If Exists, User Preference
@@ -77,6 +78,15 @@ export default function Home() {
 		height = count % 2 === 0 ? 41 + 18 + (count / 2) * 48 : 41 + 18 + ((count + 1) / 2) * 48;
 		// Calculating Height End
 
+		// Calculating Height Based on the Number of Features/Buttons With Available Settings
+		// 41px = Navbar Height
+		// 18px = Border(2px) + Body's Top Padding(16px)
+		// 48px = Button Height(32px) + Margin Bottom (16px)
+		let [countt, heightt] = [0, 0];
+		allFeatures.map((value, index) => (countt = countt + 1));
+		heightt = countt % 2 === 0 ? 41 + 18 + (countt / 2) * 48 : 41 + 18 + ((countt + 1) / 2) * 48;
+		// Calculating Height End
+
 		// If #mainBody Section is Hidden => #toggleFeature Section is Visible
 		if (document.getElementById('mainBody').classList.contains('hidden')) {
 			// Send Message to ContentJS With Calculated Height
@@ -98,10 +108,10 @@ export default function Home() {
 
 		// If #toggleFeature Section is Hidden => #mainBody Section is Visible
 		else {
-			// Send Message to ContentJS With Constant Height of #toggleFeature = 539px (498px + 41px)
+			// Send Message to ContentJS With Calculated Height
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				// On Successful Height Change By ContentJ
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: 539}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
 					// Loggin
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
 
@@ -121,15 +131,15 @@ export default function Home() {
 	}
 
 	function toggleSettings() {
-		// Calculating Height Based on the Number of Features/Buttons With Available Settings
+		// Calculating Height Based on the Number of Enabled Features/Buttons
 		let [count, height] = [0, 0];
-		allFeatures.map((value) => (value.hasSettings === true ? (count = count + 1) : (count = count)));
+		allFeatures.map((value) => (value.isEnabled === true ? (count = count + 1) : (count = count)));
 		height = count % 2 === 0 ? 41 + 18 + (count / 2) * 48 : 41 + 18 + ((count + 1) / 2) * 48;
 		// Calculating Height End
 
-		// Calculating Height Based on the Number of Enabled Features/Buttons
+		// Calculating Height Based on the Number of Features/Buttons With Available Settings
 		let [countt, heightt] = [0, 0];
-		allFeatures.map((value) => (value.isEnabled === true ? (countt = countt + 1) : (countt = countt)));
+		allFeatures.map((value) => (value.hasSettings === true ? (countt = countt + 1) : (countt = countt)));
 		heightt = countt % 2 === 0 ? 41 + 18 + (countt / 2) * 48 : 41 + 18 + ((countt + 1) / 2) * 48;
 		// Calculating Height End
 
@@ -138,7 +148,7 @@ export default function Home() {
 			// Send Message to ContentJS With Calculated Height
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				// On Successful Height Change By ContentJ
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
 					// Loggin
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
 					// Make #mainBody Section Visible
@@ -153,10 +163,10 @@ export default function Home() {
 		}
 		// If #toggleFeature Section is Hidden => #mainBody Section is Visible
 		else {
-			// Send Message to ContentJS With Constant Height of #toggleFeature = 539px (498px + 41px)
+			// Send Message to ContentJS With Calculated Height
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				// On Successful Height Change By ContentJ
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: height}, function (response) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'changeHeight', height: heightt}, function (response) {
 					// Loggin
 					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Change Height', response.farewell);
 
@@ -231,8 +241,8 @@ export default function Home() {
 		if (featureId === 'textEditor') {
 			// Deactivate Text Editor On Second Time Button Click
 			if (document.getElementById(featureId).classList.contains('active')) {
-				document.getElementById(featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
-				document.getElementById(featureId).classList.add('from-btnThree', 'to-btnFour');
+				document.getElementById(featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
+				document.getElementById(featureId).classList.add('from-btnOne', 'to-btnTwo');
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'deactivate'}, function (response) {
 						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Tech Editor', response.farewell);
@@ -241,8 +251,8 @@ export default function Home() {
 			}
 			// Activate Text Editor On First Time Button Click
 			else {
-				document.getElementById(featureId).classList.remove('from-btnThree', 'to-btnFour');
-				document.getElementById(featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+				document.getElementById(featureId).classList.remove('from-btnOne', 'to-btnTwo');
+				document.getElementById(featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'activate'}, function (response) {
 						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Tech Editor', response.farewell);
@@ -250,13 +260,26 @@ export default function Home() {
 				});
 			}
 		}
+
+		// Session Manager Button Is Clicked
+		if (featureId === 'sessionManager') {
+			chrome.tabs.query({}, function (tabs) {
+				tabs.map((value, index) => {
+					console.log({
+						title: value.title,
+						url: value.url,
+						favicon: value.favIconUrl,
+					});
+				});
+			});
+		}
 	}
 
 	if (!isLoading) {
 		changeHeight();
 		return (
 			<>
-				<header className='bg-gradient-to-r from-navOne to-navTwo'>
+				<header className='bg-navBar'>
 					<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
 						<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
 							SuperDev <i className='fa-regular fa-window px-[3px]'></i>
@@ -282,7 +305,7 @@ export default function Home() {
 											onClick={() => singleFeature(value.id)}
 											className={
 												value.id +
-												' rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
+												' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
 											}>
 											<i className={'fa-regular ' + value.icon + ' px-[5px] text-bodyText'}></i> {value.title}
 										</button>
@@ -294,7 +317,7 @@ export default function Home() {
 											id={value.id}
 											className={
 												value.id +
-												' rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300 hidden'
+												' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300 hidden'
 											}>
 											<i className={'fa-regular ' + value.icon + ' px-[5px] text-bodyText'}></i> {value.title}
 										</button>
@@ -312,7 +335,7 @@ export default function Home() {
 											key={index}
 											id={value.id}
 											onClick={() => toggleSingleFeature(value.id)}
-											className='rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+											className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
 											<i className={value.id + ' fa-regular ' + value.disableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
 										</button>
 									);
@@ -322,7 +345,7 @@ export default function Home() {
 											key={index}
 											id={value.id}
 											onClick={() => toggleSingleFeature(value.id)}
-											className='rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+											className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
 											<i className={value.id + ' fa-regular ' + value.enableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
 										</button>
 									);
@@ -339,7 +362,7 @@ export default function Home() {
 											key={index}
 											id={value.id}
 											onClick={() => singleSettingsPage(value.id)}
-											className='rounded-md text-left bg-gradient-to-r from-btnThree to-btnFour hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+											className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
 											<i className={value.id + ' fa-regular ' + value.settingsIcon + ' pl-[5px] pr-[4px] text-bodyText text-xs'}></i> {value.title}
 										</button>
 									);

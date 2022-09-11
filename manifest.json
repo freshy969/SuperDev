@@ -24,6 +24,7 @@
 		"contentSettings",
 		"proxy"
 	],
+	"host_permissions": ["*://*/*"],
 	"background": {
 		"service_worker": "js/background.js"
 	},
