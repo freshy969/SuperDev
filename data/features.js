@@ -96,7 +96,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: true,
+		hasSettings: false,
 		id: 'pageRuler',
 	},
 	{
@@ -156,7 +156,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: false,
+		hasSettings: true,
 		id: 'jsonViewer',
 	},
 	{
@@ -186,7 +186,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: false,
+		hasSettings: true,
 		id: 'cookieEditor',
 	},
 	{
@@ -196,7 +196,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: false,
+		hasSettings: true,
 		id: 'editLocalstorage',
 	},
 ];
