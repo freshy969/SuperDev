@@ -4,6 +4,7 @@ import NavBar from '../components/NavBar';
 import MainBody from '../components/MainBody';
 import ToggleFeature from '../components/ToggleFeature';
 import ToggleSettings from '../components/ToggleSettings';
+import CalcHeightIsEnabled from '../components/functions/CalcHeightIsEnabled';
 import ChangeHeight from '../components/functions/ChangeHeight';
 
 export default function Home() {
@@ -24,10 +25,8 @@ export default function Home() {
 		}
 	}, []);
 
-	function changeHeight() {}
-
 	if (!isLoading) {
-		ChangeHeight();
+		ChangeHeight(CalcHeightIsEnabled());
 		return (
 			<>
 				<NavBar />

@@ -2,7 +2,6 @@
 	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		// Popup Removed on Navbar Click
 		if (request.message === 'removePopup') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From NavbarJs', request.message);
 			sendResponse({farewell: 'Popup Removed on Navbar Click'});
 			if (document.getElementById('superDev') !== null) {
 				document.getElementById('superDev').remove();
@@ -11,30 +10,26 @@
 
 		// Height Change
 		if (request.message === 'changeHeight') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received Height From IndexJs', request.height);
 			setTimeout(iframeVisible, 0);
 			function iframeVisible() {
 				document.getElementById('superDevIframe').style.height = `${request.height}px`;
 				document.getElementById('superDevIframe').style.visibility = 'visible';
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Now Visible + Height Changed', request.message);
 			}
-			sendResponse({farewell: 'Height Changed'});
+			sendResponse({farewell: 'Popup Height Changed'});
 		}
 
 		// Create/Remove Popup on Message from BackgroundJs
 		if (request.message === 'extClicked') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ContentJs Received From BackgroundJs', request.message);
-
 			// If Popup Exists, Remove It on Extension Click
 			if (document.getElementById('superDev') !== null) {
 				document.getElementById('superDev').remove();
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Already Exists, Removing', request.message);
+				sendResponse({farewell: 'Existing Popup Removed'});
 			}
 
 			// Creating a Popup
 			else {
 				// Parent Div of Drag Button & Iframe
-				let superDev = document.createElement('div');
+				let superDev = document.createElement('section');
 				superDev.id = 'superDev';
 				superDev.style.cssText = `
 				position: fixed !important;
@@ -75,8 +70,6 @@
 				visibility: hidden !important;`;
 				document.getElementById('superDev').appendChild(superDevIframe);
 
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Popup Non Existent, Adding Hidden One', request.message);
-
 				// Draggable Using JQuery and JQuery UI
 				$('#superDev').draggable({
 					handle: '#superDevHandler',
@@ -84,9 +77,7 @@
 					iframeFix: true,
 				});
 			}
-
-			// Replying BackgroundJs
-			sendResponse({farewell: 'Popup Created/Removed'});
+			sendResponse({farewell: 'Hidden Popup Created'});
 		}
 
 		// Text Editor
