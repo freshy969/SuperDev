@@ -60,7 +60,6 @@
 				superDevIframe.scrolling = 'no';
 				superDevIframe.style.cssText = `
 				width: 345px !important;
-				height: 539px !important;
 				border: 0px !important;
 				border-radius: 8px !important;
 				display: block !important;
