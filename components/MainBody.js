@@ -8,7 +8,7 @@ export default function MainBody() {
 				document.getElementById(featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'activate'}, function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Text Editor', response.farewell);
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
 					});
 				});
 			} else {
@@ -16,10 +16,16 @@ export default function MainBody() {
 				document.getElementById(featureId).classList.add('from-btnOne', 'to-btnTwo');
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'deactivate'}, function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Text Editor', response.farewell);
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
 					});
 				});
 			}
+		} else if (featureId === 'pageRuler') {
+			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				chrome.tabs.sendMessage(tabs[0].id, {message: 'pageRuler'}, function (response) {
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
+				});
+			});
 		}
 	}
 

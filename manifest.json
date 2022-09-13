@@ -51,8 +51,9 @@
 	"web_accessible_resources": [
 		{
 			"matches": ["file://*/*", "http://*/*", "https://*/*"],
-			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next"]
+			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next/*"]
 		}
 	],
-	"manifest_version": 3
+	"manifest_version": 3,
+	"minimum_chrome_version": "88"
 }

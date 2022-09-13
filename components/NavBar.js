@@ -28,7 +28,7 @@ export default function NavBar() {
 	function removePopup() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {message: 'removePopup'}, function (response) {
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Regarding Remove Popup', response.farewell);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
 			});
 		});
 	}
