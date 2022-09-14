@@ -102,18 +102,9 @@ const textEditor = (port, request) => {
 };
 
 const pageRuler = (port, request) => {
-	// //Draw Canvas (Not Appended to DOM Yet)
-	// let bodyArea = document.querySelector('body');
-	// let canvas = document.createElement('canvas');
-	// let ctx = canvas.getContext('2d');
-
-	let portThree = chrome.runtime.connect({name: 'portThree'});
-	portThree.postMessage({message: 'bodyScreenshot'});
-	portThree.onMessage.addListener(function (request) {
-		port.postMessage({message: request.message});
-	});
-
-	// let image = document.getElementById('rulerImg');
-	// ctx.drawImage(image, 0, 0, image.width, image.height);
-	// let imgData = ctx.getImageData(0, 0, bodyArea.clientWidth, bodyArea.clientHeight).data;
+	// let portThree = chrome.runtime.connect({name: 'portThree'});
+	// portThree.postMessage({message: 'bodyScreenshot'});
+	// portThree.onMessage.addListener(function (request) {
+	// 	port.postMessage({message: request.message});
+	// });
 };
