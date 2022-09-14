@@ -53,6 +53,32 @@
 				border-radius: 3px;
 				background: rgba(0, 30, 51, 0.55);
 			}
+			.rulerAxis::before,
+			.rulerAxis::after {
+				content: '';
+				position: absolute;
+				background: inherit;
+			}
+			.xAxis.rulerAxis::before,
+			.xAxis.rulerAxis::after {
+				left: 0px;
+				height: 5px;
+				top: -2px;
+				width: 1px;
+			}
+			.yAxis.rulerAxis::before,
+			.yAxis.rulerAxis::after {
+				left: -2px;
+				height: 1px;
+				top: 0px;
+				width: 5px;
+			}
+			.xAxis.rulerAxis::after {
+				left: 100%;
+			}
+			.yAxis.rulerAxis::after {
+				top: 100%;
+			}
 		</style>
 	</head>
 	<body>
