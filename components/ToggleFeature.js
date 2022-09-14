@@ -9,13 +9,13 @@ export default function ToggleFeature() {
 					document.getElementsByClassName(featureId)[1].classList.replace(value.disableIcon, value.enableIcon);
 					value.isEnabled = false;
 					localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Disabled on LocalStorage', value.title);
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Disabled', value.title);
 				} else {
 					document.getElementsByClassName(featureId)[0].classList.remove('hidden');
 					document.getElementsByClassName(featureId)[1].classList.replace(value.enableIcon, value.disableIcon);
 					value.isEnabled = true;
 					localStorage.setItem('allFeatures', JSON.stringify(allFeatures));
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Enabled on LocalStorage', value.title);
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Feature Enabled', value.title);
 				}
 			}
 		});

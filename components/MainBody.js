@@ -6,24 +6,32 @@ export default function MainBody() {
 			if (!document.getElementById(featureId).classList.contains('active')) {
 				document.getElementById(featureId).classList.remove('from-btnOne', 'to-btnTwo');
 				document.getElementById(featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
+
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'activate'}, function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
+					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+					portTwo.postMessage({message: featureId, action: 'activate'});
+					portTwo.onMessage.addListener(function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
 					});
 				});
 			} else {
 				document.getElementById(featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 				document.getElementById(featureId).classList.add('from-btnOne', 'to-btnTwo');
+
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					chrome.tabs.sendMessage(tabs[0].id, {message: featureId, action: 'deactivate'}, function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
+					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+					portTwo.postMessage({message: featureId, action: 'deactivate'});
+					portTwo.onMessage.addListener(function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
 					});
 				});
 			}
 		} else if (featureId === 'pageRuler') {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-				chrome.tabs.sendMessage(tabs[0].id, {message: 'pageRuler'}, function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Farewell', response.farewell);
+				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+				portTwo.postMessage({message: 'pageRuler'});
+				portTwo.onMessage.addListener(function (response) {
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
 				});
 			});
 		}

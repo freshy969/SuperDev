@@ -17,10 +17,10 @@ export default function Home() {
 
 		if (localStorage.getItem('allFeatures') === null) {
 			localStorage.setItem('allFeatures', JSON.stringify(features));
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage', 'IndexJs');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage');
 			setIsLoading(false);
 		} else {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage', 'IndexJs');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage');
 			setIsLoading(false);
 		}
 	}, []);
