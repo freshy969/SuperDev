@@ -53,7 +53,6 @@ p {
 	transform: perspective(1px) scale(1.03);
 }
 
-/** Start Page Ruler CSS **/
 .rulerData {
 	position: fixed;
 	width: 0;
@@ -120,4 +119,3 @@ p {
 .yAxis.rulerAxis::after {
 	top: 100%;
 }
-/** End Page Ruler CSS
