@@ -68,30 +68,33 @@ p {
 }
 .rulerAxis {
 	position: absolute;
-	background: rgb(3, 218, 198);
+	background: rgb(0, 212, 190);
 }
 .yAxis.rulerAxis {
 	width: 1px;
 }
 .rulerAxis {
 	position: absolute;
-	background: rgb(3, 218, 198);
+	background: rgb(0, 212, 190);
 }
 .rulerTooltip {
 	position: absolute;
-	left: 5px;
-	bottom: 4px;
+	left: 7px;
+	bottom: 6px;
+	padding: 1px 10px;
 	color: white;
 	text-align: center;
 	white-space: nowrap;
 	font-size: 12px;
-	line-height: 20px;
-	font-family: sans-serif;
+	line-height: 25px;
 	direction: ltr;
+	border-radius: 4px;
+	background: rgba(15, 17, 29, 0.95);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	padding: 0px 5px;
-	border-radius: 3px;
-	background: rgba(0, 30, 51, 0.55);
+	box-shadow: rgb(0 0 0 / 15%) 0.15em 0.15em 0.2em !important;
+	font-family: system-ui, -apple-system, sans-serif;
 }
 .rulerAxis::before,
 .rulerAxis::after {

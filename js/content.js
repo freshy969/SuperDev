@@ -103,7 +103,7 @@ const textEditor = (port, request) => {
 
 const pageRuler = (port, request) => {
 	// Global Variables
-	let body;
+	let html;
 	let threshold;
 	let inputX;
 	let inputY;
@@ -127,23 +127,23 @@ const pageRuler = (port, request) => {
 	// Draws Canvas
 	function drawCanvas(src) {
 		// Variable Values
-		body = document.querySelector('body');
+		html = document.querySelector('html');
 		threshold = 20;
 		canvas = document.createElement('canvas');
 		ctx = canvas.getContext('2d');
 		image = new Image();
 		image.src = src;
 
-		console.log(1, 'Body', body);
+		console.log(1, 'Html', html);
 		console.log(2, 'Canvas', canvas);
 		console.log(3, 'CTX', ctx);
 		console.log(4, 'Image', image);
 
-		// Adjust The Canvas Size to The Body Size
-		width = canvas.width = body.clientWidth;
-		height = canvas.height = body.clientHeight;
-		console.log(5, 'Body, Canvas Width', width);
-		console.log(6, 'Body, Canvas Height', height);
+		// Adjust The Canvas Size to The Html Size
+		width = canvas.width = html.clientWidth;
+		height = canvas.height = html.clientHeight;
+		console.log(5, 'Html, Canvas Width', width);
+		console.log(6, 'Html, Canvas Height', height);
 
 		// Draw Image to Canvas and Get Data
 		ctx.drawImage(image, 0, 0, width, height);
@@ -157,16 +157,16 @@ const pageRuler = (port, request) => {
 		console.log(9, 'grayImage', grayImage);
 
 		// Store Mouse Position
-		body.onmousemove = storeMousePosition;
-		body.ontouchmove = storeMousePosition;
-		body.onmouseleave = removePageRuler;
+		html.onmousemove = storeMousePosition;
+		html.ontouchmove = storeMousePosition;
+		html.onmouseleave = removePageRuler;
 	}
 
 	// Store Mouse Position
 	function storeMousePosition(event) {
 		event.preventDefault();
-		inputX = event.pageX - body.offsetLeft;
-		inputY = event.pageY - body.offsetTop;
+		inputX = event.pageX - html.offsetLeft;
+		inputY = event.pageY - html.offsetTop;
 		console.log(10, 'X and Y Coordinates', inputX, inputY);
 		measureDistance(inputX, inputY);
 	}
@@ -184,8 +184,8 @@ const pageRuler = (port, request) => {
 
 	// Removes Page Ruler
 	function removePageRuler() {
-		let dimensions = body.querySelector('.rulerData');
-		if (dimensions) body.removeChild(dimensions);
+		let dimensions = html.querySelector('.rulerData');
+		if (dimensions) html.removeChild(dimensions);
 	}
 
 	// Checks If Mouse Position Is Not at Display Boundary
@@ -203,10 +203,10 @@ const pageRuler = (port, request) => {
 	function showPageRuler(dimensions) {
 		if (!dimensions) return;
 
-		let newDimensions = body.querySelector('.rulerData') || document.createElement('div');
-		let xAxis = body.querySelector('.xAxis.rulerAxis') || document.createElement('div');
-		let yAxis = body.querySelector('.yAxis.rulerAxis') || document.createElement('div');
-		let tooltip = body.querySelector('.rulerTooltip') || document.createElement('div');
+		let newDimensions = html.querySelector('.rulerData') || document.createElement('div');
+		let xAxis = html.querySelector('.xAxis.rulerAxis') || document.createElement('div');
+		let yAxis = html.querySelector('.yAxis.rulerAxis') || document.createElement('div');
+		let tooltip = html.querySelector('.rulerTooltip') || document.createElement('div');
 
 		newDimensions.className = 'rulerData';
 
@@ -240,11 +240,11 @@ const pageRuler = (port, request) => {
 		if (dimensions.y < 26) tooltip.classList.add('bottom');
 		if (dimensions.x > window.innerWidth - 110) tooltip.classList.add('left');
 
-		if (!body.querySelector('.rulerData')) {
+		if (!html.querySelector('.rulerData')) {
 			newDimensions.appendChild(xAxis);
 			newDimensions.appendChild(yAxis);
 			newDimensions.appendChild(tooltip);
-			body.appendChild(newDimensions);
+			html.appendChild(newDimensions);
 		}
 	}
 
