@@ -116,10 +116,19 @@ const pageRuler = (port, request) => {
 	let height;
 	let imageData;
 	let grayImage;
-	let portThree = chrome.runtime.connect({name: 'portThree'});
 
+	// Add Stylesheet to Head
+	let link = document.createElement('link');
+	link.href = 'http://localhost:8888/css/pageruler.css';
+	link.type = 'text/css';
+	link.rel = 'stylesheet';
+	document.getElementsByTagName('head')[0].appendChild(link);
+
+	// Open a Comm Channel and Init pageRuler
+	let portThree = chrome.runtime.connect({name: 'portThree'});
 	drawCanvas();
 
+	// Draws Canvas
 	function drawCanvas() {
 		// Variable Values
 		html = document.querySelector('html');
@@ -133,21 +142,21 @@ const pageRuler = (port, request) => {
 		portThree.onMessage.addListener(function (request) {
 			if (request.action && request.action === 'bodyScreenshotDone') {
 				image.src = request.bodyScreenshot;
+				console.log(image);
 
 				// Adjust The Canvas Size to The Html Size
 				width = canvas.width = html.clientWidth;
 				height = canvas.height = html.clientHeight;
+				console.log(width, height);
 
 				// Draw Image to Canvas and Get Data
 				ctx.drawImage(image, 0, 0, width, height);
-				imageData = ctx.getImageData(0, 0, width, height).data;
-				console.log(1, 'Image Data', imageData);
+				imageData = ctx.getImageData(0, 0, width, height).data.buffer;
+				console.log(imageData);
 
-				// Asking BJS, toGrayscale
-				portThree.postMessage({action: 'toGrayscale', imageData: imageData});
-			}
-			if (request.action && request.action === 'toGrayscaleDone') {
-				// Store Mouse Position
+				grayImage = toGrayscale(new Uint8ClampedArray(imageData));
+				console.log(grayImage);
+
 				html.onmousemove = storeMousePosition;
 				html.ontouchmove = storeMousePosition;
 				html.onmouseleave = removePageRuler;
@@ -183,6 +192,19 @@ const pageRuler = (port, request) => {
 	function removePageRuler() {
 		let distances = html.querySelector('.rulerData');
 		if (distances) html.removeChild(distances);
+	}
+
+	// Converts Image Data to Grayscale for Processing
+	function toGrayscale(imageData) {
+		console.log(imageData);
+		let grayPicture = new Int16Array(imageData.length / 4);
+		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
+			let r = imageData[i];
+			let g = imageData[i + 1];
+			let b = imageData[i + 2];
+			grayPicture[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
+		}
+		return grayPicture;
 	}
 
 	// Takes Result From MeasureDistance and Populates/Create HTML
