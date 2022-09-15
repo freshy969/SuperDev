@@ -21,10 +21,11 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				portThree.postMessage({action: 'bodyScreenshotDone', bodyScreenshot: bodyScreenshot});
 			});
 		}
-		if (request.action === 'storeData') {
+		if (request.action === 'toGrayscale') {
+			grayImage = toGrayscale(new Uint8ClampedArray(request.imageData));
 			width = request.width;
 			height = request.height;
-			grayImage = request.grayImage;
+			portThree.postMessage({action: 'toGrayscaleDone'});
 		}
 		if (request.action === 'measureDistance') {
 			portThree.postMessage({
@@ -125,4 +126,16 @@ function measureDistance(inputX, inputY) {
 	distances.x = inputX;
 	distances.y = inputY;
 	return distances;
+}
+
+// Converts Image Data to Grayscale for Processing
+function toGrayscale(imageData) {
+	let grayPicture = new Int16Array(imageData.length / 4);
+	for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
+		let r = imageData[i];
+		let g = imageData[i + 1];
+		let b = imageData[i + 2];
+		grayPicture[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
+	}
+	return grayPicture;
 }
