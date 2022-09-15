@@ -107,7 +107,7 @@ const deactivateTextEditor = (port, request) => {
 const pageRuler = (port, request) => {
 	// Add Global Stylesheet to Head
 	let link = document.createElement('link');
-	link.href = chrome.runtime.getURL('css/global.css');
+	link.href = chrome.runtime.getURL('css/pageruler.css');
 	link.type = 'text/css';
 	link.rel = 'stylesheet';
 	document.getElementsByTagName('head')[0].appendChild(link);
