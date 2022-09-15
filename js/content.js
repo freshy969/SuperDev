@@ -107,27 +107,18 @@ const deactivateTextEditor = (port, request) => {
 const pageRuler = (port, request) => {
 	// Global Variables
 	let html;
-	let threshold;
 	let inputX;
 	let inputY;
 	let canvas;
 	let ctx;
 	let image;
-	let src;
 	let width;
 	let height;
 	let imageData;
 	let grayImage;
-
-	// Generates Screenshot
 	let portThree = chrome.runtime.connect({name: 'portThree'});
-	portThree.postMessage({action: 'bodyScreenshot'});
-	portThree.onMessage.addListener(function (request) {
-		if (request.action && request.action === 'bodyScreenshotDone') {
-			src = request.bodyScreenshot;
-			drawCanvas();
-		}
-	});
+
+	drawCanvas();
 
 	function drawCanvas() {
 		// Variable Values
@@ -136,33 +127,32 @@ const pageRuler = (port, request) => {
 		canvas = document.createElement('canvas');
 		ctx = canvas.getContext('2d');
 		image = new Image();
-		image.src = src;
-		console.log(1, 'Html', html);
-		console.log(2, 'Canvas', canvas);
-		console.log(3, 'CTX', ctx);
-		console.log(4, 'Image', image);
 
-		// Adjust The Canvas Size to The Html Size
-		width = canvas.width = html.clientWidth;
-		height = canvas.height = html.clientHeight;
-		console.log(5, 'Html, Canvas Width', width);
-		console.log(6, 'Html, Canvas Height', height);
+		// Asking BJS, bodyScreenshot
+		portThree.postMessage({action: 'bodyScreenshot'});
+		portThree.onMessage.addListener(function (request) {
+			if (request.action && request.action === 'bodyScreenshotDone') {
+				image.src = request.bodyScreenshot;
 
-		// Draw Image to Canvas and Get Data
-		ctx.drawImage(image, 0, 0, width, height);
-		imageData = ctx.getImageData(0, 0, width, height).data;
+				// Adjust The Canvas Size to The Html Size
+				width = canvas.width = html.clientWidth;
+				height = canvas.height = html.clientHeight;
 
-		console.log(7, 'CTX', ctx);
-		console.log(8, 'imageData', imageData);
+				// Draw Image to Canvas and Get Data
+				ctx.drawImage(image, 0, 0, width, height);
+				imageData = ctx.getImageData(0, 0, width, height).data;
+				console.log(1, 'Image Data', imageData);
 
-		// Send to toGrayscale
-		toGrayscale(new Uint8ClampedArray(imageData));
-		console.log(9, 'grayImage', grayImage);
-
-		// Store Mouse Position
-		html.onmousemove = storeMousePosition;
-		html.ontouchmove = storeMousePosition;
-		html.onmouseleave = removePageRuler;
+				// Asking BJS, toGrayscale
+				portThree.postMessage({action: 'toGrayscale', imageData: imageData});
+			}
+			if (request.action && request.action === 'toGrayscaleDone') {
+				// Store Mouse Position
+				html.onmousemove = storeMousePosition;
+				html.ontouchmove = storeMousePosition;
+				html.onmouseleave = removePageRuler;
+			}
+		});
 	}
 
 	// Store Mouse Position
@@ -170,41 +160,34 @@ const pageRuler = (port, request) => {
 		event.preventDefault();
 		inputX = event.pageX - html.offsetLeft;
 		inputY = event.pageY - html.offsetTop;
-		console.log(10, 'X and Y Coordinates', inputX, inputY);
-		measureDistance(inputX, inputY);
-	}
+		console.log(3, 'X and Y Coordinates', inputX, inputY);
 
-	// Converts Image Data to Grayscale for Processing
-	function toGrayscale(imageData) {
-		grayImage = new Int16Array(imageData.length / 4);
-		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
-			let r = imageData[i];
-			let g = imageData[i + 1];
-			let b = imageData[i + 2];
-			grayImage[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
-		}
+		// Asking BJS, toGrayscale
+		portThree.postMessage({
+			action: 'measureDistance',
+			grayImage: grayImage,
+			inputX: inputX,
+			inputY: inputY,
+			width: width,
+			height: height,
+		});
+		portThree.onMessage.addListener(function (request) {
+			if (request.action && request.action === 'measureDistanceDone') {
+				console.log(4, 'Calculated Data', request.distances);
+				showPageRuler(request.distances);
+			}
+		});
 	}
 
 	// Removes Page Ruler From Dom //
 	function removePageRuler() {
-		let dimensions = html.querySelector('.rulerData');
-		if (dimensions) html.removeChild(dimensions);
-	}
-
-	// Checks If Mouse Position Is Not at Display Boundary
-	function isDisplayBoundary(inputX, inputY) {
-		if (inputX > 0 && inputX < width && inputY > 0 && inputY < height) return true;
-		else return false;
-	}
-
-	// Called From MeasureDistances, Returns Lightness at Given Coordinates
-	function getLightnessAt(I, inputX, inputY) {
-		return isDisplayBoundary(inputX, inputY) ? I[inputY * width + inputX] : -1;
+		let distances = html.querySelector('.rulerData');
+		if (distances) html.removeChild(distances);
 	}
 
 	// Takes Result From MeasureDistance and Populates/Create HTML
-	function showPageRuler(dimensions) {
-		if (!dimensions) return;
+	function showPageRuler(distances) {
+		if (!distances) return;
 
 		let newDimensions = html.querySelector('.rulerData') || document.createElement('div');
 		let xAxis = html.querySelector('.xAxis.rulerAxis') || document.createElement('div');
@@ -213,13 +196,13 @@ const pageRuler = (port, request) => {
 
 		newDimensions.className = 'rulerData';
 
-		newDimensions.style.webkitTransform = `translate(${dimensions.x}px, ${dimensions.y}px)`;
-		newDimensions.style.MozTransform = `translate(${dimensions.x}px, ${dimensions.y}px)`;
-		newDimensions.style.msTransform = `translate(${dimensions.x}px, ${dimensions.y}px)`;
-		newDimensions.style.OTransform = `translate(${dimensions.x}px, ${dimensions.y}px)`;
+		newDimensions.style.webkitTransform = `translate(${distances.x}px, ${distances.y}px)`;
+		newDimensions.style.MozTransform = `translate(${distances.x}px, ${distances.y}px)`;
+		newDimensions.style.msTransform = `translate(${distances.x}px, ${distances.y}px)`;
+		newDimensions.style.OTransform = `translate(${distances.x}px, ${distances.y}px)`;
 
-		let measureWidth = dimensions.left + dimensions.right;
-		let measureHeight = dimensions.top + dimensions.bottom;
+		let measureWidth = distances.left + distances.right;
+		let measureHeight = distances.top + distances.bottom;
 
 		xAxis.className = 'xAxis rulerAxis';
 		xAxis.style.width = measureWidth + 'px';
@@ -227,21 +210,21 @@ const pageRuler = (port, request) => {
 		yAxis.className = 'yAxis rulerAxis';
 		yAxis.style.height = measureHeight + 'px';
 
-		xAxis.style.webkitTransform = `translateX(${-dimensions.left}px)`;
-		xAxis.style.MozTransform = `translateX(${-dimensions.left}px)`;
-		xAxis.style.msTransform = `translateX(${-dimensions.left}px)`;
-		xAxis.style.OTransform = `translateX(${-dimensions.left}px)`;
+		xAxis.style.webkitTransform = `translateX(${-distances.left}px)`;
+		xAxis.style.MozTransform = `translateX(${-distances.left}px)`;
+		xAxis.style.msTransform = `translateX(${-distances.left}px)`;
+		xAxis.style.OTransform = `translateX(${-distances.left}px)`;
 
-		yAxis.style.webkitTransform = `translateY(${-dimensions.top}px)`;
-		yAxis.style.MozTransform = `translateY(${-dimensions.top}px)`;
-		yAxis.style.msTransform = `translateY(${-dimensions.top}px)`;
-		yAxis.style.OTransform = `translateY(${-dimensions.top}px)`;
+		yAxis.style.webkitTransform = `translateY(${-distances.top}px)`;
+		yAxis.style.MozTransform = `translateY(${-distances.top}px)`;
+		yAxis.style.msTransform = `translateY(${-distances.top}px)`;
+		yAxis.style.OTransform = `translateY(${-distances.top}px)`;
 
 		tooltip.className = 'rulerTooltip';
 		tooltip.textContent = measureWidth + 1 + ' × ' + (measureHeight + 1);
 
-		if (dimensions.y < 26) tooltip.classList.add('bottom');
-		if (dimensions.x > window.innerWidth - 110) tooltip.classList.add('left');
+		if (distances.y < 26) tooltip.classList.add('bottom');
+		if (distances.x > window.innerWidth - 110) tooltip.classList.add('left');
 
 		if (!html.querySelector('.rulerData')) {
 			newDimensions.appendChild(xAxis);
@@ -249,87 +232,5 @@ const pageRuler = (port, request) => {
 			newDimensions.appendChild(tooltip);
 			html.appendChild(newDimensions);
 		}
-	}
-
-	// Calculates Result using GrayImage + Mouse Coordinates
-	function measureDistance(inputX, inputY) {
-		if (!isDisplayBoundary(inputX, inputY)) return false;
-
-		let area = 0;
-		let distances = {top: 0, right: 0, bottom: 0, left: 0};
-		let directions = {
-			top: {x: 0, y: -1},
-			right: {x: 1, y: 0},
-			bottom: {x: 0, y: 1},
-			left: {x: -1, y: 0},
-		};
-		let lightness = getLightnessAt(grayImage, inputX, inputY);
-
-		if (lightness === 68) return false;
-
-		for (let direction in distances) {
-			let vector = directions[direction];
-			let boundaryFound = false;
-			let sX = inputX;
-			let sY = inputY;
-			let color;
-			let currentLightness;
-
-			while (!boundaryFound) {
-				sX += vector.x;
-				sY += vector.y;
-				currentLightness = getLightnessAt(grayImage, sX, sY);
-
-				if (currentLightness && Math.abs(currentLightness - lightness) < threshold) {
-					distances[direction]++;
-				} else {
-					area += distances[direction];
-					boundaryFound = true;
-				}
-			}
-		}
-
-		if (area <= 6) {
-			distances = {top: 0, right: 0, bottom: 0, left: 0};
-			let similarColorStreakThreshold = 10;
-
-			for (let direction in distances) {
-				let vector = directions[direction];
-				let boundaryFound = false;
-				let sX = inputX;
-				let sY = inputY;
-				let color, currentLightness;
-				let lastLightness = lightness;
-				let similarColorStreak = 0;
-
-				while (!boundaryFound) {
-					sX += vector.x;
-					sY += vector.y;
-					currentLightness = getLightnessAt(grayImage, sX, sY);
-
-					if (currentLightness) {
-						distances[direction]++;
-
-						if (Math.abs(currentLightness - lastLightness) < threshold) {
-							similarColorStreak++;
-							if (similarColorStreak === similarColorStreakThreshold) {
-								distances[direction] -= similarColorStreakThreshold + 1;
-								boundaryFound = true;
-							}
-						} else {
-							similarColorStreak = 0;
-						}
-						lastLightness = currentLightness;
-					} else {
-						boundaryFound = true;
-					}
-				}
-			}
-		}
-
-		distances.x = inputX;
-		distances.y = inputY;
-		console.log(11, 'Calculated Data', distances);
-		showPageRuler(distances);
 	}
 };
