@@ -117,6 +117,9 @@ const pageRuler = (port, request) => {
 	let imageData;
 	let grayImage;
 
+	// Shuru Kardia Hai.
+	port.postMessage({action: 'Page Ruler Started'});
+
 	// Add Stylesheet to Head
 	let link = document.createElement('link');
 	link.href = 'http://localhost:8888/css/pageruler.css';
@@ -142,20 +145,16 @@ const pageRuler = (port, request) => {
 		portThree.onMessage.addListener(function (request) {
 			if (request.action && request.action === 'bodyScreenshotDone') {
 				image.src = request.bodyScreenshot;
-				console.log(image);
 
 				// Adjust The Canvas Size to The Html Size
 				width = canvas.width = html.clientWidth;
 				height = canvas.height = html.clientHeight;
-				console.log(width, height);
 
 				// Draw Image to Canvas and Get Data
 				ctx.drawImage(image, 0, 0, width, height);
 				imageData = ctx.getImageData(0, 0, width, height).data.buffer;
-				console.log(imageData);
 
 				grayImage = toGrayscale(new Uint8ClampedArray(imageData));
-				console.log(grayImage);
 
 				// Store Data
 				portThree.postMessage({action: 'storeData', grayImage: grayImage, width: width, height: height});
@@ -172,7 +171,6 @@ const pageRuler = (port, request) => {
 		event.preventDefault();
 		inputX = event.pageX - html.offsetLeft;
 		inputY = event.pageY - html.offsetTop;
-		console.log(3, 'X and Y Coordinates', inputX, inputY);
 
 		// Asking BJS, toGrayscale
 		portThree.postMessage({
@@ -182,7 +180,6 @@ const pageRuler = (port, request) => {
 		});
 		portThree.onMessage.addListener(function (request) {
 			if (request.action && request.action === 'measureDistanceDone') {
-				console.log(4, 'Calculated Data', request.distances);
 				showPageRuler(request.distances);
 			}
 		});
@@ -192,12 +189,10 @@ const pageRuler = (port, request) => {
 	function removePageRuler() {
 		let distances = html.querySelector('.rulerData');
 		if (distances) html.removeChild(distances);
-		port.postMessage({action: 'Page Ruler Removed'});
 	}
 
 	// Converts Image Data to Grayscale for Processing
 	function toGrayscale(imageData) {
-		console.log(imageData);
 		let grayPicture = new Int16Array(imageData.length / 4);
 		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
 			let r = imageData[i];
@@ -255,6 +250,5 @@ const pageRuler = (port, request) => {
 			newDimensions.appendChild(tooltip);
 			html.appendChild(newDimensions);
 		}
-		port.postMessage({action: 'Page Ruler Added'});
 	}
 };

@@ -59,6 +59,7 @@ function measureDistance(inputX, inputY) {
 		left: {x: -1, y: 0},
 	};
 	let lightness = getLightnessAt(grayImage, inputX, inputY);
+	console.log(lightness);
 
 	if (lightness === 68) return false;
 
