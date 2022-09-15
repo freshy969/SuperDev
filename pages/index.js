@@ -20,7 +20,7 @@ export default function Home() {
 			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded to LocalStorage');
 			setIsLoading(false);
 		} else {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalSotrage');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Features Loaded from LocalStorage');
 			setIsLoading(false);
 		}
 	}, []);

@@ -9,9 +9,9 @@ export default function MainBody() {
 
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-					portTwo.postMessage({message: featureId, action: 'activate'});
+					portTwo.postMessage({action: 'activateTextEditor'});
 					portTwo.onMessage.addListener(function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 					});
 				});
 			} else {
@@ -20,18 +20,18 @@ export default function MainBody() {
 
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-					portTwo.postMessage({message: featureId, action: 'deactivate'});
+					portTwo.postMessage({action: 'deactivateTextEditor'});
 					portTwo.onMessage.addListener(function (response) {
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 					});
 				});
 			}
 		} else if (featureId === 'pageRuler') {
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-				portTwo.postMessage({message: 'pageRuler'});
+				portTwo.postMessage({action: 'pageRuler'});
 				portTwo.onMessage.addListener(function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Message', response.message);
+					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 				});
 			});
 		}

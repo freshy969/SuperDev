@@ -1,6 +1,6 @@
 chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
-		switch (request.message) {
+		switch (request.action) {
 			case 'extClicked':
 				extClicked(port, request);
 				break;
@@ -10,8 +10,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'changeHeight':
 				changeHeight(port, request);
 				break;
-			case 'textEditor':
-				textEditor(port, request);
+			case 'activateTextEditor':
+				activateTextEditor(port, request);
+				break;
+			case 'deactivateTextEditor':
+				deactivateTextEditor(port, request);
 				break;
 			case 'pageRuler':
 				pageRuler(port, request);
@@ -24,7 +27,7 @@ const extClicked = (port, request) => {
 	if (document.getElementById('superDev') !== null) {
 		document.getElementById('superDev').remove();
 
-		port.postMessage({message: 'Popup Removed'});
+		port.postMessage({action: 'Popup Removed'});
 	} else {
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
@@ -70,7 +73,7 @@ const extClicked = (port, request) => {
 			iframeFix: true,
 		});
 
-		port.postMessage({message: 'Popup Created'});
+		port.postMessage({action: 'Popup Created'});
 	}
 };
 
@@ -79,7 +82,7 @@ const removePopup = (port, request) => {
 		// Why postMessage is called here before action.
 		// Because the sender (NavbarJs, part of iFrame) cannot receive
 		// the message after we remove the whole iFrame from the DOM.
-		port.postMessage({message: 'Popup Removed'});
+		port.postMessage({action: 'Popup Removed'});
 		document.getElementById('superDev').remove();
 	}
 };
@@ -87,18 +90,18 @@ const removePopup = (port, request) => {
 const changeHeight = (port, request) => {
 	document.getElementById('superDevIframe').style.height = `${request.height}px`;
 	document.getElementById('superDevIframe').style.visibility = 'visible';
-	port.postMessage({message: 'Height Changed'});
+	port.postMessage({action: 'Height Changed'});
 };
 
-const textEditor = (port, request) => {
-	if (request.action === 'deactivate') {
-		document.querySelector('body').contentEditable = false;
-		port.postMessage({message: 'Text Uneditable Now'});
-	} else if (request.action === 'activate') {
-		document.querySelector('body').contentEditable = true;
-		document.querySelector('body').spellcheck = false;
-		port.postMessage({message: 'Text Editable Now'});
-	}
+const activateTextEditor = (port, request) => {
+	document.querySelector('body').contentEditable = true;
+	document.querySelector('body').spellcheck = false;
+	port.postMessage({action: 'Text Editable Now'});
+};
+
+const deactivateTextEditor = (port, request) => {
+	document.querySelector('body').contentEditable = false;
+	port.postMessage({action: 'Text Uneditable Now'});
 };
 
 const pageRuler = (port, request) => {
@@ -110,6 +113,7 @@ const pageRuler = (port, request) => {
 	let canvas;
 	let ctx;
 	let image;
+	let src;
 	let width;
 	let height;
 	let imageData;
@@ -117,15 +121,15 @@ const pageRuler = (port, request) => {
 
 	// Generates Screenshot
 	let portThree = chrome.runtime.connect({name: 'portThree'});
-	portThree.postMessage({message: 'bodyScreenshot'});
+	portThree.postMessage({action: 'bodyScreenshot'});
 	portThree.onMessage.addListener(function (request) {
-		port.postMessage({message: request.message});
-		request.message;
-		drawCanvas(request.message);
+		if (request.action && request.action === 'bodyScreenshotDone') {
+			src = request.bodyScreenshot;
+			drawCanvas();
+		}
 	});
 
-	// Draws Canvas
-	function drawCanvas(src) {
+	function drawCanvas() {
 		// Variable Values
 		html = document.querySelector('html');
 		threshold = 20;
@@ -133,7 +137,6 @@ const pageRuler = (port, request) => {
 		ctx = canvas.getContext('2d');
 		image = new Image();
 		image.src = src;
-
 		console.log(1, 'Html', html);
 		console.log(2, 'Canvas', canvas);
 		console.log(3, 'CTX', ctx);
@@ -182,7 +185,7 @@ const pageRuler = (port, request) => {
 		}
 	}
 
-	// Removes Page Ruler
+	// Removes Page Ruler From Dom //
 	function removePageRuler() {
 		let dimensions = html.querySelector('.rulerData');
 		if (dimensions) html.removeChild(dimensions);
