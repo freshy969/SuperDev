@@ -157,6 +157,9 @@ const pageRuler = (port, request) => {
 				grayImage = toGrayscale(new Uint8ClampedArray(imageData));
 				console.log(grayImage);
 
+				// Store Data
+				portThree.postMessage({action: 'storeData', grayImage: grayImage, width: width, height: height});
+
 				html.onmousemove = storeMousePosition;
 				html.ontouchmove = storeMousePosition;
 				html.onmouseleave = removePageRuler;
@@ -174,11 +177,8 @@ const pageRuler = (port, request) => {
 		// Asking BJS, toGrayscale
 		portThree.postMessage({
 			action: 'measureDistance',
-			grayImage: grayImage,
 			inputX: inputX,
 			inputY: inputY,
-			width: width,
-			height: height,
 		});
 		portThree.onMessage.addListener(function (request) {
 			if (request.action && request.action === 'measureDistanceDone') {
@@ -192,6 +192,7 @@ const pageRuler = (port, request) => {
 	function removePageRuler() {
 		let distances = html.querySelector('.rulerData');
 		if (distances) html.removeChild(distances);
+		port.postMessage({action: 'Page Ruler Removed'});
 	}
 
 	// Converts Image Data to Grayscale for Processing
@@ -254,5 +255,6 @@ const pageRuler = (port, request) => {
 			newDimensions.appendChild(tooltip);
 			html.appendChild(newDimensions);
 		}
+		port.postMessage({action: 'Page Ruler Added'});
 	}
 };

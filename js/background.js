@@ -21,11 +21,12 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				portThree.postMessage({action: 'bodyScreenshotDone', bodyScreenshot: bodyScreenshot});
 			});
 		}
-		if (request.action === 'measureDistance') {
+		if (request.action === 'storeData') {
 			width = request.width;
 			height = request.height;
 			grayImage = request.grayImage;
-
+		}
+		if (request.action === 'measureDistance') {
 			portThree.postMessage({
 				action: 'measureDistanceDone',
 				distances: measureDistance(request.inputX, request.inputY),
