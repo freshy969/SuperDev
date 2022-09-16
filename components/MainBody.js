@@ -3,9 +3,9 @@ export default function MainBody() {
 
 	function singleFeature(featureId) {
 		if (featureId === 'textEditor') {
-			if (!document.getElementById(featureId).classList.contains('active')) {
-				document.getElementById(featureId).classList.remove('from-btnOne', 'to-btnTwo');
-				document.getElementById(featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
+			if (!document.querySelector('#' + featureId).classList.contains('active')) {
+				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
+				document.querySelector('#' + featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
@@ -15,8 +15,8 @@ export default function MainBody() {
 					});
 				});
 			} else {
-				document.getElementById(featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
-				document.getElementById(featureId).classList.add('from-btnOne', 'to-btnTwo');
+				document.querySelector('#' + featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
+				document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 
 				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});

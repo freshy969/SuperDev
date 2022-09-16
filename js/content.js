@@ -24,9 +24,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 const extClicked = (port, request) => {
-	if (document.getElementById('superDev') !== null) {
-		document.getElementById('superDev').remove();
-
+	if (document.querySelector('#superDev') !== null) {
+		document.querySelector('#superDev').remove();
 		port.postMessage({action: 'Popup Removed'});
 	} else {
 		let superDev = document.createElement('section');
@@ -50,7 +49,7 @@ const extClicked = (port, request) => {
 			margin-left:194px !important;
 			margin-bottom: -30px !important;
 			z-index: 2147483647 !important;`;
-		document.getElementById('superDev').appendChild(superDevHandler);
+		document.querySelector('#superDev').appendChild(superDevHandler);
 
 		let superDevIframe = document.createElement('iframe');
 		superDevIframe.src = chrome.runtime.getURL('index.html');
@@ -65,7 +64,7 @@ const extClicked = (port, request) => {
 			z-index: 2147483646 !important;
 			overflow: hidden !important;
 			visibility: hidden !important;`;
-		document.getElementById('superDev').appendChild(superDevIframe);
+		document.querySelector('#superDev').appendChild(superDevIframe);
 
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
@@ -78,18 +77,18 @@ const extClicked = (port, request) => {
 };
 
 const removePopup = (port, request) => {
-	if (document.getElementById('superDev') !== null) {
+	if (document.querySelector('#superDev') !== null) {
 		// Why postMessage is called here before action.
 		// Because the sender (NavbarJs, part of iFrame) cannot receive
 		// the message after we remove the whole iFrame from the DOM.
 		port.postMessage({action: 'Popup Removed'});
-		document.getElementById('superDev').remove();
+		document.querySelector('#superDev').remove();
 	}
 };
 
 const changeHeight = (port, request) => {
-	document.getElementById('superDevIframe').style.height = `${request.height}px`;
-	document.getElementById('superDevIframe').style.visibility = 'visible';
+	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+	document.querySelector('#superDevIframe').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
 };
 
@@ -110,7 +109,7 @@ const pageRuler = (port, request) => {
 	link.href = chrome.runtime.getURL('css/pageruler.css');
 	link.type = 'text/css';
 	link.rel = 'stylesheet';
-	document.getElementsByTagName('head')[0].appendChild(link);
+	document.querySelector('head')[0].appendChild(link);
 
 	// Global Variables
 	let html = document.querySelector('html');

@@ -36,7 +36,7 @@ export default function NavBar() {
 	}
 
 	function toggleFeature() {
-		if (document.getElementById('toggleFeature').classList.contains('hidden')) {
+		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightAllFeatures());
 			HideAllExcept('toggleFeature');
 		} else {
@@ -46,7 +46,7 @@ export default function NavBar() {
 	}
 
 	function toggleSettings() {
-		if (document.getElementById('toggleSettings').classList.contains('hidden')) {
+		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightHasSettings());
 			HideAllExcept('toggleSettings');
 		} else {
