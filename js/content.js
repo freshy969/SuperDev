@@ -24,10 +24,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 const extClicked = (port, request) => {
-	if (document.querySelector('#superDev') !== null) {
-		document.querySelector('#superDev').remove();
-		port.postMessage({action: 'Popup Removed'});
-	} else {
+	// If Popup Doesn't Exists
+	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
@@ -35,7 +33,8 @@ const extClicked = (port, request) => {
 			top: 32px !important;
 			right: 18px !important;
 			background-color: rgba(0,0,0,0) !important;
-			z-index: 2147483646 !important;`;
+			z-index: 2147483646 !important;
+			visibility: hidden !important`;
 		document.body.appendChild(superDev);
 
 		let superDevHandler = document.createElement('div');
@@ -62,8 +61,7 @@ const extClicked = (port, request) => {
 			display: block !important;
 			background-color: rgba(0,0,0,0) !important;
 			z-index: 2147483646 !important;
-			overflow: hidden !important;
-			visibility: hidden !important;`;
+			overflow: hidden !important;`;
 		document.querySelector('#superDev').appendChild(superDevIframe);
 
 		$('#superDev').draggable({
@@ -74,21 +72,26 @@ const extClicked = (port, request) => {
 
 		port.postMessage({action: 'Popup Created'});
 	}
+	// If Popup Visible
+	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		document.querySelector('#superDev').style.visibility = 'hidden';
+		port.postMessage({action: 'Popup Hidden'});
+	}
+	// If Popup Hidden
+	else {
+		document.querySelector('#superDev').style.visibility = 'visible';
+		port.postMessage({action: 'Popup Visible'});
+	}
 };
 
 const removePopup = (port, request) => {
-	if (document.querySelector('#superDev') !== null) {
-		// Why postMessage is called here before action.
-		// Because the sender (NavbarJs, part of iFrame) cannot receive
-		// the message after we remove the whole iFrame from the DOM.
-		port.postMessage({action: 'Popup Removed'});
-		document.querySelector('#superDev').remove();
-	}
+	document.querySelector('#superDev').style.visibility = 'hidden';
+	port.postMessage({action: 'Popup Hidden'});
 };
 
 const changeHeight = (port, request) => {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
-	document.querySelector('#superDevIframe').style.visibility = 'visible';
+	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
 };
 
@@ -109,7 +112,7 @@ const pageRuler = (port, request) => {
 	link.href = chrome.runtime.getURL('css/pageruler.css');
 	link.type = 'text/css';
 	link.rel = 'stylesheet';
-	document.querySelector('head')[0].appendChild(link);
+	document.querySelector('head').appendChild(link);
 
 	// Global Variables
 	let html = document.querySelector('html');
