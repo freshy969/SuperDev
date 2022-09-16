@@ -33,14 +33,6 @@ function getAverage(values) {
 	return Math.floor(sum / values.length);
 }
 
-//
-// measureDistances
-// ================
-//
-// measures the distances to the next boundary
-// around pageX and pageY.
-//
-
 function measureDistances(x, y) {
 	if (!inBoundaries(x, y)) return false;
 
@@ -130,24 +122,10 @@ function setLightnessAt(I, x, y, value) {
 	return inBoundaries(x, y) ? (I[y * width + x] = value) : -1;
 }
 
-//
-// inBoundaries
-// ============
-//
-// checks if x and y are in the canvas boundaries
-//
-
 function inBoundaries(x, y) {
 	if (x > 0 && x < width && y > 0 && y < height) return true;
 	else return false;
 }
-
-//
-// Grayscale
-// ---------
-//
-// reduces the input image data to an array of gray shades.
-//
 
 function grayscale(imgData) {
 	var gray = new Int16Array(imgData.length / 4);

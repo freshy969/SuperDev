@@ -107,26 +107,89 @@ const deactivateTextEditor = (port, request) => {
 };
 
 const pageRuler = (port, request) => {
-	// Add Global Stylesheet to Head
-	let link = document.createElement('link');
-	link.href = chrome.runtime.getURL('css/pageruler.css');
-	link.type = 'text/css';
-	link.rel = 'stylesheet';
-	document.querySelector('head').appendChild(link);
+	// Adding Styles To Head
+	let style = document.createElement('style');
+	document.head.appendChild(style);
+	style.textContent = `
+	.rulerData {
+		position: fixed;
+		width: 0;
+		height: 0;
+		z-index: 2147483646;
+		cursor: crosshair;
+		top: 0;
+		left: 0;
+		display: block !important;
+	}
+	.xAxis {
+		height: 1px;
+	}
+	.rulerAxis {
+		position: absolute;
+		background: rgb(0, 212, 190);
+	}
+	.yAxis {
+		width: 1px;
+	}
+	.rulerTooltip {
+		position: absolute;
+		left: 7px;
+		bottom: 6px;
+		padding: 1px 10px;
+		color: white;
+		text-align: center;
+		white-space: nowrap;
+		font-size: 12px;
+		line-height: 25px;
+		direction: ltr;
+		border-radius: 4px;
+		background: rgba(15, 17, 29, 0.95);
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		box-shadow: rgb(0 0 0 / 15%) 0.15em 0.15em 0.2em !important;
+		font-family: system-ui, -apple-system, sans-serif;
+	}
+	.rulerAxis::before,
+	.rulerAxis::after {
+		content: '';
+		position: absolute;
+		background: inherit;
+	}
+	.xAxis::before,
+	.xAxis::after {
+		left: 0px;
+		height: 5px;
+		top: -2px;
+		width: 1px;
+	}
+	.yAxis::before,
+	.yAxis::after {
+		left: -2px;
+		height: 1px;
+		top: 0px;
+		width: 5px;
+	}
+	.xAxis::after {
+		left: 100%;
+	}
+	.yAxis::after {
+		top: 100%;
+	}
+	`;
 
 	// Global Variables
-	let html = document.querySelector('html');
+	let body = document.querySelector('body');
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d');
-	let width = (canvas.width = html.clientWidth);
-	let height = (canvas.height = html.clientHeight);
-	let image = new Image();
-	let inputX;
-	let inputY;
-	let imageData;
-
-	port.postMessage({action: 'Page Ruler Started'});
+	let width = (canvas.width = body.clientWidth);
+	let height = (canvas.height = body.clientHeight);
 	let portThree = chrome.runtime.connect({name: 'portThree'});
+	let image = new Image();
+	let inputX, inputY, imageData;
+
+	// Initiate
+	port.postMessage({action: 'Page Ruler Started'});
 	drawCanvas();
 
 	function drawCanvas() {
@@ -139,46 +202,54 @@ const pageRuler = (port, request) => {
 				portThree.postMessage({action: 'toGrayscale', imageData: imageData, width: width, height: height});
 			}
 			if (request.action && request.action === 'toGrayscaleDone') {
-				html.onmousemove = storeMousePosition;
-				html.ontouchmove = storeMousePosition;
-				html.onmouseleave = removePageRuler;
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Grayscaled');
+				body.onmousemove = storeMousePosition;
+				body.ontouchmove = storeMousePosition;
+				body.onmouseleave = removePageRuler;
 			}
 		});
 	}
 
 	// Store Mouse Position
 	function storeMousePosition(event) {
-		event.preventDefault();
-		inputX = event.pageX - html.offsetLeft;
-		inputY = event.pageY - html.offsetTop;
+		setTimeout(() => {
+			event.preventDefault();
+			inputX = event.pageX - body.offsetLeft;
+			inputY = event.pageY - body.offsetTop;
 
-		// Asking BJS, toGrayscale
-		portThree.postMessage({
-			action: 'measureDistance',
-			inputX: inputX,
-			inputY: inputY,
-		});
-		portThree.onMessage.addListener(function (request) {
-			if (request.action && request.action === 'measureDistanceDone') {
-				showPageRuler(request.distances);
+			if (event.target.classList && event.target.id !== 'superDevIframe') {
+				// Asking BJS, toGrayscale
+				portThree.postMessage({
+					action: 'measureDistance',
+					inputX: inputX,
+					inputY: inputY,
+				});
+				// Show Page Ruler If Data Received
+				portThree.onMessage.addListener(function (request) {
+					if (request.action && request.action === 'measureDistanceDone') {
+						showPageRuler(request.distances);
+					}
+				});
+			} else {
+				removePageRuler();
 			}
-		});
+		}, 100);
 	}
 
 	// Removes Page Ruler From Dom //
 	function removePageRuler() {
-		let distances = html.querySelector('.rulerData');
-		if (distances) html.removeChild(distances);
+		let distances = body.querySelector('.rulerData');
+		if (distances) body.removeChild(distances);
 	}
 
 	// Takes Result From MeasureDistance and Populates/Create HTML
 	function showPageRuler(distances) {
 		if (!distances) return;
 
-		let newDimensions = html.querySelector('.rulerData') || document.createElement('div');
-		let xAxis = html.querySelector('.xAxis.rulerAxis') || document.createElement('div');
-		let yAxis = html.querySelector('.yAxis.rulerAxis') || document.createElement('div');
-		let tooltip = html.querySelector('.rulerTooltip') || document.createElement('div');
+		let newDimensions = body.querySelector('.rulerData') || document.createElement('div');
+		let xAxis = body.querySelector('.xAxis.rulerAxis') || document.createElement('div');
+		let yAxis = body.querySelector('.yAxis.rulerAxis') || document.createElement('div');
+		let tooltip = body.querySelector('.rulerTooltip') || document.createElement('div');
 
 		newDimensions.className = 'rulerData';
 
@@ -212,11 +283,11 @@ const pageRuler = (port, request) => {
 		if (distances.y < 26) tooltip.classList.add('bottom');
 		if (distances.x > window.innerWidth - 110) tooltip.classList.add('left');
 
-		if (!html.querySelector('.rulerData')) {
+		if (!body.querySelector('.rulerData')) {
 			newDimensions.appendChild(xAxis);
 			newDimensions.appendChild(yAxis);
 			newDimensions.appendChild(tooltip);
-			html.appendChild(newDimensions);
+			body.appendChild(newDimensions);
 		}
 	}
 };
