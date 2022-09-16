@@ -29,13 +29,11 @@ function getAverage(values) {
 	while (i--) {
 		sum = sum + values[i];
 	}
-
 	return Math.floor(sum / values.length);
 }
 
 function measureDistances(x, y) {
 	if (!inBoundaries(x, y)) return false;
-
 	var area = 0;
 	var distances = {top: 0, right: 0, bottom: 0, left: 0};
 	var directions = {
@@ -45,9 +43,7 @@ function measureDistances(x, y) {
 		left: {x: -1, y: 0},
 	};
 	var lightness = getLightnessAt(data, x, y);
-
 	if (lightness === 68) return false;
-
 	for (var direction in distances) {
 		var vector = directions[direction];
 		var boundaryFound = false;
@@ -55,7 +51,6 @@ function measureDistances(x, y) {
 		var sy = y;
 		var color;
 		var currentLightness;
-
 		while (!boundaryFound) {
 			sx += vector.x;
 			sy += vector.y;
@@ -69,7 +64,6 @@ function measureDistances(x, y) {
 			}
 		}
 	}
-
 	if (area <= 6) {
 		distances = {top: 0, right: 0, bottom: 0, left: 0};
 		var similarColorStreakThreshold = 10;
@@ -107,10 +101,8 @@ function measureDistances(x, y) {
 			}
 		}
 	}
-
 	distances.x = x;
 	distances.y = y;
-
 	return distances;
 }
 
@@ -129,15 +121,11 @@ function inBoundaries(x, y) {
 
 function grayscale(imgData) {
 	var gray = new Int16Array(imgData.length / 4);
-
 	for (var i = 0, n = 0, l = imgData.length; i < l; i += 4, n++) {
 		var r = imgData[i],
 			g = imgData[i + 1],
 			b = imgData[i + 2];
-
-		// weighted grayscale algorithm
 		gray[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
 	}
-
 	return gray;
 }

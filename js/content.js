@@ -189,20 +189,25 @@ const pageRuler = (port, request) => {
 	let inputX, inputY, imageData;
 
 	// Initiate
-	port.postMessage({action: 'Page Ruler Started'});
+	port.postMessage({action: 'PageRuler Initiated'});
 	drawCanvas();
 
 	function drawCanvas() {
 		portThree.postMessage({action: 'bodyScreenshot'});
+		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Started Body Screenshot');
 		portThree.onMessage.addListener(function (request) {
 			if (request.action && request.action === 'bodyScreenshotDone') {
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Done Body Screenshot');
 				image.src = request.bodyScreenshot;
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Starting Drawing Canvas');
 				ctx.drawImage(image, 0, 0, width, height);
 				imageData = Array.from(ctx.getImageData(0, 0, width, height).data);
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Done Drawing Canvas');
 				portThree.postMessage({action: 'toGrayscale', imageData: imageData, width: width, height: height});
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Starting Grayscaling');
 			}
 			if (request.action && request.action === 'toGrayscaleDone') {
-				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Grayscaled');
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Done Grayscaling');
 				body.onmousemove = storeMousePosition;
 				body.ontouchmove = storeMousePosition;
 				body.onmouseleave = removePageRuler;
@@ -212,28 +217,28 @@ const pageRuler = (port, request) => {
 
 	// Store Mouse Position
 	function storeMousePosition(event) {
-		setTimeout(() => {
-			event.preventDefault();
+		event.preventDefault();
+		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Received Mouse Input');
+
+		if (event.target.classList && event.target.id !== 'superDevIframe') {
 			inputX = event.pageX - body.offsetLeft;
 			inputY = event.pageY - body.offsetTop;
+			askMeasureDistance();
+		} else removePageRuler();
+	}
 
-			if (event.target.classList && event.target.id !== 'superDevIframe') {
-				// Asking BJS, toGrayscale
-				portThree.postMessage({
-					action: 'measureDistance',
-					inputX: inputX,
-					inputY: inputY,
-				});
-				// Show Page Ruler If Data Received
-				portThree.onMessage.addListener(function (request) {
-					if (request.action && request.action === 'measureDistanceDone') {
-						showPageRuler(request.distances);
-					}
-				});
-			} else {
-				removePageRuler();
+	function askMeasureDistance() {
+		portThree.postMessage({
+			action: 'measureDistance',
+			inputX: inputX,
+			inputY: inputY,
+		});
+		portThree.onMessage.addListener(function (request) {
+			if (request.action && request.action === 'measureDistanceDone') {
+				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Done Measuring', request.distances);
+				showPageRuler(request.distances);
 			}
-		}, 100);
+		});
 	}
 
 	// Removes Page Ruler From Dom //

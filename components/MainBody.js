@@ -27,7 +27,7 @@ export default function MainBody() {
 				});
 			}
 		} else if (featureId === 'pageRuler') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Started Grayscaling');
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Started PageRuler');
 			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 				portTwo.postMessage({action: 'pageRuler'});
