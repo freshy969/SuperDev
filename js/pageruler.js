@@ -22,7 +22,6 @@ const pageRuler = (port, request) => {
 	let altKeyWasPressed = false;
 	let connectionClosed = false;
 	let lineColor = getLineColor();
-	// var lineColor = [0, 1, 0.5];
 	let colorThreshold = [0.2, 0.5, 0.2];
 	let overlay = document.createElement('div');
 	overlay.className = 'rulerNoCursor';
