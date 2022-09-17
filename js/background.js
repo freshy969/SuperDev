@@ -1,3 +1,4 @@
+// Open Extension on Icon Click
 chrome.action.onClicked.addListener(() => {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
@@ -16,7 +17,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	console.log(portThree);
 
 	chrome.scripting.insertCSS({
-		target: {tabId: portThree.sender.tab.id},
+		target: {tabId: portThree.sender.tabs.id},
 		files: ['css/tooltip.css'],
 	});
 
@@ -334,4 +335,16 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 		return [h, s, l];
 	}
+});
+
+// Open Extension on Context Menu Click
+chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
+chrome.contextMenus.onClicked.addListener(function () {
+	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+		portOne.postMessage({action: 'extClicked'});
+		portOne.onMessage.addListener(function (response) {
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
+		});
+	});
 });
