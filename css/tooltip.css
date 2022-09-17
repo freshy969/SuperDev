@@ -37,7 +37,7 @@
 }
 
 .altColor .rulerTooltip {
-	background: hsla(50, 100%, 10%, 0.55);
+	background: hsla(231.429, 32%, 9%, 0.95);
 }
 
 .rulerTooltip.left {
@@ -52,11 +52,11 @@
 
 .rulerAxis {
 	position: absolute;
-	background: hsla(205, 100%, 50%, 0.55);
+	background: hsla(0, 100%, 50%, 1);
 }
 
 .altColor .rulerAxis {
-	background: hsla(50, 100%, 50%, 0.55);
+	background: hsla(0, 100%, 50%, 1);
 }
 
 .rulerAxis:before,

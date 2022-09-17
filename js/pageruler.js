@@ -12,6 +12,7 @@ const pageRuler = (port, request) => {
 	// Was Added
 	let image = new Image();
 	let canvas = document.createElement('canvas');
+	let ctx = canvas.getContext('2d', {willReadFrequently: true});
 	// Was Added
 	let body = document.querySelector('body');
 	let portThree = chrome.runtime.connect({name: 'dimensions'});
@@ -33,7 +34,9 @@ const pageRuler = (port, request) => {
 			// Was Added
 			case 'parseScreenshot':
 				parseScreenshot(request.dataUrl);
-				loadImage();
+				setTimeout(() => {
+					loadImage();
+				}, 0);
 				break;
 			// Was Added
 			case 'distances':
@@ -70,7 +73,6 @@ const pageRuler = (port, request) => {
 	}
 
 	function loadImage() {
-		ctx = canvas.getContext('2d', {willReadFrequently: true});
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -185,7 +187,6 @@ const pageRuler = (port, request) => {
 		if (paused) return;
 
 		removeDimensions();
-		console.log(dimensions);
 		if (!dimensions) return;
 
 		let newDimensions = document.createElement('div');
