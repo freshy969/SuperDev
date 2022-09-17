@@ -52,7 +52,7 @@
 
 .rulerAxis {
 	position: absolute;
-	background: hsla(355, 78%, 56%, 1);
+	background: hsla(205, 100%, 50%, 0.55);
 }
 
 .altColor .rulerAxis {
