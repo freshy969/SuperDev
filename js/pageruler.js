@@ -34,9 +34,6 @@ const pageRuler = (port, request) => {
 			// Was Added
 			case 'parseScreenshot':
 				parseScreenshot(request.dataUrl);
-				setTimeout(() => {
-					loadImage();
-				}, 0);
 				break;
 			// Was Added
 			case 'distances':
@@ -70,6 +67,9 @@ const pageRuler = (port, request) => {
 	// Was Added
 	function parseScreenshot(dataUrl) {
 		image.src = dataUrl;
+		image.onload = function () {
+			loadImage();
+		};
 	}
 
 	function loadImage() {
