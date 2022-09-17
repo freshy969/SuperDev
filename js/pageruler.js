@@ -98,7 +98,6 @@ const pageRuler = (port, request) => {
 		window.removeEventListener('mousemove', onInputMove);
 		window.removeEventListener('touchmove', onInputMove);
 		window.removeEventListener('scroll', onVisibleAreaChange);
-
 		removeDimensions();
 		enableCursor();
 	}
