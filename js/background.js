@@ -9,114 +9,250 @@ chrome.action.onClicked.addListener(() => {
 });
 
 chrome.runtime.onConnect.addListener(function (portThree) {
-	//Global Vars, PageRuler
-	let threshold = 20;
-	let grayImage;
-	let width;
-	let height;
+	let areaThreshold = 6;
+	let dimensionsThreshold = 6;
+	let map;
+
+	console.log(portThree);
+
+	chrome.scripting.insertCSS({
+		target: {tabId: portThree.sender.tab.id},
+		files: ['css/tooltip.css'],
+	});
 
 	portThree.onMessage.addListener(function (request) {
-		if (request.action === 'bodyScreenshot') {
-			chrome.tabs.captureVisibleTab({format: 'png'}, function (bodyScreenshot) {
-				portThree.postMessage({action: 'bodyScreenshotDone', bodyScreenshot: bodyScreenshot});
-			});
-		}
-
-		if (request.action === 'toGrayscale') {
-			grayImage = toGrayscale(new Uint8ClampedArray(request.imageData));
-			width = request.width;
-			height = request.height;
-			portThree.postMessage({action: 'toGrayscaleDone'});
-		}
-
-		if (request.action === 'measureDistance') {
-			portThree.postMessage({
-				action: 'measureDistanceDone',
-				distances: measureDistance(request.inputX, request.inputY),
-			});
+		switch (request.action) {
+			// Was Added
+			case 'takeScreenshot':
+				takeScreenshot();
+				break;
+			// Was Added
+			case 'imageData':
+				imageData = new Uint8ClampedArray(request.imageData);
+				data = grayscale(imageData);
+				width = request.width;
+				height = request.height;
+				portThree.postMessage({action: 'screenshotProcessed'});
+				break;
+			case 'position':
+				measureAreaStopped = true;
+				measureDistances(request.data);
+				break;
+			case 'area':
+				measureAreaStopped = true;
+				measureArea(request.data);
+				break;
 		}
 	});
 
-	// Checks If Mouse Position Is Not at Display Boundary
-	function isDisplayBoundary(inputX, inputY) {
-		if (inputX > 0 && inputX < width && inputY > 0 && inputY < height) return true;
-		else return false;
+	// Was Added
+	function takeScreenshot() {
+		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
+			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
+		});
+	}
+	// Was Added
+
+	function measureArea(pos) {
+		let x0, y0, startLightness;
+
+		map = new Int16Array(data);
+		x0 = pos.x;
+		y0 = pos.y;
+		startLightness = getLightnessAt(map, x0, y0);
+		stack = [[x0, y0, startLightness]];
+		area = {top: y0, right: x0, bottom: y0, left: x0};
+		pixelsInArea = [];
+
+		measureAreaStopped = false;
+
+		setTimeout(nextTick, 0);
 	}
 
-	// Called From MeasureDistances, Returns Lightness at Given Coordinates
-	function getLightnessAt(grayImage, inputX, inputY) {
-		return isDisplayBoundary(inputX, inputY) ? grayImage[inputY * width + inputX] : -1;
+	function nextTick() {
+		workOffStack();
+
+		if (!measureAreaStopped) {
+			if (stack.length) {
+				setTimeout(nextTick, 0);
+			} else {
+				finishMeasureArea();
+			}
+		}
 	}
 
-	// Calculates Result using GrayImage + Mouse Coordinates
-	function measureDistance(inputX, inputY) {
-		if (!isDisplayBoundary(inputX, inputY)) return false;
+	function workOffStack() {
+		let max = 500000;
+		let count = 0;
 
-		let area = 0;
-		let distances = {top: 0, right: 0, bottom: 0, left: 0};
+		while (count++ < max && stack.length) {
+			floodFill();
+		}
+	}
+
+	function floodFill() {
+		let xyl = stack.shift();
+		let x = xyl[0];
+		let y = xyl[1];
+		let lastLightness = xyl[2];
+		let currentLightness = getLightnessAt(map, x, y);
+
+		if (currentLightness > -1 && currentLightness < 256 && Math.abs(currentLightness - lastLightness) < areaThreshold) {
+			setLightnessAt(map, x, y, 256);
+			pixelsInArea.push([x, y]);
+
+			if (x < area.left) area.left = x;
+			else if (x > area.right) area.right = x;
+			if (y < area.top) area.top = y;
+			else if (y > area.bottom) area.bottom = y;
+
+			stack.push([x - 1, y, currentLightness]);
+			stack.push([x, y + 1, currentLightness]);
+			stack.push([x + 1, y, currentLightness]);
+			stack.push([x, y - 1, currentLightness]);
+		}
+	}
+
+	function finishMeasureArea() {
+		let boundariePixels = {
+			top: [],
+			right: [],
+			bottom: [],
+			left: [],
+		};
+
+		// clear map
+		map = [];
+
+		for (let i = 0, l = pixelsInArea.length; i < l; i++) {
+			let x = pixelsInArea[i][0];
+			let y = pixelsInArea[i][1];
+
+			if (x === area.left) boundariePixels.left.push(y);
+			if (x === area.right) boundariePixels.right.push(y);
+
+			if (y === area.top) boundariePixels.top.push(x);
+			if (y === area.bottom) boundariePixels.bottom.push(x);
+		}
+
+		let x = getMaxSpread(boundariePixels.top, boundariePixels.bottom);
+		let y = getMaxSpread(boundariePixels.left, boundariePixels.right);
+
+		area.x = x;
+		area.y = y;
+		area.left = area.x - area.left;
+		area.right = area.right - area.x;
+		area.top = area.y - area.top;
+		area.bottom = area.bottom - area.y;
+
+		area.backgroundColor = getColorAt(area.x, area.y);
+
+		portThree.postMessage({
+			action: 'distances',
+			data: area,
+		});
+	}
+
+	function getMaxSpread(sideA, sideB) {
+		let a = getDimensions(sideA);
+		let b = getDimensions(sideB);
+
+		let smallerSide = a.length < b.length ? a : b;
+
+		return smallerSide.center;
+	}
+
+	function getDimensions(values) {
+		let min = Infinity;
+		let max = 0;
+
+		for (let i = 0, l = values.length; i < l; i++) {
+			if (values[i] < min) min = values[i];
+			if (values[i] > max) max = values[i];
+		}
+
+		return {
+			min: min,
+			center: min + Math.floor((max - min) / 2),
+			max: max,
+			length: max - min,
+		};
+	}
+
+	function measureDistances(input) {
+		let distances = {
+			top: 0,
+			right: 0,
+			bottom: 0,
+			left: 0,
+		};
 		let directions = {
 			top: {x: 0, y: -1},
 			right: {x: 1, y: 0},
 			bottom: {x: 0, y: 1},
 			left: {x: -1, y: 0},
 		};
-		let lightness = getLightnessAt(grayImage, inputX, inputY);
-		console.log(lightness);
-
-		if (lightness === 68) return false;
+		let area = 0;
+		let startLightness = getLightnessAt(data, input.x, input.y);
+		let lastLightness;
 
 		for (let direction in distances) {
 			let vector = directions[direction];
 			let boundaryFound = false;
-			let sX = inputX;
-			let sY = inputY;
+			let sx = input.x;
+			let sy = input.y;
 			let currentLightness;
 
-			while (!boundaryFound) {
-				sX += vector.x;
-				sY += vector.y;
-				currentLightness = getLightnessAt(grayImage, sX, sY);
+			lastLightness = startLightness;
 
-				if (currentLightness && Math.abs(currentLightness - lightness) < threshold) {
+			while (!boundaryFound) {
+				sx += vector.x;
+				sy += vector.y;
+				currentLightness = getLightnessAt(data, sx, sy);
+
+				if (currentLightness > -1 && Math.abs(currentLightness - lastLightness) < dimensionsThreshold) {
 					distances[direction]++;
+					lastLightness = currentLightness;
 				} else {
-					area += distances[direction];
 					boundaryFound = true;
 				}
 			}
+
+			area += distances[direction];
 		}
 
 		if (area <= 6) {
 			distances = {top: 0, right: 0, bottom: 0, left: 0};
-			let similarColorStreakThreshold = 10;
+			let similarColorStreakThreshold = 8;
 
 			for (let direction in distances) {
 				let vector = directions[direction];
 				let boundaryFound = false;
-				let sX = inputX;
-				let sY = inputY;
+				let sx = input.x;
+				let sy = input.y;
 				let currentLightness;
-				let lastLightness = lightness;
 				let similarColorStreak = 0;
 
-				while (!boundaryFound) {
-					sX += vector.x;
-					sY += vector.y;
-					currentLightness = getLightnessAt(grayImage, sX, sY);
+				lastLightness = startLightness;
 
-					if (currentLightness) {
+				while (!boundaryFound) {
+					sx += vector.x;
+					sy += vector.y;
+					currentLightness = getLightnessAt(data, sx, sy);
+
+					if (currentLightness > -1) {
 						distances[direction]++;
 
-						if (Math.abs(currentLightness - lastLightness) < threshold) {
+						if (Math.abs(currentLightness - lastLightness) < dimensionsThreshold) {
 							similarColorStreak++;
 							if (similarColorStreak === similarColorStreakThreshold) {
 								distances[direction] -= similarColorStreakThreshold + 1;
 								boundaryFound = true;
 							}
 						} else {
+							lastLightness = currentLightness;
 							similarColorStreak = 0;
 						}
-						lastLightness = currentLightness;
 					} else {
 						boundaryFound = true;
 					}
@@ -124,20 +260,78 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 			}
 		}
 
-		distances.x = inputX;
-		distances.y = inputY;
-		return distances;
+		distances.x = input.x;
+		distances.y = input.y;
+		distances.backgroundColor = getColorAt(input.x, input.y);
+
+		portThree.postMessage({
+			action: 'distances',
+			data: distances,
+		});
 	}
 
-	// Converts Image Data to Grayscale for Processing
-	function toGrayscale(imageData) {
-		let grayPicture = new Int16Array(imageData.length / 4);
+	function getColorAt(x, y) {
+		if (!inBoundaries(x, y)) return -1;
+
+		let i = y * width * 4 + x * 4;
+
+		return rgbToHsl(imageData[i], imageData[++i], imageData[++i]);
+	}
+
+	function getLightnessAt(data, x, y) {
+		return inBoundaries(x, y) ? data[y * width + x] : -1;
+	}
+
+	function setLightnessAt(data, x, y, value) {
+		return inBoundaries(x, y) ? (data[y * width + x] = value) : -1;
+	}
+
+	function inBoundaries(x, y) {
+		if (x >= 0 && x < width && y >= 0 && y < height) return true;
+		else return false;
+	}
+
+	function grayscale(imageData) {
+		let gray = new Int16Array(imageData.length / 4);
+
 		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
-			let r = imageData[i];
-			let g = imageData[i + 1];
-			let b = imageData[i + 2];
-			grayPicture[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
+			let r = imageData[i],
+				g = imageData[i + 1],
+				b = imageData[i + 2];
+
+			gray[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
 		}
-		return grayPicture;
+
+		return gray;
+	}
+
+	function rgbToHsl(r, g, b) {
+		(r /= 255), (g /= 255), (b /= 255);
+		let max = Math.max(r, g, b),
+			min = Math.min(r, g, b);
+		let h,
+			s,
+			l = (max + min) / 2;
+
+		if (max == min) {
+			h = s = 0; // achromatic
+		} else {
+			let d = max - min;
+			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+			switch (max) {
+				case r:
+					h = (g - b) / d + (g < b ? 6 : 0);
+					break;
+				case g:
+					h = (b - r) / d + 2;
+					break;
+				case b:
+					h = (r - g) / d + 4;
+					break;
+			}
+			h /= 6;
+		}
+
+		return [h, s, l];
 	}
 });

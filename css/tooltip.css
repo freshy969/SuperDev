@@ -1,0 +1,110 @@
+.rulerNoCursor {
+	cursor: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2147483647;
+}
+
+.rulerDimensions {
+	position: fixed;
+	width: 0;
+	height: 0;
+	z-index: 2147483646;
+	pointer-events: none;
+}
+
+.rulerDebugScreen {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 2147483645;
+}
+
+.rulerDebugScreen.is-hidden {
+	display: none;
+}
+
+.rulerTooltip {
+	position: absolute;
+	left: 7px;
+	bottom: 6px;
+	padding: 1px 10px;
+	color: white;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 12px;
+	line-height: 25px;
+	direction: ltr;
+	border-radius: 4px;
+	background: hsla(231.429, 32%, 9%, 0.95);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em !important;
+	font-family: system-ui, -apple-system, sans-serif;
+}
+
+.altColor .rulerTooltip {
+	background: hsla(50, 100%, 10%, 0.55);
+}
+
+.rulerTooltip.left {
+	left: auto;
+	right: 7px;
+}
+
+.rulerTooltip.bottom {
+	bottom: auto;
+	top: 6px;
+}
+
+.rulerAxis {
+	position: absolute;
+	background: hsla(355, 78%, 56%, 1);
+}
+
+.altColor .rulerAxis {
+	background: hsla(50, 100%, 50%, 0.55);
+}
+
+.rulerAxis:before,
+.rulerAxis:after {
+	content: '';
+	position: absolute;
+	background: inherit;
+}
+
+.x.rulerAxis:before,
+.x.rulerAxis:after {
+	left: 0;
+	height: 5px;
+	top: -2px;
+	width: 1px;
+}
+
+.x.rulerAxis:after {
+	left: 100%;
+}
+
+.y.rulerAxis:before,
+.y.rulerAxis:after {
+	left: -2px;
+	height: 1px;
+	top: 0;
+	width: 5px;
+}
+
+.y.rulerAxis:after {
+	top: 100%;
+}
+
+.x.rulerAxis {
+	height: 1px;
+}
+
+.y.rulerAxis {
+	width: 1px;
+}
