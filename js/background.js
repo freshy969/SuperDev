@@ -9,16 +9,17 @@ chrome.action.onClicked.addListener(() => {
 	});
 });
 
+// Page Ruler
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
 	let dimensionsThreshold = 6;
 	let map;
 
-	console.log(portThree);
-
-	chrome.scripting.insertCSS({
-		target: {tabId: portThree.sender.tabs.id},
-		files: ['css/tooltip.css'],
+	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.scripting.insertCSS({
+			target: {tabId: tabs[0].id},
+			files: ['css/tooltip.css'],
+		});
 	});
 
 	portThree.onMessage.addListener(function (request) {
@@ -335,6 +336,10 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 		return [h, s, l];
 	}
+});
+
+chrome.runtime.onSuspend.addListener(function (portThree) {
+	portThree.postMessage({action: 'destroy'});
 });
 
 // Open Extension on Context Menu Click

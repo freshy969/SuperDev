@@ -48,7 +48,7 @@ const pageRuler = (port, request) => {
 		}
 	});
 
-	initiate();
+	onResizeWindow(), initiate();
 
 	function initiate() {
 		window.addEventListener('mousemove', onInputMove);
@@ -70,7 +70,7 @@ const pageRuler = (port, request) => {
 	}
 
 	function loadImage() {
-		ctx = canvas.getContext('2d');
+		ctx = canvas.getContext('2d', {willReadFrequently: true});
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -90,8 +90,6 @@ const pageRuler = (port, request) => {
 		overlay.height = window.innerHeight;
 		onVisibleAreaChange();
 	}
-
-	onResizeWindow();
 
 	function destroy() {
 		connectionClosed = true;
