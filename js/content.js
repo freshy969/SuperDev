@@ -20,7 +20,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
-				activatePageRuler(port, request);
+				//activatePageRuler(port, request);
 				break;
 		}
 	});
@@ -125,6 +125,8 @@ const activatePageRuler = (port, request) => {
 	let connectionClosed = false;
 	let lineColor = getLineColor();
 	let colorThreshold = [0.2, 0.5, 0.2];
+	let overlay = document.createElement('div');
+	overlay.className = 'rulerNoCursor';
 
 	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -147,7 +149,8 @@ const activatePageRuler = (port, request) => {
 		}
 	});
 
-	onVisibleAreaChange(), initiate();
+	onResizeWindow(), initiate();
+	port.postMessage({action: 'Page Ruler Started'});
 
 	function initiate() {
 		window.addEventListener('mousemove', onInputMove);
@@ -185,6 +188,12 @@ const activatePageRuler = (port, request) => {
 		});
 	}
 	// Was Added
+
+	function onResizeWindow() {
+		overlay.width = window.innerWidth;
+		overlay.height = window.innerHeight;
+		onVisibleAreaChange();
+	}
 
 	function deactivatePageRuler() {
 		connectionClosed = true;
@@ -225,11 +234,11 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function disableCursor() {
-		body.classList.add('rulerNoCursor');
+		body.appendChild(overlay);
 	}
 
 	function enableCursor() {
-		body.classList.remove('rulerNoCursor');
+		body.removeChild(overlay);
 	}
 
 	function detectAltKeyPress(event) {
@@ -256,7 +265,6 @@ const activatePageRuler = (port, request) => {
 
 	function onInputMove(event) {
 		event.preventDefault();
-		console.log(event.target.classList);
 		if (event.touches) {
 			inputX = event.touches[0].clientX;
 			inputY = event.touches[0].clientY;
@@ -264,7 +272,6 @@ const activatePageRuler = (port, request) => {
 			inputX = event.clientX;
 			inputY = event.clientY;
 		}
-
 		sendToWorker(event);
 	}
 
