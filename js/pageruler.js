@@ -162,6 +162,7 @@ const pageRuler = (port, request) => {
 	}
 
 	function onInputMove(event) {
+		event.preventDefault();
 		if (event.touches) {
 			inputX = event.touches[0].clientX;
 			inputY = event.touches[0].clientY;

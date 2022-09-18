@@ -59,7 +59,7 @@ export default function NavBar() {
 		<header id='navBar' className='bg-navBar'>
 			<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
 				<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
-					SuperDev <i className='fa-regular fa-window px-[3px]'></i>
+					SuperDev Pro<img className='inline relative ml-1 mt-[-3px]' src='../icons/orange/icon48.png' alt='logo' width='16'></img>
 				</h1>
 				<nav>
 					<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
