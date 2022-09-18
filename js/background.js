@@ -1,13 +1,10 @@
-// Single Port Variable
-let port;
-
 // Open Extension on Icon Click
 chrome.action.onClicked.addListener(() => {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		port = chrome.tabs.connect(tabs[0].id, {name: 'port'});
-		port.postMessage({action: 'extClicked'});
-		port.onMessage.addListener(function (response) {
-			console.log('Got Response : ', response.action);
+		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+		portOne.postMessage({action: 'extClicked'});
+		portOne.onMessage.addListener(function (response) {
+			console.log('Response', response.action);
 		});
 	});
 });
@@ -16,9 +13,10 @@ chrome.action.onClicked.addListener(() => {
 chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
 chrome.contextMenus.onClicked.addListener(function () {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		port = chrome.tabs.connect(tabs[0].id, {name: 'port'});
-		port.postMessage({action: 'extClicked'});
-		port.onMessage.addListener(function (response) {
+		let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+		portTwo.postMessage({action: 'extClicked'});
+		portTwo.onMessage.addListener(function (response) {
+			console.log('Response', response.action);
 			if (response.action === 'Popup Created' || response.action === 'Popup Visible') {
 				chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
 			} else if (response.action === 'Popup Hidden') {
@@ -29,7 +27,7 @@ chrome.contextMenus.onClicked.addListener(function () {
 });
 
 // Page Ruler
-chrome.runtime.onConnect.addListener(function (port) {
+chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
 	let dimensionsThreshold = 6;
 	let map;
@@ -41,7 +39,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 		});
 	});
 
-	port.onMessage.addListener(function (request) {
+	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {
 			// Was Added
 			case 'takeScreenshot':
@@ -53,7 +51,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				data = grayscale(imageData);
 				width = request.width;
 				height = request.height;
-				port.postMessage({action: 'screenshotProcessed'});
+				portThree.postMessage({action: 'screenshotProcessed'});
 				break;
 			case 'position':
 				measureAreaStopped = true;
@@ -69,7 +67,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 	// Was Added
 	function takeScreenshot() {
 		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
-			port.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
+			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
 	}
 	// Was Added
@@ -168,7 +166,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 		area.backgroundColor = getColorAt(area.x, area.y);
 
-		port.postMessage({
+		portThree.postMessage({
 			action: 'distances',
 			data: area,
 		});
@@ -285,7 +283,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 		distances.y = input.y;
 		distances.backgroundColor = getColorAt(input.x, input.y);
 
-		port.postMessage({
+		portThree.postMessage({
 			action: 'distances',
 			data: distances,
 		});
