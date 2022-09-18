@@ -1,8 +1,9 @@
-import HideAllExcept from '/components/functions/HidEAll';
+import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
 import CalcHeightIsEnabled from '/components/functions/CalcHeightIsEnabled';
 import CalcHeightAllFeatures from '/components/functions/CalcHeightAllFeatures';
 import CalcHeightHasSettings from '/components/functions/CalcHeightHasSettings';
 import ChangeHeight from '/components/functions/ChangeHeight';
+import DisableAllFeature from '/components/functions/DisableAllFeature';
 
 export default function NavBar() {
 	function darkMode() {
@@ -28,6 +29,7 @@ export default function NavBar() {
 	function removePopup() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
+			DisableAllFeature(portFour);
 			portFour.postMessage({action: 'removePopup'});
 			portFour.onMessage.addListener(function (response) {
 				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
@@ -38,20 +40,20 @@ export default function NavBar() {
 	function toggleFeature() {
 		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightAllFeatures());
-			HideAllExcept('toggleFeature');
+			HideAllComponentExcept('toggleFeature');
 		} else {
 			ChangeHeight(CalcHeightIsEnabled());
-			HideAllExcept('mainBody');
+			HideAllComponentExcept('mainBody');
 		}
 	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightHasSettings());
-			HideAllExcept('toggleSettings');
+			HideAllComponentExcept('toggleSettings');
 		} else {
 			ChangeHeight(CalcHeightIsEnabled());
-			HideAllExcept('mainBody');
+			HideAllComponentExcept('mainBody');
 		}
 	}
 

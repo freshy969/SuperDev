@@ -39,7 +39,7 @@
 	},
 	"content_scripts": [
 		{
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js", "js/pageruler.js"],
+			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
 			"matches": ["file://*/*", "http://*/*", "https://*/*"]
 		}
 	],
