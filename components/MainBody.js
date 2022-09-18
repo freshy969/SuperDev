@@ -2,40 +2,46 @@ export default function MainBody() {
 	let allFeatures = JSON.parse(localStorage.getItem('allFeatures'));
 
 	function singleFeature(featureId) {
-		if (featureId === 'textEditor') {
-			if (!document.querySelector('#' + featureId).classList.contains('active')) {
-				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
-				document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
+			if (featureId === 'textEditor') {
+				if (!document.querySelector('#' + featureId).classList.contains('active')) {
+					document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
+					document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 
-				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-					portTwo.postMessage({action: 'activateTextEditor'});
-					portTwo.onMessage.addListener(function (response) {
+					portFour.postMessage({action: 'activateTextEditor'});
+					portFour.onMessage.addListener(function (response) {
 						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 					});
-				});
-			} else {
-				document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
-				document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
+				} else {
+					document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+					document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 
-				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-					portTwo.postMessage({action: 'deactivateTextEditor'});
-					portTwo.onMessage.addListener(function (response) {
+					portFour.postMessage({action: 'deactivateTextEditor'});
+					portFour.onMessage.addListener(function (response) {
 						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 					});
-				});
+				}
+			} else if (featureId === 'pageRuler') {
+				if (!document.querySelector('#' + featureId).classList.contains('active')) {
+					document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
+					document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+
+					portFour.postMessage({action: 'pageRuler'});
+					portFour.onMessage.addListener(function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
+					});
+				} else {
+					document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+					document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
+
+					portFour.postMessage({action: 'destroy'});
+					portFour.onMessage.addListener(function (response) {
+						console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
+					});
+				}
 			}
-		} else if (featureId === 'pageRuler') {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Started PageRuler');
-			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-				portTwo.postMessage({action: 'pageRuler'});
-				portTwo.onMessage.addListener(function (response) {
-					console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
-				});
-			});
-		}
+		});
 	}
 
 	return (

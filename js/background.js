@@ -9,6 +9,23 @@ chrome.action.onClicked.addListener(() => {
 	});
 });
 
+// Open Extension on Context Menu Click
+chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
+chrome.contextMenus.onClicked.addListener(function () {
+	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+		portTwo.postMessage({action: 'extClicked'});
+		portTwo.onMessage.addListener(function (response) {
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
+			if (response.action === 'Popup Created' || response.action === 'Popup Visible') {
+				chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
+			} else if (response.action === 'Popup Hidden') {
+				chrome.contextMenus.update('inspectWith', {title: 'Inspect with SuperDev Pro', contexts: ['all']});
+			}
+		});
+	});
+});
+
 // Page Ruler
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
@@ -336,20 +353,4 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 		return [h, s, l];
 	}
-});
-
-chrome.runtime.onSuspend.addListener(function (portThree) {
-	portThree.postMessage({action: 'destroy'});
-});
-
-// Open Extension on Context Menu Click
-chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
-chrome.contextMenus.onClicked.addListener(function () {
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-		portOne.postMessage({action: 'extClicked'});
-		portOne.onMessage.addListener(function (response) {
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
-		});
-	});
 });

@@ -27,9 +27,9 @@ export default function NavBar() {
 
 	function removePopup() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-			portTwo.postMessage({action: 'removePopup'});
-			portTwo.onMessage.addListener(function (response) {
+			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
+			portFour.postMessage({action: 'removePopup'});
+			portFour.onMessage.addListener(function (response) {
 				console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Action', response.action);
 			});
 		});
