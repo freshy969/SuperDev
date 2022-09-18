@@ -4,7 +4,7 @@ chrome.action.onClicked.addListener(() => {
 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 		portOne.postMessage({action: 'extClicked'});
 		portOne.onMessage.addListener(function (response) {
-			console.log('Response', response.action);
+			console.log('Got Response : ', response.action);
 		});
 	});
 });
@@ -16,7 +16,7 @@ chrome.contextMenus.onClicked.addListener(function () {
 		let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 		portTwo.postMessage({action: 'extClicked'});
 		portTwo.onMessage.addListener(function (response) {
-			console.log('Response', response.action);
+			console.log('Got Response : ', response.action);
 			if (response.action === 'Popup Created' || response.action === 'Popup Visible') {
 				chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
 			} else if (response.action === 'Popup Hidden') {

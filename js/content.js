@@ -20,7 +20,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
-				//activatePageRuler(port, request);
+				deactivatePageRuler(port, request);
 				break;
 		}
 	});
@@ -149,8 +149,8 @@ const activatePageRuler = (port, request) => {
 		}
 	});
 
-	onResizeWindow(), initiate();
-	port.postMessage({action: 'Page Ruler Started'});
+	//onResizeWindow(), initiate();
+	port.postMessage({action: 'Page Ruler Activated'});
 
 	function initiate() {
 		window.addEventListener('mousemove', onInputMove);
@@ -375,4 +375,8 @@ const activatePageRuler = (port, request) => {
 
 		return [h, s, l];
 	}
+};
+
+const deactivatePageRuler = (port, request) => {
+	port.postMessage({action: 'Page Ruler Deactivated'});
 };
