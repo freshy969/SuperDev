@@ -1,11 +1,21 @@
 {
 	"name": "SuperDev Pro",
 	"version": "1.0.0",
-	"description": "A Browser Extension and a Swiss Army Toolbox for Web Designers, Developers and Founders.",
+	"description": "A Swiss Army Toolbox Browser Extension for Web Designers, Developers and Founders.",
 	"permissions": ["storage", "tabs", "activeTab", "scripting", "contextMenus", "clipboardWrite", "desktopCapture", "downloads", "management"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
 		"service_worker": "js/background.js"
+	},
+	"commands": {
+		"_execute_action": {
+			"suggested_key": {
+				"chromeos": "Ctrl+Shift+S",
+				"linux": "Ctrl+Shift+S",
+				"mac": "Ctrl+Shift+S",
+				"windows": "Ctrl+Shift+S"
+			}
+		}
 	},
 	"author": "Choudhary Abdullah",
 	"action": {

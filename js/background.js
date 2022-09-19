@@ -1,5 +1,6 @@
+// Called on Extension Install/Update and Chrome Update
 chrome.runtime.onInstalled.addListener(async () => {
-	// ContentJs Reinjection on Update/Install
+	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			chrome.scripting.executeScript({
@@ -40,6 +41,11 @@ chrome.management.onEnabled.addListener(async (extension) => {
 			}
 		}
 	}
+});
+
+// Shortcut Commands
+chrome.commands.onCommand.addListener((command) => {
+	console.log(`Command: ${command}`);
 });
 
 // Open Extension on Icon Click

@@ -1,29 +1,27 @@
 ## SuperDev
 
-A Browser Extension and a Swiss Army Toolbox for Web Designers, Developers and Founders.  
+A Swiss Army Toolbox Browser Extension for Web Designers, Developers and Founders.
 List of Feature below -
 
 ```
-1. Session Manager
-2. Color Picker
-3. Color Palette
-4. Text Editor
-5. Lorem Ipsum
-6. Take Screenshot
-7. Extract Media
-8. Delete Element
-9. Responsive Viewer
-10. Page Ruler
-11. CSS Viewer
-12. CSS Editor
-13. Fake Form Filler
-14. Go Incognito
-15. Console Viewer
-16. JSON Viewer
-17. Clear All Cache
-18. CORS Unblock
-19. Cookie Editor
-20. LocalStorage Editor
+1. CSS Inspector
+2. CSS Copier
+3. CSS Editor
+4. Color Picker
+5. Color Palette
+6. Page Ruler
+7. Text Editor
+8. Font Inspector
+9. Font Changer
+10. Padding Editor
+11. Margin Editor
+12. Move Element
+13. Export Element
+14. Delete Element
+15. Extract Media
+16. Take Screenshot
+17. Responsive Viewer
+18. Clear All Cache
 ```
 
 ## Screenshots
