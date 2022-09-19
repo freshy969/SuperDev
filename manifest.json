@@ -1,7 +1,7 @@
 {
 	"name": "SuperDev",
 	"version": "1.0.0",
-	"description": "SuperDev is Chrome Extension for Developers and Designers that Adds 20+ Extension Feature into a Single one.",
+	"description": "A Browser Extension and a Swiss Army Toolbox for Web Designers, Developers and Founders.",
 	"permissions": [
 		"storage",
 		"tabs",
