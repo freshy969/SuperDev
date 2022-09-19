@@ -6,7 +6,9 @@ chrome.action.onClicked.addListener(() => {
 		portOne.onMessage.addListener(function (response) {
 			if (response.action === 'Popup Hidden') {
 				portOne.postMessage({action: 'deactivateAll'});
-				console.log('Got Response : ', response.action);
+				portOne.onMessage.addListener(function (response) {
+					console.log('Got Response : ', response.action);
+				});
 			}
 		});
 	});
@@ -21,7 +23,9 @@ chrome.contextMenus.onClicked.addListener(function () {
 		portTwo.onMessage.addListener(function (response) {
 			if (response.action === 'Popup Hidden') {
 				portTwo.postMessage({action: 'deactivateAll'});
-				console.log('Got Response : ', response.action);
+				portTwo.onMessage.addListener(function (response) {
+					console.log('Got Response : ', response.action);
+				});
 			}
 		});
 	});
