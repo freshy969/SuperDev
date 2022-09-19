@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(async () => {
-	// ContentJs Reinjection after Upgrade Install
+	// ContentJs Reinjection on Update/Install
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			chrome.scripting.executeScript({
@@ -26,6 +26,20 @@ chrome.runtime.onInstalled.addListener(async () => {
 			});
 		}
 	});
+});
+
+// ContentJs Reinjection on Extension Enable
+chrome.management.onEnabled.addListener(async (extension) => {
+	if (extension.name === chrome.runtime.getManifest().name) {
+		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+				chrome.scripting.executeScript({
+					target: {tabId: tab.id},
+					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+				});
+			}
+		}
+	}
 });
 
 // Open Extension on Icon Click

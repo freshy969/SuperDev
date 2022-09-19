@@ -1,8 +1,8 @@
 {
-	"name": "SuperDev",
+	"name": "SuperDev Pro",
 	"version": "1.0.0",
 	"description": "A Browser Extension and a Swiss Army Toolbox for Web Designers, Developers and Founders.",
-	"permissions": ["storage", "tabs", "activeTab", "scripting", "contextMenus", "clipboardWrite", "desktopCapture", "downloads"],
+	"permissions": ["storage", "tabs", "activeTab", "scripting", "contextMenus", "clipboardWrite", "desktopCapture", "downloads", "management"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
 		"service_worker": "js/background.js"
