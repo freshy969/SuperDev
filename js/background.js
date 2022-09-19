@@ -27,17 +27,6 @@ chrome.contextMenus.onClicked.addListener(function () {
 	});
 });
 
-// Update Context Menu
-chrome.storage.onChanged.addListener(function (result) {
-	if (result.isHidden) {
-		if (result.isHidden.newValue === true) {
-			chrome.contextMenus.update('inspectWith', {title: 'Inspect with SuperDev Pro', contexts: ['all']});
-		} else if (result.isHidden.newValue === false) {
-			chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
-		}
-	}
-});
-
 // Page Ruler
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
