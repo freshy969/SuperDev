@@ -1,36 +1,52 @@
+import {useState, useEffect} from 'react';
 import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
 import CalcHeightIsEnabled from '/components/functions/CalcHeightIsEnabled';
 import CalcHeightAllFeatures from '/components/functions/CalcHeightAllFeatures';
 import CalcHeightHasSettings from '/components/functions/CalcHeightHasSettings';
 import ChangeHeight from '/components/functions/ChangeHeight';
-import DisableAllFeature from '/components/functions/DisableAllFeature';
 
 export default function NavBar() {
+	const [allFeatures, setAllFeatures] = useState([]);
+
+	useEffect(() => {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
+			setAllFeatures(JSON.parse(result.allFeatures));
+		});
+
+		chrome.storage.onChanged.addListener(function (result) {
+			if (result.allFeatures) {
+				setAllFeatures(JSON.parse(result.allFeatures.newValue));
+			}
+		});
+	}, []);
+
 	function darkMode() {
-		if (localStorage.getItem('colorTheme')) {
-			if (localStorage.getItem('colorTheme') === 'light') {
-				document.documentElement.classList.add('dark');
-				localStorage.setItem('colorTheme', 'dark');
+		chrome.storage.sync.get(['colorTheme'], function (result) {
+			if (result.colorTheme) {
+				if (result.colorTheme === 'light') {
+					document.documentElement.classList.add('dark');
+					chrome.storage.sync.set({colorTheme: 'dark'});
+				} else {
+					document.documentElement.classList.remove('dark');
+					chrome.storage.sync.set({colorTheme: 'light'});
+				}
 			} else {
-				document.documentElement.classList.remove('dark');
-				localStorage.setItem('colorTheme', 'light');
+				if (document.documentElement.classList.contains('dark')) {
+					document.documentElement.classList.remove('dark');
+					chrome.storage.sync.set({colorTheme: 'light'});
+				} else {
+					document.documentElement.classList.add('dark');
+					chrome.storage.sync.set({colorTheme: 'dark'});
+				}
 			}
-		} else {
-			if (document.documentElement.classList.contains('dark')) {
-				document.documentElement.classList.remove('dark');
-				localStorage.setItem('colorTheme', 'light');
-			} else {
-				document.documentElement.classList.add('dark');
-				localStorage.setItem('colorTheme', 'dark');
-			}
-		}
+		});
 	}
 
-	function removePopup() {
+	function showHideExtension() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
-			DisableAllFeature(portFour);
-			portFour.postMessage({action: 'removePopup'});
+			portFour.postMessage({action: 'deactivateAll'});
+			portFour.postMessage({action: 'showHideExtension'});
 			portFour.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
 			});
@@ -39,38 +55,40 @@ export default function NavBar() {
 
 	function toggleFeature() {
 		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
-			ChangeHeight(CalcHeightAllFeatures());
+			ChangeHeight(CalcHeightAllFeatures(allFeatures));
 			HideAllComponentExcept('toggleFeature');
 		} else {
-			ChangeHeight(CalcHeightIsEnabled());
+			ChangeHeight(CalcHeightIsEnabled(allFeatures));
 			HideAllComponentExcept('mainBody');
 		}
 	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			ChangeHeight(CalcHeightHasSettings());
+			ChangeHeight(CalcHeightHasSettings(allFeatures));
 			HideAllComponentExcept('toggleSettings');
 		} else {
-			ChangeHeight(CalcHeightIsEnabled());
+			ChangeHeight(CalcHeightIsEnabled(allFeatures));
 			HideAllComponentExcept('mainBody');
 		}
 	}
 
-	return (
-		<header id='navBar' className='bg-navBar'>
-			<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
-				<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
-					SuperDev Pro<img className='inline relative ml-1 mt-[-3px]' src='../icons/orange/icon48.png' alt='logo' width='16'></img>
-				</h1>
-				<nav>
-					<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
-					<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={toggleFeature}></button>
-					<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
-					<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
-					<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={removePopup}></button>
-				</nav>
-			</div>
-		</header>
-	);
+	if (allFeatures.length !== 0) {
+		return (
+			<header id='navBar' className='bg-navBar'>
+				<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
+					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
+						SuperDev Pro<img className='inline relative ml-1 mt-[-3px]' src='../icons/orange/icon48.png' alt='logo' width='16'></img>
+					</h1>
+					<nav>
+						<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
+						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={toggleFeature}></button>
+						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
+						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
+						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={showHideExtension}></button>
+					</nav>
+				</div>
+			</header>
+		);
+	}
 }

@@ -1,11 +1,8 @@
 chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
-			case 'extClicked':
-				extClicked(port, request);
-				break;
-			case 'removePopup':
-				removePopup(port, request);
+			case 'showHideExtension':
+				showHideExtension(port, request);
 				break;
 			case 'changeHeight':
 				changeHeight(port, request);
@@ -22,11 +19,16 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
 				break;
+			case 'deactivateAll':
+				deactivateTextEditor(port, request);
+				deactivatePageRuler(port, request);
+				port.postMessage({action: 'Deactivated All'});
+				break;
 		}
 	});
 });
 
-const extClicked = (port, request) => {
+const showHideExtension = (port, request) => {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
@@ -73,28 +75,27 @@ const extClicked = (port, request) => {
 			iframeFix: true,
 		});
 
+		chrome.storage.sync.set({isHidden: false});
 		port.postMessage({action: 'Popup Created'});
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		chrome.storage.sync.set({isHidden: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
+		chrome.storage.sync.set({isHidden: false});
 		document.querySelector('#superDev').style.visibility = 'visible';
 		port.postMessage({action: 'Popup Visible'});
 	}
 };
 
-const removePopup = (port, request) => {
-	document.querySelector('#superDev').style.visibility = 'hidden';
-	port.postMessage({action: 'Popup Hidden'});
-};
-
 const changeHeight = (port, request) => {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
-	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
+	if (document.querySelector('#superDev').style.visibility === 'hidden')
+		document.querySelector('#superDevIframe').onload = document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
 };
 
@@ -149,7 +150,7 @@ const activatePageRuler = (port, request) => {
 		}
 	});
 
-	//onResizeWindow(), initiate();
+	onResizeWindow(), initiate();
 	port.postMessage({action: 'Page Ruler Activated'});
 
 	function initiate() {

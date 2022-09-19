@@ -2,9 +2,12 @@
 chrome.action.onClicked.addListener(() => {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-		portOne.postMessage({action: 'extClicked'});
+		portOne.postMessage({action: 'showHideExtension'});
 		portOne.onMessage.addListener(function (response) {
-			console.log('Got Response : ', response.action);
+			if (response.action === 'Popup Hidden') {
+				portOne.postMessage({action: 'deactivateAll'});
+				console.log('Got Response : ', response.action);
+			}
 		});
 	});
 });
@@ -14,16 +17,25 @@ chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith
 chrome.contextMenus.onClicked.addListener(function () {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 		let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-		portTwo.postMessage({action: 'extClicked'});
+		portTwo.postMessage({action: 'showHideExtension'});
 		portTwo.onMessage.addListener(function (response) {
-			console.log('Got Response : ', response.action);
-			if (response.action === 'Popup Created' || response.action === 'Popup Visible') {
-				chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
-			} else if (response.action === 'Popup Hidden') {
-				chrome.contextMenus.update('inspectWith', {title: 'Inspect with SuperDev Pro', contexts: ['all']});
+			if (response.action === 'Popup Hidden') {
+				portTwo.postMessage({action: 'deactivateAll'});
+				console.log('Got Response : ', response.action);
 			}
 		});
 	});
+});
+
+// Update Context Menu
+chrome.storage.onChanged.addListener(function (result) {
+	if (result.isHidden) {
+		if (result.isHidden.newValue === true) {
+			chrome.contextMenus.update('inspectWith', {title: 'Inspect with SuperDev Pro', contexts: ['all']});
+		} else if (result.isHidden.newValue === false) {
+			chrome.contextMenus.update('inspectWith', {title: 'Hide/Disable SuperDev Pro', contexts: ['all']});
+		}
+	}
 });
 
 // Page Ruler

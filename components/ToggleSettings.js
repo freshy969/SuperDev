@@ -1,25 +1,39 @@
+import {useState, useEffect} from 'react';
 export default function ToggleSettings() {
-	let allFeatures = JSON.parse(localStorage.getItem('allFeatures'));
+	const [allFeatures, setAllFeatures] = useState([]);
+
+	useEffect(() => {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
+			setAllFeatures(JSON.parse(result.allFeatures));
+		});
+		chrome.storage.onChanged.addListener(function (result) {
+			if (result.allFeatures) {
+				setAllFeatures(JSON.parse(result.allFeatures.newValue));
+			}
+		});
+	}, []);
 
 	function singleSettingsPage(featureId) {}
 
-	return (
-		<section id='toggleSettings' className='hidden'>
-			<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
-				{allFeatures.map((value, index) => {
-					if (value.hasSettings === true) {
-						return (
-							<button
-								key={index}
-								id={value.id}
-								onClick={() => singleSettingsPage(value.id)}
-								className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
-								<i className={value.id + ' fa-regular ' + value.settingsIcon + ' pl-[5px] pr-[4px] text-bodyText text-xs'}></i> {value.title}
-							</button>
-						);
-					}
-				})}
-			</div>
-		</section>
-	);
+	if (allFeatures.length !== 0) {
+		return (
+			<section id='toggleSettings' className='hidden'>
+				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-borderLight dark:border-borderDark box-border rounded-b-lg'>
+					{allFeatures.map((value, index) => {
+						if (value.hasSettings === true && value.isEnabled === true) {
+							return (
+								<button
+									key={index}
+									id={value.id}
+									onClick={() => singleSettingsPage(value.id)}
+									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+									<i className={value.id + ' fa-regular ' + value.settingsIcon + ' pl-[5px] pr-[4px] text-bodyText text-xs'}></i> {value.title}
+								</button>
+							);
+						}
+					})}
+				</div>
+			</section>
+		);
+	}
 }
