@@ -1,6 +1,6 @@
 ## SuperDev
 
-SuperDev is Chrome Extension for Developers and Designers that Adds 20+ Extension's Feature into a Single one.  
+A Browser Extension and a Swiss Army Toolbox for Web Designers, Developers and Founders.  
 List of Feature below -
 
 ```
