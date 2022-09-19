@@ -28,9 +28,9 @@ export default function MainBody() {
 									onClick={() => DisableAllFeatureExcept(allFeatures, value.id)}
 									className={
 										value.id +
-										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
+										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
 									}>
-									<i className={'fa-regular ' + value.icon + ' px-[5px] text-bodyText'}></i> {value.title}
+									<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText'}></i> {value.title}
 								</button>
 							);
 						} else {
@@ -40,9 +40,9 @@ export default function MainBody() {
 									id={value.id}
 									className={
 										value.id +
-										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300 hidden'
+										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300 hidden'
 									}>
-									<i className={'fa-regular ' + value.icon + ' px-[5px] text-bodyText'}></i> {value.title}
+									<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText'}></i> {value.title}
 								</button>
 							);
 						}

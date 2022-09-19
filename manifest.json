@@ -24,28 +24,28 @@
 		"contentSettings",
 		"proxy"
 	],
-	"host_permissions": ["*://*/*"],
+	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
 		"service_worker": "js/background.js"
 	},
-	"author": "Sixsilicon",
+	"author": "Choudhary Abdullah",
 	"action": {
-		"default_title": "SuperDev"
+		"default_title": "SuperDev Pro"
 	},
 	"icons": {
-		"16": "icons/orange/icon16.png",
-		"48": "icons/orange/icon48.png",
-		"128": "icons/orange/icon128.png"
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
 	},
 	"content_scripts": [
 		{
 			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
-			"matches": ["file://*/*", "http://*/*", "https://*/*"]
+			"matches": ["http://*/*", "https://*/*"]
 		}
 	],
 	"web_accessible_resources": [
 		{
-			"matches": ["file://*/*", "http://*/*", "https://*/*"],
+			"matches": ["http://*/*", "https://*/*"],
 			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next/*"]
 		}
 	],

@@ -1,34 +1,49 @@
-// Open Extension on Icon Click
-chrome.action.onClicked.addListener(() => {
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-		portOne.postMessage({action: 'showHideExtension'});
-		portOne.onMessage.addListener(function (response) {
-			if (response.action === 'Popup Hidden') {
-				portOne.postMessage({action: 'deactivateAll'});
-				portOne.onMessage.addListener(function (response) {
-					console.log('Got Response : ', response.action);
+chrome.runtime.onInstalled.addListener(async () => {
+	// ContentJs Reinjection after Upgrade Install
+	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+			chrome.scripting.executeScript({
+				target: {tabId: tab.id},
+				files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+			});
+		}
+	}
+	// Creating Chrome Context Menu
+	chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
+	chrome.contextMenus.onClicked.addListener((tab) => {
+		if (!tab.pageUrl.includes('chrome://') && !tab.pageUrl.includes('file://')) {
+			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+				portTwo.postMessage({action: 'showHideExtension'});
+				portTwo.onMessage.addListener(function (response) {
+					if (response.action === 'Popup Hidden') {
+						portTwo.postMessage({action: 'deactivateAll'});
+						portTwo.onMessage.addListener(function (response) {
+							console.log('Got Response : ', response.action);
+						});
+					}
 				});
-			}
-		});
+			});
+		}
 	});
 });
 
-// Open Extension on Context Menu Click
-chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
-chrome.contextMenus.onClicked.addListener(function () {
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-		portTwo.postMessage({action: 'showHideExtension'});
-		portTwo.onMessage.addListener(function (response) {
-			if (response.action === 'Popup Hidden') {
-				portTwo.postMessage({action: 'deactivateAll'});
-				portTwo.onMessage.addListener(function (response) {
-					console.log('Got Response : ', response.action);
-				});
-			}
+// Open Extension on Icon Click
+chrome.action.onClicked.addListener((tab) => {
+	if (!tab.url.includes('chrome://') && !tab.url.includes('file://')) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension'});
+			portOne.onMessage.addListener(function (response) {
+				if (response.action === 'Popup Hidden') {
+					portOne.postMessage({action: 'deactivateAll'});
+					portOne.onMessage.addListener(function (response) {
+						console.log('Got Response : ', response.action);
+					});
+				}
+			});
 		});
-	});
+	}
 });
 
 // Page Ruler

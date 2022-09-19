@@ -42,8 +42,8 @@ export default function ToggleFeature() {
 									key={index}
 									id={value.id}
 									onClick={() => toggleSingleFeature(value.id)}
-									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
-									<i className={value.id + ' fa-regular ' + value.disableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
+									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+									<i className={value.id + ' fa-regular ' + value.disableIcon + ' pl-[5px] pr-[4px] text-btnText text-[11px]'}></i> {value.title}
 								</button>
 							);
 						} else {
@@ -52,8 +52,8 @@ export default function ToggleFeature() {
 									key={index}
 									id={value.id}
 									onClick={() => toggleSingleFeature(value.id)}
-									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-bodyText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
-									<i className={value.id + ' fa-regular ' + value.enableIcon + ' pl-[5px] pr-[4px] text-bodyText text-[11px]'}></i> {value.title}
+									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
+									<i className={value.id + ' fa-regular ' + value.enableIcon + ' pl-[5px] pr-[4px] text-btnText text-[11px]'}></i> {value.title}
 								</button>
 							);
 						}

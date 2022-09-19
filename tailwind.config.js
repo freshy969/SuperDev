@@ -9,14 +9,10 @@ module.exports = {
 
 				bodyDark: '#000000FF',
 				bodyLight: '#F4F4F6FF',
-				bodyText: '#F3F3F3FF',
 
 				btnOne: '#007CF0ff',
 				btnTwo: '#06B6D4FF',
-
-				btnThree: '#FFA600',
-				btnFour: '#F99200',
-				btnFive: '#FFD500',
+				btnText: '#F3F3F3FF',
 
 				borderLight: '#DBDBDBFF',
 				borderDark: '#222222AA',
