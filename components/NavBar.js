@@ -13,25 +13,27 @@ export default function NavBar() {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 
-		chrome.storage.onChanged.addListener(function (result) {
-			if (result.allFeatures) {
-				setAllFeatures(JSON.parse(result.allFeatures.newValue));
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.allFeatures) {
+				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 
-			// Hide All Active Buttons on isHidden True
-			if (result.isHidden) {
-				if (result.isHidden.newValue === true) {
-					allFeatures.map((value, index) => {
-						if (document.querySelector('#' + value.id) && document.querySelector('#' + value.id).classList.contains('active')) {
-							document.querySelector('#' + value.id).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
-							document.querySelector('#' + value.id).classList.add('from-btnOne', 'to-btnTwo');
-							console.log('All Active Button Hidden');
-						}
+			//Hide All Active Buttons on isHidden True
+			if (changes.isHidden) {
+				if (changes.isHidden.newValue === true) {
+					chrome.storage.sync.get(['allFeatures'], function (result) {
+						JSON.parse(result.allFeatures).map((value, index) => {
+							if (document.querySelector('#' + value.id) && document.querySelector('#' + value.id).classList.contains('active')) {
+								document.querySelector('#' + value.id).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+								document.querySelector('#' + value.id).classList.add('from-btnOne', 'to-btnTwo');
+								console.log('All Active Button Hidden');
+							}
+						});
 					});
 				}
 			}
 		});
-	}, [allFeatures]);
+	}, []);
 
 	function darkMode() {
 		chrome.storage.sync.get(['colorTheme'], function (result) {

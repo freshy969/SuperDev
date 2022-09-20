@@ -8,9 +8,9 @@ export default function MainBody() {
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
-		chrome.storage.onChanged.addListener(function (result) {
-			if (result.allFeatures) {
-				setAllFeatures(JSON.parse(result.allFeatures.newValue));
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.allFeatures) {
+				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 	}, []);
