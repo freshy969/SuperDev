@@ -8,6 +8,7 @@ import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateF
 
 export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
+	const [isMinimised, setIsMinimised] = useState(false);
 
 	useEffect(() => {
 		chrome.storage.sync.get(['allFeatures'], function (result) {
@@ -29,6 +30,17 @@ export default function NavBar() {
 			}
 		});
 	}, []);
+
+	function toggleFeature() {
+		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
+			ChangeHeight(CalcHeightAllFeatures(allFeatures));
+			ActivateDeactivateFeature(allFeatures, null);
+			HideAllComponentExcept('toggleFeature');
+		} else {
+			ChangeHeight(CalcHeightIsEnabled(allFeatures));
+			HideAllComponentExcept('mainBody');
+		}
+	}
 
 	function darkMode() {
 		chrome.storage.sync.get(['colorTheme'], function (result) {
@@ -52,27 +64,6 @@ export default function NavBar() {
 		});
 	}
 
-	function showHideExtension() {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
-			portFour.postMessage({action: 'showHideExtension'});
-			portFour.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
-		});
-	}
-
-	function toggleFeature() {
-		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
-			ChangeHeight(CalcHeightAllFeatures(allFeatures));
-			ActivateDeactivateFeature(allFeatures, null);
-			HideAllComponentExcept('toggleFeature');
-		} else {
-			ChangeHeight(CalcHeightIsEnabled(allFeatures));
-			HideAllComponentExcept('mainBody');
-		}
-	}
-
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightHasSettings(allFeatures));
@@ -84,22 +75,47 @@ export default function NavBar() {
 		}
 	}
 
+	function pauseExtension() {
+		ActivateDeactivateFeature(allFeatures, null);
+	}
+
+	function minimiseExtension() {
+		if (isMinimised === false) {
+			ChangeHeight(41);
+			setIsMinimised(true);
+			document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+		} else {
+			document.querySelector('#navBar').firstChild.style.borderRadius = '';
+			ChangeHeight(CalcHeightIsEnabled(allFeatures));
+			setIsMinimised(false);
+		}
+	}
+
+	function showHideExtension() {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
+			portFour.postMessage({action: 'showHideExtension'});
+			portFour.onMessage.addListener(function (response) {
+				console.log('Got Response : ', response.action);
+			});
+		});
+	}
+
 	if (allFeatures.length !== 0) {
 		return (
 			<header id='navBar' className='bg-navBar'>
-				<div className='flex justify-between border border-b-0 border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
-					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2.5px]'>
+				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
+					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[1.5px]'>
 						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
-						<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.5px]'></button>
-						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={toggleFeature}></button>
-						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
-						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
-						<button
-							className='text-navText text-right fa-regular fa-circle-pause text-xs ml-2 py-1 px-[3px]'
-							onClick={() => ActivateDeactivateFeature(allFeatures, null)}></button>
-						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={showHideExtension}></button>
+						<button className='text-navText text-right fa-solid fa-grip-vertical text-xs p-1 relative bottom-[1px]'></button>
+						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1 relative bottom-[1px]' onClick={toggleFeature}></button>
+						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1 relative bottom-[1px]' onClick={darkMode}></button>
+						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1 relative bottom-[1px]' onClick={toggleSettings}></button>
+						<button className='text-navText text-right fa-regular fa-circle-pause text-xs ml-2 p-1 relative bottom-[1px]' onClick={pauseExtension}></button>
+						<button className='text-navText text-right fa-solid fa-compress text-xs ml-2 p-1 relative bottom-[1px]' onClick={minimiseExtension}></button>
+						<button className='text-navText text-right fa-solid fa-xmark text-[15px] ml-2 p-1 relative top-[0px]' onClick={showHideExtension}></button>
 					</nav>
 				</div>
 			</header>
