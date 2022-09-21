@@ -17,12 +17,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 				portTwo.postMessage({action: 'showHideExtension'});
 				portTwo.onMessage.addListener(function (response) {
-					if (response.action === 'Popup Hidden') {
-						portTwo.postMessage({action: 'deactivateAll'});
-						portTwo.onMessage.addListener(function (response) {
-							console.log('Got Response : ', response.action);
-						});
-					}
+					console.log('Got Response : ', response.action);
 				});
 			});
 		}
@@ -55,12 +50,7 @@ chrome.action.onClicked.addListener((tab) => {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
 			portOne.onMessage.addListener(function (response) {
-				if (response.action === 'Popup Hidden') {
-					portOne.postMessage({action: 'deactivateAll'});
-					portOne.onMessage.addListener(function (response) {
-						console.log('Got Response : ', response.action);
-					});
-				}
+				console.log('Got Response : ', response.action);
 			});
 		});
 	}

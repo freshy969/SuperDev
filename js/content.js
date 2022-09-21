@@ -19,16 +19,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
 				break;
-			case 'deactivateAll':
-				deactivateTextEditor(port, request);
-				deactivatePageRuler(port, request);
-				port.postMessage({action: 'Deactivated All'});
-				break;
 		}
 	});
 });
 
 const showHideExtension = (port, request) => {
+	chrome.storage.sync.set({isHidden: false});
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
@@ -75,8 +71,6 @@ const showHideExtension = (port, request) => {
 			cursor: 'move',
 			iframeFix: true,
 		});
-
-		chrome.storage.sync.set({isHidden: false});
 		port.postMessage({action: 'Popup Created'});
 	}
 	// If Popup Visible

@@ -19,17 +19,11 @@ export default function NavBar() {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 
-			//Hide All Active Buttons on isHidden True
+			//Disable All Active Feature on isHidden=True
 			if (changes.isHidden) {
 				if (changes.isHidden.newValue === true) {
 					chrome.storage.sync.get(['allFeatures'], function (result) {
-						JSON.parse(result.allFeatures).map((value, index) => {
-							if (document.querySelector('#' + value.id) && document.querySelector('#' + value.id).classList.contains('active')) {
-								document.querySelector('#' + value.id).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
-								document.querySelector('#' + value.id).classList.add('from-btnOne', 'to-btnTwo');
-								console.log('All Active Button Hidden');
-							}
-						});
+						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 					});
 				}
 			}
@@ -61,7 +55,6 @@ export default function NavBar() {
 	function showHideExtension() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
-			portFour.postMessage({action: 'deactivateAll'});
 			portFour.postMessage({action: 'showHideExtension'});
 			portFour.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
@@ -83,6 +76,7 @@ export default function NavBar() {
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightHasSettings(allFeatures));
+			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleSettings');
 		} else {
 			ChangeHeight(CalcHeightIsEnabled(allFeatures));
