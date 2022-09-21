@@ -11,17 +11,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 	}
 	// Creating Chrome Context Menu
 	chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
-	chrome.contextMenus.onClicked.addListener((tab) => {
-		if (!tab.pageUrl.includes('chrome://') && !tab.pageUrl.includes('chrome-extension://') && !tab.pageUrl.includes('file://')) {
-			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-				let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-				portTwo.postMessage({action: 'showHideExtension'});
-				portTwo.onMessage.addListener(function (response) {
-					console.log('Got Response : ', response.action);
-				});
-			});
-		}
-	});
 });
 
 // ContentJs Reinjection on Extension Enable
@@ -38,9 +27,17 @@ chrome.management.onEnabled.addListener(async (extension) => {
 	}
 });
 
-// Shortcut Commands
-chrome.commands.onCommand.addListener((command) => {
-	console.log(`Command: ${command}`);
+// Context Menu onClick
+chrome.contextMenus.onClicked.addListener((tab) => {
+	if (!tab.pageUrl.includes('chrome://') && !tab.pageUrl.includes('chrome-extension://') && !tab.pageUrl.includes('file://')) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+			portTwo.postMessage({action: 'showHideExtension'});
+			portTwo.onMessage.addListener(function (response) {
+				console.log('Got Response : ', response.action);
+			});
+		});
+	}
 });
 
 // Open Extension on Icon Click
