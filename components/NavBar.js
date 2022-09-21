@@ -8,7 +8,6 @@ import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateF
 
 export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
-	const [isMinimised, setIsMinimised] = useState(false);
 
 	useEffect(() => {
 		chrome.storage.sync.get(['allFeatures'], function (result) {
@@ -26,6 +25,19 @@ export default function NavBar() {
 					chrome.storage.sync.get(['allFeatures'], function (result) {
 						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 					});
+				}
+			}
+
+			//Disable All Active Feature on isHidden=True
+			if (changes.isMinimised) {
+				if (changes.isMinimised.newValue === true) {
+					ChangeHeight(42);
+					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+				} else {
+					chrome.storage.sync.get(['allFeatures'], function (result) {
+						ChangeHeight(CalcHeightIsEnabled(JSON.parse(result.allFeatures)));
+					});
+					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 				}
 			}
 		});
@@ -80,15 +92,12 @@ export default function NavBar() {
 	}
 
 	function minimiseExtension() {
-		if (isMinimised === false) {
-			ChangeHeight(42);
-			setIsMinimised(true);
-			document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-		} else {
-			document.querySelector('#navBar').firstChild.style.borderRadius = '';
-			ChangeHeight(CalcHeightIsEnabled(allFeatures));
-			setIsMinimised(false);
-		}
+		chrome.storage.sync.get(['isMinimised'], function (result) {
+			if (result.isMinimised) {
+				if (result.isMinimised === true) chrome.storage.sync.set({isMinimised: false});
+				else chrome.storage.sync.set({isMinimised: true});
+			} else chrome.storage.sync.set({isMinimised: true});
+		});
 	}
 
 	function showHideExtension() {
