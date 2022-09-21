@@ -8,8 +8,7 @@
 		"react-scripts": "5.0.1"
 	},
 	"scripts": {
-		"build": "GENERATE_SOURCEMAP=false && react-scripts build && cp -R src/icons src/js src/libs manifest.json build && clear",
-		"run": "react-scripts build"
+		"build": "react-scripts build && cp -R src/icons src/js src/libs manifest.json build && clear"
 	},
 	"eslintConfig": {
 		"extends": [
