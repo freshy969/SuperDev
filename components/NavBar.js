@@ -97,14 +97,14 @@ export default function NavBar() {
 						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
-						<button
-							className='text-navText text-right fa-regular fa-circle-pause text-xs p-1'
-							onClick={() => ActivateDeactivateFeature(allFeatures, null)}></button>
-						<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] ml-2 p-1 relative top-[0.3px]'></button>
+						<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
 						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-2 p-1' onClick={toggleFeature}></button>
 						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
 						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
-						<button className='text-navText text-right fa-solid fa-xmark text-[15px] ml-2 p-1 relative top-[1.3px]' onClick={showHideExtension}></button>
+						<button
+							className='text-navText text-right fa-regular fa-circle-pause text-xs ml-2 py-1 px-[2px]'
+							onClick={() => ActivateDeactivateFeature(allFeatures, null)}></button>
+						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={showHideExtension}></button>
 					</nav>
 				</div>
 			</header>

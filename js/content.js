@@ -51,7 +51,7 @@ const showHideExtension = (port, request) => {
 			width: 18px !important;
 			background-color: rgba(0,0,0,0) !important;
 			height: 20px !important;
-			margin-left:194px !important;
+			margin-left:172px !important;
 			margin-bottom: -33px !important;
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
