@@ -97,7 +97,10 @@ export default function NavBar() {
 					</h1>
 					<nav>
 						<button className='text-navText text-right fa-solid fa-grip-vertical text-[13px] p-1 relative top-[0.3px]'></button>
-						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1' onClick={toggleFeature}></button>
+						{/* <button
+							className='text-navText text-right fa-regular fa-pause text-sm ml-2 p-1 relative top-[1px]'
+							onClick={DisableActiveFeature(allFeatures)}></button> */}
+						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-2 p-1' onClick={toggleFeature}></button>
 						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1' onClick={darkMode}></button>
 						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1' onClick={toggleSettings}></button>
 						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-2 p-1 relative top-[1.3px]' onClick={showHideExtension}></button>

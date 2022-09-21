@@ -88,12 +88,13 @@ const showHideExtension = (port, request) => {
 	// If Popup Hidden
 	else {
 		chrome.storage.sync.set({isHidden: false});
-		document.querySelector('#superDev').style.top = '32px';
 		// Take Popup back to its Orignal Position on Reopen
+		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
-		document.querySelector('#superDev').style.visibility = 'visible';
 		//
+		document.querySelector('#superDev').style.visibility = 'visible';
+
 		port.postMessage({action: 'Popup Visible'});
 	}
 };
