@@ -1,5 +1,6 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
-import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
+import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);

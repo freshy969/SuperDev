@@ -1,22 +1,37 @@
 {
-	"name": "superdev",
-	"version": "0.1.0",
+	"name": "superdevpro",
+	"version": "1.0.0",
 	"private": true,
-	"scripts": {
-		"dev": "next dev",
-		"build": "next build && next export -o build && mv build/_next build/next && cd build && grep -rli '_next' * | xargs -I@ sed -i '' 's/_next/next/g' @ && cd .. && cp -R css fonts icons js libs manifest.json README.md build &&clear",
-		"start": "next start",
-		"lint": "next lint"
-	},
 	"dependencies": {
-		"next": "^12.3.0",
-		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-scripts": "5.0.1"
+	},
+	"scripts": {
+		"build": "GENERATE_SOURCEMAP=false && react-scripts build && cp -R src/icons src/js src/libs manifest.json build && clear",
+		"run": "react-scripts build"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	},
 	"devDependencies": {
-		"autoprefixer": "^10.4.8",
-		"eslint": "8.23.0",
-		"eslint-config-next": "12.2.5",
+		"autoprefixer": "^10.4.12",
+		"eslint": "^8.23.1",
+		"eslint-plugin-react": "^7.31.8",
 		"postcss": "^8.4.16",
 		"tailwindcss": "^3.1.8"
 	}

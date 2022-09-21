@@ -1,11 +1,12 @@
-import features from '../data/features';
+import React from 'react';
+import features from './data/features';
 import {useState, useEffect} from 'react';
-import NavBar from '../components/NavBar';
-import MainBody from '../components/MainBody';
-import ToggleFeature from '../components/ToggleFeature';
-import ToggleSettings from '../components/ToggleSettings';
-import CalcHeightIsEnabled from '../components/functions/CalcHeightIsEnabled';
-import ChangeHeight from '../components/functions/ChangeHeight';
+import NavBar from './components/NavBar';
+import MainBody from './components/MainBody';
+import ToggleFeature from './components/ToggleFeature';
+import ToggleSettings from './components/ToggleSettings';
+import CalcHeightIsEnabled from './components/functions/CalcHeightIsEnabled';
+import ChangeHeight from './components/functions/ChangeHeight';
 
 export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -39,10 +40,12 @@ export default function Home() {
 		ChangeHeight(CalcHeightIsEnabled(allFeatures));
 		return (
 			<>
-				<NavBar />
-				<MainBody />
-				<ToggleFeature />
-				<ToggleSettings />
+				<div className='bg-bodyLight dark:bg-bodyDark'>
+					<NavBar />
+					<MainBody />
+					<ToggleFeature />
+					<ToggleSettings />
+				</div>
 			</>
 		);
 	}

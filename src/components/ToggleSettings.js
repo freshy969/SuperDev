@@ -1,3 +1,4 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
 export default function ToggleSettings() {
 	const [allFeatures, setAllFeatures] = useState([]);
@@ -13,8 +14,6 @@ export default function ToggleSettings() {
 		});
 	}, []);
 
-	function singleSettingsPage(featureId) {}
-
 	if (allFeatures.length !== 0) {
 		return (
 			<section id='toggleSettings' className='hidden'>
@@ -25,7 +24,6 @@ export default function ToggleSettings() {
 								<button
 									key={index}
 									id={value.id}
-									onClick={() => singleSettingsPage(value.id)}
 									className='rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'>
 									<i className={value.id + ' fa-regular ' + value.settingsIcon + ' pl-[5px] pr-[4px] text-btnText text-xs'}></i> {value.title}
 								</button>

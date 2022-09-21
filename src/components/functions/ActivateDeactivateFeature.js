@@ -2,7 +2,7 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 	if (allFeatures.length !== 0) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
-			allFeatures.map((value, index) => {
+			allFeatures.map((value) => {
 				// If Null, Hide All Active Feature With Nothing Active (For Pause Functionality)
 				if (featureId === null) JustHideMe(portFour, value.id);
 				// Disable All

@@ -1,10 +1,11 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
-import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
-import CalcHeightIsEnabled from '/components/functions/CalcHeightIsEnabled';
-import CalcHeightAllFeatures from '/components/functions/CalcHeightAllFeatures';
-import CalcHeightHasSettings from '/components/functions/CalcHeightHasSettings';
-import ChangeHeight from '/components/functions/ChangeHeight';
-import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
+import HideAllComponentExcept from './functions/HideAllComponentExcept';
+import CalcHeightIsEnabled from './functions/CalcHeightIsEnabled';
+import CalcHeightAllFeatures from './functions/CalcHeightAllFeatures';
+import CalcHeightHasSettings from './functions/CalcHeightHasSettings';
+import ChangeHeight from './functions/ChangeHeight';
+import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
