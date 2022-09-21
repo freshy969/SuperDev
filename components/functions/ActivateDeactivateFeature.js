@@ -3,21 +3,12 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
 			allFeatures.map((value, index) => {
-				// If Null, Hide Active Feature
-				// Without Leaving Anyone Active
-				// For Pause Functionality BTW
-				if (featureId === null) {
-					JustHideMe(portFour, value.id);
-				}
+				// If Null, Hide All Active Feature With Nothing Active (For Pause Functionality)
+				if (featureId === null) JustHideMe(portFour, value.id);
 				// Disable All
-				else if (featureId !== value.id) {
-					JustHideMe(portFour, value.id);
-				}
+				else if (featureId !== value.id) JustHideMe(portFour, value.id);
 				// Except The One Clicked
-				else {
-					if (value.id === 'textEditor') HideMeShowMe(portFour, value.id);
-					else if (value.id === 'pageRuler') HideMeShowMe(portFour, value.id);
-				}
+				else if (featureId === value.id) HideMeShowMe(portFour, value.id);
 			});
 		});
 	}
