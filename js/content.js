@@ -33,7 +33,7 @@ const showHideExtension = (port, request) => {
 			position: fixed !important;
 			top: 32px !important;
 			right: 18px !important;
-			width: 345px !important;
+			width: 335px !important;
 			background-color: rgba(0,0,0,0) !important;
 			z-index: 2147483646 !important;
 			visibility: hidden !important`;
@@ -47,7 +47,7 @@ const showHideExtension = (port, request) => {
 			width: 18px !important;
 			background-color: rgba(0,0,0,0) !important;
 			height: 20px !important;
-			margin-left:140px !important;
+			margin-left:152px !important;
 			margin-bottom: -31px !important;
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
@@ -57,7 +57,7 @@ const showHideExtension = (port, request) => {
 		superDevIframe.id = 'superDevIframe';
 		superDevIframe.scrolling = 'no';
 		superDevIframe.style.cssText = `
-			width: 345px !important;
+			width: 335px !important;
 			border: 0px !important;
 			border-radius: 8px !important;
 			display: block !important;

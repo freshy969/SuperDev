@@ -81,7 +81,7 @@ export default function NavBar() {
 
 	function minimiseExtension() {
 		if (isMinimised === false) {
-			ChangeHeight(41);
+			ChangeHeight(42);
 			setIsMinimised(true);
 			document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 		} else {
@@ -105,17 +105,19 @@ export default function NavBar() {
 		return (
 			<header id='navBar' className='bg-navBar'>
 				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
-					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[1.5px]'>
+					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2px]'>
 						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
-						<button className='text-navText text-right fa-solid fa-grip-vertical text-xs p-1 relative bottom-[1px]'></button>
-						<button className='text-navText text-right fa-regular fa-eye-slash text-xs ml-[10px] p-1 relative bottom-[1px]' onClick={toggleFeature}></button>
-						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-2 p-1 relative bottom-[1px]' onClick={darkMode}></button>
-						<button className='text-navText text-right fa-regular fa-gear text-xs ml-2 p-1 relative bottom-[1px]' onClick={toggleSettings}></button>
-						<button className='text-navText text-right fa-regular fa-circle-pause text-xs ml-2 p-1 relative bottom-[1px]' onClick={pauseExtension}></button>
-						<button className='text-navText text-right fa-solid fa-compress text-xs ml-2 p-1 relative bottom-[1px]' onClick={minimiseExtension}></button>
-						<button className='text-navText text-right fa-solid fa-xmark text-[15px] ml-2 p-1 relative top-[0px]' onClick={showHideExtension}></button>
+						<button className='text-navText text-right fa-regular fa-up-down-left-right text-xs p-1 relative bottom-[2px]'></button>
+						<button className='text-navText text-right fa-regular fa-eye text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleFeature}></button>
+						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={darkMode}></button>
+						<button className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleSettings}></button>
+						<button className='text-navText text-right fa-regular fa-circle-pause text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={pauseExtension}></button>
+						<button
+							className='text-navText text-right fa-regular fa-circle-minus text-xs ml-[6px] p-1 relative bottom-[2px]'
+							onClick={minimiseExtension}></button>
+						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 relative bottom-[0.5px]' onClick={showHideExtension}></button>
 					</nav>
 				</div>
 			</header>
