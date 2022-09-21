@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import DisableAllFeatureExcept from '/components/functions/DisableAllFeatureExcept';
+import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
 
 export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);
@@ -25,7 +25,7 @@ export default function MainBody() {
 								<button
 									key={index}
 									id={value.id}
-									onClick={() => DisableAllFeatureExcept(allFeatures, value.id)}
+									onClick={() => ActivateDeactivateFeature(allFeatures, value.id)}
 									className={
 										value.id +
 										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
