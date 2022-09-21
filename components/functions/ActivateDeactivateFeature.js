@@ -37,8 +37,8 @@ function HideMeShowMe(portFour, featureId) {
 		}
 		// Deactivate On Click If Active
 		else {
-			document.querySelector('#' + value.id).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
-			document.querySelector('#' + value.id).classList.add('from-btnOne', 'to-btnTwo');
+			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			portFour.onMessage.addListener(function (response) {

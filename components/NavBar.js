@@ -72,6 +72,7 @@ export default function NavBar() {
 	function toggleFeature() {
 		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
 			ChangeHeight(CalcHeightAllFeatures(allFeatures));
+			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleFeature');
 		} else {
 			ChangeHeight(CalcHeightIsEnabled(allFeatures));
