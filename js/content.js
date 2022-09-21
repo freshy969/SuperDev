@@ -14,6 +14,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				deactivateTextEditor(port, request);
 				break;
 			case 'activatePageRuler':
+				document.querySelector('#superDev').style.visibility = 'hidden';
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
@@ -118,15 +119,12 @@ const activatePageRuler = (port, request) => {
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
 	// Was Added
 	let body = document.querySelector('body');
-	let portThree = chrome.runtime.connect({name: 'dimensions'});
+	let portThree = chrome.runtime.connect({name: 'portThree'});
 	let changeDelay = 300;
 	let changeTimeout;
 	let paused = true;
 	let inputX, inputY;
-	let altKeyWasPressed = false;
 	let connectionClosed = false;
-	let lineColor = getLineColor();
-	let colorThreshold = [0.2, 0.5, 0.2];
 	let overlay = document.createElement('div');
 	overlay.className = 'rulerNoCursor';
 
@@ -145,9 +143,6 @@ const activatePageRuler = (port, request) => {
 			case 'screenshotProcessed':
 				resume();
 				break;
-			case 'deactivatePageRuler':
-				deactivatePageRuler();
-				break;
 		}
 	});
 
@@ -159,10 +154,7 @@ const activatePageRuler = (port, request) => {
 		window.addEventListener('touchmove', onInputMove);
 		window.addEventListener('scroll', onVisibleAreaChange);
 		window.addEventListener('resize', onVisibleAreaChange);
-
-		window.addEventListener('keydown', detectAltKeyPress);
-		window.addEventListener('keyup', detectAltKeyRelease);
-		window.addEventListener('keyup', onKeyRelease);
+		window.addEventListener('keydown', detectEscape);
 
 		disableCursor();
 		requestNewScreenshot();
@@ -170,6 +162,13 @@ const activatePageRuler = (port, request) => {
 
 	// Was Added
 	function parseScreenshot(dataUrl) {
+		// Show Minimised Popup After Screenshot is Done
+		document.querySelector('#superDev').style.top = '32px';
+		document.querySelector('#superDev').style.right = '18px';
+		document.querySelector('#superDev').style.left = '';
+		document.querySelector('#superDevIframe').style.height = '42px';
+		document.querySelector('#superDev').style.visibility = 'visible';
+
 		image.src = dataUrl;
 		image.onload = function () {
 			loadImage();
@@ -197,11 +196,14 @@ const activatePageRuler = (port, request) => {
 		onVisibleAreaChange();
 	}
 
-	function deactivatePageRuler() {
+	function destroyPageRuler() {
 		connectionClosed = true;
 		window.removeEventListener('mousemove', onInputMove);
 		window.removeEventListener('touchmove', onInputMove);
 		window.removeEventListener('scroll', onVisibleAreaChange);
+		window.removeEventListener('resize', onVisibleAreaChange);
+		window.removeEventListener('keypress', detectEscape);
+
 		removeDimensions();
 		enableCursor();
 	}
@@ -243,45 +245,34 @@ const activatePageRuler = (port, request) => {
 		body.removeChild(overlay);
 	}
 
-	function detectAltKeyPress(event) {
-		if (event.altKey && !altKeyWasPressed) {
-			altKeyWasPressed = true;
-			sendToWorker(event);
-		}
-	}
-
-	function detectAltKeyRelease(event) {
-		if (altKeyWasPressed) {
-			altKeyWasPressed = false;
-			sendToWorker(event);
-		}
-	}
-
-	function onKeyRelease(event) {
-		switch (event.code) {
-			case 'Escape':
-				portThree.postMessage({action: 'closeOverlay'});
-				break;
-		}
-	}
-
 	function onInputMove(event) {
 		event.preventDefault();
-		if (event.touches) {
-			inputX = event.touches[0].clientX;
-			inputY = event.touches[0].clientY;
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.touches) {
+				inputX = event.touches[0].clientX;
+				inputY = event.touches[0].clientY;
+			} else {
+				inputX = event.clientX;
+				inputY = event.clientY;
+			}
+			sendToWorker(event);
 		} else {
-			inputX = event.clientX;
-			inputY = event.clientY;
+			removeDimensions();
 		}
-		sendToWorker(event);
+	}
+
+	function detectEscape(event) {
+		console.log(event);
+		if (event.key === 'Escape') {
+			destroyPageRuler();
+		}
 	}
 
 	function sendToWorker(event) {
 		if (paused) return;
 
 		portThree.postMessage({
-			action: event.altKey ? 'area' : 'position',
+			action: 'position',
 			data: {x: inputX, y: inputY},
 		});
 	}
@@ -296,13 +287,6 @@ const activatePageRuler = (port, request) => {
 		newDimensions.className = 'rulerDimensions';
 		newDimensions.style.left = dimensions.x + 'px';
 		newDimensions.style.top = dimensions.y + 'px';
-
-		if (
-			Math.abs(dimensions.backgroundColor[0] - lineColor[0]) <= colorThreshold[0] &&
-			Math.abs(dimensions.backgroundColor[1] - lineColor[1]) <= colorThreshold[1] &&
-			Math.abs(dimensions.backgroundColor[2] - lineColor[2]) <= colorThreshold[2]
-		)
-			newDimensions.className += ' altColor';
 
 		let measureWidth = dimensions.left + dimensions.right;
 		let measureHeight = dimensions.top + dimensions.bottom;
@@ -332,53 +316,9 @@ const activatePageRuler = (port, request) => {
 
 		body.appendChild(newDimensions);
 	}
-
-	function getLineColor() {
-		let axis = document.createElement('div');
-		axis.className = 'rulerAxis';
-
-		body.appendChild(axis);
-
-		let style = getComputedStyle(axis);
-		let rgbString = style.backgroundColor;
-		let colorsOnly = rgbString.substring(rgbString.indexOf('(') + 1, rgbString.lastIndexOf(')')).split(/,\s*/);
-
-		body.removeChild(axis);
-
-		return rgbToHsl(colorsOnly[0], colorsOnly[1], colorsOnly[2]);
-	}
-
-	function rgbToHsl(r, g, b) {
-		(r /= 255), (g /= 255), (b /= 255);
-		let max = Math.max(r, g, b),
-			min = Math.min(r, g, b);
-		let h,
-			s,
-			l = (max + min) / 2;
-
-		if (max == min) {
-			h = s = 0; // achromatic
-		} else {
-			let d = max - min;
-			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-			switch (max) {
-				case r:
-					h = (g - b) / d + (g < b ? 6 : 0);
-					break;
-				case g:
-					h = (b - r) / d + 2;
-					break;
-				case b:
-					h = (r - g) / d + 4;
-					break;
-			}
-			h /= 6;
-		}
-
-		return [h, s, l];
-	}
 };
 
 const deactivatePageRuler = (port, request) => {
+	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };

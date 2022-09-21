@@ -29,6 +29,10 @@ export default function Home() {
 				setIsLoading(false);
 			}
 		});
+
+		// Set isMinimised, isHidden False on Page Reload
+		chrome.storage.sync.set({isMinimised: false});
+		chrome.storage.sync.set({isHidden: false});
 	}, []);
 
 	if (!isLoading) {
