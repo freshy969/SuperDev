@@ -1,4 +1,5 @@
 export default function ActivateDeactivateFeature(allFeatures, featureId) {
+	if (featureId === null) console.log(1);
 	if (allFeatures.length !== 0) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});

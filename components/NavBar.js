@@ -14,47 +14,6 @@ export default function NavBar() {
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
-
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) {
-				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
-			}
-		});
-
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.setMinimised) {
-				if (changes.setMinimised.newValue === true) {
-					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(42);
-				} else {
-					chrome.storage.sync.get(['allFeatures'], function (result) {
-						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('mainBody');
-						} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
-							ChangeHeight(AllFeaturesHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('toggleFeature');
-						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							ChangeHeight(SettingsHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('toggleSettings');
-						}
-					});
-				}
-			}
-		});
-
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.disableActiveFeature) {
-				if (changes.disableActiveFeature.newValue === true) {
-					chrome.storage.sync.get(['allFeatures'], function (result) {
-						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
-					});
-				}
-			}
-		});
 	}, []);
 
 	function toggleFeature() {
@@ -113,6 +72,7 @@ export default function NavBar() {
 	function showHideExtension() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
+			ActivateDeactivateFeature(allFeatures, null);
 			portFour.postMessage({action: 'showHideExtension'});
 			portFour.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
@@ -121,6 +81,43 @@ export default function NavBar() {
 	}
 
 	if (allFeatures.length !== 0) {
+		// On Storage Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.allFeatures) {
+				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
+			}
+		});
+
+		// On Storage Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.setMinimised) {
+				if (changes.setMinimised.newValue === true) {
+					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+					ChangeHeight(42);
+				} else {
+					if (!document.querySelector('#mainBody').classList.contains('hidden')) {
+						ChangeHeight(BodyHeight(allFeatures));
+						HideAllComponentExcept('mainBody');
+					} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
+						ChangeHeight(AllFeaturesHeight(allFeatures));
+						HideAllComponentExcept('toggleFeature');
+					} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
+						ChangeHeight(SettingsHeight(allFeatures));
+						HideAllComponentExcept('toggleSettings');
+					}
+				}
+			}
+		});
+
+		// On Storage Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.disableActiveFeature) {
+				if (changes.disableActiveFeature.newValue === true) {
+					ActivateDeactivateFeature(allFeatures, null);
+				}
+			}
+		});
+
 		return (
 			<header id='navBar' className='bg-navBar'>
 				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>

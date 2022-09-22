@@ -199,8 +199,10 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('keydown', detectEscape);
 
 		// Show Full Popup and Disable Page Ruler
+		chrome.storage.sync.set({disableActiveFeature: false});
 		chrome.storage.sync.set({disableActiveFeature: true});
 		chrome.storage.sync.set({setMinimised: false});
+
 		removeDimensions();
 		enableCursor();
 	}
@@ -316,7 +318,6 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
-	console.log(1);
 	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };

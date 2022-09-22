@@ -6,14 +6,15 @@ export default function ToggleFeature() {
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
+	}, []);
+
+	if (allFeatures.length !== 0) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
-	}, []);
 
-	if (allFeatures.length !== 0) {
 		function toggleSingleFeature(featureId) {
 			allFeatures.map((value, index) => {
 				if (value.id === featureId) {
