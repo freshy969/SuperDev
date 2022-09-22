@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			chrome.scripting.executeScript({
 				target: {tabId: tab.id},
-				files: ['js/content.js', 'libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js'],
+				files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
 			});
 		}
 	}
@@ -20,7 +20,7 @@ chrome.management.onEnabled.addListener(async (extension) => {
 			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 				chrome.scripting.executeScript({
 					target: {tabId: tab.id},
-					files: ['js/content.js', 'libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js'],
+					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
 				});
 			}
 		}
@@ -34,14 +34,6 @@ chrome.contextMenus.onClicked.addListener((tab) => {
 			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 			portTwo.postMessage({action: 'showHideExtension'});
 			portTwo.onMessage.addListener(function (response) {
-				chrome.scripting.executeScript({
-					target: {tabId: tabs[0].id},
-					files: ['static/js/main.js'],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: tab.id},
-					files: ['static/css/main.css'],
-				});
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -55,14 +47,6 @@ chrome.action.onClicked.addListener((tab) => {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
 			portOne.onMessage.addListener(function (response) {
-				chrome.scripting.executeScript({
-					target: {tabId: tabs[0].id},
-					files: ['static/js/main.js'],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: tab.id},
-					files: ['static/css/main.css'],
-				});
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -73,7 +57,7 @@ chrome.action.onClicked.addListener((tab) => {
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
 	let dimensionsThreshold = 6;
-	let map, imageData, data, width, height, measureAreaStopped, stack, area, pixelsInArea;
+	let map;
 
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 		chrome.scripting.insertCSS({

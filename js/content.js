@@ -4,6 +4,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'showHideExtension':
 				showHideExtension(port, request);
 				break;
+			case 'changeHeight':
+				changeHeight(port, request);
+				break;
 			case 'activateTextEditor':
 				activateTextEditor(port, request);
 				break;
@@ -33,7 +36,8 @@ const showHideExtension = (port, request) => {
 			right: 18px !important;
 			width: 335px !important;
 			background-color: rgba(0,0,0,0) !important;
-			z-index: 2147483646 !important;`;
+			z-index: 2147483646 !important;
+			visibility: hidden !important`;
 		document.body.appendChild(superDev);
 
 		let superDevHandler = document.createElement('div');
@@ -49,9 +53,11 @@ const showHideExtension = (port, request) => {
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
 
-		let superDevBody = document.createElement('div');
-		superDevBody.id = 'superDevBody';
-		superDevBody.style.cssText = `
+		let superDevIframe = document.createElement('iframe');
+		superDevIframe.src = chrome.runtime.getURL('index.html');
+		superDevIframe.id = 'superDevIframe';
+		superDevIframe.scrolling = 'no';
+		superDevIframe.style.cssText = `
 			width: 335px !important;
 			border: 0px !important;
 			border-radius: 8px !important;
@@ -59,7 +65,7 @@ const showHideExtension = (port, request) => {
 			background-color: rgba(0,0,0,0) !important;
 			z-index: 2147483646 !important;
 			overflow: hidden !important;`;
-		document.querySelector('#superDev').appendChild(superDevBody);
+		document.querySelector('#superDev').appendChild(superDevIframe);
 
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
@@ -88,6 +94,13 @@ const showHideExtension = (port, request) => {
 	}
 };
 
+const changeHeight = (port, request) => {
+	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+	if (document.querySelector('#superDev').style.visibility === 'hidden')
+		document.querySelector('#superDevIframe').onload = document.querySelector('#superDev').style.visibility = 'visible';
+	port.postMessage({action: 'Height Changed'});
+};
+
 const activateTextEditor = (port, request) => {
 	document.querySelector('body').contentEditable = true;
 	document.querySelector('body').spellcheck = false;
@@ -113,7 +126,7 @@ const activatePageRuler = (port, request) => {
 	let inputX, inputY;
 	let connectionClosed = false;
 	let overlay = document.createElement('div');
-	overlay.className = 'sd-cursorCrosshair';
+	overlay.className = 'rulerNoCursor';
 
 	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -153,7 +166,7 @@ const activatePageRuler = (port, request) => {
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
-		document.querySelector('#superDevBody').style.height = '42px';
+		document.querySelector('#superDevIframe').style.height = '42px';
 		document.querySelector('#superDev').style.visibility = 'visible';
 
 		image.src = dataUrl;
@@ -196,7 +209,7 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function removeDimensions() {
-		let dimensions = body.querySelector('.sd-rulerDimensions');
+		let dimensions = body.querySelector('.rulerDimensions');
 		if (dimensions) body.removeChild(dimensions);
 	}
 
@@ -234,7 +247,7 @@ const activatePageRuler = (port, request) => {
 
 	function onInputMove(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevBody' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -271,7 +284,7 @@ const activatePageRuler = (port, request) => {
 		if (!dimensions) return;
 
 		let newDimensions = document.createElement('div');
-		newDimensions.className = 'sd-rulerDimensions';
+		newDimensions.className = 'rulerDimensions';
 		newDimensions.style.left = dimensions.x + 'px';
 		newDimensions.style.top = dimensions.y + 'px';
 
@@ -279,17 +292,17 @@ const activatePageRuler = (port, request) => {
 		let measureHeight = dimensions.top + dimensions.bottom;
 
 		let xAxis = document.createElement('div');
-		xAxis.className = 'x sd-rulerAxis';
+		xAxis.className = 'x rulerAxis';
 		xAxis.style.left = -dimensions.left + 'px';
 		xAxis.style.width = measureWidth + 'px';
 
 		let yAxis = document.createElement('div');
-		yAxis.className = 'y sd-rulerAxis';
+		yAxis.className = 'y rulerAxis';
 		yAxis.style.top = -dimensions.top + 'px';
 		yAxis.style.height = measureHeight + 'px';
 
 		let tooltip = document.createElement('div');
-		tooltip.className = 'sd-rulerTooltip';
+		tooltip.className = 'rulerTooltip';
 
 		tooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
 
