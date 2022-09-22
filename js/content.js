@@ -27,7 +27,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 const showHideExtension = (port, request, changeIsPopupHidden) => {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
-		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: false});
+		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: false});
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
@@ -76,13 +76,13 @@ const showHideExtension = (port, request, changeIsPopupHidden) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: true});
+		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
-		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: false});
+		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: false});
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
