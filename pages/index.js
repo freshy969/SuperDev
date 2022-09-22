@@ -31,6 +31,8 @@ export default function Home() {
 			} else if (result.colorTheme === 'dark') {
 				document.documentElement.classList.add('dark');
 				setIsLoadingOne(false);
+			} else {
+				setIsLoadingOne(false);
 			}
 		});
 
