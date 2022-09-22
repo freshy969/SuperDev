@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
-import CalcHeightIsEnabled from '/components/functions/CalcHeightIsEnabled';
-import CalcHeightAllFeatures from '/components/functions/CalcHeightAllFeatures';
-import CalcHeightHasSettings from '/components/functions/CalcHeightHasSettings';
+import BodyHeight from '/components/functions/BodyHeight';
+import AllFeaturesHeight from '/components/functions/AllFeaturesHeight';
+import SettingsHeight from '/components/functions/SettingsHeight';
 import ChangeHeight from '/components/functions/ChangeHeight';
 import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
 
@@ -10,34 +10,40 @@ export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
+		// Get All Features
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 
+		// On Storage Change
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
+		});
 
-			//Disable All Active Feature on isHidden=True
-			if (changes.isHidden) {
-				if (changes.isHidden.newValue === true) {
+		// On Storage Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.setMinimised) {
+				if (changes.setMinimised.newValue === true) {
+					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+					ChangeHeight(42);
+				} else {
+					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 					chrome.storage.sync.get(['allFeatures'], function (result) {
-						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
+						ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
 					});
 				}
 			}
+		});
 
-			//Disable All Active Feature on isHidden=True
-			if (changes.isMinimised) {
-				if (changes.isMinimised.newValue === true) {
-					ChangeHeight(42);
-					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-				} else {
+		// On Storage Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.disableActiveFeature) {
+				if (changes.disableActiveFeature.newValue === true) {
 					chrome.storage.sync.get(['allFeatures'], function (result) {
-						ChangeHeight(CalcHeightIsEnabled(JSON.parse(result.allFeatures)));
+						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 					});
-					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 				}
 			}
 		});
@@ -45,11 +51,11 @@ export default function NavBar() {
 
 	function toggleFeature() {
 		if (document.querySelector('#toggleFeature').classList.contains('hidden')) {
-			ChangeHeight(CalcHeightAllFeatures(allFeatures));
+			ChangeHeight(AllFeaturesHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleFeature');
 		} else {
-			ChangeHeight(CalcHeightIsEnabled(allFeatures));
+			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 		}
 	}
@@ -64,25 +70,17 @@ export default function NavBar() {
 					document.documentElement.classList.remove('dark');
 					chrome.storage.sync.set({colorTheme: 'light'});
 				}
-			} else {
-				if (document.documentElement.classList.contains('dark')) {
-					document.documentElement.classList.remove('dark');
-					chrome.storage.sync.set({colorTheme: 'light'});
-				} else {
-					document.documentElement.classList.add('dark');
-					chrome.storage.sync.set({colorTheme: 'dark'});
-				}
 			}
 		});
 	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			ChangeHeight(CalcHeightHasSettings(allFeatures));
+			ChangeHeight(SettingsHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleSettings');
 		} else {
-			ChangeHeight(CalcHeightIsEnabled(allFeatures));
+			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 		}
 	}
@@ -92,11 +90,11 @@ export default function NavBar() {
 	}
 
 	function minimiseExtension() {
-		chrome.storage.sync.get(['isMinimised'], function (result) {
-			if (result.isMinimised) {
-				if (result.isMinimised === true) chrome.storage.sync.set({isMinimised: false});
-				else chrome.storage.sync.set({isMinimised: true});
-			} else chrome.storage.sync.set({isMinimised: true});
+		chrome.storage.sync.get(['setMinimised'], function (result) {
+			if (result.setMinimised) {
+				if (result.setMinimised === true) chrome.storage.sync.set({setMinimised: false});
+				else chrome.storage.sync.set({setMinimised: true});
+			} else chrome.storage.sync.set({setMinimised: true});
 		});
 	}
 

@@ -1,4 +1,4 @@
-export default function CalcHeightHasSettings(allFeatures) {
+export default function SettingsHeight(allFeatures) {
 	if (allFeatures.length !== 0) {
 		let [count, height] = [0, 0];
 		allFeatures.map((value) => (value.hasSettings === true && value.isEnabled === true ? (count = count + 1) : (count = count)));

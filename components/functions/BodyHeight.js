@@ -1,4 +1,4 @@
-export default function CalcHeightIsEnabled(allFeatures) {
+export default function BodyHeight(allFeatures) {
 	if (allFeatures.length !== 0) {
 		let [count, height] = [0, 0];
 		allFeatures.map((value) => (value.isEnabled === true ? (count = count + 1) : (count = count)));

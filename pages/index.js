@@ -4,39 +4,52 @@ import NavBar from '../components/NavBar';
 import MainBody from '../components/MainBody';
 import ToggleFeature from '../components/ToggleFeature';
 import ToggleSettings from '../components/ToggleSettings';
-import CalcHeightIsEnabled from '../components/functions/CalcHeightIsEnabled';
+import BodyHeight from '../components/functions/BodyHeight';
 import ChangeHeight from '../components/functions/ChangeHeight';
 
 export default function Home() {
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingOne, setIsLoadingOne] = useState(true);
+	const [isLoadingTwo, setIsLoadingTwo] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
+		// SetMinimised, DisableActiveFeature Initialisation
+		chrome.storage.sync.set({setMinimised: false});
+		chrome.storage.sync.set({disableActiveFeature: false});
+
+		// Dark Mode Initialisation
 		chrome.storage.sync.get(['colorTheme'], function (result) {
-			if (result.colorTheme === 'dark' || (result.colorTheme === undefined && window.matchMedia('(prefers-color-scheme: dark)').matches))
+			if (result.colorTheme === undefined) {
+				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					document.documentElement.classList.add('dark');
+					chrome.storage.sync.set({colorTheme: 'dark'});
+					setIsLoadingOne(false);
+				} else {
+					chrome.storage.sync.set({colorTheme: 'light'});
+					setIsLoadingOne(false);
+				}
+			} else if (result.colorTheme === 'dark') {
 				document.documentElement.classList.add('dark');
-			else document.documentElement.classList.remove('dark');
+				setIsLoadingOne(false);
+			}
 		});
 
+		// All Features Initialisation
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.sync.set({allFeatures: JSON.stringify(features)}, function () {
 					setAllFeatures(features);
-					setIsLoading(false);
+					setIsLoadingTwo(false);
 				});
 			} else {
 				setAllFeatures(JSON.parse(result.allFeatures));
-				setIsLoading(false);
+				setIsLoadingTwo(false);
 			}
 		});
-
-		// Set isMinimised, isHidden False on Page Reload
-		chrome.storage.sync.set({isMinimised: false});
-		chrome.storage.sync.set({isHidden: false});
 	}, []);
 
-	if (!isLoading) {
-		ChangeHeight(CalcHeightIsEnabled(allFeatures));
+	if (!isLoadingOne && !isLoadingTwo) {
+		ChangeHeight(BodyHeight(allFeatures));
 		return (
 			<>
 				<NavBar />

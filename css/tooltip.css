@@ -1,4 +1,4 @@
-.rulerNoCursor {
+.rulerOverlay {
 	cursor: crosshair !important;
 	position: fixed;
 	left: 0;
@@ -36,10 +36,6 @@
 	font-family: system-ui, -apple-system, sans-serif;
 }
 
-.altColor .rulerTooltip {
-	background: hsla(231.429, 32%, 9%, 0.95);
-}
-
 .rulerTooltip.left {
 	left: auto;
 	right: 7px;
@@ -52,10 +48,6 @@
 
 .rulerAxis {
 	position: absolute;
-	background: hsla(0, 100%, 50%, 1);
-}
-
-.altColor .rulerAxis {
 	background: hsla(0, 100%, 50%, 1);
 }
 

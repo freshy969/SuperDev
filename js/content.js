@@ -2,7 +2,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			case 'showHideExtension':
-				showHideExtension(port, request);
+				showHideExtension(port, request, true);
 				break;
 			case 'changeHeight':
 				changeHeight(port, request);
@@ -14,7 +14,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				deactivateTextEditor(port, request);
 				break;
 			case 'activatePageRuler':
-				document.querySelector('#superDev').style.visibility = 'hidden';
+				showHideExtension(port, request, false);
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
@@ -24,10 +24,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 	});
 });
 
-const showHideExtension = (port, request) => {
-	chrome.storage.sync.set({isHidden: false});
+const showHideExtension = (port, request, changeIsPopupHidden) => {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
+		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: false});
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
@@ -76,20 +76,17 @@ const showHideExtension = (port, request) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		chrome.storage.sync.set({isHidden: true});
+		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
-		chrome.storage.sync.set({isHidden: false});
-		// Take Popup back to its Orignal Position on Reopen
+		if (changeIsPopupHidden !== false) chrome.storage.sync.set({disableActiveFeature: false});
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
-		//
 		document.querySelector('#superDev').style.visibility = 'visible';
-
 		port.postMessage({action: 'Popup Visible'});
 	}
 };
@@ -126,7 +123,7 @@ const activatePageRuler = (port, request) => {
 	let inputX, inputY;
 	let connectionClosed = false;
 	let overlay = document.createElement('div');
-	overlay.className = 'rulerNoCursor';
+	overlay.className = 'rulerOverlay';
 
 	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -163,11 +160,7 @@ const activatePageRuler = (port, request) => {
 	// Was Added
 	function parseScreenshot(dataUrl) {
 		// Show Minimised Popup After Screenshot is Done
-		document.querySelector('#superDev').style.top = '32px';
-		document.querySelector('#superDev').style.right = '18px';
-		document.querySelector('#superDev').style.left = '';
-		document.querySelector('#superDevIframe').style.height = '42px';
-		document.querySelector('#superDev').style.visibility = 'visible';
+		chrome.storage.sync.set({setMinimised: true});
 
 		image.src = dataUrl;
 		image.onload = function () {
@@ -204,6 +197,8 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('resize', onVisibleAreaChange);
 		window.removeEventListener('keypress', detectEscape);
 
+		// Show Full Popup
+		chrome.storage.sync.set({setMinimised: false});
 		removeDimensions();
 		enableCursor();
 	}
@@ -242,7 +237,8 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function enableCursor() {
-		body.removeChild(overlay);
+		overlay = body.querySelector('.rulerOverlay');
+		if (overlay) body.removeChild(overlay);
 	}
 
 	function onInputMove(event) {
@@ -262,7 +258,7 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function detectEscape(event) {
-		console.log(event);
+		event.preventDefault();
 		if (event.key === 'Escape') {
 			destroyPageRuler();
 		}

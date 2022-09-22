@@ -1,4 +1,4 @@
-export default function CalcHeightAllFeatures(allFeatures) {
+export default function AllFeaturesHeight(allFeatures) {
 	if (allFeatures.length !== 0) {
 		let [count, height] = [0, 0];
 		allFeatures.map((value, index) => (count = count + 1));
