@@ -2,16 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-html,
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-p {
+* [class*='sd-'] {
 	font-family: 'Euclid';
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 @font-face {
@@ -51,4 +49,96 @@ p {
 
 .scaleButton:hover {
 	transform: perspective(1px) scale(1.03);
+}
+
+.sd-cursorCrosshair {
+	cursor: crosshair !important;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2147483645;
+}
+
+.sd-rulerDimensions {
+	position: fixed;
+	width: 0;
+	height: 0;
+	z-index: 2147483644;
+	pointer-events: none;
+}
+
+.sd-rulerTooltip {
+	position: absolute;
+	left: 7px;
+	bottom: 6px;
+	padding: 1px 10px;
+	color: white;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 12px;
+	line-height: 25px;
+	direction: ltr;
+	border-radius: 4px;
+	background: hsla(231.429, 32%, 9%, 0.95);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em !important;
+	font-family: system-ui, -apple-system, sans-serif;
+}
+
+.sd-rulerTooltip.left {
+	left: auto;
+	right: 7px;
+}
+
+.sd-rulerTooltip.bottom {
+	bottom: auto;
+	top: 6px;
+}
+
+.sd-rulerAxis {
+	position: absolute;
+	background: hsla(0, 100%, 50%, 1);
+}
+
+.sd-rulerAxis:before,
+.sd-rulerAxis:after {
+	content: '';
+	position: absolute;
+	background: inherit;
+}
+
+.x.sd-rulerAxis:before,
+.x.sd-rulerAxis:after {
+	left: 0;
+	height: 5px;
+	top: -2px;
+	width: 1px;
+}
+
+.x.sd-rulerAxis:after {
+	left: 100%;
+}
+
+.y.sd-rulerAxis:before,
+.y.sd-rulerAxis:after {
+	left: -2px;
+	height: 1px;
+	top: 0;
+	width: 5px;
+}
+
+.y.sd-rulerAxis:after {
+	top: 100%;
+}
+
+.x.sd-rulerAxis {
+	height: 1px;
+}
+
+.y.sd-rulerAxis {
+	width: 1px;
 }

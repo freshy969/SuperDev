@@ -6,6 +6,8 @@ export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
+		console.log(3);
+
 		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
@@ -19,7 +21,7 @@ export default function MainBody() {
 	if (allFeatures.length !== 0) {
 		return (
 			<section id='mainBody'>
-				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>
+				<div className='sd-grid sd-grid-cols-2 sd-gap-x-[14px] sd-p-4 sd-pb-0 sd-border sd-border-t-0 sd-border-borderLight dark:sd-border-borderDark sd-box-border sd-rounded-b-lg'>
 					{allFeatures.map((value, index) => {
 						if (value.isEnabled === true) {
 							return (
@@ -29,9 +31,9 @@ export default function MainBody() {
 									onClick={() => ActivateDeactivateFeature(allFeatures, value.id)}
 									className={
 										value.id +
-										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
+										' sd-rounded-md sd-text-left sd-bg-gradient-to-r sd-from-btnOne sd-to-btnTwo hover:sd-from-pink-500 hover:sd-via-red-500 hover:sd-to-yellow-500 sd-shadow-lg sd-text-xs sd-text-btnText sd-p-2 sd-mb-4 sd-font-normal sd-transition sd-ease-in-out scaleButton sd-duration-300'
 									}>
-									<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText'}></i> {value.title}
+									<i className={'fa-regular ' + value.icon + ' sd-px-[5px] sd-text-btnText'}></i> {value.title}
 								</button>
 							);
 						} else {
@@ -41,9 +43,9 @@ export default function MainBody() {
 									id={value.id}
 									className={
 										value.id +
-										' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300 hidden'
+										' sd-rounded-md sd-text-left sd-bg-gradient-to-r sd-from-btnOne sd-to-btnTwo hover:sd-from-pink-500 hover:sd-via-red-500 hover:sd-to-yellow-500 sd-shadow-lg sd-text-xs sd-text-btnText sd-p-2 sd-mb-4 sd-font-normal sd-transition sd-ease-in-out scaleButton sd-duration-300 sd-hidden'
 									}>
-									<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText'}></i> {value.title}
+									<i className={'fa-regular ' + value.icon + ' sd-px-[5px] sd-text-btnText'}></i> {value.title}
 								</button>
 							);
 						}

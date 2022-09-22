@@ -28,14 +28,14 @@
 	},
 	"content_scripts": [
 		{
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
+			"js": ["js/content.js", "libs/js/jquery.min.js", "libs/js/jquery-ui.min.js"],
 			"matches": ["http://*/*", "https://*/*"]
 		}
 	],
 	"web_accessible_resources": [
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next/*"]
+			"resources": ["icons/*", "js/*", "libs/*", "static/*"]
 		}
 	],
 	"manifest_version": 3,

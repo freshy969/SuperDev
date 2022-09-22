@@ -1,10 +1,10 @@
 export default function HideAllComponentExcept(componentId) {
 	let hideArray = ['mainBody', 'toggleFeature', 'toggleSettings'];
-	hideArray.map((value) => {
+	hideArray.map((value, index) => {
 		if (value !== componentId) {
-			document.querySelector('#' + value).classList.add('hidden');
+			document.querySelector('#' + value).classList.add('sd-hidden');
 		} else {
-			document.querySelector('#' + value).classList.remove('hidden');
+			document.querySelector('#' + value).classList.remove('sd-hidden');
 		}
 	});
 }

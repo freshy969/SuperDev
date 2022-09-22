@@ -20,4 +20,6 @@ module.exports = {
 		},
 	},
 	plugins: [],
+	prefix: 'sd-',
+	important: true,
 };
