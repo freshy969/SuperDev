@@ -76,7 +76,10 @@ const showHideExtension = (port, request, changeIsPopupHidden) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: true});
+		if (changeIsPopupHidden === true) {
+			chrome.storage.sync.set({disableActiveFeature: false});
+			chrome.storage.sync.set({disableActiveFeature: true});
+		}
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
