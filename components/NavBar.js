@@ -29,7 +29,6 @@ export default function NavBar() {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(42);
 				} else {
-					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 					chrome.storage.sync.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
@@ -63,9 +62,11 @@ export default function NavBar() {
 			ChangeHeight(AllFeaturesHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleFeature');
+			chrome.storage.sync.set({setMinimised: false});
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
+			chrome.storage.sync.set({setMinimised: false});
 		}
 	}
 
@@ -88,9 +89,11 @@ export default function NavBar() {
 			ChangeHeight(SettingsHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleSettings');
+			chrome.storage.sync.set({setMinimised: false});
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
+			chrome.storage.sync.set({setMinimised: false});
 		}
 	}
 
@@ -125,16 +128,16 @@ export default function NavBar() {
 						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
-						<button className='text-navText text-right fa-regular fa-up-down-left-right text-xs p-1 relative bottom-[2px]'></button>
-						<button className='text-navText text-right fa-regular fa-eye text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleFeature}></button>
-						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={darkMode}></button>
-						<button className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleSettings}></button>
+						<button className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] p-1 relative bottom-[1px]'></button>
+						<button className='text-navText text-right fa-regular fa-eye text-[13px] ml-[6px] p-1 relative bottom-[0.5px]' onClick={toggleFeature}></button>
+						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={darkMode}></button>
+						<button className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={toggleSettings}></button>
 						<button
-							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[2px]'
+							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[1px]'
 							onClick={minimiseExtension}></button>
-						<button className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={pauseExtension}></button>
+						<button className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={pauseExtension}></button>
 						<button
-							className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0.5px]'
+							className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0px]'
 							onClick={showHideExtension}></button>
 					</nav>
 				</div>
