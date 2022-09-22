@@ -197,7 +197,8 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('resize', onVisibleAreaChange);
 		window.removeEventListener('keypress', detectEscape);
 
-		// Show Full Popup
+		// Show Full Popup and Disable Page Ruler
+		chrome.storage.sync.set({disableActiveFeature: true});
 		chrome.storage.sync.set({setMinimised: false});
 		removeDimensions();
 		enableCursor();
