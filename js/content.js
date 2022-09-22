@@ -135,6 +135,7 @@ const activatePageRuler = (port, request) => {
 				break;
 			// Was Added
 			case 'distances':
+				window.focus();
 				showDimensions(request.data);
 				break;
 			case 'screenshotProcessed':
@@ -195,7 +196,7 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('touchmove', onInputMove);
 		window.removeEventListener('scroll', onVisibleAreaChange);
 		window.removeEventListener('resize', onVisibleAreaChange);
-		window.removeEventListener('keypress', detectEscape);
+		window.removeEventListener('keydown', detectEscape);
 
 		// Show Full Popup and Disable Page Ruler
 		chrome.storage.sync.set({disableActiveFeature: true});
@@ -238,8 +239,7 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function enableCursor() {
-		overlay = body.querySelector('.rulerOverlay');
-		if (overlay) body.removeChild(overlay);
+		body.removeChild(overlay);
 	}
 
 	function onInputMove(event) {
@@ -316,6 +316,7 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
+	console.log(1);
 	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };

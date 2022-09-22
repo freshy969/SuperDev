@@ -31,7 +31,16 @@ export default function NavBar() {
 				} else {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 					chrome.storage.sync.get(['allFeatures'], function (result) {
-						ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
+							ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('mainBody');
+						} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
+							ChangeHeight(AllFeaturesHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('toggleFeature');
+						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
+							ChangeHeight(SettingsHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('toggleSettings');
+						}
 					});
 				}
 			}
@@ -120,11 +129,13 @@ export default function NavBar() {
 						<button className='text-navText text-right fa-regular fa-eye text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleFeature}></button>
 						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={darkMode}></button>
 						<button className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={toggleSettings}></button>
-						<button className='text-navText text-right fa-regular fa-circle-pause text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={pauseExtension}></button>
 						<button
-							className='text-navText text-right fa-regular fa-circle-minus text-xs ml-[6px] p-1 relative bottom-[2px]'
+							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[2px]'
 							onClick={minimiseExtension}></button>
-						<button className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 relative bottom-[0.5px]' onClick={showHideExtension}></button>
+						<button className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[2px]' onClick={pauseExtension}></button>
+						<button
+							className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0.5px]'
+							onClick={showHideExtension}></button>
 					</nav>
 				</div>
 			</header>
