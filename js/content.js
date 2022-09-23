@@ -145,6 +145,7 @@ const activatePageRuler = (port, request) => {
 
 	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		document.querySelector('#superDev').style.visibility = 'hidden';
+		port.postMessage({action: 'Popup Hidden'});
 		onResizeWindow(), initiate();
 		port.postMessage({action: 'Page Ruler Activated'});
 	}

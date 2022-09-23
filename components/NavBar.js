@@ -124,6 +124,7 @@ export default function NavBar() {
 			if (changes.disableActiveFeature) {
 				if (changes.disableActiveFeature.newValue === true) {
 					ActivateDeactivateFeature(allFeatures, null);
+					console.log('Deactivated Active Feature');
 				}
 			}
 		});
