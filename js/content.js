@@ -74,19 +74,18 @@ const showHideExtension = (port, request) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		chrome.storage.local.set({disableActiveFeature: false}, function () {
-			chrome.storage.local.set({disableActiveFeature: true});
-		});
+		chrome.storage.local.set({disableActiveFeature: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({setMinimised: null});
+		chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({disableActiveFeature: false});
 		chrome.storage.local.set({whichFeatureActive: null});
-		chrome.storage.local.set({isPopupPaused: false});
 
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
@@ -208,9 +207,7 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('keydown', detectEscape);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({disableActiveFeature: false}, function () {
-				chrome.storage.local.set({disableActiveFeature: true}, function () {});
-			});
+			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
