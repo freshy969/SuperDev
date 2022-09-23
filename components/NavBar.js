@@ -4,6 +4,7 @@ import BodyHeight from '/components/functions/BodyHeight';
 import AllFeaturesHeight from '/components/functions/AllFeaturesHeight';
 import SettingsHeight from '/components/functions/SettingsHeight';
 import ChangeHeight from '/components/functions/ChangeHeight';
+import JustChangeHeight from '/components/functions/JustChangeHeight';
 import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
 
 export default function NavBar() {
@@ -13,6 +14,68 @@ export default function NavBar() {
 		// Get All Features
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
+		});
+
+		// On AllFeatures Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.allFeatures) {
+				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
+			}
+		});
+
+		// On SetMinimised Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.setMinimised) {
+				if (changes.setMinimised.newValue === true) {
+					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+					ChangeHeight(42);
+					console.log('Popup Minimised');
+				} else if (changes.setMinimised.newValue === false) {
+					chrome.storage.local.get(['allFeatures'], function (result) {
+						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
+							ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('mainBody');
+							console.log('Popup Expanded');
+						} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
+							ChangeHeight(AllFeaturesHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('toggleFeature');
+							console.log('Popup Expanded');
+						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
+							ChangeHeight(SettingsHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('toggleSettings');
+							console.log('Popup Expanded');
+						}
+					});
+				}
+			}
+		});
+
+		// On IsPopupHidden Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.isPopupHidden) {
+				if (changes.isPopupHidden.newValue === true) {
+					if (document.querySelector('#mainBody').classList.contains('hidden')) {
+						chrome.storage.local.get(['allFeatures'], function (result) {
+							JustChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('mainBody');
+							console.log('Set Homepage as Default');
+						});
+					}
+				}
+			}
+		});
+
+		// On DisableActiveFeature Change
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.disableActiveFeature) {
+				if (changes.disableActiveFeature.newValue === true) {
+					chrome.storage.local.get(['allFeatures'], function (result) {
+						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
+						chrome.storage.local.set({disableActiveFeature: false});
+						console.log('Deactivated Active Feature');
+					});
+				}
+			}
 		});
 	}, []);
 
@@ -88,49 +151,6 @@ export default function NavBar() {
 	}
 
 	if (allFeatures.length !== 0) {
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) {
-				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
-			}
-		});
-
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.setMinimised) {
-				if (changes.setMinimised.newValue === true) {
-					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(42);
-					console.log('Popup Minimised');
-				} else if (changes.setMinimised.newValue === false) {
-					if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-						ChangeHeight(BodyHeight(allFeatures));
-						HideAllComponentExcept('mainBody');
-						console.log('Popup Expanded');
-					} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
-						ChangeHeight(AllFeaturesHeight(allFeatures));
-						HideAllComponentExcept('toggleFeature');
-						console.log('Popup Expanded');
-					} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-						ChangeHeight(SettingsHeight(allFeatures));
-						HideAllComponentExcept('toggleSettings');
-						console.log('Popup Expanded');
-					}
-				}
-			}
-		});
-
-		// On Storage Change
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.disableActiveFeature) {
-				if (changes.disableActiveFeature.newValue === true) {
-					ActivateDeactivateFeature(allFeatures, null);
-					chrome.storage.local.set({disableActiveFeature: false});
-					console.log('Deactivated Active Feature');
-				}
-			}
-		});
-
 		return (
 			<header id='navBar' className='bg-navBar'>
 				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>

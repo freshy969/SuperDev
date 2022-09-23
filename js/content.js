@@ -7,6 +7,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'changeHeight':
 				changeHeight(port, request);
 				break;
+			case 'justChangeHeight':
+				justChangeHeight(port, request);
+				break;
 			case 'activateTextEditor':
 				activateTextEditor(port, request);
 				break;
@@ -72,13 +75,14 @@ const showHideExtension = (port, request) => {
 		});
 		port.postMessage({action: 'Popup Created'});
 	}
-	// If Popup Visible
+	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		chrome.storage.local.set({isPopupHidden: true});
 		chrome.storage.local.set({disableActiveFeature: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
-	// If Popup Hidden
+	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
 		chrome.storage.local.set({setMinimised: false});
@@ -100,6 +104,11 @@ const changeHeight = (port, request) => {
 	if (document.querySelector('#superDev').style.visibility === 'hidden')
 		document.querySelector('#superDevIframe').onload = document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
+};
+
+const justChangeHeight = (port, request) => {
+	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+	port.postMessage({action: 'Just Height Changed'});
 };
 
 const activateTextEditor = (port, request) => {

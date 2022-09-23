@@ -8,14 +8,14 @@ export default function MainBody() {
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
-	}, []);
-
-	if (allFeatures.length !== 0) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
+	}, []);
+
+	if (allFeatures.length !== 0) {
 		return (
 			<section id='mainBody'>
 				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>

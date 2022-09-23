@@ -6,33 +6,32 @@ export default function ToggleFeature() {
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
-	}, []);
-
-	if (allFeatures.length !== 0) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
+	}, []);
 
-		function toggleSingleFeature(featureId) {
-			allFeatures.map((value, index) => {
-				if (value.id === featureId) {
-					if (value.isEnabled === true) {
-						document.getElementsByClassName(featureId)[0].classList.add('hidden');
-						document.getElementsByClassName(featureId)[1].classList.replace(value.disableIcon, value.enableIcon);
-						value.isEnabled = false;
-						chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-					} else {
-						document.getElementsByClassName(featureId)[0].classList.remove('hidden');
-						document.getElementsByClassName(featureId)[1].classList.replace(value.enableIcon, value.disableIcon);
-						value.isEnabled = true;
-						chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-					}
+	function toggleSingleFeature(featureId) {
+		allFeatures.map((value, index) => {
+			if (value.id === featureId) {
+				if (value.isEnabled === true) {
+					document.getElementsByClassName(featureId)[0].classList.add('hidden');
+					document.getElementsByClassName(featureId)[1].classList.replace(value.disableIcon, value.enableIcon);
+					value.isEnabled = false;
+					chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+				} else {
+					document.getElementsByClassName(featureId)[0].classList.remove('hidden');
+					document.getElementsByClassName(featureId)[1].classList.replace(value.enableIcon, value.disableIcon);
+					value.isEnabled = true;
+					chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 				}
-			});
-		}
+			}
+		});
+	}
 
+	if (allFeatures.length !== 0) {
 		return (
 			<section id='toggleFeature' className='hidden'>
 				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>
