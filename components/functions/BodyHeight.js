@@ -4,7 +4,6 @@ export default function BodyHeight(allFeatures) {
 		allFeatures.map((value) => (value.isEnabled === true ? (count = count + 1) : (count = count)));
 		if (count === 0) height = 42;
 		else height = count % 2 === 0 ? 42 + 17 + (count / 2) * 48 : 42 + 17 + ((count + 1) / 2) * 48;
-		console.log('Height Is Enabled', height);
 		return height;
 	}
 }

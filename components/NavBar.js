@@ -22,10 +22,12 @@ export default function NavBar() {
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleFeature');
 			chrome.storage.sync.set({setMinimised: false});
+			console.log('Toggle Feature Activated');
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 			chrome.storage.sync.set({setMinimised: false});
+			console.log('Toggle Feature Dectivated');
 		}
 	}
 
@@ -35,9 +37,11 @@ export default function NavBar() {
 				if (result.colorTheme === 'light') {
 					document.documentElement.classList.add('dark');
 					chrome.storage.sync.set({colorTheme: 'dark'});
+					console.log('Dark Mode Activated');
 				} else {
 					document.documentElement.classList.remove('dark');
 					chrome.storage.sync.set({colorTheme: 'light'});
+					console.log('Light Mode Activated');
 				}
 			}
 		});
@@ -49,15 +53,18 @@ export default function NavBar() {
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleSettings');
 			chrome.storage.sync.set({setMinimised: false});
+			console.log('Toggle Settings Activated');
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 			chrome.storage.sync.set({setMinimised: false});
+			console.log('Toggle Settings Dectivated');
 		}
 	}
 
 	function pauseExtension() {
 		ActivateDeactivateFeature(allFeatures, null);
+		console.log('Extension Paused');
 	}
 
 	function minimiseExtension() {
@@ -93,16 +100,20 @@ export default function NavBar() {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(42);
+					console.log('Popup Minimised');
 				} else {
 					if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 						ChangeHeight(BodyHeight(allFeatures));
 						HideAllComponentExcept('mainBody');
+						console.log('Popup Expanded');
 					} else if (!document.querySelector('#toggleFeature').classList.contains('hidden')) {
 						ChangeHeight(AllFeaturesHeight(allFeatures));
 						HideAllComponentExcept('toggleFeature');
+						console.log('Popup Expanded');
 					} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 						ChangeHeight(SettingsHeight(allFeatures));
 						HideAllComponentExcept('toggleSettings');
+						console.log('Popup Expanded');
 					}
 				}
 			}

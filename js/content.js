@@ -2,7 +2,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			case 'showHideExtension':
-				showHideExtension(port, request, true);
+				showHideExtension(port, request);
 				break;
 			case 'changeHeight':
 				changeHeight(port, request);
@@ -14,7 +14,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 				deactivateTextEditor(port, request);
 				break;
 			case 'activatePageRuler':
-				showHideExtension(port, request, false);
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
@@ -24,7 +23,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 	});
 });
 
-const showHideExtension = (port, request, changeIsPopupHidden) => {
+const showHideExtension = (port, request) => {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
@@ -75,11 +74,9 @@ const showHideExtension = (port, request, changeIsPopupHidden) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		if (changeIsPopupHidden === true) {
-			chrome.storage.sync.set({disableActiveFeature: false}, function () {
-				chrome.storage.sync.set({disableActiveFeature: true});
-			});
-		}
+		chrome.storage.sync.set({disableActiveFeature: false}, function () {
+			chrome.storage.sync.set({disableActiveFeature: true});
+		});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -103,12 +100,12 @@ const changeHeight = (port, request) => {
 const activateTextEditor = (port, request) => {
 	document.querySelector('body').contentEditable = true;
 	document.querySelector('body').spellcheck = false;
-	port.postMessage({action: 'Text Editable Now'});
+	port.postMessage({action: 'Text Editable'});
 };
 
 const deactivateTextEditor = (port, request) => {
 	document.querySelector('body').contentEditable = false;
-	port.postMessage({action: 'Text Uneditable Now'});
+	port.postMessage({action: 'Text Uneditable'});
 };
 
 const activatePageRuler = (port, request) => {
@@ -146,8 +143,11 @@ const activatePageRuler = (port, request) => {
 		}
 	});
 
-	onResizeWindow(), initiate();
-	port.postMessage({action: 'Page Ruler Activated'});
+	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		document.querySelector('#superDev').style.visibility = 'hidden';
+		onResizeWindow(), initiate();
+		port.postMessage({action: 'Page Ruler Activated'});
+	}
 
 	function initiate() {
 		window.addEventListener('mousemove', onInputMove);

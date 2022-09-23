@@ -26,13 +26,16 @@ export default function Home() {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
 					chrome.storage.sync.set({colorTheme: 'dark'});
+					console.log('Dark Mode Activated');
 					setIsLoadingOne(false);
 				} else {
 					chrome.storage.sync.set({colorTheme: 'light'});
+					console.log('Light Mode Activated');
 					setIsLoadingOne(false);
 				}
 			} else if (result.colorTheme === 'dark') {
 				document.documentElement.classList.add('dark');
+				console.log('Dark Mode Activated');
 				setIsLoadingOne(false);
 			} else {
 				setIsLoadingOne(false);
