@@ -115,11 +115,19 @@ const activateTextEditor = (port, request) => {
 	document.querySelector('body').contentEditable = true;
 	document.querySelector('body').spellcheck = false;
 	port.postMessage({action: 'Text Editable'});
+	chrome.storage.local.set({setMinimised: true});
 };
 
 const deactivateTextEditor = (port, request) => {
 	document.querySelector('body').contentEditable = false;
 	port.postMessage({action: 'Text Uneditable'});
+
+	chrome.storage.local.get(['isPopupPaused'], function (result) {
+		if (result.isPopupPaused === true) {
+			chrome.storage.local.set({setMinimised: false});
+			chrome.storage.local.set({isPopupPaused: false});
+		}
+	});
 };
 
 const activatePageRuler = (port, request) => {
