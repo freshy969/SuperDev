@@ -13,9 +13,12 @@ export default function Home() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		// SetMinimised, DisableActiveFeature Initialisation
-		chrome.storage.sync.set({setMinimised: false});
-		chrome.storage.sync.set({disableActiveFeature: false});
+		// SetMinimised, DisableActiveFeature, PageRuler Initialisation
+		chrome.storage.sync.set({setMinimised: false}, function () {
+			chrome.storage.sync.set({disableActiveFeature: false}, function () {
+				chrome.storage.sync.set({whichFeatureActive: null});
+			});
+		});
 
 		// Dark Mode Initialisation
 		chrome.storage.sync.get(['colorTheme'], function (result) {

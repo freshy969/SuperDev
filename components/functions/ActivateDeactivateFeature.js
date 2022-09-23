@@ -1,5 +1,4 @@
 export default function ActivateDeactivateFeature(allFeatures, featureId) {
-	if (featureId === null) console.log(1);
 	if (allFeatures.length !== 0) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
@@ -24,6 +23,7 @@ function HideMeShowMe(portFour, featureId) {
 
 			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			portFour.onMessage.addListener(function (response) {
+				chrome.storage.sync.set({whichFeatureActive: featureId});
 				console.log('Got Response : ', response.action);
 			});
 		}

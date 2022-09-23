@@ -27,7 +27,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 const showHideExtension = (port, request, changeIsPopupHidden) => {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
-		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: false});
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
@@ -77,15 +76,15 @@ const showHideExtension = (port, request, changeIsPopupHidden) => {
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		if (changeIsPopupHidden === true) {
-			chrome.storage.sync.set({disableActiveFeature: false});
-			chrome.storage.sync.set({disableActiveFeature: true});
+			chrome.storage.sync.set({disableActiveFeature: false}, function () {
+				chrome.storage.sync.set({disableActiveFeature: true});
+			});
 		}
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
-		if (changeIsPopupHidden === true) chrome.storage.sync.set({disableActiveFeature: false});
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
@@ -202,8 +201,14 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('keydown', detectEscape);
 
 		// Show Full Popup and Disable Page Ruler
-		chrome.storage.sync.set({disableActiveFeature: false});
-		chrome.storage.sync.set({disableActiveFeature: true});
+		chrome.storage.sync.get(['whichFeatureActive'], function (result) {
+			if (result.whichFeatureActive === null) {
+				chrome.storage.sync.set({disableActiveFeature: false}, function () {
+					chrome.storage.sync.set({disableActiveFeature: true});
+				});
+			}
+		});
+
 		chrome.storage.sync.set({setMinimised: false});
 
 		removeDimensions();
