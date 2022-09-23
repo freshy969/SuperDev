@@ -29,7 +29,12 @@ chrome.management.onEnabled.addListener(async (extension) => {
 
 // Context Menu onClick
 chrome.contextMenus.onClicked.addListener((tab) => {
-	if (!tab.pageUrl.includes('chrome://') && !tab.pageUrl.includes('chrome-extension://') && !tab.pageUrl.includes('file://')) {
+	if (
+		!tab.pageUrl.includes('chrome://') &&
+		!tab.pageUrl.includes('chrome-extension://') &&
+		!tab.pageUrl.includes('file://') &&
+		!tab.pageUrl.includes('https://chrome.google.com/webstore')
+	) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 			portTwo.postMessage({action: 'showHideExtension'});
@@ -42,7 +47,12 @@ chrome.contextMenus.onClicked.addListener((tab) => {
 
 // Open Extension on Icon Click
 chrome.action.onClicked.addListener((tab) => {
-	if (!tab.url.includes('chrome://') && !tab.url.includes('chrome-extension://') && !tab.url.includes('file://')) {
+	if (
+		!tab.url.includes('chrome://') &&
+		!tab.url.includes('chrome-extension://') &&
+		!tab.url.includes('file://') &&
+		!tab.url.includes('https://chrome.google.com/webstore')
+	) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
