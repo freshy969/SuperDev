@@ -192,7 +192,7 @@ const activatePageRuler = (port, request) => {
 		onVisibleAreaChange();
 	}
 
-	function destroyPageRuler() {
+	function destroyPageRuler(isManualEscape) {
 		connectionClosed = true;
 		window.removeEventListener('mousemove', onInputMove);
 		window.removeEventListener('touchmove', onInputMove);
@@ -200,14 +200,11 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('resize', onVisibleAreaChange);
 		window.removeEventListener('keydown', detectEscape);
 
-		chrome.storage.sync.get(['isManualEscape'], function (result) {
-			console.log(result.isManualEscape);
-			if (result.isManualEscape === true) {
-				chrome.storage.sync.set({disableActiveFeature: false}, function () {
-					chrome.storage.sync.set({disableActiveFeature: true}, function () {});
-				});
-			}
-		});
+		if (isManualEscape === true) {
+			chrome.storage.sync.set({disableActiveFeature: false}, function () {
+				chrome.storage.sync.set({disableActiveFeature: true}, function () {});
+			});
+		}
 
 		chrome.storage.sync.set({setMinimised: false});
 
@@ -271,7 +268,11 @@ const activatePageRuler = (port, request) => {
 	function detectEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
-			destroyPageRuler();
+			if (event.isTrusted === true) {
+				destroyPageRuler(true);
+			} else if (event.isTrusted === false) {
+				destroyPageRuler(false);
+			}
 		}
 	}
 
@@ -326,9 +327,6 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
-	chrome.storage.sync.set({isManualEscape: false}, function () {
-		window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
-		port.postMessage({action: 'Page Ruler Deactivated'});
-		chrome.storage.sync.set({isManualEscape: true});
-	});
+	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+	port.postMessage({action: 'Page Ruler Deactivated'});
 };

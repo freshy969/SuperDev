@@ -16,9 +16,7 @@ export default function Home() {
 		// SetMinimised, DisableActiveFeature, PageRuler Initialisation
 		chrome.storage.sync.set({setMinimised: false}, function () {
 			chrome.storage.sync.set({disableActiveFeature: false}, function () {
-				chrome.storage.sync.set({whichFeatureActive: null}, function () {
-					chrome.storage.sync.set({isManualEscape: true});
-				});
+				chrome.storage.sync.set({whichFeatureActive: null});
 			});
 		});
 
