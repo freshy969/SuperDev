@@ -200,11 +200,11 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('resize', onVisibleAreaChange);
 		window.removeEventListener('keydown', detectEscape);
 
-		// Show Full Popup and Disable Page Ruler
-		chrome.storage.sync.get(['whichFeatureActive'], function (result) {
-			if (result.whichFeatureActive === null) {
+		chrome.storage.sync.get(['isManualEscape'], function (result) {
+			console.log(result.isManualEscape);
+			if (result.isManualEscape === true) {
 				chrome.storage.sync.set({disableActiveFeature: false}, function () {
-					chrome.storage.sync.set({disableActiveFeature: true});
+					chrome.storage.sync.set({disableActiveFeature: true}, function () {});
 				});
 			}
 		});
@@ -326,6 +326,9 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
-	port.postMessage({action: 'Page Ruler Deactivated'});
+	chrome.storage.sync.set({isManualEscape: false}, function () {
+		window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+		port.postMessage({action: 'Page Ruler Deactivated'});
+		chrome.storage.sync.set({isManualEscape: true});
+	});
 };
