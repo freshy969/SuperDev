@@ -13,21 +13,23 @@ export default function Home() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		// SetMinimised, DisableActiveFeature, WhichFeatureActive Initialisation
-		chrome.storage.sync.set({setMinimised: false});
-		chrome.storage.sync.set({disableActiveFeature: false});
-		chrome.storage.sync.set({whichFeatureActive: null});
+		// Initialisation/Reset on First Load
+		// SetMinimised, DisableActiveFeature, WhichFeatureActive
+		chrome.storage.local.set({setMinimised: null});
+		chrome.storage.local.set({disableActiveFeature: false});
+		chrome.storage.local.set({whichFeatureActive: null});
+		chrome.storage.local.set({isPopupPaused: false});
 
 		// Dark Mode Initialisation
-		chrome.storage.sync.get(['colorTheme'], function (result) {
+		chrome.storage.local.get(['colorTheme'], function (result) {
 			if (result.colorTheme === undefined) {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
-					chrome.storage.sync.set({colorTheme: 'dark'});
+					chrome.storage.local.set({colorTheme: 'dark'});
 					console.log('Dark Mode Activated');
 					setIsLoadingOne(false);
 				} else {
-					chrome.storage.sync.set({colorTheme: 'light'});
+					chrome.storage.local.set({colorTheme: 'light'});
 					console.log('Light Mode Activated');
 					setIsLoadingOne(false);
 				}
@@ -41,9 +43,9 @@ export default function Home() {
 		});
 
 		// All Features Initialisation
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.sync.set({allFeatures: JSON.stringify(features)}, function () {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {
 					setAllFeatures(features);
 					setIsLoadingTwo(false);
 				});

@@ -3,7 +3,7 @@ export default function ToggleFeature() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 	}, []);
@@ -22,12 +22,12 @@ export default function ToggleFeature() {
 						document.getElementsByClassName(featureId)[0].classList.add('hidden');
 						document.getElementsByClassName(featureId)[1].classList.replace(value.disableIcon, value.enableIcon);
 						value.isEnabled = false;
-						chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+						chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 					} else {
 						document.getElementsByClassName(featureId)[0].classList.remove('hidden');
 						document.getElementsByClassName(featureId)[1].classList.replace(value.enableIcon, value.disableIcon);
 						value.isEnabled = true;
-						chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+						chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 					}
 				}
 			});

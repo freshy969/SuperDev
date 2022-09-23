@@ -74,14 +74,20 @@ const showHideExtension = (port, request) => {
 	}
 	// If Popup Visible
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		chrome.storage.sync.set({disableActiveFeature: false}, function () {
-			chrome.storage.sync.set({disableActiveFeature: true});
+		chrome.storage.local.set({disableActiveFeature: false}, function () {
+			chrome.storage.local.set({disableActiveFeature: true});
 		});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 	// If Popup Hidden
 	else {
+		// Reset on Visible
+		chrome.storage.local.set({setMinimised: null});
+		chrome.storage.local.set({disableActiveFeature: false});
+		chrome.storage.local.set({whichFeatureActive: null});
+		chrome.storage.local.set({isPopupPaused: false});
+
 		document.querySelector('#superDev').style.top = '32px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
@@ -164,7 +170,7 @@ const activatePageRuler = (port, request) => {
 	// Was Added
 	function parseScreenshot(dataUrl) {
 		// Show Minimised Popup After Screenshot is Done
-		chrome.storage.sync.set({setMinimised: true});
+		chrome.storage.local.set({setMinimised: true});
 
 		image.src = dataUrl;
 		image.onload = function () {
@@ -202,12 +208,17 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('keydown', detectEscape);
 
 		if (isManualEscape === true) {
-			chrome.storage.sync.set({disableActiveFeature: false}, function () {
-				chrome.storage.sync.set({disableActiveFeature: true}, function () {});
+			chrome.storage.local.set({disableActiveFeature: false}, function () {
+				chrome.storage.local.set({disableActiveFeature: true}, function () {});
 			});
 		}
 
-		chrome.storage.sync.set({setMinimised: false});
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
 
 		removeDimensions();
 		enableCursor();

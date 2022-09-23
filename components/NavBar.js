@@ -11,7 +11,7 @@ export default function NavBar() {
 
 	useEffect(() => {
 		// Get All Features
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 	}, []);
@@ -21,26 +21,26 @@ export default function NavBar() {
 			ChangeHeight(AllFeaturesHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleFeature');
-			chrome.storage.sync.set({setMinimised: false});
+			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Feature Activated');
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
-			chrome.storage.sync.set({setMinimised: false});
+			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Feature Dectivated');
 		}
 	}
 
 	function darkMode() {
-		chrome.storage.sync.get(['colorTheme'], function (result) {
+		chrome.storage.local.get(['colorTheme'], function (result) {
 			if (result.colorTheme) {
 				if (result.colorTheme === 'light') {
 					document.documentElement.classList.add('dark');
-					chrome.storage.sync.set({colorTheme: 'dark'});
+					chrome.storage.local.set({colorTheme: 'dark'});
 					console.log('Dark Mode Activated');
 				} else {
 					document.documentElement.classList.remove('dark');
-					chrome.storage.sync.set({colorTheme: 'light'});
+					chrome.storage.local.set({colorTheme: 'light'});
 					console.log('Light Mode Activated');
 				}
 			}
@@ -52,27 +52,28 @@ export default function NavBar() {
 			ChangeHeight(SettingsHeight(allFeatures));
 			ActivateDeactivateFeature(allFeatures, null);
 			HideAllComponentExcept('toggleSettings');
-			chrome.storage.sync.set({setMinimised: false});
+			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Activated');
 		} else {
 			ChangeHeight(BodyHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
-			chrome.storage.sync.set({setMinimised: false});
+			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Dectivated');
 		}
 	}
 
 	function pauseExtension() {
 		ActivateDeactivateFeature(allFeatures, null);
+		chrome.storage.local.set({isPopupPaused: true});
 		console.log('Extension Paused');
 	}
 
 	function minimiseExtension() {
-		chrome.storage.sync.get(['setMinimised'], function (result) {
+		chrome.storage.local.get(['setMinimised'], function (result) {
 			if (result.setMinimised) {
-				if (result.setMinimised === true) chrome.storage.sync.set({setMinimised: false});
-				else chrome.storage.sync.set({setMinimised: true});
-			} else chrome.storage.sync.set({setMinimised: true});
+				if (result.setMinimised === true) chrome.storage.local.set({setMinimised: false});
+				else chrome.storage.local.set({setMinimised: true});
+			} else chrome.storage.local.set({setMinimised: true});
 		});
 	}
 
@@ -101,7 +102,7 @@ export default function NavBar() {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(42);
 					console.log('Popup Minimised');
-				} else {
+				} else if (changes.setMinimised.newValue === false) {
 					if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 						ChangeHeight(BodyHeight(allFeatures));
 						HideAllComponentExcept('mainBody');

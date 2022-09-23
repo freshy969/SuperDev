@@ -5,7 +5,7 @@ export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 	}, []);

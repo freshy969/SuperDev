@@ -23,7 +23,7 @@ function HideMeShowMe(portFour, featureId) {
 
 			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			portFour.onMessage.addListener(function (response) {
-				chrome.storage.sync.set({whichFeatureActive: featureId});
+				chrome.storage.local.set({whichFeatureActive: featureId});
 				console.log('Got Response : ', response.action);
 			});
 		}
