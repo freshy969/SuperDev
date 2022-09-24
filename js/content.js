@@ -137,7 +137,7 @@ const activateTextEditor = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
-				event.target.classList.add('textEditorEnabled');
+				event.target.classList.add('textEditorOutline');
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
 				event.target.focus();
@@ -148,9 +148,9 @@ const activateTextEditor = (port, request) => {
 	function detectMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('textEditorEnabled')) {
+			if (event.target.classList.contains('textEditorOutline')) {
 				event.target.style.outline = 'none';
-				event.target.classList.remove('textEditorEnabled');
+				event.target.classList.remove('textEditorOutline');
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
 			}
@@ -163,11 +163,11 @@ const activateTextEditor = (port, request) => {
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			if (document.querySelector('.textEditorEnabled')) {
-				document.querySelector('.textEditorEnabled').style.outline = 'none';
-				document.querySelector('.textEditorEnabled').removeAttribute('contenteditable', true);
-				document.querySelector('.textEditorEnabled').removeAttribute('spellcheck', false);
-				document.querySelector('.textEditorEnabled').classList.remove('textEditorEnabled');
+			if (document.querySelector('.textEditorOutline')) {
+				document.querySelector('.textEditorOutline').style.outline = 'none';
+				document.querySelector('.textEditorOutline').removeAttribute('contenteditable', true);
+				document.querySelector('.textEditorOutline').removeAttribute('spellcheck', false);
+				document.querySelector('.textEditorOutline').classList.remove('textEditorOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
@@ -421,6 +421,10 @@ const activateMoveElement = (port, request) => {
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
 
+	let moveElementGuide = document.createElement('div');
+	moveElementGuide.classList.add('moveElementGuide');
+	document.body.appendChild(moveElementGuide);
+
 	function detectEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -435,7 +439,8 @@ const activateMoveElement = (port, request) => {
 	function detectMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('moveElementCurrent');
+			event.target.classList.add('moveElementOutline');
+			renderGuide();
 			event.target.focus();
 		}
 	}
@@ -444,7 +449,7 @@ const activateMoveElement = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.outline = 'none';
-			event.target.classList.remove('moveElementCurrent');
+			event.target.classList.remove('moveElementOutline');
 		}
 	}
 
@@ -454,8 +459,8 @@ const activateMoveElement = (port, request) => {
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			document.querySelector('.moveElementCurrent').style.outline = 'none';
-			document.querySelector('.moveElementCurrent').classList.remove('moveElementCurrent');
+			document.querySelector('.moveElementOutline').style.outline = 'none';
+			document.querySelector('.moveElementOutline').classList.remove('moveElementOutline');
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -465,6 +470,25 @@ const activateMoveElement = (port, request) => {
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
+	}
+
+	function renderGuide() {
+		let moveElementPosition = document.querySelector('.moveElementOutline').getBoundingClientRect();
+		let scrollWidth = document.body.scrollWidth;
+		let scrollHeight = document.body.scrollHeight;
+		let top = moveElementPosition.top + document.documentElement.scrollTop;
+		let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
+		let left = moveElementPosition.left;
+		let right = moveElementPosition.right;
+
+		moveElementGuide.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
 	}
 
 	port.postMessage({action: 'Move Element Activated'});

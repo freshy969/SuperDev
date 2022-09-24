@@ -93,10 +93,23 @@
 /** Page Ruler **/
 
 /** Move Element, Text Editor **/
-.moveElementCurrent {
+.moveElementOutline {
 	outline: red solid 2px !important;
 }
-.textEditorEnabled {
+.moveElementGuide > svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: visible;
+	pointer-events: none;
+	z-index: 2147483645;
+}
+
+.moveElementGuide line {
+	stroke: rgb(255, 26, 26);
+	stroke-dasharray: 2;
+}
+.textEditorOutline {
 	outline: transparent solid 2px !important;
 }
 /** Move Element, Text Editor **/
