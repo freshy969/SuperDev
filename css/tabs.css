@@ -92,12 +92,11 @@
 }
 /** Page Ruler **/
 
-/** Move Element **/
+/** Move Element, Text Editor **/
 .moveElementCurrent {
 	outline: red solid 2px !important;
 }
-
-.moveElementCurrent.moveElementSelected {
-	outline: #03dac6 solid 2px !important;
+.textEditorEnabled {
+	outline: transparent solid 2px !important;
 }
-/** Move Element **/
+/** Move Element, Text Editor **/

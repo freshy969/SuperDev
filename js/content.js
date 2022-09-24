@@ -118,22 +118,75 @@ const justChangeHeight = (port, request) => {
 };
 
 const activateTextEditor = (port, request) => {
-	document.querySelector('body').contentEditable = true;
-	document.querySelector('body').spellcheck = false;
-	port.postMessage({action: 'Text Editable'});
+	window.addEventListener('keyup', detectEscape);
+	window.addEventListener('mouseover', detectMouseOver);
+	window.addEventListener('mouseout', detectMouseOut);
+
+	function detectEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyTextEditor(true);
+			} else if (event.isTrusted === false) {
+				destroyTextEditor(false);
+			}
+		}
+	}
+
+	function detectMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.innerText !== '') {
+				event.target.classList.add('textEditorEnabled');
+				event.target.setAttribute('contenteditable', true);
+				event.target.setAttribute('spellcheck', false);
+				event.target.focus();
+			}
+		}
+	}
+
+	function detectMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.classList.contains('textEditorEnabled')) {
+				event.target.style.outline = 'none';
+				event.target.classList.remove('textEditorEnabled');
+				event.target.removeAttribute('contenteditable', true);
+				event.target.removeAttribute('spellcheck', false);
+			}
+		}
+	}
+
+	function destroyTextEditor(isManualEscape) {
+		window.removeEventListener('mouseover', detectMouseOver);
+		window.removeEventListener('mouseout', detectMouseOut);
+		window.removeEventListener('keyup', detectEscape);
+
+		if (isManualEscape === true) {
+			if (document.querySelector('.textEditorEnabled')) {
+				document.querySelector('.textEditorEnabled').style.outline = 'none';
+				document.querySelector('.textEditorEnabled').removeAttribute('contenteditable', true);
+				document.querySelector('.textEditorEnabled').removeAttribute('spellcheck', false);
+				document.querySelector('.textEditorEnabled').classList.remove('textEditorEnabled');
+			}
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+	}
+
+	port.postMessage({action: 'Text Editor Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
 const deactivateTextEditor = (port, request) => {
-	document.querySelector('body').contentEditable = false;
-	port.postMessage({action: 'Text Uneditable'});
-
-	chrome.storage.local.get(['isPopupPaused'], function (result) {
-		if (result.isPopupPaused === true) {
-			chrome.storage.local.set({setMinimised: false});
-			chrome.storage.local.set({isPopupPaused: false});
-		}
-	});
+	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Text Editor Deactivated'});
 };
 
 const activatePageRuler = (port, request) => {
@@ -183,7 +236,7 @@ const activatePageRuler = (port, request) => {
 		window.addEventListener('touchmove', onInputMove);
 		window.addEventListener('scroll', onVisibleAreaChange);
 		window.addEventListener('resize', onVisibleAreaChange);
-		window.addEventListener('keydown', detectEscape);
+		window.addEventListener('keyup', detectEscape);
 
 		disableCursor();
 		requestNewScreenshot();
@@ -227,7 +280,7 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('touchmove', onInputMove);
 		window.removeEventListener('scroll', onVisibleAreaChange);
 		window.removeEventListener('resize', onVisibleAreaChange);
-		window.removeEventListener('keydown', detectEscape);
+		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -359,35 +412,19 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };
 
 const activateMoveElement = (port, request) => {
-	window.focus();
+	window.addEventListener('keyup', detectEscape);
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
-	window.addEventListener('keydown', detectEscape);
-
-	function detectMouseOver(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('moveElementCurrent');
-		}
-	}
-
-	function detectMouseOut(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.remove('moveElementCurrent');
-		}
-	}
 
 	function detectEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				document.querySelector('.moveElementCurrent').classList.remove('moveElementCurrent');
 				destroyMoveElement(true);
 			} else if (event.isTrusted === false) {
 				destroyMoveElement(false);
@@ -395,12 +432,30 @@ const activateMoveElement = (port, request) => {
 		}
 	}
 
+	function detectMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('moveElementCurrent');
+			event.target.focus();
+		}
+	}
+
+	function detectMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.style.outline = 'none';
+			event.target.classList.remove('moveElementCurrent');
+		}
+	}
+
 	function destroyMoveElement(isManualEscape) {
 		window.removeEventListener('mouseover', detectMouseOver);
 		window.removeEventListener('mouseout', detectMouseOut);
-		window.removeEventListener('keydown', detectEscape);
+		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
+			document.querySelector('.moveElementCurrent').style.outline = 'none';
+			document.querySelector('.moveElementCurrent').classList.remove('moveElementCurrent');
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -417,6 +472,6 @@ const activateMoveElement = (port, request) => {
 };
 
 const deactivateMoveElement = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
 };
