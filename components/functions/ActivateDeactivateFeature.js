@@ -46,6 +46,9 @@ function JustHideMe(portFour, featureId) {
 			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+			portFour.onMessage.addListener(function (response) {
+				console.log('Got Response : ', response.action);
+			});
 		}
 	}
 }

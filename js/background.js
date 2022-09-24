@@ -3,10 +3,21 @@ chrome.runtime.onInstalled.addListener(async () => {
 	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-			chrome.scripting.executeScript({
-				target: {tabId: tab.id},
-				files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
-			});
+			if (
+				!tab.url.includes('chrome://') &&
+				!tab.url.includes('chrome-extension://') &&
+				!tab.url.includes('file://') &&
+				!tab.url.includes('https://chrome.google.com/webstore')
+			) {
+				chrome.scripting.executeScript({
+					target: {tabId: tab.id},
+					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+				});
+				chrome.scripting.insertCSS({
+					target: {tabId: tab.id},
+					files: ['css/tabs.css'],
+				});
+			}
 		}
 	}
 	// Creating Chrome Context Menu
@@ -18,10 +29,21 @@ chrome.management.onEnabled.addListener(async (extension) => {
 	if (extension.name === chrome.runtime.getManifest().name) {
 		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-				chrome.scripting.executeScript({
-					target: {tabId: tab.id},
-					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
-				});
+				if (
+					!tab.url.includes('chrome://') &&
+					!tab.url.includes('chrome-extension://') &&
+					!tab.url.includes('file://') &&
+					!tab.url.includes('https://chrome.google.com/webstore')
+				) {
+					chrome.scripting.executeScript({
+						target: {tabId: tab.id},
+						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+					});
+					chrome.scripting.insertCSS({
+						target: {tabId: tab.id},
+						files: ['css/tabs.css'],
+					});
+				}
 			}
 		}
 	}
@@ -68,13 +90,6 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	let areaThreshold = 6;
 	let dimensionsThreshold = 6;
 	let map;
-
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		chrome.scripting.insertCSS({
-			target: {tabId: tabs[0].id},
-			files: ['css/tooltip.css'],
-		});
-	});
 
 	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {

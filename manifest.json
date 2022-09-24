@@ -28,6 +28,7 @@
 	},
 	"content_scripts": [
 		{
+			"css": ["css/tabs.css"],
 			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
 			"matches": ["http://*/*", "https://*/*"]
 		}
@@ -35,7 +36,7 @@
 	"web_accessible_resources": [
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"resources": ["index.html", "404.html", "css/*", "fonts/*", "icons/*", "js/*", "libs/*", "next/*"]
+			"resources": ["index.html", "css/*", "icons/*", "js/*", "libs/*", "next/*"]
 		}
 	],
 	"manifest_version": 3,

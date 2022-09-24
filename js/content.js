@@ -22,6 +22,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
 				break;
+			case 'activateMoveElement':
+				activateMoveElement(port, request);
+				break;
+			case 'deactivateMoveElement':
+				deactivateMoveElement(port, request);
+				break;
 		}
 	});
 });
@@ -355,4 +361,62 @@ const activatePageRuler = (port, request) => {
 const deactivatePageRuler = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
+};
+
+const activateMoveElement = (port, request) => {
+	window.focus();
+	window.addEventListener('mouseover', detectMouseOver);
+	window.addEventListener('mouseout', detectMouseOut);
+	window.addEventListener('keydown', detectEscape);
+
+	function detectMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('moveElementCurrent');
+		}
+	}
+
+	function detectMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.remove('moveElementCurrent');
+		}
+	}
+
+	function detectEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				document.querySelector('.moveElementCurrent').classList.remove('moveElementCurrent');
+				destroyMoveElement(true);
+			} else if (event.isTrusted === false) {
+				destroyMoveElement(false);
+			}
+		}
+	}
+
+	function destroyMoveElement(isManualEscape) {
+		window.removeEventListener('mouseover', detectMouseOver);
+		window.removeEventListener('mouseout', detectMouseOut);
+		window.removeEventListener('keydown', detectEscape);
+
+		if (isManualEscape === true) {
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+	}
+
+	port.postMessage({action: 'Move Element Activated'});
+	chrome.storage.local.set({setMinimised: true});
+};
+
+const deactivateMoveElement = (port, request) => {
+	window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+	port.postMessage({action: 'Move Element Deactivated'});
 };
