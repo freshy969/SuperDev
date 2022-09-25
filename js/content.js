@@ -230,8 +230,6 @@ const activatePageRuler = (port, request) => {
 	// Was Added
 	let body = document.querySelector('body');
 	let portThree = chrome.runtime.connect({name: 'portThree'});
-	let changeDelay = 300;
-	let changeTimeout;
 	let paused = true;
 	let inputX, inputY;
 	let connectionClosed = false;
@@ -335,13 +333,39 @@ const activatePageRuler = (port, request) => {
 		if (dimensions) body.removeChild(dimensions);
 	}
 
-	function onVisibleAreaChange() {
+	function waitForScrollEnd() {
+		let lastChangedFrame = 0;
+		let lastX = window.scrollX;
+		let lastY = window.scrollY;
+
+		return new Promise((resolve) => {
+			function tick(frames) {
+				// We requestAnimationFrame either for 500 frames or until 20 frames with
+				// no change have been observed.
+				if (frames - lastChangedFrame > 30) {
+					resolve();
+				} else {
+					if (window.scrollX != lastX || window.scrollY != lastY) {
+						lastChangedFrame = frames;
+						lastX = window.scrollX;
+						lastY = window.scrollY;
+					}
+					requestAnimationFrame(tick.bind(null, frames + 1));
+				}
+			}
+			tick(0);
+		});
+	}
+
+	async function onVisibleAreaChange(event) {
 		if (!paused) pause();
 		else return;
 
-		if (changeTimeout) clearTimeout(changeTimeout);
-
-		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
+		await waitForScrollEnd();
+		waitForScrollEnd().then(() => {
+			console.log(1);
+			requestNewScreenshot();
+		});
 	}
 
 	function requestNewScreenshot() {
