@@ -89,7 +89,7 @@ const showHideExtension = (port, request) => {
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
 			iframeFix: true,
-			containment: 'body',
+			containment: 'document',
 		});
 		port.postMessage({action: 'Popup Created'});
 	}
@@ -600,7 +600,7 @@ const activateMoveElement = (port, request) => {
 			renderPageGuidelines(false);
 			event.target.style.cursor = 'move';
 			event.target.classList.add('moveElementDraggable');
-			$('.moveElementDraggable').draggable({iframeFix: true, containment: 'body'});
+			$('.moveElementDraggable').draggable({iframeFix: true, containment: 'document'});
 		}
 	}
 
