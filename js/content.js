@@ -190,13 +190,13 @@ const activateTextEditor = (port, request) => {
 
 	function renderPageGuidelines(toShow) {
 		if (toShow === true) {
-			let moveElementPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let pageGuidelinesPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
 			let scrollHeight = document.body.scrollHeight;
-			let top = moveElementPosition.top + document.documentElement.scrollTop;
-			let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
-			let left = moveElementPosition.left;
-			let right = moveElementPosition.right;
+			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinesPosition.left;
+			let right = pageGuidelinesPosition.right;
 
 			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -509,13 +509,13 @@ const activatePageGuidelines = (port, request) => {
 
 	function renderPageGuidelines(toShow) {
 		if (toShow === true) {
-			let moveElementPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let pageGuidelinesPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
 			let scrollHeight = document.body.scrollHeight;
-			let top = moveElementPosition.top + document.documentElement.scrollTop;
-			let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
-			let left = moveElementPosition.left;
-			let right = moveElementPosition.right;
+			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinesPosition.left;
+			let right = pageGuidelinesPosition.right;
 
 			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -532,11 +532,11 @@ const activatePageGuidelines = (port, request) => {
 		}
 	}
 
-	port.postMessage({action: 'Move Element Activated'});
+	port.postMessage({action: 'Page Guidelines Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
 const deactivatePageGuidelines = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Move Element Deactivated'});
+	port.postMessage({action: 'Page Guidelines Deactivated'});
 };
