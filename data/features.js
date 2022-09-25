@@ -20,6 +20,26 @@ const features = [
 		id: 'pageRuler',
 	},
 	{
+		title: 'Text Editor',
+		icon: 'fa-pencil',
+		disableIcon: 'fa-eye',
+		enableIcon: 'fa-eye-slash',
+		settingsIcon: 'fa-gear',
+		isEnabled: true,
+		hasSettings: false,
+		id: 'textEditor',
+	},
+	{
+		title: 'Move Element',
+		icon: 'fa-arrows-up-down-left-right',
+		disableIcon: 'fa-eye',
+		enableIcon: 'fa-eye-slash',
+		settingsIcon: 'fa-gear',
+		isEnabled: true,
+		hasSettings: true,
+		id: 'moveElement',
+	},
+	{
 		title: 'Color Picker',
 		icon: 'fa-eye-dropper',
 		disableIcon: 'fa-eye',
@@ -79,16 +99,7 @@ const features = [
 		hasSettings: true,
 		id: 'customCSS',
 	},
-	{
-		title: 'Text Editor',
-		icon: 'fa-pencil',
-		disableIcon: 'fa-eye',
-		enableIcon: 'fa-eye-slash',
-		settingsIcon: 'fa-gear',
-		isEnabled: true,
-		hasSettings: false,
-		id: 'textEditor',
-	},
+
 	{
 		title: 'Font Inspector',
 		icon: 'fa-text-size',
@@ -109,16 +120,7 @@ const features = [
 		hasSettings: true,
 		id: 'fontChanger',
 	},
-	{
-		title: 'Move Element',
-		icon: 'fa-arrows-up-down-left-right',
-		disableIcon: 'fa-eye',
-		enableIcon: 'fa-eye-slash',
-		settingsIcon: 'fa-gear',
-		isEnabled: true,
-		hasSettings: true,
-		id: 'moveElement',
-	},
+
 	{
 		title: 'Export Element',
 		icon: 'fa-up-right-from-square',
