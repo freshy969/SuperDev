@@ -109,7 +109,4 @@
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
-.moveElementDraggable {
-	cursor: move !important;
-}
 /**  Page Guidelines + Move Element **/

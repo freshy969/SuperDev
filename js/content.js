@@ -10,11 +10,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'justChangeHeight':
 				justChangeHeight(port, request);
 				break;
-			case 'activateTextEditor':
-				activateTextEditor(port, request);
+			case 'activatePageGuidelines':
+				activatePageGuidelines(port, request);
 				break;
-			case 'deactivateTextEditor':
-				deactivateTextEditor(port, request);
+			case 'deactivatePageGuidelines':
+				deactivatePageGuidelines(port, request);
 				break;
 			case 'activatePageRuler':
 				activatePageRuler(port, request);
@@ -22,17 +22,23 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
 				break;
-			case 'activatePageGuidelines':
-				activatePageGuidelines(port, request);
+			case 'activateTextEditor':
+				activateTextEditor(port, request);
 				break;
-			case 'deactivatePageGuidelines':
-				deactivatePageGuidelines(port, request);
+			case 'deactivateTextEditor':
+				deactivateTextEditor(port, request);
 				break;
 			case 'activateMoveElement':
 				activateMoveElement(port, request);
 				break;
 			case 'deactivateMoveElement':
 				deactivateMoveElement(port, request);
+				break;
+			case 'activateColorPicker':
+				activateColorPicker(port, request);
+				break;
+			case 'deactivateColorPicker':
+				deactivateColorPicker(port, request);
 				break;
 		}
 	});
@@ -122,7 +128,7 @@ const justChangeHeight = (port, request) => {
 	port.postMessage({action: 'Just Height Changed'});
 };
 
-const activateTextEditor = (port, request) => {
+const activatePageGuidelines = (port, request) => {
 	window.addEventListener('keyup', detectEscape);
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
@@ -135,9 +141,9 @@ const activateTextEditor = (port, request) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyTextEditor(true);
+				destroyPageGuidelines(true);
 			} else if (event.isTrusted === false) {
-				destroyTextEditor(false);
+				destroyPageGuidelines(false);
 			}
 		}
 	}
@@ -145,42 +151,29 @@ const activateTextEditor = (port, request) => {
 	function detectMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.innerText !== '') {
-				event.target.setAttribute('contenteditable', true);
-				event.target.setAttribute('spellcheck', false);
-				event.target.classList.add('pageGuidelinesOutline');
-				renderPageGuidelines(true);
-				event.target.focus();
-			}
+			event.target.classList.add('pageGuidelinesOutline');
+			renderPageGuidelines(true);
+			event.target.focus();
 		}
 	}
 
 	function detectMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('pageGuidelinesOutline')) {
-				event.target.style.outline = 'none';
-				event.target.removeAttribute('contenteditable', true);
-				event.target.removeAttribute('spellcheck', false);
-				event.target.classList.remove('pageGuidelinesOutline');
-				renderPageGuidelines(false);
-			}
+			event.target.style.outline = 'none';
+			renderPageGuidelines(false);
+			event.target.classList.remove('pageGuidelinesOutline');
 		}
 	}
 
-	function destroyTextEditor(isManualEscape) {
+	function destroyPageGuidelines(isManualEscape) {
 		window.removeEventListener('mouseover', detectMouseOver);
 		window.removeEventListener('mouseout', detectMouseOut);
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelinesOutline')) {
-				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
-				document.querySelector('.pageGuidelinesOutline').removeAttribute('contenteditable', true);
-				document.querySelector('.pageGuidelinesOutline').removeAttribute('spellcheck', false);
-				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
-				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
-			}
+			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -219,13 +212,13 @@ const activateTextEditor = (port, request) => {
 		}
 	}
 
-	port.postMessage({action: 'Text Editor Activated'});
+	port.postMessage({action: 'Page Guidelines Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
-const deactivateTextEditor = (port, request) => {
+const deactivatePageGuidelines = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Text Editor Deactivated'});
+	port.postMessage({action: 'Page Guidelines Deactivated'});
 };
 
 const activatePageRuler = (port, request) => {
@@ -455,7 +448,7 @@ const deactivatePageRuler = (port, request) => {
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };
 
-const activatePageGuidelines = (port, request) => {
+const activateTextEditor = (port, request) => {
 	window.addEventListener('keyup', detectEscape);
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
@@ -468,9 +461,9 @@ const activatePageGuidelines = (port, request) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageGuidelines(true);
+				destroyTextEditor(true);
 			} else if (event.isTrusted === false) {
-				destroyPageGuidelines(false);
+				destroyTextEditor(false);
 			}
 		}
 	}
@@ -478,29 +471,42 @@ const activatePageGuidelines = (port, request) => {
 	function detectMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelinesOutline');
-			renderPageGuidelines(true);
-			event.target.focus();
+			if (event.target.innerText !== '') {
+				event.target.setAttribute('contenteditable', true);
+				event.target.setAttribute('spellcheck', false);
+				event.target.classList.add('pageGuidelinesOutline');
+				renderPageGuidelines(true);
+				event.target.focus();
+			}
 		}
 	}
 
 	function detectMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.style.outline = 'none';
-			renderPageGuidelines(false);
-			event.target.classList.remove('pageGuidelinesOutline');
+			if (event.target.classList.contains('pageGuidelinesOutline')) {
+				event.target.style.outline = 'none';
+				event.target.removeAttribute('contenteditable', true);
+				event.target.removeAttribute('spellcheck', false);
+				event.target.classList.remove('pageGuidelinesOutline');
+				renderPageGuidelines(false);
+			}
 		}
 	}
 
-	function destroyPageGuidelines(isManualEscape) {
+	function destroyTextEditor(isManualEscape) {
 		window.removeEventListener('mouseover', detectMouseOver);
 		window.removeEventListener('mouseout', detectMouseOut);
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
-			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			if (document.querySelector('.pageGuidelinesOutline')) {
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').removeAttribute('contenteditable', true);
+				document.querySelector('.pageGuidelinesOutline').removeAttribute('spellcheck', false);
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			}
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -539,13 +545,13 @@ const activatePageGuidelines = (port, request) => {
 		}
 	}
 
-	port.postMessage({action: 'Page Guidelines Activated'});
+	port.postMessage({action: 'Text Editor Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
-const deactivatePageGuidelines = (port, request) => {
+const deactivateTextEditor = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Page Guidelines Deactivated'});
+	port.postMessage({action: 'Text Editor Deactivated'});
 };
 
 const activateMoveElement = (port, request) => {
@@ -591,6 +597,7 @@ const activateMoveElement = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuidelines(false);
+			event.target.style.cursor = 'move';
 			event.target.classList.add('moveElementDraggable');
 			$('.moveElementDraggable').draggable({iframeFix: true});
 		}
@@ -616,6 +623,10 @@ const activateMoveElement = (port, request) => {
 		});
 
 		$('.moveElementDraggable').draggable('destroy');
+		document.querySelectorAll('.moveElementDraggable').forEach((removeMoveCursor) => {
+			removeMoveCursor.style.cursor = 'default';
+		});
+
 		document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		document.querySelector('.pageGuidelinesWrapper').remove();
 	}
