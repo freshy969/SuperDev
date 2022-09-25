@@ -484,6 +484,8 @@ const activateMoveElement = (port, request) => {
 		moveElementGuide.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
 					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
 					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
 					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
