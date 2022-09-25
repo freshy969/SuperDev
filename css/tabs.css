@@ -93,10 +93,10 @@
 /** Page Ruler **/
 
 /** Move Element, Text Editor **/
-.moveElementOutline {
+.pageGuidelinesOutline {
 	outline: red solid 2px !important;
 }
-.moveElementGuide > svg {
+.pageGuidelinesWrapper > svg {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -105,11 +105,11 @@
 	z-index: 2147483645;
 }
 
-.moveElementGuide line {
+.pageGuidelinesWrapper line {
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
 .textEditorOutline {
-	outline: transparent solid 2px !important;
+	outline: red solid 2px !important;
 }
 /** Move Element, Text Editor **/

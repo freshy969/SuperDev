@@ -22,11 +22,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
 				break;
-			case 'activateMoveElement':
-				activateMoveElement(port, request);
+			case 'activatePageGuidelines':
+				activatePageGuidelines(port, request);
 				break;
-			case 'deactivateMoveElement':
-				deactivateMoveElement(port, request);
+			case 'deactivatePageGuidelines':
+				deactivatePageGuidelines(port, request);
 				break;
 		}
 	});
@@ -122,6 +122,10 @@ const activateTextEditor = (port, request) => {
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
 
+	let pageGuidelinesWrapper = document.createElement('div');
+	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
+	document.body.appendChild(pageGuidelinesWrapper);
+
 	function detectEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -137,9 +141,10 @@ const activateTextEditor = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
-				event.target.classList.add('textEditorOutline');
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
+				event.target.classList.add('pageGuidelinesOutline');
+				renderPageGuidelines(true);
 				event.target.focus();
 			}
 		}
@@ -148,11 +153,12 @@ const activateTextEditor = (port, request) => {
 	function detectMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('textEditorOutline')) {
+			if (event.target.classList.contains('pageGuidelinesOutline')) {
 				event.target.style.outline = 'none';
-				event.target.classList.remove('textEditorOutline');
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
+				event.target.classList.remove('pageGuidelinesOutline');
+				renderPageGuidelines(false);
 			}
 		}
 	}
@@ -163,21 +169,48 @@ const activateTextEditor = (port, request) => {
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			if (document.querySelector('.textEditorOutline')) {
-				document.querySelector('.textEditorOutline').style.outline = 'none';
-				document.querySelector('.textEditorOutline').removeAttribute('contenteditable', true);
-				document.querySelector('.textEditorOutline').removeAttribute('spellcheck', false);
-				document.querySelector('.textEditorOutline').classList.remove('textEditorOutline');
+			if (document.querySelector('.pageGuidelinesOutline')) {
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').removeAttribute('contenteditable', true);
+				document.querySelector('.pageGuidelinesOutline').removeAttribute('spellcheck', false);
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
+				document.querySelector('.pageGuidelinesWrapper').remove();
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
+	}
+
+	function renderPageGuidelines(toShow) {
+		if (toShow === true) {
+			let moveElementPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = moveElementPosition.top + document.documentElement.scrollTop;
+			let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
+			let left = moveElementPosition.left;
+			let right = moveElementPosition.right;
+
+			pageGuidelinesWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelinesWrapper.innerHTML = ``;
+		}
 	}
 
 	port.postMessage({action: 'Text Editor Activated'});
@@ -416,22 +449,22 @@ const deactivatePageRuler = (port, request) => {
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };
 
-const activateMoveElement = (port, request) => {
+const activatePageGuidelines = (port, request) => {
 	window.addEventListener('keyup', detectEscape);
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
 
-	let moveElementGuide = document.createElement('div');
-	moveElementGuide.classList.add('moveElementGuide');
-	document.body.appendChild(moveElementGuide);
+	let pageGuidelinesWrapper = document.createElement('div');
+	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
+	document.body.appendChild(pageGuidelinesWrapper);
 
 	function detectEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyMoveElement(true);
+				destroyPageGuidelines(true);
 			} else if (event.isTrusted === false) {
-				destroyMoveElement(false);
+				destroyPageGuidelines(false);
 			}
 		}
 	}
@@ -439,8 +472,8 @@ const activateMoveElement = (port, request) => {
 	function detectMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('moveElementOutline');
-			renderGuide();
+			event.target.classList.add('pageGuidelinesOutline');
+			renderPageGuidelines(true);
 			event.target.focus();
 		}
 	}
@@ -449,39 +482,42 @@ const activateMoveElement = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.outline = 'none';
-			event.target.classList.remove('moveElementOutline');
+			renderPageGuidelines(false);
+			event.target.classList.remove('pageGuidelinesOutline');
 		}
 	}
 
-	function destroyMoveElement(isManualEscape) {
+	function destroyPageGuidelines(isManualEscape) {
 		window.removeEventListener('mouseover', detectMouseOver);
 		window.removeEventListener('mouseout', detectMouseOut);
 		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
-			document.querySelector('.moveElementOutline').style.outline = 'none';
-			document.querySelector('.moveElementOutline').classList.remove('moveElementOutline');
+			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
+				document.querySelector('.pageGuidelinesWrapper').remove();
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
 	}
 
-	function renderGuide() {
-		let moveElementPosition = document.querySelector('.moveElementOutline').getBoundingClientRect();
-		let scrollWidth = document.body.scrollWidth;
-		let scrollHeight = document.body.scrollHeight;
-		let top = moveElementPosition.top + document.documentElement.scrollTop;
-		let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
-		let left = moveElementPosition.left;
-		let right = moveElementPosition.right;
+	function renderPageGuidelines(toShow) {
+		if (toShow === true) {
+			let moveElementPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = moveElementPosition.top + document.documentElement.scrollTop;
+			let bottom = moveElementPosition.bottom + document.documentElement.scrollTop;
+			let left = moveElementPosition.left;
+			let right = moveElementPosition.right;
 
-		moveElementGuide.innerHTML = `
+			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -491,13 +527,16 @@ const activateMoveElement = (port, request) => {
 					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
+		} else {
+			pageGuidelinesWrapper.innerHTML = ``;
+		}
 	}
 
 	port.postMessage({action: 'Move Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
-const deactivateMoveElement = (port, request) => {
+const deactivatePageGuidelines = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
 };
