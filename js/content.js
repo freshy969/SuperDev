@@ -153,7 +153,7 @@ const activatePageGuidelines = (port, request) => {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
 			renderPageGuidelines(true);
-			event.target.focus();
+			event.target.focus({preventScroll: true});
 		}
 	}
 
@@ -476,7 +476,7 @@ const activateTextEditor = (port, request) => {
 				event.target.setAttribute('spellcheck', false);
 				event.target.classList.add('pageGuidelinesOutline');
 				renderPageGuidelines(true);
-				event.target.focus();
+				event.target.focus({preventScroll: true});
 			}
 		}
 	}
@@ -580,7 +580,7 @@ const activateMoveElement = (port, request) => {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
 			renderPageGuidelines(true);
-			event.target.focus();
+			event.target.focus({preventScroll: true});
 		}
 	}
 
