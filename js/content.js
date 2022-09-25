@@ -51,7 +51,7 @@ const showHideExtension = (port, request) => {
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
 			position: fixed !important;
-			top: 32px !important;
+			top: 18px !important;
 			right: 18px !important;
 			width: 335px !important;
 			background-color: rgba(0,0,0,0) !important;
@@ -66,9 +66,9 @@ const showHideExtension = (port, request) => {
 			cursor: move !important;
 			width: 18px !important;
 			background-color: rgba(0,0,0,0) !important;
-			height: 20px !important;
-			margin-left:141px !important;
-			margin-bottom: -31px !important;
+			height: 42px !important;
+			margin-left:143px !important;
+			margin-bottom: -42px !important;
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
 
@@ -89,6 +89,7 @@ const showHideExtension = (port, request) => {
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
 			iframeFix: true,
+			containment: 'body',
 		});
 		port.postMessage({action: 'Popup Created'});
 	}
@@ -194,8 +195,8 @@ const activatePageGuidelines = (port, request) => {
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinesPosition.left;
-			let right = pageGuidelinesPosition.right;
+			let left = pageGuidelinesPosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinesPosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -527,8 +528,8 @@ const activateTextEditor = (port, request) => {
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinesPosition.left;
-			let right = pageGuidelinesPosition.right;
+			let left = pageGuidelinesPosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinesPosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -599,7 +600,7 @@ const activateMoveElement = (port, request) => {
 			renderPageGuidelines(false);
 			event.target.style.cursor = 'move';
 			event.target.classList.add('moveElementDraggable');
-			$('.moveElementDraggable').draggable({iframeFix: true});
+			$('.moveElementDraggable').draggable({iframeFix: true, containment: 'body'});
 		}
 	}
 
@@ -638,8 +639,8 @@ const activateMoveElement = (port, request) => {
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinesPosition.left;
-			let right = pageGuidelinesPosition.right;
+			let left = pageGuidelinesPosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinesPosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelinesWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
