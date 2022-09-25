@@ -28,6 +28,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageGuidelines':
 				deactivatePageGuidelines(port, request);
 				break;
+			case 'activateMoveElement':
+				activateMoveElement(port, request);
+				break;
+			case 'deactivateMoveElement':
+				deactivateMoveElement(port, request);
+				break;
 		}
 	});
 });
@@ -76,7 +82,6 @@ const showHideExtension = (port, request) => {
 
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
-			cursor: 'move',
 			iframeFix: true,
 		});
 		port.postMessage({action: 'Popup Created'});
@@ -181,11 +186,12 @@ const activateTextEditor = (port, request) => {
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
-				document.querySelector('.pageGuidelinesWrapper').remove();
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
+
+		document.querySelector('.pageGuidelinesWrapper').remove();
 	}
 
 	function renderPageGuidelines(toShow) {
@@ -500,11 +506,12 @@ const activatePageGuidelines = (port, request) => {
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
-				document.querySelector('.pageGuidelinesWrapper').remove();
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
+
+		document.querySelector('.pageGuidelinesWrapper').remove();
 	}
 
 	function renderPageGuidelines(toShow) {
@@ -539,4 +546,110 @@ const activatePageGuidelines = (port, request) => {
 const deactivatePageGuidelines = (port, request) => {
 	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Guidelines Deactivated'});
+};
+
+const activateMoveElement = (port, request) => {
+	window.addEventListener('keyup', detectEscape);
+	window.addEventListener('mouseover', detectMouseOver);
+	window.addEventListener('mouseout', detectMouseOut);
+	window.addEventListener('click', detectMouseClick);
+
+	let pageGuidelinesWrapper = document.createElement('div');
+	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
+	document.body.appendChild(pageGuidelinesWrapper);
+
+	function detectEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyMoveElement(true);
+			} else if (event.isTrusted === false) {
+				destroyMoveElement(false);
+			}
+		}
+	}
+
+	function detectMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('pageGuidelinesOutline');
+			renderPageGuidelines(true);
+			event.target.focus();
+		}
+	}
+
+	function detectMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.style.outline = 'none';
+			renderPageGuidelines(false);
+			event.target.classList.remove('pageGuidelinesOutline');
+		}
+	}
+
+	function detectMouseClick(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			renderPageGuidelines(false);
+			event.target.classList.add('moveElementDraggable');
+			$('.moveElementDraggable').draggable({iframeFix: true});
+		}
+	}
+
+	function destroyMoveElement(isManualEscape) {
+		window.removeEventListener('mouseover', detectMouseOver);
+		window.removeEventListener('mouseout', detectMouseOut);
+		window.removeEventListener('keyup', detectEscape);
+		window.removeEventListener('click', detectMouseClick);
+
+		if (isManualEscape === true) {
+			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		$('.moveElementDraggable').draggable('destroy');
+		document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
+		document.querySelector('.pageGuidelinesWrapper').remove();
+	}
+
+	function renderPageGuidelines(toShow) {
+		if (toShow === true) {
+			let pageGuidelinesPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinesPosition.left;
+			let right = pageGuidelinesPosition.right;
+
+			pageGuidelinesWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelinesWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Move Element Activated'});
+	chrome.storage.local.set({setMinimised: true});
+};
+
+const deactivateMoveElement = (port, request) => {
+	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Move Element Deactivated'});
 };

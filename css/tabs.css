@@ -92,7 +92,7 @@
 }
 /** Page Ruler **/
 
-/** Move Element, Text Editor **/
+/**  Page Guidelines + Move Element **/
 .pageGuidelinesOutline {
 	outline: red solid 2px !important;
 }
@@ -109,7 +109,7 @@
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
-.textEditorOutline {
-	outline: red solid 2px !important;
+.moveElementDraggable {
+	cursor: move !important;
 }
-/** Move Element, Text Editor **/
+/**  Page Guidelines + Move Element **/
