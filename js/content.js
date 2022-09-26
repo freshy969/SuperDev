@@ -230,7 +230,7 @@ const activatePageRuler = (port, request) => {
 	// Was Added
 	let body = document.querySelector('body');
 	let portThree = chrome.runtime.connect({name: 'portThree'});
-	let changeDelay = 300;
+	let changeDelay = 500;
 	let changeTimeout;
 	let paused = true;
 	let inputX, inputY;
