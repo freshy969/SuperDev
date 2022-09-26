@@ -340,7 +340,6 @@ const activatePageRuler = (port, request) => {
 		else return;
 
 		if (changeTimeout) clearTimeout(changeTimeout);
-
 		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
 	}
 
