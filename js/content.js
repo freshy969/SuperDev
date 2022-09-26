@@ -337,8 +337,6 @@ const activatePageRuler = (port, request) => {
 
 	function onVisibleAreaChange() {
 		if (!paused) pause();
-		else return;
-
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
 	}
