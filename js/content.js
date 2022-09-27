@@ -223,11 +223,9 @@ const deactivatePageGuidelines = (port, request) => {
 };
 
 const activatePageRuler = (port, request) => {
-	// Was Added
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	// Was Added
 	let body = document.querySelector('body');
 	let portThree = chrome.runtime.connect({name: 'portThree'});
 	let changeDelay = 500;
@@ -242,11 +240,9 @@ const activatePageRuler = (port, request) => {
 		if (connectionClosed) return;
 
 		switch (request.action) {
-			// Was Added
 			case 'parseScreenshot':
 				parseScreenshot(request.dataUrl);
 				break;
-			// Was Added
 			case 'distances':
 				window.focus();
 				showDimensions(request.data);
@@ -260,7 +256,7 @@ const activatePageRuler = (port, request) => {
 	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
-		onResizeWindow(), initiate();
+		initiate();
 		port.postMessage({action: 'Page Ruler Activated'});
 	}
 
@@ -275,7 +271,6 @@ const activatePageRuler = (port, request) => {
 		requestNewScreenshot();
 	}
 
-	// Was Added
 	function parseScreenshot(dataUrl) {
 		// Show Minimised Popup After Screenshot is Done
 		chrome.storage.local.set({setMinimised: true});
@@ -298,13 +293,6 @@ const activatePageRuler = (port, request) => {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	}
-	// Was Added
-
-	function onResizeWindow() {
-		overlay.width = window.innerWidth;
-		overlay.height = window.innerHeight;
-		onVisibleAreaChange();
 	}
 
 	function destroyPageRuler(isManualEscape) {
@@ -336,6 +324,9 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function onVisibleAreaChange() {
+		overlay.width = window.innerWidth;
+		overlay.height = window.innerHeight;
+
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
