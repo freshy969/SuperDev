@@ -324,9 +324,6 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function onVisibleAreaChange() {
-		overlay.width = window.innerWidth;
-		overlay.height = window.innerHeight;
-
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
