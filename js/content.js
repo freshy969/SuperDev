@@ -119,8 +119,7 @@ const showHideExtension = (port, request) => {
 
 const changeHeight = (port, request) => {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
-	if (document.querySelector('#superDev').style.visibility === 'hidden')
-		document.querySelector('#superDevIframe').onload = document.querySelector('#superDev').style.visibility = 'visible';
+	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
 };
 
@@ -281,9 +280,12 @@ const activatePageRuler = (port, request) => {
 		chrome.storage.local.set({setMinimised: true});
 
 		image.src = dataUrl;
-		image.onload = function () {
-			loadImage();
-		};
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				loadImage();
+			});
+		});
 	}
 
 	function loadImage() {
