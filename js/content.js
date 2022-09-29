@@ -608,12 +608,14 @@ const activateMoveElement = (port, request) => {
 			}
 		});
 
-		$('.moveElementDraggable').draggable('destroy');
-		document.querySelectorAll('.moveElementDraggable').forEach((removeMoveCursor) => {
-			removeMoveCursor.style.cursor = 'default';
-		});
+		if (document.querySelector('.moveElementDraggable')) {
+			$('.moveElementDraggable').draggable('destroy');
+			document.querySelectorAll('.moveElementDraggable').forEach((removeMoveCursor) => {
+				removeMoveCursor.style.cursor = 'default';
+			});
+			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
+		}
 
-		document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		document.querySelector('.pageGuidelinesWrapper').remove();
 	}
 
