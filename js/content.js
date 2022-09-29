@@ -255,8 +255,13 @@ const activatePageRuler = (port, request) => {
 	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
-		initiate();
-		port.postMessage({action: 'Page Ruler Activated'});
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				initiate();
+				port.postMessage({action: 'Page Ruler Activated'});
+			});
+		});
 	}
 
 	function initiate() {
