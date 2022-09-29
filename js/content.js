@@ -594,6 +594,7 @@ const activateMoveElement = (port, request) => {
 			$('.moveElementDraggable').draggable({
 				iframeFix: true,
 				containment: 'document',
+				cancel: false,
 				create: function () {
 					renderPageGuidelines(false);
 				},
