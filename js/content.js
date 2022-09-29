@@ -130,9 +130,9 @@ const justChangeHeight = (port, request) => {
 };
 
 const activatePageGuidelines = (port, request) => {
-	window.addEventListener('keyup', detectEscape);
-	window.addEventListener('mouseover', detectMouseOver);
-	window.addEventListener('mouseout', detectMouseOut);
+	document.addEventListener('keyup', detectEscape);
+	document.addEventListener('mouseover', detectMouseOver);
+	document.addEventListener('mouseout', detectMouseOut);
 	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
@@ -168,9 +168,9 @@ const activatePageGuidelines = (port, request) => {
 	}
 
 	function destroyPageGuidelines(isManualEscape) {
-		window.removeEventListener('mouseover', detectMouseOver);
-		window.removeEventListener('mouseout', detectMouseOut);
-		window.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mouseover', detectMouseOver);
+		document.removeEventListener('mouseout', detectMouseOut);
+		document.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
 			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
@@ -218,7 +218,7 @@ const activatePageGuidelines = (port, request) => {
 };
 
 const deactivatePageGuidelines = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Guidelines Deactivated'});
 };
 
@@ -260,11 +260,11 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function initiate() {
-		window.addEventListener('mousemove', onInputMove);
-		window.addEventListener('touchmove', onInputMove);
-		window.addEventListener('scroll', onVisibleAreaChange);
+		document.addEventListener('mousemove', onInputMove);
+		document.addEventListener('touchmove', onInputMove);
+		document.addEventListener('scroll', onVisibleAreaChange);
+		document.addEventListener('keyup', detectEscape);
 		window.addEventListener('resize', onVisibleAreaChange);
-		window.addEventListener('keyup', detectEscape);
 		window.focus({preventScroll: true});
 
 		disableCursor();
@@ -297,11 +297,11 @@ const activatePageRuler = (port, request) => {
 
 	function destroyPageRuler(isManualEscape) {
 		connectionClosed = true;
-		window.removeEventListener('mousemove', onInputMove);
-		window.removeEventListener('touchmove', onInputMove);
-		window.removeEventListener('scroll', onVisibleAreaChange);
+		document.removeEventListener('mousemove', onInputMove);
+		document.removeEventListener('touchmove', onInputMove);
+		document.removeEventListener('scroll', onVisibleAreaChange);
+		document.removeEventListener('keyup', detectEscape);
 		window.removeEventListener('resize', onVisibleAreaChange);
-		window.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -430,14 +430,14 @@ const activatePageRuler = (port, request) => {
 };
 
 const deactivatePageRuler = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };
 
 const activateTextEditor = (port, request) => {
-	window.addEventListener('keyup', detectEscape);
-	window.addEventListener('mouseover', detectMouseOver);
-	window.addEventListener('mouseout', detectMouseOut);
+	document.addEventListener('keyup', detectEscape);
+	document.addEventListener('mouseover', detectMouseOver);
+	document.addEventListener('mouseout', detectMouseOut);
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
@@ -481,9 +481,9 @@ const activateTextEditor = (port, request) => {
 	}
 
 	function destroyTextEditor(isManualEscape) {
-		window.removeEventListener('mouseover', detectMouseOver);
-		window.removeEventListener('mouseout', detectMouseOut);
-		window.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mouseover', detectMouseOver);
+		document.removeEventListener('mouseout', detectMouseOut);
+		document.removeEventListener('keyup', detectEscape);
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelinesOutline')) {
@@ -536,15 +536,15 @@ const activateTextEditor = (port, request) => {
 };
 
 const deactivateTextEditor = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Text Editor Deactivated'});
 };
 
 const activateMoveElement = (port, request) => {
-	window.addEventListener('keyup', detectEscape);
-	window.addEventListener('mouseover', detectMouseOver);
-	window.addEventListener('mouseout', detectMouseOut);
-	window.addEventListener('click', detectMouseClick);
+	document.addEventListener('keyup', detectEscape);
+	document.addEventListener('mouseover', detectMouseOver);
+	document.addEventListener('mouseout', detectMouseOut);
+	document.addEventListener('click', detectMouseClick);
 	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
@@ -590,10 +590,10 @@ const activateMoveElement = (port, request) => {
 	}
 
 	function destroyMoveElement(isManualEscape) {
-		window.removeEventListener('mouseover', detectMouseOver);
-		window.removeEventListener('mouseout', detectMouseOut);
-		window.removeEventListener('keyup', detectEscape);
-		window.removeEventListener('click', detectMouseClick);
+		document.removeEventListener('mouseover', detectMouseOver);
+		document.removeEventListener('mouseout', detectMouseOut);
+		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('click', detectMouseClick);
 
 		if (isManualEscape === true) {
 			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
@@ -649,6 +649,6 @@ const activateMoveElement = (port, request) => {
 };
 
 const deactivateMoveElement = (port, request) => {
-	window.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
 };
