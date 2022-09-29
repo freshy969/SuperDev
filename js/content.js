@@ -276,9 +276,6 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function parseScreenshot(dataUrl) {
-		// Show Minimised Popup After Screenshot is Done
-		chrome.storage.local.set({setMinimised: true});
-
 		image.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(() => {
@@ -293,6 +290,9 @@ const activatePageRuler = (port, request) => {
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+		// Show Minimised Popup
+		chrome.storage.local.set({setMinimised: true});
 
 		portThree.postMessage({
 			action: 'imageData',
