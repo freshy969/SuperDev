@@ -589,10 +589,23 @@ const activateMoveElement = (port, request) => {
 	function detectMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			renderPageGuidelines(false);
 			event.target.style.cursor = 'move';
 			event.target.classList.add('moveElementDraggable');
-			$('.moveElementDraggable').draggable({iframeFix: true, containment: 'document'});
+			$('.moveElementDraggable').draggable({
+				iframeFix: true,
+				containment: 'document',
+				create: function () {
+					renderPageGuidelines(false);
+				},
+				start: function () {
+					document.removeEventListener('mouseover', detectMouseOver);
+					document.removeEventListener('mouseout', detectMouseOut);
+				},
+				stop: function () {
+					document.addEventListener('mouseover', detectMouseOver);
+					document.addEventListener('mouseout', detectMouseOut);
+				},
+			});
 		}
 	}
 
