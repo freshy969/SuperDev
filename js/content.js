@@ -133,6 +133,7 @@ const activatePageGuidelines = (port, request) => {
 	window.addEventListener('keyup', detectEscape);
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
+	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
@@ -154,7 +155,6 @@ const activatePageGuidelines = (port, request) => {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
 			renderPageGuidelines(true);
-			event.target.focus({preventScroll: true});
 		}
 	}
 
@@ -244,7 +244,6 @@ const activatePageRuler = (port, request) => {
 				parseScreenshot(request.dataUrl);
 				break;
 			case 'distances':
-				window.focus();
 				showDimensions(request.data);
 				break;
 			case 'screenshotProcessed':
@@ -266,6 +265,7 @@ const activatePageRuler = (port, request) => {
 		window.addEventListener('scroll', onVisibleAreaChange);
 		window.addEventListener('resize', onVisibleAreaChange);
 		window.addEventListener('keyup', detectEscape);
+		window.focus({preventScroll: true});
 
 		disableCursor();
 		requestNewScreenshot();
@@ -545,6 +545,7 @@ const activateMoveElement = (port, request) => {
 	window.addEventListener('mouseover', detectMouseOver);
 	window.addEventListener('mouseout', detectMouseOut);
 	window.addEventListener('click', detectMouseClick);
+	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
@@ -566,7 +567,6 @@ const activateMoveElement = (port, request) => {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
 			renderPageGuidelines(true);
-			event.target.focus({preventScroll: true});
 		}
 	}
 
