@@ -109,7 +109,7 @@ const showHideExtension = (port, request) => {
 		chrome.storage.local.set({disableActiveFeature: false});
 		chrome.storage.local.set({whichFeatureActive: null});
 
-		document.querySelector('#superDev').style.top = '32px';
+		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
 		document.querySelector('#superDev').style.visibility = 'visible';
