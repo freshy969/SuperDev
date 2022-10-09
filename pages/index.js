@@ -15,10 +15,10 @@ export default function Home() {
 	useEffect(() => {
 		// Initialisation/Reset on First Load
 		// SetMinimised, DisableActiveFeature, WhichFeatureActive
-		chrome.storage.local.set({setMinimised: false});
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({disableActiveFeature: false});
+		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 
 		// Dark Mode Initialisation

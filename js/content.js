@@ -103,16 +103,17 @@ const showHideExtension = (port, request) => {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({setMinimised: false});
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({disableActiveFeature: false});
+		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 
 		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
-		document.querySelector('#superDev').style.visibility = 'visible';
+		chrome.storage.local.set({setMinimised: false});
+
 		port.postMessage({action: 'Popup Visible'});
 	}
 };
@@ -337,7 +338,17 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function requestNewScreenshot() {
-		portThree.postMessage({action: 'takeScreenshot'});
+		// In Case od Scroll or Resize
+		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+			document.querySelector('#superDev').style.visibility = 'hidden';
+			chrome.storage.local.set({setMinimised: null});
+			port.postMessage({action: 'Popup Hidden'});
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					portThree.postMessage({action: 'takeScreenshot'});
+				});
+			});
+		} else portThree.postMessage({action: 'takeScreenshot'});
 	}
 
 	function pause() {
