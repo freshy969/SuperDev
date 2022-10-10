@@ -348,7 +348,9 @@ const activatePageRuler = (port, request) => {
 					portThree.postMessage({action: 'takeScreenshot'});
 				});
 			});
-		} else portThree.postMessage({action: 'takeScreenshot'});
+		}
+		// First Screenshot
+		else portThree.postMessage({action: 'takeScreenshot'});
 	}
 
 	function pause() {
