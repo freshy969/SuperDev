@@ -228,7 +228,9 @@ const activatePageRuler = (port, request) => {
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
 	let body = document.querySelector('body');
 	let portThree = chrome.runtime.connect({name: 'portThree'});
-	let changeDelay = 500;
+	let pageScrollDelay = 600;
+	let windowResizeDelay = 1200;
+
 	let changeTimeout;
 	let paused = true;
 	let inputX, inputY;
@@ -268,8 +270,8 @@ const activatePageRuler = (port, request) => {
 		document.addEventListener('mousemove', onInputMove);
 		document.addEventListener('touchmove', onInputMove);
 		document.addEventListener('keyup', detectEscape);
-		document.addEventListener('scroll', onVisibleAreaChange);
-		window.addEventListener('resize', onVisibleAreaChange);
+		document.addEventListener('scroll', onPageScroll);
+		window.addEventListener('resize', onWindowResize);
 		window.focus({preventScroll: true});
 
 		disableCursor();
@@ -308,8 +310,8 @@ const activatePageRuler = (port, request) => {
 		document.removeEventListener('mousemove', onInputMove);
 		document.removeEventListener('touchmove', onInputMove);
 		document.removeEventListener('keyup', detectEscape);
-		document.removeEventListener('scroll', onVisibleAreaChange);
-		window.removeEventListener('resize', onVisibleAreaChange);
+		document.removeEventListener('scroll', onPageScroll);
+		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -331,18 +333,26 @@ const activatePageRuler = (port, request) => {
 		if (dimensions) body.removeChild(dimensions);
 	}
 
-	function onVisibleAreaChange() {
+	function onPageScroll() {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(requestNewScreenshot, changeDelay);
+		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
+	}
+
+	function onWindowResize() {
+		if (!paused) pause();
+		if (changeTimeout) clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
 	}
 
 	function requestNewScreenshot() {
+		console.log(new Date().getSeconds(), new Date().getMilliseconds());
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
 			chrome.storage.local.set({setMinimised: null});
 			port.postMessage({action: 'Popup Hidden'});
+
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
 					portThree.postMessage({action: 'takeScreenshot'});
