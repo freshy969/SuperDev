@@ -267,8 +267,8 @@ const activatePageRuler = (port, request) => {
 	function initiate() {
 		document.addEventListener('mousemove', onInputMove);
 		document.addEventListener('touchmove', onInputMove);
-		document.addEventListener('scroll', onVisibleAreaChange);
 		document.addEventListener('keyup', detectEscape);
+		document.addEventListener('scroll', onVisibleAreaChange);
 		window.addEventListener('resize', onVisibleAreaChange);
 		window.focus({preventScroll: true});
 
@@ -307,8 +307,8 @@ const activatePageRuler = (port, request) => {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onInputMove);
 		document.removeEventListener('touchmove', onInputMove);
-		document.removeEventListener('scroll', onVisibleAreaChange);
 		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('scroll', onVisibleAreaChange);
 		window.removeEventListener('resize', onVisibleAreaChange);
 
 		if (isManualEscape === true) {
