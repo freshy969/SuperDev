@@ -519,7 +519,6 @@ const activateTextEditor = (port, request) => {
 				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelinesOutline').removeAttribute('contenteditable', true);
 				document.querySelector('.pageGuidelinesOutline').removeAttribute('spellcheck', false);
-				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});

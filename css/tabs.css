@@ -1,7 +1,7 @@
 /** Page Ruler **/
 .pageRulerOverlay,
 .colorPickerOverlay {
-	cursor: crosshair;
+	cursor: crosshair !important;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -35,7 +35,7 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em;
+	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em !important;
 	font-family: system-ui, -apple-system, sans-serif;
 }
 
@@ -130,7 +130,7 @@
 
 /**  Page Guidelines + Move Element **/
 .pageGuidelinesOutline {
-	outline: red solid 2px;
+	outline: red solid 2px !important;
 }
 .pageGuidelinesWrapper > svg {
 	position: absolute;
