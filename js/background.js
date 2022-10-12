@@ -88,6 +88,7 @@ chrome.action.onClicked.addListener((tab) => {
 // Page Ruler + Color Picker
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let dimensionsThreshold = 6;
+	let imageData, data, width, height;
 
 	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {
