@@ -419,6 +419,7 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function showDimensions(dimensions) {
+		console.log(dimensions.backgroundColor);
 		if (paused) return;
 
 		removeDimensions();
