@@ -901,7 +901,6 @@ const activateColorPicker = (port, request) => {
 	}
 
 	function showColorPicker(spotColor) {
-		console.log(spotColor);
 		if (paused) return;
 
 		removeColorPicker();
