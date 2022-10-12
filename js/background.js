@@ -245,12 +245,15 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	function getColorAt(input) {
 		if (!inBoundaries(input.x, input.y)) return -1;
 		let i = input.y * width * 4 + input.x * 4;
+		let r = imageData[i],
+			g = imageData[i + 1],
+			b = imageData[i + 2];
 
 		let spotColor = {
 			x: input.x,
 			y: input.y,
-			rgb: `rgb(${imageData[i]}, ${imageData[++i]}, ${imageData[++i]})`,
-			hex: rgbToHex(imageData[i], imageData[++i], imageData[++i]),
+			rgb: `rgb(${r}, ${g}, ${b})`,
+			hex: rgbToHex(r, g, b),
 		};
 
 		portThree.postMessage({
