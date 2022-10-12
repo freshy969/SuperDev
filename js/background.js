@@ -87,9 +87,7 @@ chrome.action.onClicked.addListener((tab) => {
 
 // Page Ruler
 chrome.runtime.onConnect.addListener(function (portThree) {
-	let areaThreshold = 6;
 	let dimensionsThreshold = 6;
-	let map;
 
 	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {
@@ -98,14 +96,14 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				takeScreenshot();
 				break;
 			// Was Added
-			case 'imageData':
+			case 'toGrayscale':
 				imageData = new Uint8ClampedArray(request.imageData);
 				data = grayscale(imageData);
 				width = request.width;
 				height = request.height;
 				portThree.postMessage({action: 'screenshotProcessed'});
 				break;
-			case 'position':
+			case 'measureDistances':
 				measureAreaStopped = true;
 				measureDistances(request.data);
 				break;

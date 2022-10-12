@@ -298,7 +298,7 @@ const activatePageRuler = (port, request) => {
 		chrome.storage.local.set({setMinimised: true});
 
 		portThree.postMessage({
-			action: 'imageData',
+			action: 'toGrayscale',
 			imageData: Array.from(imageData),
 			width: canvas.width,
 			height: canvas.height,
@@ -413,7 +413,7 @@ const activatePageRuler = (port, request) => {
 		if (paused) return;
 
 		portThree.postMessage({
-			action: 'position',
+			action: 'measureDistances',
 			data: {x: inputX, y: inputY},
 		});
 	}
