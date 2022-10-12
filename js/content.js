@@ -245,7 +245,7 @@ const activatePageRuler = (port, request) => {
 			case 'parseScreenshot':
 				parseScreenshot(request.dataUrl);
 				break;
-			case 'distances':
+			case 'showDimensions':
 				showDimensions(request.data);
 				break;
 			case 'screenshotProcessed':
@@ -346,7 +346,6 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function requestNewScreenshot() {
-		console.log(new Date().getSeconds(), new Date().getMilliseconds());
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
@@ -419,7 +418,6 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function showDimensions(dimensions) {
-		console.log(dimensions.backgroundColor);
 		if (paused) return;
 
 		removeDimensions();
