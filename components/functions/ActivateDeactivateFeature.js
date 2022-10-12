@@ -21,10 +21,15 @@ function HideMeShowMe(portFour, featureId) {
 			document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
 			document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 
-			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+			setTimeout(() => {
+				portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+			}, 50);
+
 			portFour.onMessage.addListener(function (response) {
-				chrome.storage.local.set({whichFeatureActive: featureId});
-				console.log('Got Response : ', response.action);
+				if (response.action.includes('Activated')) {
+					chrome.storage.local.set({whichFeatureActive: featureId});
+					console.log('Got Response : ', response.action);
+				}
 			});
 		}
 		// Deactivate On Click If Active
@@ -34,7 +39,9 @@ function HideMeShowMe(portFour, featureId) {
 
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			portFour.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
+				if (response.action.includes('Deactivated')) {
+					console.log('Got Response : ', response.action);
+				}
 			});
 		}
 	}
@@ -47,7 +54,9 @@ function JustHideMe(portFour, featureId) {
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			portFour.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
+				if (response.action.includes('Deactivated')) {
+					console.log('Got Response : ', response.action);
+				}
 			});
 		}
 	}
