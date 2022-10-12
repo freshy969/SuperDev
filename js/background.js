@@ -109,10 +109,6 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				measureAreaStopped = true;
 				measureDistances(request.data);
 				break;
-			case 'area':
-				measureAreaStopped = true;
-				measureArea(request.data);
-				break;
 		}
 	});
 
@@ -123,132 +119,6 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		});
 	}
 	// Was Added
-
-	function measureArea(pos) {
-		let x0, y0, startLightness;
-
-		map = new Int16Array(data);
-		x0 = pos.x;
-		y0 = pos.y;
-		startLightness = getLightnessAt(map, x0, y0);
-		stack = [[x0, y0, startLightness]];
-		area = {top: y0, right: x0, bottom: y0, left: x0};
-		pixelsInArea = [];
-
-		measureAreaStopped = false;
-
-		setTimeout(nextTick, 0);
-	}
-
-	function nextTick() {
-		workOffStack();
-
-		if (!measureAreaStopped) {
-			if (stack.length) {
-				setTimeout(nextTick, 0);
-			} else {
-				finishMeasureArea();
-			}
-		}
-	}
-
-	function workOffStack() {
-		let max = 500000;
-		let count = 0;
-
-		while (count++ < max && stack.length) {
-			floodFill();
-		}
-	}
-
-	function floodFill() {
-		let xyl = stack.shift();
-		let x = xyl[0];
-		let y = xyl[1];
-		let lastLightness = xyl[2];
-		let currentLightness = getLightnessAt(map, x, y);
-
-		if (currentLightness > -1 && currentLightness < 256 && Math.abs(currentLightness - lastLightness) < areaThreshold) {
-			setLightnessAt(map, x, y, 256);
-			pixelsInArea.push([x, y]);
-
-			if (x < area.left) area.left = x;
-			else if (x > area.right) area.right = x;
-			if (y < area.top) area.top = y;
-			else if (y > area.bottom) area.bottom = y;
-
-			stack.push([x - 1, y, currentLightness]);
-			stack.push([x, y + 1, currentLightness]);
-			stack.push([x + 1, y, currentLightness]);
-			stack.push([x, y - 1, currentLightness]);
-		}
-	}
-
-	function finishMeasureArea() {
-		let boundariePixels = {
-			top: [],
-			right: [],
-			bottom: [],
-			left: [],
-		};
-
-		// clear map
-		map = [];
-
-		for (let i = 0, l = pixelsInArea.length; i < l; i++) {
-			let x = pixelsInArea[i][0];
-			let y = pixelsInArea[i][1];
-
-			if (x === area.left) boundariePixels.left.push(y);
-			if (x === area.right) boundariePixels.right.push(y);
-
-			if (y === area.top) boundariePixels.top.push(x);
-			if (y === area.bottom) boundariePixels.bottom.push(x);
-		}
-
-		let x = getMaxSpread(boundariePixels.top, boundariePixels.bottom);
-		let y = getMaxSpread(boundariePixels.left, boundariePixels.right);
-
-		area.x = x;
-		area.y = y;
-		area.left = area.x - area.left;
-		area.right = area.right - area.x;
-		area.top = area.y - area.top;
-		area.bottom = area.bottom - area.y;
-
-		area.backgroundColor = getColorAt(area.x, area.y);
-
-		portThree.postMessage({
-			action: 'distances',
-			data: area,
-		});
-	}
-
-	function getMaxSpread(sideA, sideB) {
-		let a = getDimensions(sideA);
-		let b = getDimensions(sideB);
-
-		let smallerSide = a.length < b.length ? a : b;
-
-		return smallerSide.center;
-	}
-
-	function getDimensions(values) {
-		let min = Infinity;
-		let max = 0;
-
-		for (let i = 0, l = values.length; i < l; i++) {
-			if (values[i] < min) min = values[i];
-			if (values[i] > max) max = values[i];
-		}
-
-		return {
-			min: min,
-			center: min + Math.floor((max - min) / 2),
-			max: max,
-			length: max - min,
-		};
-	}
 
 	function measureDistances(input) {
 		let distances = {
@@ -351,10 +221,6 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 	function getLightnessAt(data, x, y) {
 		return inBoundaries(x, y) ? data[y * width + x] : -1;
-	}
-
-	function setLightnessAt(data, x, y, value) {
-		return inBoundaries(x, y) ? (data[y * width + x] = value) : -1;
 	}
 
 	function inBoundaries(x, y) {
