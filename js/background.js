@@ -91,11 +91,12 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {
-			// Was Added
+			// Page Ruler + Color Picker
 			case 'takeScreenshot':
 				takeScreenshot();
 				break;
-			// Was Added
+
+			// Page Ruler
 			case 'toGrayscale':
 				imageData = new Uint8ClampedArray(request.imageData);
 				data = grayscale(imageData);
@@ -103,12 +104,20 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				height = request.height;
 				portThree.postMessage({action: 'screenshotProcessed'});
 				break;
+
 			case 'measureDistances':
-				measureAreaStopped = true;
 				measureDistances(request.data);
 				break;
+
+			// Color Picker
+			case 'setColorPicker':
+				imageData = new Uint8ClampedArray(request.imageData);
+				width = request.width;
+				height = request.height;
+				portThree.postMessage({action: 'colorPickerSet'});
+				break;
+
 			case 'getColorAt':
-				measureAreaStopped = true;
 				getColorAt(request.data);
 				break;
 		}
@@ -243,7 +252,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		};
 
 		portThree.postMessage({
-			action: 'spotColor',
+			action: 'showColorPicker',
 			data: spotColor,
 		});
 	}
