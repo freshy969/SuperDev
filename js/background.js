@@ -247,6 +247,8 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		let i = input.y * width * 4 + input.x * 4;
 
 		let spotColor = {
+			x: input.x,
+			y: input.y,
 			rgb: `rgb(${imageData[i]}, ${imageData[++i]}, ${imageData[++i]})`,
 			hex: rgbToHex(imageData[i], imageData[++i], imageData[++i]),
 		};

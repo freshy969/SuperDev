@@ -130,16 +130,16 @@ const justChangeHeight = (port, request) => {
 };
 
 const activatePageGuidelines = (port, request) => {
-	document.addEventListener('keyup', detectEscape);
-	document.addEventListener('mouseover', detectMouseOver);
-	document.addEventListener('mouseout', detectMouseOut);
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
 	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
 	document.body.appendChild(pageGuidelinesWrapper);
 
-	function detectEscape(event) {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -150,7 +150,7 @@ const activatePageGuidelines = (port, request) => {
 		}
 	}
 
-	function detectMouseOver(event) {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
@@ -158,7 +158,7 @@ const activatePageGuidelines = (port, request) => {
 		}
 	}
 
-	function detectMouseOut(event) {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.outline = 'none';
@@ -168,9 +168,9 @@ const activatePageGuidelines = (port, request) => {
 	}
 
 	function destroyPageGuidelines(isManualEscape) {
-		document.removeEventListener('mouseover', detectMouseOver);
-		document.removeEventListener('mouseout', detectMouseOut);
-		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
 			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
@@ -236,7 +236,7 @@ const activatePageRuler = (port, request) => {
 	let inputX, inputY;
 	let connectionClosed = false;
 	let overlay = document.createElement('div');
-	overlay.className = 'rulerOverlay';
+	overlay.className = 'pageRulerOverlay';
 
 	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -267,9 +267,9 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function initiate() {
-		document.addEventListener('mousemove', onInputMove);
-		document.addEventListener('touchmove', onInputMove);
-		document.addEventListener('keyup', detectEscape);
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('touchmove', onMouseMove);
+		document.addEventListener('keyup', onEscape);
 		document.addEventListener('scroll', onPageScroll);
 		window.addEventListener('resize', onWindowResize);
 		window.focus({preventScroll: true});
@@ -307,9 +307,9 @@ const activatePageRuler = (port, request) => {
 
 	function destroyPageRuler(isManualEscape) {
 		connectionClosed = true;
-		document.removeEventListener('mousemove', onInputMove);
-		document.removeEventListener('touchmove', onInputMove);
-		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('scroll', onPageScroll);
 		window.removeEventListener('resize', onWindowResize);
 
@@ -329,7 +329,7 @@ const activatePageRuler = (port, request) => {
 	}
 
 	function removeDimensions() {
-		let dimensions = body.querySelector('.rulerDimensions');
+		let dimensions = body.querySelector('.pageRulerDiv');
 		if (dimensions) body.removeChild(dimensions);
 	}
 
@@ -381,7 +381,7 @@ const activatePageRuler = (port, request) => {
 		body.removeChild(overlay);
 	}
 
-	function onInputMove(event) {
+	function onMouseMove(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -397,7 +397,7 @@ const activatePageRuler = (port, request) => {
 		}
 	}
 
-	function detectEscape(event) {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -423,38 +423,38 @@ const activatePageRuler = (port, request) => {
 		removeDimensions();
 		if (!dimensions) return;
 
-		let newDimensions = document.createElement('div');
-		newDimensions.className = 'rulerDimensions';
-		newDimensions.style.left = dimensions.x + 'px';
-		newDimensions.style.top = dimensions.y + 'px';
+		let newPageRulerDiv = document.createElement('div');
+		newPageRulerDiv.className = 'pageRulerDiv';
+		newPageRulerDiv.style.left = dimensions.x + 'px';
+		newPageRulerDiv.style.top = dimensions.y + 'px';
 
 		let measureWidth = dimensions.left + dimensions.right;
 		let measureHeight = dimensions.top + dimensions.bottom;
 
 		let xAxis = document.createElement('div');
-		xAxis.className = 'x rulerAxis';
+		xAxis.className = 'x pageRulerAxis';
 		xAxis.style.left = -dimensions.left + 'px';
 		xAxis.style.width = measureWidth + 'px';
 
 		let yAxis = document.createElement('div');
-		yAxis.className = 'y rulerAxis';
+		yAxis.className = 'y pageRulerAxis';
 		yAxis.style.top = -dimensions.top + 'px';
 		yAxis.style.height = measureHeight + 'px';
 
-		let tooltip = document.createElement('div');
-		tooltip.className = 'rulerTooltip';
+		let pageRulerTooltip = document.createElement('div');
+		pageRulerTooltip.className = 'pageRulerTooltip';
 
-		tooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
+		pageRulerTooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
 
-		if (dimensions.y < 40) tooltip.classList.add('bottom');
+		if (dimensions.y < 40) pageRulerTooltip.classList.add('bottom');
 
-		if (dimensions.x > window.innerWidth - 120) tooltip.classList.add('left');
+		if (dimensions.x > window.innerWidth - 120) pageRulerTooltip.classList.add('left');
 
-		newDimensions.appendChild(xAxis);
-		newDimensions.appendChild(yAxis);
-		newDimensions.appendChild(tooltip);
+		newPageRulerDiv.appendChild(xAxis);
+		newPageRulerDiv.appendChild(yAxis);
+		newPageRulerDiv.appendChild(pageRulerTooltip);
 
-		body.appendChild(newDimensions);
+		body.appendChild(newPageRulerDiv);
 	}
 };
 
@@ -464,15 +464,15 @@ const deactivatePageRuler = (port, request) => {
 };
 
 const activateTextEditor = (port, request) => {
-	document.addEventListener('keyup', detectEscape);
-	document.addEventListener('mouseover', detectMouseOver);
-	document.addEventListener('mouseout', detectMouseOut);
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
 	document.body.appendChild(pageGuidelinesWrapper);
 
-	function detectEscape(event) {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -483,7 +483,7 @@ const activateTextEditor = (port, request) => {
 		}
 	}
 
-	function detectMouseOver(event) {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
@@ -496,7 +496,7 @@ const activateTextEditor = (port, request) => {
 		}
 	}
 
-	function detectMouseOut(event) {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.classList.contains('pageGuidelinesOutline')) {
@@ -510,9 +510,9 @@ const activateTextEditor = (port, request) => {
 	}
 
 	function destroyTextEditor(isManualEscape) {
-		document.removeEventListener('mouseover', detectMouseOver);
-		document.removeEventListener('mouseout', detectMouseOut);
-		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelinesOutline')) {
@@ -570,17 +570,17 @@ const deactivateTextEditor = (port, request) => {
 };
 
 const activateMoveElement = (port, request) => {
-	document.addEventListener('keyup', detectEscape);
-	document.addEventListener('mouseover', detectMouseOver);
-	document.addEventListener('mouseout', detectMouseOut);
-	document.addEventListener('click', detectMouseClick);
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
 	window.focus({preventScroll: true});
 
 	let pageGuidelinesWrapper = document.createElement('div');
 	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
 	document.body.appendChild(pageGuidelinesWrapper);
 
-	function detectEscape(event) {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -591,7 +591,7 @@ const activateMoveElement = (port, request) => {
 		}
 	}
 
-	function detectMouseOver(event) {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelinesOutline');
@@ -599,7 +599,7 @@ const activateMoveElement = (port, request) => {
 		}
 	}
 
-	function detectMouseOut(event) {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.outline = 'none';
@@ -608,7 +608,7 @@ const activateMoveElement = (port, request) => {
 		}
 	}
 
-	function detectMouseClick(event) {
+	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.cursor = 'move';
@@ -621,22 +621,22 @@ const activateMoveElement = (port, request) => {
 					renderPageGuidelines(false);
 				},
 				start: function () {
-					document.removeEventListener('mouseover', detectMouseOver);
-					document.removeEventListener('mouseout', detectMouseOut);
+					document.removeEventListener('mouseover', onMouseOver);
+					document.removeEventListener('mouseout', onMouseOut);
 				},
 				stop: function () {
-					document.addEventListener('mouseover', detectMouseOver);
-					document.addEventListener('mouseout', detectMouseOut);
+					document.addEventListener('mouseover', onMouseOver);
+					document.addEventListener('mouseout', onMouseOut);
 				},
 			});
 		}
 	}
 
 	function destroyMoveElement(isManualEscape) {
-		document.removeEventListener('mouseover', detectMouseOver);
-		document.removeEventListener('mouseout', detectMouseOut);
-		document.removeEventListener('keyup', detectEscape);
-		document.removeEventListener('click', detectMouseClick);
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('click', onMouseClick);
 
 		if (isManualEscape === true) {
 			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
@@ -741,10 +741,11 @@ const activateColorPicker = (port, request) => {
 	}
 
 	function initiate() {
-		document.addEventListener('mousemove', onInputMove);
-		document.addEventListener('touchmove', onInputMove);
-		document.addEventListener('keyup', detectEscape);
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('touchmove', onMouseMove);
+		document.addEventListener('keyup', onEscape);
 		document.addEventListener('scroll', onPageScroll);
+		document.addEventListener('click', onMouseClick);
 		window.addEventListener('resize', onWindowResize);
 		window.focus({preventScroll: true});
 
@@ -781,10 +782,11 @@ const activateColorPicker = (port, request) => {
 
 	function destroyColorPicker(isManualEscape) {
 		connectionClosed = true;
-		document.removeEventListener('mousemove', onInputMove);
-		document.removeEventListener('touchmove', onInputMove);
-		document.removeEventListener('keyup', detectEscape);
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('scroll', onPageScroll);
+		document.removeEventListener('click', onMouseClick);
 		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
@@ -803,8 +805,8 @@ const activateColorPicker = (port, request) => {
 	}
 
 	function removeColorPicker() {
-		let dimensions = body.querySelector('.rulerDimensions');
-		if (dimensions) body.removeChild(dimensions);
+		let colorPickerDiv = body.querySelector('.colorPickerDiv');
+		if (colorPickerDiv) body.removeChild(colorPickerDiv);
 	}
 
 	function onPageScroll() {
@@ -855,7 +857,7 @@ const activateColorPicker = (port, request) => {
 		body.removeChild(overlay);
 	}
 
-	function onInputMove(event) {
+	function onMouseMove(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -871,7 +873,14 @@ const activateColorPicker = (port, request) => {
 		}
 	}
 
-	function detectEscape(event) {
+	function onMouseClick(event) {
+		if (document.querySelector('.colorPickerTooltipColorCode')) {
+			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
+			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
+		}
+	}
+
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -893,43 +902,34 @@ const activateColorPicker = (port, request) => {
 
 	function showColorPicker(spotColor) {
 		console.log(spotColor);
-		// if (paused) return;
+		if (paused) return;
 
-		// removeColorPicker();
-		// if (!dimensions) return;
+		removeColorPicker();
+		if (!spotColor) return;
 
-		// let newDimensions = document.createElement('div');
-		// newDimensions.className = 'rulerDimensions';
-		// newDimensions.style.left = dimensions.x + 'px';
-		// newDimensions.style.top = dimensions.y + 'px';
+		let newColorPickerDiv = document.createElement('div');
+		newColorPickerDiv.className = 'colorPickerDiv';
+		newColorPickerDiv.style.left = spotColor.x + 'px';
+		newColorPickerDiv.style.top = spotColor.y + 'px';
 
-		// let measureWidth = dimensions.left + dimensions.right;
-		// let measureHeight = dimensions.top + dimensions.bottom;
+		let colorPickerTooltip = document.createElement('div');
+		colorPickerTooltip.className = 'colorPickerTooltip';
 
-		// let xAxis = document.createElement('div');
-		// xAxis.className = 'x rulerAxis';
-		// xAxis.style.left = -dimensions.left + 'px';
-		// xAxis.style.width = measureWidth + 'px';
+		let colorPickerTooltipBackground = document.createElement('div');
+		colorPickerTooltipBackground.className = 'colorPickerTooltipBackground';
+		colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
 
-		// let yAxis = document.createElement('div');
-		// yAxis.className = 'y rulerAxis';
-		// yAxis.style.top = -dimensions.top + 'px';
-		// yAxis.style.height = measureHeight + 'px';
+		let colorPickerTooltipColorCode = document.createElement('div');
+		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
+		colorPickerTooltipColorCode.textContent = spotColor.hex;
 
-		// let tooltip = document.createElement('div');
-		// tooltip.className = 'rulerTooltip';
+		if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+		if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
 
-		// tooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
-
-		// if (dimensions.y < 40) tooltip.classList.add('bottom');
-
-		// if (dimensions.x > window.innerWidth - 120) tooltip.classList.add('left');
-
-		// newDimensions.appendChild(xAxis);
-		// newDimensions.appendChild(yAxis);
-		// newDimensions.appendChild(tooltip);
-
-		// body.appendChild(newDimensions);
+		colorPickerTooltip.appendChild(colorPickerTooltipBackground);
+		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
+		newColorPickerDiv.appendChild(colorPickerTooltip);
+		body.appendChild(newColorPickerDiv);
 	}
 };
 

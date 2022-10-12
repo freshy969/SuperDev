@@ -1,6 +1,7 @@
 /** Page Ruler **/
-.rulerOverlay {
-	cursor: crosshair !important;
+.pageRulerOverlay,
+.colorPickerOverlay {
+	cursor: crosshair;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -9,7 +10,8 @@
 	z-index: 2147483645;
 }
 
-.rulerDimensions {
+.pageRulerDiv,
+.colorPickerDiv {
 	position: fixed;
 	width: 0;
 	height: 0;
@@ -17,7 +19,7 @@
 	pointer-events: none;
 }
 
-.rulerTooltip {
+.pageRulerTooltip {
 	position: absolute;
 	left: 7px;
 	bottom: 6px;
@@ -33,68 +35,102 @@
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em !important;
+	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em;
 	font-family: system-ui, -apple-system, sans-serif;
 }
 
-.rulerTooltip.left {
+.colorPickerTooltip {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	left: 7px;
+	bottom: 6px;
+	padding: 1px 10px;
+	border-radius: 4px;
+	background: hsla(231.429, 32%, 9%, 0.95);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em;
+}
+
+.colorPickerTooltipBackground {
+	height: 24px;
+	width: 24px;
+	border-radius: 4px;
+	margin: 8px 10px 8px 0px;
+}
+
+.colorPickerTooltipColorCode {
+	color: white;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 14px;
+	line-height: 25px;
+	direction: ltr;
+	font-family: system-ui, -apple-system, sans-serif;
+}
+
+.pageRulerTooltip.left,
+.colorPickerTooltip.left {
 	left: auto;
 	right: 7px;
 }
 
-.rulerTooltip.bottom {
+.pageRulerTooltip.bottom,
+.colorPickerTooltip.bottom {
 	bottom: auto;
 	top: 6px;
 }
 
-.rulerAxis {
+.pageRulerAxis {
 	position: absolute;
 	background: hsla(0, 100%, 50%, 1);
 }
 
-.rulerAxis:before,
-.rulerAxis:after {
+.pageRulerAxis:before,
+.pageRulerAxis:after {
 	content: '';
 	position: absolute;
 	background: inherit;
 }
 
-.x.rulerAxis:before,
-.x.rulerAxis:after {
+.x.pageRulerAxis:before,
+.x.pageRulerAxis:after {
 	left: 0;
 	height: 5px;
 	top: -2px;
 	width: 1px;
 }
 
-.x.rulerAxis:after {
+.x.pageRulerAxis:after {
 	left: 100%;
 }
 
-.y.rulerAxis:before,
-.y.rulerAxis:after {
+.y.pageRulerAxis:before,
+.y.pageRulerAxis:after {
 	left: -2px;
 	height: 1px;
 	top: 0;
 	width: 5px;
 }
 
-.y.rulerAxis:after {
+.y.pageRulerAxis:after {
 	top: 100%;
 }
 
-.x.rulerAxis {
+.x.pageRulerAxis {
 	height: 1px;
 }
 
-.y.rulerAxis {
+.y.pageRulerAxis {
 	width: 1px;
 }
 /** Page Ruler **/
 
 /**  Page Guidelines + Move Element **/
 .pageGuidelinesOutline {
-	outline: red solid 2px !important;
+	outline: red solid 2px;
 }
 .pageGuidelinesWrapper > svg {
 	position: absolute;
