@@ -40,6 +40,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateColorPicker':
 				deactivateColorPicker(port, request);
 				break;
+			case 'activateDeleteElement':
+				activateDeleteElement(port, request);
+				break;
+			case 'deactivateDeleteElement':
+				deactivateDeleteElement(port, request);
+				break;
 		}
 	});
 });
@@ -173,8 +179,10 @@ const activatePageGuidelines = (port, request) => {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
-			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
-			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			if (document.querySelector('.pageGuidelinesOutline')) {
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			}
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -638,8 +646,10 @@ const activateMoveElement = (port, request) => {
 		document.removeEventListener('click', onMouseClick);
 
 		if (isManualEscape === true) {
-			document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
-			document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			if (document.querySelector('.pageGuidelinesOutline')) {
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			}
 			chrome.storage.local.set({disableActiveFeature: true});
 		}
 
@@ -934,4 +944,109 @@ const activateColorPicker = (port, request) => {
 const deactivateColorPicker = (port, request) => {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Picker Deactivated'});
+};
+
+const activateDeleteElement = (port, request) => {
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
+	window.focus({preventScroll: true});
+
+	let pageGuidelinesWrapper = document.createElement('div');
+	pageGuidelinesWrapper.classList.add('pageGuidelinesWrapper');
+	document.body.appendChild(pageGuidelinesWrapper);
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyDeleteElement(true);
+			} else if (event.isTrusted === false) {
+				destroyDeleteElement(false);
+			}
+		}
+	}
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('pageGuidelinesOutline');
+			renderPageGuidelines(true);
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.style.outline = 'none';
+			renderPageGuidelines(false);
+			event.target.classList.remove('pageGuidelinesOutline');
+		}
+	}
+
+	function onMouseClick(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('deleteElementWrapper');
+			document.querySelector('.deleteElementWrapper').remove();
+		}
+	}
+
+	function destroyDeleteElement(isManualEscape) {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('click', onMouseClick);
+
+		if (isManualEscape === true) {
+			if (document.querySelector('.pageGuidelinesOutline')) {
+				document.querySelector('.pageGuidelinesOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelinesOutline').classList.remove('pageGuidelinesOutline');
+			}
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		document.querySelector('.pageGuidelinesWrapper').remove();
+	}
+
+	function renderPageGuidelines(toShow) {
+		if (toShow === true) {
+			let pageGuidelinesPosition = document.querySelector('.pageGuidelinesOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = pageGuidelinesPosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinesPosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinesPosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinesPosition.right + document.documentElement.scrollLeft;
+
+			pageGuidelinesWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelinesWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Delete Element Activated'});
+	chrome.storage.local.set({setMinimised: true});
+};
+
+const deactivateDeleteElement = (port, request) => {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Delete Element Deactivated'});
 };
