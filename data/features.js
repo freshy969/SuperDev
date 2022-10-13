@@ -138,7 +138,7 @@ const features = [
 		enableIcon: 'fa-eye-slash',
 		settingsIcon: 'fa-gear',
 		isEnabled: true,
-		hasSettings: true,
+		hasSettings: false,
 		id: 'deleteElement',
 	},
 	{
