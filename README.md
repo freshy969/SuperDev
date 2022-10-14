@@ -1,6 +1,6 @@
 ## SuperDev
 
-A Swiss Army Toolbox Browser Extension for Web Designers, Developers and Founders.
+A Swiss Army Toolbox for Web Designers and Developers.
 List of Feature below -
 
 ```
