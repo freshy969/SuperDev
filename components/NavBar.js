@@ -134,14 +134,27 @@ export default function NavBar() {
 						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
-						<button className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] p-1 relative bottom-[1px]'></button>
-						<button className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={darkMode}></button>
-						<button className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={toggleSettings}></button>
 						<button
-							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[1px]'
+							id='pauseExtensionButton'
+							className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
+							onClick={pauseExtension}></button>
+						<button
+							id='toggleSettingsButton'
+							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
+							onClick={toggleSettings}></button>
+						<button
+							id='movePopupButton'
+							className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
+						<button
+							id='darkModeButton'
+							className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[1px]'
+							onClick={darkMode}></button>
+						<button
+							id='minimiseExtensionButton'
+							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-[11.5px] ml-[6px] p-1 relative bottom-[1.3px]'
 							onClick={minimiseExtension}></button>
-						<button className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px]' onClick={pauseExtension}></button>
 						<button
+							id='showHideExtensionButton'
 							className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0px]'
 							onClick={showHideExtension}></button>
 					</nav>

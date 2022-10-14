@@ -4,11 +4,18 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
 			allFeatures.map((value, index) => {
 				// If Null, Hide All Active Feature With Nothing Active (For Pause Functionality)
-				if (featureId === null) JustHideMe(portFour, value.id);
+				if (featureId === null) {
+					document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
+					JustHideMe(portFour, value.id);
+				}
 				// Disable All
-				else if (featureId !== value.id) JustHideMe(portFour, value.id);
+				else if (featureId !== value.id) {
+					JustHideMe(portFour, value.id);
+				}
 				// Except The One Clicked
-				else if (featureId === value.id) HideMeShowMe(portFour, value.id);
+				else if (featureId === value.id) {
+					HideMeShowMe(portFour, value.id);
+				}
 			});
 		});
 	}
@@ -18,6 +25,7 @@ function HideMeShowMe(portFour, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Not Active
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
+			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 			document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
 			document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 
@@ -34,6 +42,7 @@ function HideMeShowMe(portFour, featureId) {
 		}
 		// Deactivate On Click If Active
 		else {
+			document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
 			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 
