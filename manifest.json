@@ -2,7 +2,7 @@
 	"name": "SuperDev Pro",
 	"version": "1.0.0",
 	"author": "Choudhary Abdullah",
-	"description": "A Swiss Army Toolbox Browser Extension for Web Designers, Developers and Founders.",
+	"description": "A Swiss Army Toolbox for Web Designers and Developers.",
 	"manifest_version": 3,
 	"minimum_chrome_version": "88",
 	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "downloads"],
