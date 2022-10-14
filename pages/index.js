@@ -2,7 +2,6 @@ import features from '../data/features';
 import {useState, useEffect} from 'react';
 import NavBar from '../components/NavBar';
 import MainBody from '../components/MainBody';
-import ToggleFeature from '../components/ToggleFeature';
 import ToggleSettings from '../components/ToggleSettings';
 import BodyHeight from '../components/functions/BodyHeight';
 import ChangeHeight from '../components/functions/ChangeHeight';
@@ -38,7 +37,8 @@ export default function Home() {
 				document.documentElement.classList.add('dark');
 				console.log('Dark Mode Activated');
 				setIsLoadingOne(false);
-			} else {
+			} else if (result.colorTheme === 'light') {
+				console.log('Light Mode Activated');
 				setIsLoadingOne(false);
 			}
 		});
@@ -63,7 +63,6 @@ export default function Home() {
 			<>
 				<NavBar />
 				<MainBody />
-				<ToggleFeature />
 				<ToggleSettings />
 			</>
 		);

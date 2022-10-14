@@ -18,7 +18,7 @@ export default function ToggleSettings() {
 			<section id='toggleSettings' className='hidden'>
 				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>
 					{allFeatures.map((value, index) => {
-						if (value.hasSettings === true && value.isEnabled === true) {
+						if (value.hasSettings === true) {
 							return (
 								<button
 									key={index}
