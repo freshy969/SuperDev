@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import NavBar from '../components/NavBar';
 import MainBody from '../components/MainBody';
 import ToggleSettings from '../components/ToggleSettings';
-import BodyHeight from '../components/functions/BodyHeight';
+import PopupHeight from '../components/functions/PopupHeight';
 import ChangeHeight from '../components/functions/ChangeHeight';
 
 export default function Home() {
@@ -58,7 +58,7 @@ export default function Home() {
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo) {
-		ChangeHeight(BodyHeight(allFeatures));
+		ChangeHeight(PopupHeight(allFeatures));
 		return (
 			<>
 				<NavBar />

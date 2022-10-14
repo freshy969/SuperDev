@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
-import BodyHeight from '/components/functions/BodyHeight';
-import SettingsHeight from '/components/functions/SettingsHeight';
+import PopupHeight from '/components/functions/PopupHeight';
 import ChangeHeight from '/components/functions/ChangeHeight';
 import JustChangeHeight from '/components/functions/JustChangeHeight';
 import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
@@ -32,11 +31,11 @@ export default function NavBar() {
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							ChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
 							console.log('Popup Expanded');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							ChangeHeight(SettingsHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('toggleSettings');
 							console.log('Popup Expanded');
 						}
@@ -51,7 +50,7 @@ export default function NavBar() {
 				if (changes.isPopupHidden.newValue === true) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
-							JustChangeHeight(BodyHeight(JSON.parse(result.allFeatures)));
+							JustChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
 							console.log('Set Homepage as Default');
 						});
@@ -91,12 +90,12 @@ export default function NavBar() {
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ActivateDeactivateFeature(allFeatures, null);
-			ChangeHeight(SettingsHeight(allFeatures));
+			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleSettings');
 			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Activated');
 		} else {
-			ChangeHeight(BodyHeight(allFeatures));
+			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Dectivated');

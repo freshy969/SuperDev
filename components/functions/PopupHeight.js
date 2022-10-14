@@ -1,4 +1,4 @@
-export default function BodyHeight(allFeatures) {
+export default function PopupHeight(allFeatures) {
 	if (allFeatures.length !== 0) {
 		let [count, height] = [0, 0];
 		allFeatures.map((value) => (count = count + 1));
