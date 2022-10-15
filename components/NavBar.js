@@ -131,17 +131,17 @@ export default function NavBar() {
 			<header id='navBar' className='bg-navBar'>
 				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
 					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2px]'>
-						SuperDev Pro<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
+						SuperDev<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
 						<button
 							id='pauseExtensionButton'
 							className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
 							onClick={pauseExtension}></button>
-						<button
+						{/* <button
 							id='toggleSettingsButton'
 							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
-							onClick={toggleSettings}></button>
+							onClick={toggleSettings}></button> */}
 						<button
 							id='movePopupButton'
 							className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>

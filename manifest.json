@@ -1,11 +1,11 @@
 {
-	"name": "SuperDev Pro",
+	"name": "SuperDev",
 	"version": "1.0.0",
 	"author": "Choudhary Abdullah",
 	"description": "A Swiss Army Toolbox for Web Designers and Developers.",
 	"manifest_version": 3,
 	"minimum_chrome_version": "88",
-	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "downloads"],
+	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
 		"service_worker": "js/background.js"
@@ -21,7 +21,7 @@
 		}
 	},
 	"action": {
-		"default_title": "SuperDev Pro"
+		"default_title": "SuperDev"
 	},
 	"icons": {
 		"16": "icons/icon16.png",

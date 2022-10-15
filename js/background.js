@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 		}
 	}
 	// Creating Chrome Context Menu
-	chrome.contextMenus.create({title: 'Inspect with SuperDev Pro', id: 'inspectWith', contexts: ['all']});
+	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
 });
 
 // ContentJs Reinjection on Extension Enable
