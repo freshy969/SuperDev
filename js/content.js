@@ -89,7 +89,8 @@ const showHideExtension = (port, request) => {
 			display: block !important;
 			background-color: rgba(0,0,0,0) !important;
 			z-index: 2147483646 !important;
-			overflow: hidden !important;`;
+			overflow: hidden !important;
+			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px`;
 		document.querySelector('#superDev').appendChild(superDevIframe);
 
 		$('#superDev').draggable({
