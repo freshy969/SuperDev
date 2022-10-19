@@ -304,9 +304,6 @@ const activatePageHighlight = (port, request) => {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	let MIN_PARENT_COUNT = 0;
-	let MAX_PARENT_COUNT = 10000000;
-
 	function rgba() {
 		let o = Math.round,
 			r = Math.random,
@@ -314,28 +311,57 @@ const activatePageHighlight = (port, request) => {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
-	let divs = document.getElementsByTagName('div');
-	for (let i = 0; i < divs.length; i++) {
-		if (divs[i].offsetHeight == 0 || divs[i].offsetWidth == 0) {
-			continue;
-		}
-		let parents = 0;
-		let node = divs[i];
-		while (node != null) {
-			if (node.tagName == 'DIV') {
-				parents++;
+	document.querySelectorAll('*').forEach((element) => {
+		if (
+			element.offsetHeight !== 0 &&
+			element.offsetWidth !== 0 &&
+			element.id !== 'superDevHandler' &&
+			element.id !== 'superDevIframe' &&
+			element.id !== 'superDev'
+		) {
+			if (
+				element.tagName === 'ADDRESS' ||
+				element.tagName === 'ARTICLE' ||
+				element.tagName === 'ASIDE' ||
+				element.tagName === 'BLOCKQUOTE' ||
+				element.tagName === 'CANVAS' ||
+				element.tagName === 'DD' ||
+				element.tagName === 'DIV' ||
+				element.tagName === 'DL' ||
+				element.tagName === 'DT' ||
+				element.tagName === 'FIELDSET' ||
+				element.tagName === 'FIGCAPTION' ||
+				element.tagName === 'FIGURE' ||
+				element.tagName === 'FOOTER' ||
+				element.tagName === 'FORM' ||
+				element.tagName === 'H1' ||
+				element.tagName === 'H2' ||
+				element.tagName === 'H3' ||
+				element.tagName === 'H4' ||
+				element.tagName === 'H5' ||
+				element.tagName === 'H6' ||
+				element.tagName === 'HEADER' ||
+				element.tagName === 'HR' ||
+				element.tagName === 'LI' ||
+				element.tagName === 'MAIN' ||
+				element.tagName === 'NAV' ||
+				element.tagName === 'NOSCRIPT' ||
+				element.tagName === 'OL' ||
+				element.tagName === 'P' ||
+				element.tagName === 'PRE' ||
+				element.tagName === 'SECTION' ||
+				element.tagName === 'TABLE' ||
+				element.tagName === 'TFOOT' ||
+				element.tagName === 'UL' ||
+				element.tagName === 'VIDEO'
+			) {
+				let color = rgba();
+				element.style.boxSizing = 'border-box';
+				element.style.outline = '2px solid ' + color;
+				element.style.backgroundColor = color;
 			}
-			node = node.parentNode;
 		}
-		if (parents >= MIN_PARENT_COUNT && parents <= MAX_PARENT_COUNT) {
-			let color = rgba();
-			if (divs[i].id !== 'superDevHandler' && divs[i].id !== 'superDevIframe' && divs[i].id !== 'superDev') {
-				divs[i].style.boxSizing = 'border-box';
-				divs[i].style.outline = '2px solid ' + color;
-				divs[i].style.backgroundColor = color;
-			}
-		}
-	}
+	});
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -362,12 +388,12 @@ const activatePageHighlight = (port, request) => {
 			}
 		});
 
-		let divs = document.getElementsByTagName('div');
-		for (let i = 0; i < divs.length; i++) {
-			divs[i].style.boxSizing = '';
-			divs[i].style.outline = '';
-			divs[i].style.backgroundColor = '';
-		}
+		// let divs = document.getElementsByTagName('div');
+		// for (let i = 0; i < divs.length; i++) {
+		// 	element.style.boxSizing = '';
+		// 	element.style.outline = '';
+		// 	element.style.backgroundColor = '';
+		// }
 	}
 
 	port.postMessage({action: 'Page Outline Activated'});
