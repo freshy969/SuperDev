@@ -22,17 +22,17 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageOutline':
 				deactivatePageOutline(port, request);
 				break;
+			case 'activatePageHighlight':
+				activatePageHighlight(port, request);
+				break;
+			case 'deactivatePageHighlight':
+				deactivatePageHighlight(port, request);
+				break;
 			case 'activatePageRuler':
 				activatePageRuler(port, request);
 				break;
 			case 'deactivatePageRuler':
 				deactivatePageRuler(port, request);
-				break;
-			case 'activateTextEditor':
-				activateTextEditor(port, request);
-				break;
-			case 'deactivateTextEditor':
-				deactivateTextEditor(port, request);
 				break;
 			case 'activateMoveElement':
 				activateMoveElement(port, request);
@@ -45,6 +45,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 				break;
 			case 'deactivateDeleteElement':
 				deactivateDeleteElement(port, request);
+				break;
+			case 'activateTextEditor':
+				activateTextEditor(port, request);
+				break;
+			case 'deactivateTextEditor':
+				deactivateTextEditor(port, request);
 				break;
 			case 'activateColorPicker':
 				activateColorPicker(port, request);
@@ -294,6 +300,85 @@ const deactivatePageOutline = (port, request) => {
 	port.postMessage({action: 'Page Outline Deactivated'});
 };
 
+const activatePageHighlight = (port, request) => {
+	document.addEventListener('keyup', onEscape);
+	window.focus({preventScroll: true});
+
+	let MIN_PARENT_COUNT = 0;
+	let MAX_PARENT_COUNT = 10000000;
+
+	function rgba() {
+		let o = Math.round,
+			r = Math.random,
+			s = 255;
+		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
+	}
+
+	let divs = document.getElementsByTagName('div');
+	for (let i = 0; i < divs.length; i++) {
+		if (divs[i].offsetHeight == 0 || divs[i].offsetWidth == 0) {
+			continue;
+		}
+		let parents = 0;
+		let node = divs[i];
+		while (node != null) {
+			if (node.tagName == 'DIV') {
+				parents++;
+			}
+			node = node.parentNode;
+		}
+		if (parents >= MIN_PARENT_COUNT && parents <= MAX_PARENT_COUNT) {
+			let color = rgba();
+			if (divs[i].id !== 'superDevHandler' && divs[i].id !== 'superDevIframe' && divs[i].id !== 'superDev') {
+				divs[i].style.boxSizing = 'border-box';
+				divs[i].style.outline = '2px solid ' + color;
+				divs[i].style.backgroundColor = color;
+			}
+		}
+	}
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyPageGuideline(true);
+			} else if (event.isTrusted === false) {
+				destroyPageGuideline(false);
+			}
+		}
+	}
+
+	function destroyPageGuideline(isManualEscape) {
+		document.removeEventListener('keyup', onEscape);
+
+		if (isManualEscape === true) {
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		let divs = document.getElementsByTagName('div');
+		for (let i = 0; i < divs.length; i++) {
+			divs[i].style.boxSizing = '';
+			divs[i].style.outline = '';
+			divs[i].style.backgroundColor = '';
+		}
+	}
+
+	port.postMessage({action: 'Page Outline Activated'});
+	chrome.storage.local.set({setMinimised: true});
+};
+
+const deactivatePageHighlight = (port, request) => {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Page Outline Deactivated'});
+};
+
 const activatePageRuler = (port, request) => {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
@@ -535,111 +620,6 @@ const deactivatePageRuler = (port, request) => {
 	port.postMessage({action: 'Page Ruler Deactivated'});
 };
 
-const activateTextEditor = (port, request) => {
-	document.addEventListener('keyup', onEscape);
-	document.addEventListener('mouseover', onMouseOver);
-	document.addEventListener('mouseout', onMouseOut);
-
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyTextEditor(true);
-			} else if (event.isTrusted === false) {
-				destroyTextEditor(false);
-			}
-		}
-	}
-
-	function onMouseOver(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.innerText !== '') {
-				event.target.setAttribute('contenteditable', true);
-				event.target.setAttribute('spellcheck', false);
-				event.target.classList.add('pageGuidelineOutline');
-				renderPageGuideline(true);
-				event.target.focus({preventScroll: true});
-			}
-		}
-	}
-
-	function onMouseOut(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('pageGuidelineOutline')) {
-				event.target.style.outline = 'none';
-				event.target.removeAttribute('contenteditable', true);
-				event.target.removeAttribute('spellcheck', false);
-				event.target.classList.remove('pageGuidelineOutline');
-				renderPageGuideline(false);
-			}
-		}
-	}
-
-	function destroyTextEditor(isManualEscape) {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
-				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
-				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({disableActiveFeature: true});
-		}
-
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
-			}
-		});
-
-		document.querySelector('.pageGuidelineWrapper').remove();
-	}
-
-	function renderPageGuideline(toShow) {
-		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
-			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
-
-			pageGuidelineWrapper.innerHTML = `
-			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
-			xmlns="http://www.w3.org/2000/svg">
-				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
-				</rect>
-					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
-					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
-					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
-					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
-			</svg>`;
-		} else {
-			pageGuidelineWrapper.innerHTML = ``;
-		}
-	}
-
-	port.postMessage({action: 'Text Editor Activated'});
-	chrome.storage.local.set({setMinimised: true});
-};
-
-const deactivateTextEditor = (port, request) => {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Text Editor Deactivated'});
-};
-
 const activateMoveElement = (port, request) => {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
@@ -872,6 +852,111 @@ const activateDeleteElement = (port, request) => {
 const deactivateDeleteElement = (port, request) => {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Delete Element Deactivated'});
+};
+
+const activateTextEditor = (port, request) => {
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+
+	let pageGuidelineWrapper = document.createElement('div');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyTextEditor(true);
+			} else if (event.isTrusted === false) {
+				destroyTextEditor(false);
+			}
+		}
+	}
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.innerText !== '') {
+				event.target.setAttribute('contenteditable', true);
+				event.target.setAttribute('spellcheck', false);
+				event.target.classList.add('pageGuidelineOutline');
+				renderPageGuideline(true);
+				event.target.focus({preventScroll: true});
+			}
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.classList.contains('pageGuidelineOutline')) {
+				event.target.style.outline = 'none';
+				event.target.removeAttribute('contenteditable', true);
+				event.target.removeAttribute('spellcheck', false);
+				event.target.classList.remove('pageGuidelineOutline');
+				renderPageGuideline(false);
+			}
+		}
+	}
+
+	function destroyTextEditor(isManualEscape) {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+
+		if (isManualEscape === true) {
+			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
+				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
+				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
+				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+			}
+			chrome.storage.local.set({disableActiveFeature: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		document.querySelector('.pageGuidelineWrapper').remove();
+	}
+
+	function renderPageGuideline(toShow) {
+		if (toShow === true) {
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+
+			pageGuidelineWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelineWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Text Editor Activated'});
+	chrome.storage.local.set({setMinimised: true});
+};
+
+const deactivateTextEditor = (port, request) => {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Text Editor Deactivated'});
 };
 
 const activateColorPicker = (port, request) => {
