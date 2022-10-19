@@ -16,7 +16,7 @@ const features = [
 	},
 	{
 		title: 'Text Editor',
-		icon: 'fa-pencil',
+		icon: 'fa-text-size',
 		id: 'textEditor',
 	},
 	{
@@ -63,12 +63,6 @@ const features = [
 		title: 'Custom CSS',
 		icon: 'fa-code',
 		id: 'customCSS',
-	},
-
-	{
-		title: 'Font Inspector',
-		icon: 'fa-text-size',
-		id: 'fontInspector',
 	},
 	{
 		title: 'Font Changer',
