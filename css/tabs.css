@@ -128,11 +128,11 @@
 }
 /** Page Ruler **/
 
-/**  Page Guidelines + Move Element **/
-.pageGuidelinesOutline {
+/**  Page Guideline + Move Element **/
+.pageGuidelineOutline {
 	outline: red solid 2px !important;
 }
-.pageGuidelinesWrapper > svg {
+.pageGuidelineWrapper > svg {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -141,8 +141,8 @@
 	z-index: 2147483645;
 }
 
-.pageGuidelinesWrapper line {
+.pageGuidelineWrapper line {
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
-/**  Page Guidelines + Move Element **/
+/**  Page Guideline + Move Element **/
