@@ -357,7 +357,7 @@ const activatePageHighlight = (port, request) => {
 			) {
 				let color = rgba();
 				element.style.boxSizing = 'border-box';
-				element.style.outline = '2px solid ' + color;
+				element.style.border = '2px solid ' + color;
 				element.style.backgroundColor = color;
 			}
 		}
@@ -388,12 +388,56 @@ const activatePageHighlight = (port, request) => {
 			}
 		});
 
-		// let divs = document.getElementsByTagName('div');
-		// for (let i = 0; i < divs.length; i++) {
-		// 	element.style.boxSizing = '';
-		// 	element.style.outline = '';
-		// 	element.style.backgroundColor = '';
-		// }
+		document.querySelectorAll('*').forEach((element) => {
+			if (
+				element.offsetHeight !== 0 &&
+				element.offsetWidth !== 0 &&
+				element.id !== 'superDevHandler' &&
+				element.id !== 'superDevIframe' &&
+				element.id !== 'superDev'
+			) {
+				if (
+					element.tagName === 'ADDRESS' ||
+					element.tagName === 'ARTICLE' ||
+					element.tagName === 'ASIDE' ||
+					element.tagName === 'BLOCKQUOTE' ||
+					element.tagName === 'CANVAS' ||
+					element.tagName === 'DD' ||
+					element.tagName === 'DIV' ||
+					element.tagName === 'DL' ||
+					element.tagName === 'DT' ||
+					element.tagName === 'FIELDSET' ||
+					element.tagName === 'FIGCAPTION' ||
+					element.tagName === 'FIGURE' ||
+					element.tagName === 'FOOTER' ||
+					element.tagName === 'FORM' ||
+					element.tagName === 'H1' ||
+					element.tagName === 'H2' ||
+					element.tagName === 'H3' ||
+					element.tagName === 'H4' ||
+					element.tagName === 'H5' ||
+					element.tagName === 'H6' ||
+					element.tagName === 'HEADER' ||
+					element.tagName === 'HR' ||
+					element.tagName === 'LI' ||
+					element.tagName === 'MAIN' ||
+					element.tagName === 'NAV' ||
+					element.tagName === 'NOSCRIPT' ||
+					element.tagName === 'OL' ||
+					element.tagName === 'P' ||
+					element.tagName === 'PRE' ||
+					element.tagName === 'SECTION' ||
+					element.tagName === 'TABLE' ||
+					element.tagName === 'TFOOT' ||
+					element.tagName === 'UL' ||
+					element.tagName === 'VIDEO'
+				) {
+					element.style.boxSizing = '';
+					element.style.border = '';
+					element.style.backgroundColor = '';
+				}
+			}
+		});
 	}
 
 	port.postMessage({action: 'Page Outline Activated'});
