@@ -267,22 +267,27 @@ const activatePageHighlight = (port, request) => {
 							element.id !== 'superDev'
 						) {
 							if (
-								element.tagName === 'HEADER' ||
-								element.tagName === 'NAV' ||
-								element.tagName === 'FOOTER' ||
-								element.tagName === 'MAIN' ||
-								element.tagName === 'SECTION' ||
 								element.tagName === 'ARTICLE' ||
 								element.tagName === 'ASIDE' ||
-								element.tagName === 'DIV'
+								element.tagName === 'DETAILS' ||
+								element.tagName === 'FIGCAPTION' ||
+								element.tagName === 'FIGURE' ||
+								element.tagName === 'FOOTER' ||
+								element.tagName === 'HEADER' ||
+								element.tagName === 'MAIN' ||
+								element.tagName === 'MARK' ||
+								element.tagName === 'NAV' ||
+								element.tagName === 'SECTION' ||
+								element.tagName === 'SUMMARY' ||
+								element.tagName === 'TIME'
 							) {
 								let color = rgba();
 								if (value.settings.checkboxPageHighlightSix !== true) {
-									element.style.boxSizing = 'border-box';
-									element.style.border = '2px solid ' + color;
+									element.style.setProperty('box-sizing', 'border-box', 'important');
+									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
 
-								element.style.backgroundColor = color;
+								element.style.setProperty('background-color', color, 'important');
 							}
 						}
 					});
@@ -333,11 +338,11 @@ const activatePageHighlight = (port, request) => {
 							) {
 								let color = rgba();
 								if (value.settings.checkboxPageHighlightSix !== true) {
-									element.style.boxSizing = 'border-box';
-									element.style.border = '2px solid ' + color;
+									element.style.setProperty('box-sizing', 'border-box', 'important');
+									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
 
-								element.style.backgroundColor = color;
+								element.style.setProperty('background-color', color, 'important');
 							}
 						}
 					});
@@ -387,11 +392,11 @@ const activatePageHighlight = (port, request) => {
 							) {
 								let color = rgba();
 								if (value.settings.checkboxPageHighlightSix !== true) {
-									element.style.boxSizing = 'border-box';
-									element.style.border = '2px solid ' + color;
+									element.style.setProperty('box-sizing', 'border-box', 'important');
+									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
 
-								element.style.backgroundColor = color;
+								element.style.setProperty('background-color', color, 'important');
 							}
 						}
 					});
@@ -415,11 +420,11 @@ const activatePageHighlight = (port, request) => {
 							) {
 								let color = rgba();
 								if (value.settings.checkboxPageHighlightSix !== true) {
-									element.style.boxSizing = 'border-box';
-									element.style.border = '2px solid ' + color;
+									element.style.setProperty('box-sizing', 'border-box', 'important');
+									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
 
-								element.style.backgroundColor = color;
+								element.style.setProperty('background-color', color, 'important');
 							}
 						}
 					});
@@ -434,11 +439,11 @@ const activatePageHighlight = (port, request) => {
 						) {
 							let color = rgba();
 							if (value.settings.checkboxPageHighlightSix !== true) {
-								element.style.boxSizing = 'border-box';
-								element.style.border = '2px solid ' + color;
+								element.style.setProperty('box-sizing', 'border-box', 'important');
+								element.style.setProperty('border', '2px solid ' + color, 'important');
 							}
 
-							element.style.backgroundColor = color;
+							element.style.setProperty('background-color', color, 'important');
 						}
 					});
 				}
@@ -498,13 +503,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'SUMMARY' ||
 									element.tagName === 'TIME'
 								) {
-									let color = rgba();
 									if (value.settings.checkboxPageHighlightSix !== true) {
-										element.style.boxSizing = '';
-										element.style.border = '';
+										element.style.removeProperty('box-sizing');
+										element.style.removeProperty('border');
 									}
 
-									element.style.backgroundColor = '';
+									element.style.removeProperty('background-color');
 								}
 							}
 						});
@@ -553,13 +557,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'UL' ||
 									element.tagName === 'VIDEO'
 								) {
-									let color = rgba();
 									if (value.settings.checkboxPageHighlightSix !== true) {
-										element.style.boxSizing = '';
-										element.style.border = '';
+										element.style.removeProperty('box-sizing');
+										element.style.removeProperty('border');
 									}
 
-									element.style.backgroundColor = '';
+									element.style.removeProperty('background-color');
 								}
 							}
 						});
@@ -607,13 +610,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'TT' ||
 									element.tagName === 'VAR'
 								) {
-									let color = rgba();
 									if (value.settings.checkboxPageHighlightSix !== true) {
-										element.style.boxSizing = '';
-										element.style.border = '';
+										element.style.removeProperty('box-sizing');
+										element.style.removeProperty('border');
 									}
 
-									element.style.backgroundColor = '';
+									element.style.removeProperty('background-color');
 								}
 							}
 						});
@@ -635,13 +637,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'H6' ||
 									element.tagName === 'P'
 								) {
-									let color = rgba();
 									if (value.settings.checkboxPageHighlightSix !== true) {
-										element.style.boxSizing = '';
-										element.style.border = '';
+										element.style.removeProperty('box-sizing');
+										element.style.removeProperty('border');
 									}
 
-									element.style.backgroundColor = '';
+									element.style.removeProperty('background-color');
 								}
 							}
 						});
@@ -654,13 +655,12 @@ const activatePageHighlight = (port, request) => {
 								element.id !== 'superDevIframe' &&
 								element.id !== 'superDev'
 							) {
-								let color = rgba();
 								if (value.settings.checkboxPageHighlightSix !== true) {
-									element.style.boxSizing = '';
-									element.style.border = '';
+									element.style.removeProperty('box-sizing');
+									element.style.removeProperty('border');
 								}
 
-								element.style.backgroundColor = '';
+								element.style.removeProperty('background-color');
 							}
 						});
 					}
