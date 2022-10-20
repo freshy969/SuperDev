@@ -180,7 +180,6 @@ const activatePageGuideline = (port, request) => {
 	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.style.outline = 'none';
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -193,7 +192,6 @@ const activatePageGuideline = (port, request) => {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -952,7 +950,6 @@ const activateMoveElement = (port, request) => {
 	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.style.outline = 'none';
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -961,7 +958,7 @@ const activateMoveElement = (port, request) => {
 	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.style.cursor = 'move';
+			event.target.style.setProperty('cursor', 'move', 'important');
 			event.target.classList.add('moveElementDraggable');
 			$('.moveElementDraggable').draggable({
 				iframeFix: true,
@@ -990,7 +987,6 @@ const activateMoveElement = (port, request) => {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -1006,7 +1002,7 @@ const activateMoveElement = (port, request) => {
 		if (document.querySelector('.moveElementDraggable')) {
 			$('.moveElementDraggable').draggable('destroy');
 			document.querySelectorAll('.moveElementDraggable').forEach((element) => {
-				element.style.cursor = 'default';
+				element.style.setProperty('cursor', 'default', 'important');
 			});
 			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		}
@@ -1081,7 +1077,6 @@ const activateDeleteElement = (port, request) => {
 	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.style.outline = 'none';
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1103,7 +1098,6 @@ const activateDeleteElement = (port, request) => {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({disableActiveFeature: true});
@@ -1190,7 +1184,6 @@ const activateTextEditor = (port, request) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
-				event.target.style.outline = 'none';
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
 				event.target.classList.remove('pageGuidelineOutline');
@@ -1206,7 +1199,6 @@ const activateTextEditor = (port, request) => {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').style.outline = 'none';
 				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
 				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
