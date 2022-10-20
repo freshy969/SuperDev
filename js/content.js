@@ -277,8 +277,11 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'DIV'
 							) {
 								let color = rgba();
-								element.style.boxSizing = 'border-box';
-								element.style.border = '2px solid ' + color;
+								if (value.settings.checkboxPageHighlightSix !== true) {
+									element.style.boxSizing = 'border-box';
+									element.style.border = '2px solid ' + color;
+								}
+
 								element.style.backgroundColor = color;
 							}
 						}
@@ -329,8 +332,11 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'VIDEO'
 							) {
 								let color = rgba();
-								element.style.boxSizing = 'border-box';
-								element.style.border = '2px solid ' + color;
+								if (value.settings.checkboxPageHighlightSix !== true) {
+									element.style.boxSizing = 'border-box';
+									element.style.border = '2px solid ' + color;
+								}
+
 								element.style.backgroundColor = color;
 							}
 						}
@@ -380,8 +386,11 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'VAR'
 							) {
 								let color = rgba();
-								element.style.boxSizing = 'border-box';
-								element.style.border = '2px solid ' + color;
+								if (value.settings.checkboxPageHighlightSix !== true) {
+									element.style.boxSizing = 'border-box';
+									element.style.border = '2px solid ' + color;
+								}
+
 								element.style.backgroundColor = color;
 							}
 						}
@@ -405,8 +414,11 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'P'
 							) {
 								let color = rgba();
-								element.style.boxSizing = 'border-box';
-								element.style.border = '2px solid ' + color;
+								if (value.settings.checkboxPageHighlightSix !== true) {
+									element.style.boxSizing = 'border-box';
+									element.style.border = '2px solid ' + color;
+								}
+
 								element.style.backgroundColor = color;
 							}
 						}
@@ -421,8 +433,11 @@ const activatePageHighlight = (port, request) => {
 							element.id !== 'superDev'
 						) {
 							let color = rgba();
-							element.style.boxSizing = 'border-box';
-							element.style.border = '2px solid ' + color;
+							if (value.settings.checkboxPageHighlightSix !== true) {
+								element.style.boxSizing = 'border-box';
+								element.style.border = '2px solid ' + color;
+							}
+
 							element.style.backgroundColor = color;
 						}
 					});
@@ -469,17 +484,26 @@ const activatePageHighlight = (port, request) => {
 								element.id !== 'superDev'
 							) {
 								if (
-									element.tagName === 'HEADER' ||
-									element.tagName === 'NAV' ||
-									element.tagName === 'FOOTER' ||
-									element.tagName === 'MAIN' ||
-									element.tagName === 'SECTION' ||
 									element.tagName === 'ARTICLE' ||
 									element.tagName === 'ASIDE' ||
-									element.tagName === 'DIV'
+									element.tagName === 'DETAILS' ||
+									element.tagName === 'FIGCAPTION' ||
+									element.tagName === 'FIGURE' ||
+									element.tagName === 'FOOTER' ||
+									element.tagName === 'HEADER' ||
+									element.tagName === 'MAIN' ||
+									element.tagName === 'MARK' ||
+									element.tagName === 'NAV' ||
+									element.tagName === 'SECTION' ||
+									element.tagName === 'SUMMARY' ||
+									element.tagName === 'TIME'
 								) {
-									element.style.boxSizing = '';
-									element.style.border = '';
+									let color = rgba();
+									if (value.settings.checkboxPageHighlightSix !== true) {
+										element.style.boxSizing = '';
+										element.style.border = '';
+									}
+
 									element.style.backgroundColor = '';
 								}
 							}
@@ -529,8 +553,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'UL' ||
 									element.tagName === 'VIDEO'
 								) {
-									element.style.boxSizing = '';
-									element.style.border = '';
+									let color = rgba();
+									if (value.settings.checkboxPageHighlightSix !== true) {
+										element.style.boxSizing = '';
+										element.style.border = '';
+									}
+
 									element.style.backgroundColor = '';
 								}
 							}
@@ -579,8 +607,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'TT' ||
 									element.tagName === 'VAR'
 								) {
-									element.style.boxSizing = '';
-									element.style.border = '';
+									let color = rgba();
+									if (value.settings.checkboxPageHighlightSix !== true) {
+										element.style.boxSizing = '';
+										element.style.border = '';
+									}
+
 									element.style.backgroundColor = '';
 								}
 							}
@@ -603,8 +635,12 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'H6' ||
 									element.tagName === 'P'
 								) {
-									element.style.boxSizing = '';
-									element.style.border = '';
+									let color = rgba();
+									if (value.settings.checkboxPageHighlightSix !== true) {
+										element.style.boxSizing = '';
+										element.style.border = '';
+									}
+
 									element.style.backgroundColor = '';
 								}
 							}
@@ -618,8 +654,12 @@ const activatePageHighlight = (port, request) => {
 								element.id !== 'superDevIframe' &&
 								element.id !== 'superDev'
 							) {
-								element.style.boxSizing = '';
-								element.style.border = '';
+								let color = rgba();
+								if (value.settings.checkboxPageHighlightSix !== true) {
+									element.style.boxSizing = '';
+									element.style.border = '';
+								}
+
 								element.style.backgroundColor = '';
 							}
 						});

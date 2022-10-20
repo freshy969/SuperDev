@@ -14,6 +14,7 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxPageHighlightFour').checked = value.settings.checkboxPageHighlightFour;
 					document.querySelector('#checkboxPageHighlightFive').checked = value.settings.checkboxPageHighlightFive;
 					document.querySelector('#checkboxPageHighlightSix').checked = value.settings.checkboxPageHighlightSix;
+					document.querySelector('#checkboxPageHighlightSeven').checked = value.settings.checkboxPageHighlightSeven;
 				} else if (value.id === 'colorPicker') {
 					document.querySelector('#checkboxColorPickerOne').checked = value.settings.checkboxColorPickerOne;
 					document.querySelector('#checkboxColorPickerTwo').checked = value.settings.checkboxColorPickerTwo;
@@ -39,13 +40,11 @@ export default function ToggleSettings() {
 							value.settings.checkboxPageHighlightThree = false;
 							value.settings.checkboxPageHighlightFour = false;
 							value.settings.checkboxPageHighlightFive = false;
-							value.settings.checkboxPageHighlightSix = false;
 							document.querySelector('#checkboxPageHighlightOne').checked = true;
 							document.querySelector('#checkboxPageHighlightTwo').checked = false;
 							document.querySelector('#checkboxPageHighlightThree').checked = false;
 							document.querySelector('#checkboxPageHighlightFour').checked = false;
 							document.querySelector('#checkboxPageHighlightFive').checked = false;
-							document.querySelector('#checkboxPageHighlightSix').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlightOne = false;
@@ -63,13 +62,11 @@ export default function ToggleSettings() {
 							value.settings.checkboxPageHighlightThree = false;
 							value.settings.checkboxPageHighlightFour = false;
 							value.settings.checkboxPageHighlightFive = false;
-							value.settings.checkboxPageHighlightSix = false;
 							document.querySelector('#checkboxPageHighlightOne').checked = false;
 							document.querySelector('#checkboxPageHighlightTwo').checked = true;
 							document.querySelector('#checkboxPageHighlightThree').checked = false;
 							document.querySelector('#checkboxPageHighlightFour').checked = false;
 							document.querySelector('#checkboxPageHighlightFive').checked = false;
-							document.querySelector('#checkboxPageHighlightSix').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlightTwo = false;
@@ -87,13 +84,11 @@ export default function ToggleSettings() {
 							value.settings.checkboxPageHighlightThree = true;
 							value.settings.checkboxPageHighlightFour = false;
 							value.settings.checkboxPageHighlightFive = false;
-							value.settings.checkboxPageHighlightSix = false;
 							document.querySelector('#checkboxPageHighlightOne').checked = false;
 							document.querySelector('#checkboxPageHighlightTwo').checked = false;
 							document.querySelector('#checkboxPageHighlightThree').checked = true;
 							document.querySelector('#checkboxPageHighlightFour').checked = false;
 							document.querySelector('#checkboxPageHighlightFive').checked = false;
-							document.querySelector('#checkboxPageHighlightSix').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlightThree = false;
@@ -111,13 +106,11 @@ export default function ToggleSettings() {
 							value.settings.checkboxPageHighlightThree = false;
 							value.settings.checkboxPageHighlightFour = true;
 							value.settings.checkboxPageHighlightFive = false;
-							value.settings.checkboxPageHighlightSix = false;
 							document.querySelector('#checkboxPageHighlightOne').checked = false;
 							document.querySelector('#checkboxPageHighlightTwo').checked = false;
 							document.querySelector('#checkboxPageHighlightThree').checked = false;
 							document.querySelector('#checkboxPageHighlightFour').checked = true;
 							document.querySelector('#checkboxPageHighlightFive').checked = false;
-							document.querySelector('#checkboxPageHighlightSix').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlightFour = false;
@@ -135,13 +128,11 @@ export default function ToggleSettings() {
 							value.settings.checkboxPageHighlightThree = false;
 							value.settings.checkboxPageHighlightFour = false;
 							value.settings.checkboxPageHighlightFive = true;
-							value.settings.checkboxPageHighlightSix = false;
 							document.querySelector('#checkboxPageHighlightOne').checked = false;
 							document.querySelector('#checkboxPageHighlightTwo').checked = false;
 							document.querySelector('#checkboxPageHighlightThree').checked = false;
 							document.querySelector('#checkboxPageHighlightFour').checked = false;
 							document.querySelector('#checkboxPageHighlightFive').checked = true;
-							document.querySelector('#checkboxPageHighlightSix').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlightFive = false;
@@ -154,6 +145,20 @@ export default function ToggleSettings() {
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlightSix').checked === true) {
+							value.settings.checkboxPageHighlightSix = true;
+							document.querySelector('#checkboxPageHighlightSix').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlightSix = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlightSeven':
+				allFeatures.map((value, index) => {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlightSeven').checked === true) {
 							setTimeout(() => {
 								value.settings.checkboxPageHighlightOne = true;
 								value.settings.checkboxPageHighlightTwo = false;
@@ -161,12 +166,14 @@ export default function ToggleSettings() {
 								value.settings.checkboxPageHighlightFour = false;
 								value.settings.checkboxPageHighlightFive = false;
 								value.settings.checkboxPageHighlightSix = false;
+								value.settings.checkboxPageHighlightSeven = false;
 								document.querySelector('#checkboxPageHighlightOne').checked = true;
 								document.querySelector('#checkboxPageHighlightTwo').checked = false;
 								document.querySelector('#checkboxPageHighlightThree').checked = false;
 								document.querySelector('#checkboxPageHighlightFour').checked = false;
 								document.querySelector('#checkboxPageHighlightFive').checked = false;
 								document.querySelector('#checkboxPageHighlightSix').checked = false;
+								document.querySelector('#checkboxPageHighlightSeven').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -284,6 +291,17 @@ export default function ToggleSettings() {
 									id='checkboxPageHighlightSix'
 								/>
 								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightSix'>
+									Don&apos;t Add Border to Elements
+								</label>
+							</div>
+							<div className='mt-2'>
+								<input
+									onClick={() => PageHighlightSettings('checkboxPageHighlightSeven')}
+									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+									type='checkbox'
+									id='checkboxPageHighlightSeven'
+								/>
+								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightSeven'>
 									Reset Settings to Default
 								</label>
 							</div>
