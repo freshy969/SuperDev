@@ -138,10 +138,6 @@ export default function NavBar() {
 							id='pauseExtensionButton'
 							className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
 							onClick={pauseExtension}></button>
-						{/* <button
-							id='toggleSettingsButton'
-							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
-							onClick={toggleSettings}></button> */}
 						<button
 							id='movePopupButton'
 							className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
@@ -149,6 +145,10 @@ export default function NavBar() {
 							id='darkModeButton'
 							className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[1px]'
 							onClick={darkMode}></button>
+						<button
+							id='toggleSettingsButton'
+							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
+							onClick={toggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
 							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-[11.5px] ml-[6px] p-1 relative bottom-[1.3px]'

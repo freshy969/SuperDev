@@ -22,12 +22,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageOutline':
 				deactivatePageOutline(port, request);
 				break;
-			case 'activatePageHighlight':
-				activatePageHighlight(port, request);
-				break;
-			case 'deactivatePageHighlight':
-				deactivatePageHighlight(port, request);
-				break;
 			case 'activatePageRuler':
 				activatePageRuler(port, request);
 				break;
@@ -89,7 +83,7 @@ const showHideExtension = (port, request) => {
 			width: 18px !important;
 			background-color: rgba(0,0,0,0) !important;
 			height: 42px !important;
-			margin-left: 225px !important;
+			margin-left: 199px !important;
 			margin-bottom: -42px !important;
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
@@ -253,57 +247,6 @@ const activatePageOutline = (port, request) => {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	document.querySelectorAll('*').forEach((addOutline) => {
-		if (addOutline.id !== 'superDevHandler' && addOutline.id !== 'superDevIframe' && addOutline.id !== 'superDev') {
-			addOutline.style.outline = 'red solid 1px';
-		}
-	});
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyPageGuideline(true);
-			} else if (event.isTrusted === false) {
-				destroyPageGuideline(false);
-			}
-		}
-	}
-
-	function destroyPageGuideline(isManualEscape) {
-		document.removeEventListener('keyup', onEscape);
-
-		if (isManualEscape === true) {
-			chrome.storage.local.set({disableActiveFeature: true});
-		}
-
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
-			}
-		});
-
-		document.querySelectorAll('*').forEach((addOutline) => {
-			if (addOutline.style.outline === 'red solid 1px') {
-				addOutline.style.outline = 'none';
-			}
-		});
-	}
-
-	port.postMessage({action: 'Page Outline Activated'});
-	chrome.storage.local.set({setMinimised: true});
-};
-
-const deactivatePageOutline = (port, request) => {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Page Outline Deactivated'});
-};
-
-const activatePageHighlight = (port, request) => {
-	document.addEventListener('keyup', onEscape);
-	window.focus({preventScroll: true});
-
 	function rgba() {
 		let o = Math.round,
 			r = Math.random,
@@ -320,40 +263,14 @@ const activatePageHighlight = (port, request) => {
 			element.id !== 'superDev'
 		) {
 			if (
-				element.tagName === 'ADDRESS' ||
+				element.tagName === 'HEADER' ||
+				element.tagName === 'NAV' ||
+				element.tagName === 'FOOTER' ||
+				element.tagName === 'MAIN' ||
+				element.tagName === 'SECTION' ||
 				element.tagName === 'ARTICLE' ||
 				element.tagName === 'ASIDE' ||
-				element.tagName === 'BLOCKQUOTE' ||
-				element.tagName === 'CANVAS' ||
-				element.tagName === 'DD' ||
-				element.tagName === 'DIV' ||
-				element.tagName === 'DL' ||
-				element.tagName === 'DT' ||
-				element.tagName === 'FIELDSET' ||
-				element.tagName === 'FIGCAPTION' ||
-				element.tagName === 'FIGURE' ||
-				element.tagName === 'FOOTER' ||
-				element.tagName === 'FORM' ||
-				element.tagName === 'H1' ||
-				element.tagName === 'H2' ||
-				element.tagName === 'H3' ||
-				element.tagName === 'H4' ||
-				element.tagName === 'H5' ||
-				element.tagName === 'H6' ||
-				element.tagName === 'HEADER' ||
-				element.tagName === 'HR' ||
-				element.tagName === 'LI' ||
-				element.tagName === 'MAIN' ||
-				element.tagName === 'NAV' ||
-				element.tagName === 'NOSCRIPT' ||
-				element.tagName === 'OL' ||
-				element.tagName === 'P' ||
-				element.tagName === 'PRE' ||
-				element.tagName === 'SECTION' ||
-				element.tagName === 'TABLE' ||
-				element.tagName === 'TFOOT' ||
-				element.tagName === 'UL' ||
-				element.tagName === 'VIDEO'
+				element.tagName === 'DIV'
 			) {
 				let color = rgba();
 				element.style.boxSizing = 'border-box';
@@ -367,14 +284,14 @@ const activatePageHighlight = (port, request) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageGuideline(true);
+				destroyPageOutline(true);
 			} else if (event.isTrusted === false) {
-				destroyPageGuideline(false);
+				destroyPageOutline(false);
 			}
 		}
 	}
 
-	function destroyPageGuideline(isManualEscape) {
+	function destroyPageOutline(isManualEscape) {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
@@ -397,40 +314,14 @@ const activatePageHighlight = (port, request) => {
 				element.id !== 'superDev'
 			) {
 				if (
-					element.tagName === 'ADDRESS' ||
+					element.tagName === 'HEADER' ||
+					element.tagName === 'NAV' ||
+					element.tagName === 'FOOTER' ||
+					element.tagName === 'MAIN' ||
+					element.tagName === 'SECTION' ||
 					element.tagName === 'ARTICLE' ||
 					element.tagName === 'ASIDE' ||
-					element.tagName === 'BLOCKQUOTE' ||
-					element.tagName === 'CANVAS' ||
-					element.tagName === 'DD' ||
-					element.tagName === 'DIV' ||
-					element.tagName === 'DL' ||
-					element.tagName === 'DT' ||
-					element.tagName === 'FIELDSET' ||
-					element.tagName === 'FIGCAPTION' ||
-					element.tagName === 'FIGURE' ||
-					element.tagName === 'FOOTER' ||
-					element.tagName === 'FORM' ||
-					element.tagName === 'H1' ||
-					element.tagName === 'H2' ||
-					element.tagName === 'H3' ||
-					element.tagName === 'H4' ||
-					element.tagName === 'H5' ||
-					element.tagName === 'H6' ||
-					element.tagName === 'HEADER' ||
-					element.tagName === 'HR' ||
-					element.tagName === 'LI' ||
-					element.tagName === 'MAIN' ||
-					element.tagName === 'NAV' ||
-					element.tagName === 'NOSCRIPT' ||
-					element.tagName === 'OL' ||
-					element.tagName === 'P' ||
-					element.tagName === 'PRE' ||
-					element.tagName === 'SECTION' ||
-					element.tagName === 'TABLE' ||
-					element.tagName === 'TFOOT' ||
-					element.tagName === 'UL' ||
-					element.tagName === 'VIDEO'
+					element.tagName === 'DIV'
 				) {
 					element.style.boxSizing = '';
 					element.style.border = '';
@@ -444,7 +335,7 @@ const activatePageHighlight = (port, request) => {
 	chrome.storage.local.set({setMinimised: true});
 };
 
-const deactivatePageHighlight = (port, request) => {
+const deactivatePageOutline = (port, request) => {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Outline Deactivated'});
 };
@@ -776,8 +667,8 @@ const activateMoveElement = (port, request) => {
 
 		if (document.querySelector('.moveElementDraggable')) {
 			$('.moveElementDraggable').draggable('destroy');
-			document.querySelectorAll('.moveElementDraggable').forEach((removeMoveCursor) => {
-				removeMoveCursor.style.cursor = 'default';
+			document.querySelectorAll('.moveElementDraggable').forEach((element) => {
+				element.style.cursor = 'default';
 			});
 			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		}

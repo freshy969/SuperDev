@@ -10,11 +10,6 @@ const features = [
 		id: 'pageOutline',
 	},
 	{
-		title: 'Page Highlight',
-		icon: 'fa-paintbrush',
-		id: 'pageHighlight',
-	},
-	{
 		title: 'Page Ruler',
 		icon: 'fa-ruler-combined',
 		id: 'pageRuler',
