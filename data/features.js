@@ -8,6 +8,14 @@ const features = [
 		title: 'Page Outline',
 		icon: 'fa-border-all',
 		id: 'pageOutline',
+		settings: {
+			checkboxPageOutlineOne: 'checked',
+			checkboxPageOutlineTwo: 'unchecked',
+			checkboxPageOutlineThree: 'unchecked',
+			checkboxPageOutlineFour: 'unchecked',
+			checkboxPageOutlineFive: 'unchecked',
+			checkboxPageOutlineSix: 'unchecked',
+		},
 	},
 	{
 		title: 'Page Ruler',
@@ -33,6 +41,10 @@ const features = [
 		title: 'Color Picker',
 		icon: 'fa-eye-dropper',
 		id: 'colorPicker',
+		settings: {
+			checkboxColorPickerOne: 'unchecked',
+			checkboxColorPickerTwo: 'unchecked',
+		},
 	},
 	{
 		title: 'Color Palette',

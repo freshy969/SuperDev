@@ -92,6 +92,10 @@ export default function NavBar() {
 			ActivateDeactivateFeature(allFeatures, null);
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleSettings');
+
+			let bodyHeight = PopupHeight(allFeatures) - 43;
+			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
+
 			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Activated');
 		} else {

@@ -16,6 +16,9 @@ module.exports = {
 
 				borderLight: '#DBDBDBFF',
 				borderDark: '#222222AA',
+
+				settingsBorder: '#27272AFF',
+				settingsBG: '#18181BFF',
 			},
 		},
 	},
