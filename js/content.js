@@ -16,11 +16,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageGuideline':
 				deactivatePageGuideline(port, request);
 				break;
-			case 'activatePageOutline':
-				activatePageOutline(port, request);
+			case 'activatePageHighlight':
+				activatePageHighlight(port, request);
 				break;
-			case 'deactivatePageOutline':
-				deactivatePageOutline(port, request);
+			case 'deactivatePageHighlight':
+				deactivatePageHighlight(port, request);
 				break;
 			case 'activatePageRuler':
 				activatePageRuler(port, request);
@@ -243,7 +243,7 @@ const deactivatePageGuideline = (port, request) => {
 	port.postMessage({action: 'Page Guideline Deactivated'});
 };
 
-const activatePageOutline = (port, request) => {
+const activatePageHighlight = (port, request) => {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -254,44 +254,195 @@ const activatePageOutline = (port, request) => {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
-	document.querySelectorAll('*').forEach((element) => {
-		if (
-			element.offsetHeight !== 0 &&
-			element.offsetWidth !== 0 &&
-			element.id !== 'superDevHandler' &&
-			element.id !== 'superDevIframe' &&
-			element.id !== 'superDev'
-		) {
-			if (
-				element.tagName === 'HEADER' ||
-				element.tagName === 'NAV' ||
-				element.tagName === 'FOOTER' ||
-				element.tagName === 'MAIN' ||
-				element.tagName === 'SECTION' ||
-				element.tagName === 'ARTICLE' ||
-				element.tagName === 'ASIDE' ||
-				element.tagName === 'DIV'
-			) {
-				let color = rgba();
-				element.style.boxSizing = 'border-box';
-				element.style.border = '2px solid ' + color;
-				element.style.backgroundColor = color;
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		JSON.parse(result.allFeatures).map((value, index) => {
+			if (value.id === 'pageHighlight') {
+				if (value.settings.checkboxPageHighlightOne === true) {
+					document.querySelectorAll('*').forEach((element) => {
+						if (
+							element.offsetHeight !== 0 &&
+							element.offsetWidth !== 0 &&
+							element.id !== 'superDevHandler' &&
+							element.id !== 'superDevIframe' &&
+							element.id !== 'superDev'
+						) {
+							if (
+								element.tagName === 'HEADER' ||
+								element.tagName === 'NAV' ||
+								element.tagName === 'FOOTER' ||
+								element.tagName === 'MAIN' ||
+								element.tagName === 'SECTION' ||
+								element.tagName === 'ARTICLE' ||
+								element.tagName === 'ASIDE' ||
+								element.tagName === 'DIV'
+							) {
+								let color = rgba();
+								element.style.boxSizing = 'border-box';
+								element.style.border = '2px solid ' + color;
+								element.style.backgroundColor = color;
+							}
+						}
+					});
+				} else if (value.settings.checkboxPageHighlightTwo === true) {
+					document.querySelectorAll('*').forEach((element) => {
+						if (
+							element.offsetHeight !== 0 &&
+							element.offsetWidth !== 0 &&
+							element.id !== 'superDevHandler' &&
+							element.id !== 'superDevIframe' &&
+							element.id !== 'superDev'
+						) {
+							if (
+								element.tagName === 'ADDRESS' ||
+								element.tagName === 'ARTICLE' ||
+								element.tagName === 'ASIDE' ||
+								element.tagName === 'BLOCKQUOTE' ||
+								element.tagName === 'CANVAS' ||
+								element.tagName === 'DD' ||
+								element.tagName === 'DIV' ||
+								element.tagName === 'DL' ||
+								element.tagName === 'DT' ||
+								element.tagName === 'FIELDSET' ||
+								element.tagName === 'FIGCAPTION' ||
+								element.tagName === 'FIGURE' ||
+								element.tagName === 'FOOTER' ||
+								element.tagName === 'FORM' ||
+								element.tagName === 'H1' ||
+								element.tagName === 'H2' ||
+								element.tagName === 'H3' ||
+								element.tagName === 'H4' ||
+								element.tagName === 'H5' ||
+								element.tagName === 'H6' ||
+								element.tagName === 'HEADER' ||
+								element.tagName === 'HR' ||
+								element.tagName === 'LI' ||
+								element.tagName === 'MAIN' ||
+								element.tagName === 'NAV' ||
+								element.tagName === 'NOSCRIPT' ||
+								element.tagName === 'OL' ||
+								element.tagName === 'P' ||
+								element.tagName === 'PRE' ||
+								element.tagName === 'SECTION' ||
+								element.tagName === 'TABLE' ||
+								element.tagName === 'TFOOT' ||
+								element.tagName === 'UL' ||
+								element.tagName === 'VIDEO'
+							) {
+								let color = rgba();
+								element.style.boxSizing = 'border-box';
+								element.style.border = '2px solid ' + color;
+								element.style.backgroundColor = color;
+							}
+						}
+					});
+				} else if (value.settings.checkboxPageHighlightThree === true) {
+					document.querySelectorAll('*').forEach((element) => {
+						if (
+							element.offsetHeight !== 0 &&
+							element.offsetWidth !== 0 &&
+							element.id !== 'superDevHandler' &&
+							element.id !== 'superDevIframe' &&
+							element.id !== 'superDev'
+						) {
+							if (
+								element.tagName === 'A' ||
+								element.tagName === 'ABBR' ||
+								element.tagName === 'ACRONYM' ||
+								element.tagName === 'B' ||
+								element.tagName === 'BDO' ||
+								element.tagName === 'BIG' ||
+								element.tagName === 'BR' ||
+								element.tagName === 'BUTTON' ||
+								element.tagName === 'CITE' ||
+								element.tagName === 'CODE' ||
+								element.tagName === 'DFN' ||
+								element.tagName === 'EM' ||
+								element.tagName === 'I' ||
+								element.tagName === 'IMG' ||
+								element.tagName === 'INPUT' ||
+								element.tagName === 'KBD' ||
+								element.tagName === 'LABEL' ||
+								element.tagName === 'MAP' ||
+								element.tagName === 'OBJECT' ||
+								element.tagName === 'OUTPUT' ||
+								element.tagName === 'Q' ||
+								element.tagName === 'SAMP' ||
+								element.tagName === 'SCRIPT' ||
+								element.tagName === 'SELECT' ||
+								element.tagName === 'SMALL' ||
+								element.tagName === 'SPAN' ||
+								element.tagName === 'STRONG' ||
+								element.tagName === 'SUB' ||
+								element.tagName === 'SUP' ||
+								element.tagName === 'TEXTAREA' ||
+								element.tagName === 'TIME' ||
+								element.tagName === 'TT' ||
+								element.tagName === 'VAR'
+							) {
+								let color = rgba();
+								element.style.boxSizing = 'border-box';
+								element.style.border = '2px solid ' + color;
+								element.style.backgroundColor = color;
+							}
+						}
+					});
+				} else if (value.settings.checkboxPageHighlightFour === true) {
+					document.querySelectorAll('*').forEach((element) => {
+						if (
+							element.offsetHeight !== 0 &&
+							element.offsetWidth !== 0 &&
+							element.id !== 'superDevHandler' &&
+							element.id !== 'superDevIframe' &&
+							element.id !== 'superDev'
+						) {
+							if (
+								element.tagName === 'H1' ||
+								element.tagName === 'H2' ||
+								element.tagName === 'H3' ||
+								element.tagName === 'H4' ||
+								element.tagName === 'H5' ||
+								element.tagName === 'H6' ||
+								element.tagName === 'P'
+							) {
+								let color = rgba();
+								element.style.boxSizing = 'border-box';
+								element.style.border = '2px solid ' + color;
+								element.style.backgroundColor = color;
+							}
+						}
+					});
+				} else if (value.settings.checkboxPageHighlightFive === true) {
+					document.querySelectorAll('*').forEach((element) => {
+						if (
+							element.offsetHeight !== 0 &&
+							element.offsetWidth !== 0 &&
+							element.id !== 'superDevHandler' &&
+							element.id !== 'superDevIframe' &&
+							element.id !== 'superDev'
+						) {
+							let color = rgba();
+							element.style.boxSizing = 'border-box';
+							element.style.border = '2px solid ' + color;
+							element.style.backgroundColor = color;
+						}
+					});
+				}
 			}
-		}
+		});
 	});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageOutline(true);
+				destroyPageHighlight(true);
 			} else if (event.isTrusted === false) {
-				destroyPageOutline(false);
+				destroyPageHighlight(false);
 			}
 		}
 	}
 
-	function destroyPageOutline(isManualEscape) {
+	function destroyPageHighlight(isManualEscape) {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
@@ -305,39 +456,186 @@ const activatePageOutline = (port, request) => {
 			}
 		});
 
-		document.querySelectorAll('*').forEach((element) => {
-			if (
-				element.offsetHeight !== 0 &&
-				element.offsetWidth !== 0 &&
-				element.id !== 'superDevHandler' &&
-				element.id !== 'superDevIframe' &&
-				element.id !== 'superDev'
-			) {
-				if (
-					element.tagName === 'HEADER' ||
-					element.tagName === 'NAV' ||
-					element.tagName === 'FOOTER' ||
-					element.tagName === 'MAIN' ||
-					element.tagName === 'SECTION' ||
-					element.tagName === 'ARTICLE' ||
-					element.tagName === 'ASIDE' ||
-					element.tagName === 'DIV'
-				) {
-					element.style.boxSizing = '';
-					element.style.border = '';
-					element.style.backgroundColor = '';
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map((value, index) => {
+				if (value.id === 'pageHighlight') {
+					if (value.settings.checkboxPageHighlightOne === true) {
+						document.querySelectorAll('*').forEach((element) => {
+							if (
+								element.offsetHeight !== 0 &&
+								element.offsetWidth !== 0 &&
+								element.id !== 'superDevHandler' &&
+								element.id !== 'superDevIframe' &&
+								element.id !== 'superDev'
+							) {
+								if (
+									element.tagName === 'HEADER' ||
+									element.tagName === 'NAV' ||
+									element.tagName === 'FOOTER' ||
+									element.tagName === 'MAIN' ||
+									element.tagName === 'SECTION' ||
+									element.tagName === 'ARTICLE' ||
+									element.tagName === 'ASIDE' ||
+									element.tagName === 'DIV'
+								) {
+									element.style.boxSizing = '';
+									element.style.border = '';
+									element.style.backgroundColor = '';
+								}
+							}
+						});
+					} else if (value.settings.checkboxPageHighlightTwo === true) {
+						document.querySelectorAll('*').forEach((element) => {
+							if (
+								element.offsetHeight !== 0 &&
+								element.offsetWidth !== 0 &&
+								element.id !== 'superDevHandler' &&
+								element.id !== 'superDevIframe' &&
+								element.id !== 'superDev'
+							) {
+								if (
+									element.tagName === 'ADDRESS' ||
+									element.tagName === 'ARTICLE' ||
+									element.tagName === 'ASIDE' ||
+									element.tagName === 'BLOCKQUOTE' ||
+									element.tagName === 'CANVAS' ||
+									element.tagName === 'DD' ||
+									element.tagName === 'DIV' ||
+									element.tagName === 'DL' ||
+									element.tagName === 'DT' ||
+									element.tagName === 'FIELDSET' ||
+									element.tagName === 'FIGCAPTION' ||
+									element.tagName === 'FIGURE' ||
+									element.tagName === 'FOOTER' ||
+									element.tagName === 'FORM' ||
+									element.tagName === 'H1' ||
+									element.tagName === 'H2' ||
+									element.tagName === 'H3' ||
+									element.tagName === 'H4' ||
+									element.tagName === 'H5' ||
+									element.tagName === 'H6' ||
+									element.tagName === 'HEADER' ||
+									element.tagName === 'HR' ||
+									element.tagName === 'LI' ||
+									element.tagName === 'MAIN' ||
+									element.tagName === 'NAV' ||
+									element.tagName === 'NOSCRIPT' ||
+									element.tagName === 'OL' ||
+									element.tagName === 'P' ||
+									element.tagName === 'PRE' ||
+									element.tagName === 'SECTION' ||
+									element.tagName === 'TABLE' ||
+									element.tagName === 'TFOOT' ||
+									element.tagName === 'UL' ||
+									element.tagName === 'VIDEO'
+								) {
+									element.style.boxSizing = '';
+									element.style.border = '';
+									element.style.backgroundColor = '';
+								}
+							}
+						});
+					} else if (value.settings.checkboxPageHighlightThree === true) {
+						document.querySelectorAll('*').forEach((element) => {
+							if (
+								element.offsetHeight !== 0 &&
+								element.offsetWidth !== 0 &&
+								element.id !== 'superDevHandler' &&
+								element.id !== 'superDevIframe' &&
+								element.id !== 'superDev'
+							) {
+								if (
+									element.tagName === 'A' ||
+									element.tagName === 'ABBR' ||
+									element.tagName === 'ACRONYM' ||
+									element.tagName === 'B' ||
+									element.tagName === 'BDO' ||
+									element.tagName === 'BIG' ||
+									element.tagName === 'BR' ||
+									element.tagName === 'BUTTON' ||
+									element.tagName === 'CITE' ||
+									element.tagName === 'CODE' ||
+									element.tagName === 'DFN' ||
+									element.tagName === 'EM' ||
+									element.tagName === 'I' ||
+									element.tagName === 'IMG' ||
+									element.tagName === 'INPUT' ||
+									element.tagName === 'KBD' ||
+									element.tagName === 'LABEL' ||
+									element.tagName === 'MAP' ||
+									element.tagName === 'OBJECT' ||
+									element.tagName === 'OUTPUT' ||
+									element.tagName === 'Q' ||
+									element.tagName === 'SAMP' ||
+									element.tagName === 'SCRIPT' ||
+									element.tagName === 'SELECT' ||
+									element.tagName === 'SMALL' ||
+									element.tagName === 'SPAN' ||
+									element.tagName === 'STRONG' ||
+									element.tagName === 'SUB' ||
+									element.tagName === 'SUP' ||
+									element.tagName === 'TEXTAREA' ||
+									element.tagName === 'TIME' ||
+									element.tagName === 'TT' ||
+									element.tagName === 'VAR'
+								) {
+									element.style.boxSizing = '';
+									element.style.border = '';
+									element.style.backgroundColor = '';
+								}
+							}
+						});
+					} else if (value.settings.checkboxPageHighlightFour === true) {
+						document.querySelectorAll('*').forEach((element) => {
+							if (
+								element.offsetHeight !== 0 &&
+								element.offsetWidth !== 0 &&
+								element.id !== 'superDevHandler' &&
+								element.id !== 'superDevIframe' &&
+								element.id !== 'superDev'
+							) {
+								if (
+									element.tagName === 'H1' ||
+									element.tagName === 'H2' ||
+									element.tagName === 'H3' ||
+									element.tagName === 'H4' ||
+									element.tagName === 'H5' ||
+									element.tagName === 'H6' ||
+									element.tagName === 'P'
+								) {
+									element.style.boxSizing = '';
+									element.style.border = '';
+									element.style.backgroundColor = '';
+								}
+							}
+						});
+					} else if (value.settings.checkboxPageHighlightFive === true) {
+						document.querySelectorAll('*').forEach((element) => {
+							if (
+								element.offsetHeight !== 0 &&
+								element.offsetWidth !== 0 &&
+								element.id !== 'superDevHandler' &&
+								element.id !== 'superDevIframe' &&
+								element.id !== 'superDev'
+							) {
+								element.style.boxSizing = '';
+								element.style.border = '';
+								element.style.backgroundColor = '';
+							}
+						});
+					}
 				}
-			}
+			});
 		});
 	}
 
-	port.postMessage({action: 'Page Outline Activated'});
+	port.postMessage({action: 'Page Highlight Activated'});
 	chrome.storage.local.set({setMinimised: true});
 };
 
-const deactivatePageOutline = (port, request) => {
+const deactivatePageHighlight = (port, request) => {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Page Outline Deactivated'});
+	port.postMessage({action: 'Page Highlight Deactivated'});
 };
 
 const activatePageRuler = (port, request) => {
@@ -1140,14 +1438,27 @@ const activateColorPicker = (port, request) => {
 
 		let colorPickerTooltipBackground = document.createElement('div');
 		colorPickerTooltipBackground.className = 'colorPickerTooltipBackground';
-		colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
 
 		let colorPickerTooltipColorCode = document.createElement('div');
 		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
-		colorPickerTooltipColorCode.textContent = spotColor.hex;
 
-		if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
-		if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map((value, index) => {
+				if (value.id === 'colorPicker') {
+					if (value.settings.checkboxColorPickerOne === true) {
+						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
+						colorPickerTooltipColorCode.textContent = spotColor.rgb;
+						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
+					} else {
+						colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
+						colorPickerTooltipColorCode.textContent = spotColor.hex;
+						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
+					}
+				}
+			});
+		});
 
 		colorPickerTooltip.appendChild(colorPickerTooltipBackground);
 		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
