@@ -1,4 +1,4 @@
-/** Page Ruler **/
+/** Page Ruler + Color Picker **/
 .pageRulerOverlay,
 .colorPickerOverlay {
 	cursor: crosshair !important;
@@ -126,9 +126,9 @@
 .y.pageRulerAxis {
 	width: 1px;
 }
-/** Page Ruler **/
+/** Page Ruler + Color Picker **/
 
-/**  Page Guideline + Move Element **/
+/**  Page Guideline **/
 .pageGuidelineOutline {
 	outline: red solid 2px !important;
 }
@@ -145,4 +145,4 @@
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
-/**  Page Guideline + Move Element **/
+/**  Page Guideline **/
