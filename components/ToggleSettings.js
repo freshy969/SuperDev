@@ -51,16 +51,16 @@ export default function ToggleSettings() {
 	if (allFeatures.length !== 0) {
 		return (
 			<section id='toggleSettings' className='hidden'>
-				<div className='border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>
+				<div className='border border-t-0 border-borderOne box-border rounded-b-lg'>
 					<div id='toggleSettingsChild' className='rounded-md p-4'>
 						{allFeatures.map((value, index) => {
 							if (value.id === 'pageOutline') {
 								return (
 									<div key={index}>
-										<div className='rounded-md text-left bg-settingsBG border border-settingsBorder shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
+										<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
 											<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Page Outline Settings
 										</div>
-										<div className='rounded-md border bg-settingsBG border-settingsBorder shadow-lg p-3 mb-3'>
+										<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 											<div>
 												<input
 													onClick={() => PageOutlineSettings('checkboxPageOutlineOne')}
@@ -133,10 +133,10 @@ export default function ToggleSettings() {
 							} else if (value.id === 'colorPicker') {
 								return (
 									<div key={index}>
-										<div className='rounded-md text-left bg-settingsBG border border-settingsBorder shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
+										<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
 											<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Color Picker Settings
 										</div>
-										<div className='rounded-md border bg-settingsBG border-settingsBorder shadow-lg p-3'>
+										<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
 											<div>
 												<input
 													onClick={() => ColorPickerSettings('checkboxColorPickerOne')}

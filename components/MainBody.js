@@ -18,7 +18,7 @@ export default function MainBody() {
 	if (allFeatures.length !== 0) {
 		return (
 			<section id='mainBody'>
-				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderLight dark:border-borderDark box-border rounded-b-lg'>
+				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderOne box-border rounded-b-lg'>
 					{allFeatures.map((value, index) => {
 						return (
 							<button

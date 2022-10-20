@@ -7,7 +7,7 @@ class MyDocument extends Document {
 				<Head>
 					<meta name='description' content='SuperDev is Chrome Extension for Developers and Designers that Adds 20+ Extension’s Feature into a Single one.' />
 				</Head>
-				<body className='bg-bodyLight dark:bg-bodyDark'>
+				<body className='bg-bodyBG'>
 					<Main />
 					<NextScript />
 				</body>

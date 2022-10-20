@@ -7,18 +7,15 @@ module.exports = {
 				navBar: '#000000FF',
 				navText: '#F3F3F3FF',
 
-				bodyDark: '#000000FF',
-				bodyLight: '#F4F4F6FF',
+				bodyBG: '#000000FF',
+				settingsBG: '#18181BFF',
 
 				btnOne: '#007CF0ff',
 				btnTwo: '#06B6D4FF',
 				btnText: '#F3F3F3FF',
 
-				borderLight: '#DBDBDBFF',
-				borderDark: '#222222AA',
-
-				settingsBorder: '#27272AFF',
-				settingsBG: '#18181BFF',
+				borderOne: '#27272ACC',
+				borderTwo: '#27272AFF',
 			},
 		},
 	},

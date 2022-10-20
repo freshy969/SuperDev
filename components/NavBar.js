@@ -73,20 +73,6 @@ export default function NavBar() {
 		});
 	}, []);
 
-	function darkMode() {
-		chrome.storage.local.get(['colorTheme'], function (result) {
-			if (result.colorTheme === 'light') {
-				document.documentElement.classList.add('dark');
-				chrome.storage.local.set({colorTheme: 'dark'});
-				console.log('Dark Mode Activated');
-			} else if (result.colorTheme === 'dark') {
-				document.documentElement.classList.remove('dark');
-				chrome.storage.local.set({colorTheme: 'light'});
-				console.log('Light Mode Activated');
-			}
-		});
-	}
-
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ActivateDeactivateFeature(allFeatures, null);
@@ -133,7 +119,7 @@ export default function NavBar() {
 	if (allFeatures.length !== 0) {
 		return (
 			<header id='navBar' className='bg-navBar'>
-				<div className='flex justify-between border border-borderDark box-border rounded-t-lg py-[8px] px-[18px]'>
+				<div className='flex justify-between border border-borderOne box-border rounded-t-lg py-[8px] px-[18px]'>
 					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2px]'>
 						SuperDev<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
@@ -145,10 +131,6 @@ export default function NavBar() {
 						<button
 							id='movePopupButton'
 							className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
-						<button
-							id='darkModeButton'
-							className='text-navText text-right fa-regular fa-circle-half-stroke text-xs ml-[6px] p-1 relative bottom-[1px]'
-							onClick={darkMode}></button>
 						<button
 							id='toggleSettingsButton'
 							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
