@@ -61,11 +61,11 @@ export default function NavBar() {
 
 		// On DisableActiveFeature Change
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.disableActiveFeature) {
-				if (changes.disableActiveFeature.newValue === true) {
+			if (changes.setActiveFeatureDisabled) {
+				if (changes.setActiveFeatureDisabled.newValue === true) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
-						chrome.storage.local.set({disableActiveFeature: false});
+						chrome.storage.local.set({setActiveFeatureDisabled: false});
 						console.log('Deactivated Active Feature');
 					});
 				}

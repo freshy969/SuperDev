@@ -22,7 +22,22 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 }
 
 function HideMeShowMe(portFour, featureId) {
-	if (document.querySelector('#' + featureId)) {
+	// Function for Exceptions
+	if (featureId === 'clearCache') {
+		setTimeout(() => {
+			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+		}, 50);
+
+		portFour.onMessage.addListener(function (response) {
+			if (response.action.includes('Activated')) {
+				chrome.storage.local.set({whichFeatureActive: featureId});
+				console.log('Got Response : ', response.action);
+			}
+		});
+	}
+
+	// Function for Most Features
+	else if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Not Active
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';

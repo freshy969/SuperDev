@@ -52,6 +52,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateColorPicker':
 				deactivateColorPicker(port, request);
 				break;
+			case 'activateClearCache':
+				activateClearCache(port, request);
+				break;
 		}
 	});
 });
@@ -115,7 +118,7 @@ const showHideExtension = (port, request) => {
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		chrome.storage.local.set({isPopupHidden: true});
-		chrome.storage.local.set({disableActiveFeature: true});
+		chrome.storage.local.set({setActiveFeatureDisabled: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -124,7 +127,8 @@ const showHideExtension = (port, request) => {
 		// Reset on Visible
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
-		chrome.storage.local.set({disableActiveFeature: false});
+		chrome.storage.local.set({setActiveFeatureDisabled: false});
+		chrome.storage.local.set({setReload: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 
@@ -194,7 +198,7 @@ const activatePageGuideline = (port, request) => {
 			if (document.querySelector('.pageGuidelineOutline')) {
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -464,7 +468,7 @@ const activatePageHighlight = (port, request) => {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -768,7 +772,7 @@ const activatePageRuler = (port, request) => {
 		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -989,7 +993,7 @@ const activateMoveElement = (port, request) => {
 			if (document.querySelector('.pageGuidelineOutline')) {
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -1100,7 +1104,7 @@ const activateDeleteElement = (port, request) => {
 			if (document.querySelector('.pageGuidelineOutline')) {
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -1203,7 +1207,7 @@ const activateTextEditor = (port, request) => {
 				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -1344,7 +1348,7 @@ const activateColorPicker = (port, request) => {
 		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({disableActiveFeature: true});
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
 		chrome.storage.local.get(['isPopupPaused'], function (result) {
@@ -1502,4 +1506,8 @@ const activateColorPicker = (port, request) => {
 const deactivateColorPicker = (port, request) => {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Picker Deactivated'});
+};
+
+const activateClearCache = (port, request) => {
+	console.log(1);
 };
