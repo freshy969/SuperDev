@@ -255,7 +255,7 @@ const activatePageHighlight = (port, request) => {
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map((value, index) => {
 			if (value.id === 'pageHighlight') {
-				if (value.settings.checkboxPageHighlightOne === true) {
+				if (value.settings.checkboxPageHighlight1 === true) {
 					document.querySelectorAll('*').forEach((element) => {
 						if (
 							element.offsetHeight !== 0 &&
@@ -280,7 +280,7 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'TIME'
 							) {
 								let color = rgba();
-								if (value.settings.checkboxPageHighlightSix !== true) {
+								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.setProperty('box-sizing', 'border-box', 'important');
 									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
@@ -289,7 +289,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						}
 					});
-				} else if (value.settings.checkboxPageHighlightTwo === true) {
+				} else if (value.settings.checkboxPageHighlight2 === true) {
 					document.querySelectorAll('*').forEach((element) => {
 						if (
 							element.offsetHeight !== 0 &&
@@ -335,7 +335,7 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'VIDEO'
 							) {
 								let color = rgba();
-								if (value.settings.checkboxPageHighlightSix !== true) {
+								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.setProperty('box-sizing', 'border-box', 'important');
 									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
@@ -344,7 +344,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						}
 					});
-				} else if (value.settings.checkboxPageHighlightThree === true) {
+				} else if (value.settings.checkboxPageHighlight3 === true) {
 					document.querySelectorAll('*').forEach((element) => {
 						if (
 							element.offsetHeight !== 0 &&
@@ -389,7 +389,7 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'VAR'
 							) {
 								let color = rgba();
-								if (value.settings.checkboxPageHighlightSix !== true) {
+								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.setProperty('box-sizing', 'border-box', 'important');
 									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
@@ -398,7 +398,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						}
 					});
-				} else if (value.settings.checkboxPageHighlightFour === true) {
+				} else if (value.settings.checkboxPageHighlight4 === true) {
 					document.querySelectorAll('*').forEach((element) => {
 						if (
 							element.offsetHeight !== 0 &&
@@ -417,7 +417,7 @@ const activatePageHighlight = (port, request) => {
 								element.tagName === 'P'
 							) {
 								let color = rgba();
-								if (value.settings.checkboxPageHighlightSix !== true) {
+								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.setProperty('box-sizing', 'border-box', 'important');
 									element.style.setProperty('border', '2px solid ' + color, 'important');
 								}
@@ -426,7 +426,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						}
 					});
-				} else if (value.settings.checkboxPageHighlightFive === true) {
+				} else if (value.settings.checkboxPageHighlight5 === true) {
 					document.querySelectorAll('*').forEach((element) => {
 						if (
 							element.offsetHeight !== 0 &&
@@ -436,7 +436,7 @@ const activatePageHighlight = (port, request) => {
 							element.id !== 'superDev'
 						) {
 							let color = rgba();
-							if (value.settings.checkboxPageHighlightSix !== true) {
+							if (value.settings.checkboxPageHighlight6 !== true) {
 								element.style.setProperty('box-sizing', 'border-box', 'important');
 								element.style.setProperty('border', '2px solid ' + color, 'important');
 							}
@@ -477,7 +477,7 @@ const activatePageHighlight = (port, request) => {
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'pageHighlight') {
-					if (value.settings.checkboxPageHighlightOne === true) {
+					if (value.settings.checkboxPageHighlight1 === true) {
 						document.querySelectorAll('*').forEach((element) => {
 							if (
 								element.offsetHeight !== 0 &&
@@ -501,7 +501,7 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'SUMMARY' ||
 									element.tagName === 'TIME'
 								) {
-									if (value.settings.checkboxPageHighlightSix !== true) {
+									if (value.settings.checkboxPageHighlight6 !== true) {
 										element.style.removeProperty('box-sizing');
 										element.style.removeProperty('border');
 									}
@@ -510,7 +510,7 @@ const activatePageHighlight = (port, request) => {
 								}
 							}
 						});
-					} else if (value.settings.checkboxPageHighlightTwo === true) {
+					} else if (value.settings.checkboxPageHighlight2 === true) {
 						document.querySelectorAll('*').forEach((element) => {
 							if (
 								element.offsetHeight !== 0 &&
@@ -555,7 +555,7 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'UL' ||
 									element.tagName === 'VIDEO'
 								) {
-									if (value.settings.checkboxPageHighlightSix !== true) {
+									if (value.settings.checkboxPageHighlight6 !== true) {
 										element.style.removeProperty('box-sizing');
 										element.style.removeProperty('border');
 									}
@@ -564,7 +564,7 @@ const activatePageHighlight = (port, request) => {
 								}
 							}
 						});
-					} else if (value.settings.checkboxPageHighlightThree === true) {
+					} else if (value.settings.checkboxPageHighlight3 === true) {
 						document.querySelectorAll('*').forEach((element) => {
 							if (
 								element.offsetHeight !== 0 &&
@@ -608,7 +608,7 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'TT' ||
 									element.tagName === 'VAR'
 								) {
-									if (value.settings.checkboxPageHighlightSix !== true) {
+									if (value.settings.checkboxPageHighlight6 !== true) {
 										element.style.removeProperty('box-sizing');
 										element.style.removeProperty('border');
 									}
@@ -617,7 +617,7 @@ const activatePageHighlight = (port, request) => {
 								}
 							}
 						});
-					} else if (value.settings.checkboxPageHighlightFour === true) {
+					} else if (value.settings.checkboxPageHighlight4 === true) {
 						document.querySelectorAll('*').forEach((element) => {
 							if (
 								element.offsetHeight !== 0 &&
@@ -635,7 +635,7 @@ const activatePageHighlight = (port, request) => {
 									element.tagName === 'H6' ||
 									element.tagName === 'P'
 								) {
-									if (value.settings.checkboxPageHighlightSix !== true) {
+									if (value.settings.checkboxPageHighlight6 !== true) {
 										element.style.removeProperty('box-sizing');
 										element.style.removeProperty('border');
 									}
@@ -644,7 +644,7 @@ const activatePageHighlight = (port, request) => {
 								}
 							}
 						});
-					} else if (value.settings.checkboxPageHighlightFive === true) {
+					} else if (value.settings.checkboxPageHighlight5 === true) {
 						document.querySelectorAll('*').forEach((element) => {
 							if (
 								element.offsetHeight !== 0 &&
@@ -653,7 +653,7 @@ const activatePageHighlight = (port, request) => {
 								element.id !== 'superDevIframe' &&
 								element.id !== 'superDev'
 							) {
-								if (value.settings.checkboxPageHighlightSix !== true) {
+								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.removeProperty('box-sizing');
 									element.style.removeProperty('border');
 								}
@@ -1477,7 +1477,7 @@ const activateColorPicker = (port, request) => {
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'colorPicker') {
-					if (value.settings.checkboxColorPickerOne === true) {
+					if (value.settings.checkboxColorPicker1 === true) {
 						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
 						colorPickerTooltipColorCode.textContent = spotColor.rgb;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');

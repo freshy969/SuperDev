@@ -8,16 +8,30 @@ export default function ToggleSettings() {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'pageHighlight') {
-					document.querySelector('#checkboxPageHighlightOne').checked = value.settings.checkboxPageHighlightOne;
-					document.querySelector('#checkboxPageHighlightTwo').checked = value.settings.checkboxPageHighlightTwo;
-					document.querySelector('#checkboxPageHighlightThree').checked = value.settings.checkboxPageHighlightThree;
-					document.querySelector('#checkboxPageHighlightFour').checked = value.settings.checkboxPageHighlightFour;
-					document.querySelector('#checkboxPageHighlightFive').checked = value.settings.checkboxPageHighlightFive;
-					document.querySelector('#checkboxPageHighlightSix').checked = value.settings.checkboxPageHighlightSix;
-					document.querySelector('#checkboxPageHighlightSeven').checked = value.settings.checkboxPageHighlightSeven;
+					document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
+					document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
+					document.querySelector('#checkboxPageHighlight3').checked = value.settings.checkboxPageHighlight3;
+					document.querySelector('#checkboxPageHighlight4').checked = value.settings.checkboxPageHighlight4;
+					document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
+					document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
+					document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
 				} else if (value.id === 'colorPicker') {
-					document.querySelector('#checkboxColorPickerOne').checked = value.settings.checkboxColorPickerOne;
-					document.querySelector('#checkboxColorPickerTwo').checked = value.settings.checkboxColorPickerTwo;
+					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
+					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
+				} else if (value.id === 'clearCache') {
+					document.querySelector('#checkboxClearCache1').checked = value.settings.checkboxClearCache1;
+					document.querySelector('#checkboxClearCache2').checked = value.settings.checkboxClearCache2;
+					document.querySelector('#checkboxClearCache3').checked = value.settings.checkboxClearCache3;
+					document.querySelector('#checkboxClearCache4').checked = value.settings.checkboxClearCache4;
+					document.querySelector('#checkboxClearCache5').checked = value.settings.checkboxClearCache5;
+					document.querySelector('#checkboxClearCache6').checked = value.settings.checkboxClearCache6;
+					document.querySelector('#checkboxClearCache7').checked = value.settings.checkboxClearCache7;
+					document.querySelector('#checkboxClearCache8').checked = value.settings.checkboxClearCache8;
+					document.querySelector('#checkboxClearCache9').checked = value.settings.checkboxClearCache9;
+					document.querySelector('#checkboxClearCache10').checked = value.settings.checkboxClearCache10;
+					document.querySelector('#checkboxClearCache11').checked = value.settings.checkboxClearCache11;
+					document.querySelector('#checkboxClearCache12').checked = value.settings.checkboxClearCache12;
+					document.querySelector('#checkboxClearCache13').checked = value.settings.checkboxClearCache13;
 				}
 			});
 		});
@@ -31,149 +45,148 @@ export default function ToggleSettings() {
 
 	function PageHighlightSettings(checkbox) {
 		switch (checkbox) {
-			case 'checkboxPageHighlightOne':
+			case 'checkboxPageHighlight1':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightOne').checked === true) {
-							value.settings.checkboxPageHighlightOne = true;
-							value.settings.checkboxPageHighlightTwo = false;
-							value.settings.checkboxPageHighlightThree = false;
-							value.settings.checkboxPageHighlightFour = false;
-							value.settings.checkboxPageHighlightFive = false;
-							document.querySelector('#checkboxPageHighlightOne').checked = true;
-							document.querySelector('#checkboxPageHighlightTwo').checked = false;
-							document.querySelector('#checkboxPageHighlightThree').checked = false;
-							document.querySelector('#checkboxPageHighlightFour').checked = false;
-							document.querySelector('#checkboxPageHighlightFive').checked = false;
+						if (document.querySelector('#checkboxPageHighlight1').checked === true) {
+							value.settings.checkboxPageHighlight1 = true;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = true;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightOne = false;
+							value.settings.checkboxPageHighlight1 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightTwo':
+			case 'checkboxPageHighlight2':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightTwo').checked === true) {
-							value.settings.checkboxPageHighlightOne = false;
-							value.settings.checkboxPageHighlightTwo = true;
-							value.settings.checkboxPageHighlightThree = false;
-							value.settings.checkboxPageHighlightFour = false;
-							value.settings.checkboxPageHighlightFive = false;
-							document.querySelector('#checkboxPageHighlightOne').checked = false;
-							document.querySelector('#checkboxPageHighlightTwo').checked = true;
-							document.querySelector('#checkboxPageHighlightThree').checked = false;
-							document.querySelector('#checkboxPageHighlightFour').checked = false;
-							document.querySelector('#checkboxPageHighlightFive').checked = false;
+						if (document.querySelector('#checkboxPageHighlight2').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = true;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = true;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightTwo = false;
+							value.settings.checkboxPageHighlight2 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightThree':
+			case 'checkboxPageHighlight3':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightThree').checked === true) {
-							value.settings.checkboxPageHighlightOne = false;
-							value.settings.checkboxPageHighlightTwo = false;
-							value.settings.checkboxPageHighlightThree = true;
-							value.settings.checkboxPageHighlightFour = false;
-							value.settings.checkboxPageHighlightFive = false;
-							document.querySelector('#checkboxPageHighlightOne').checked = false;
-							document.querySelector('#checkboxPageHighlightTwo').checked = false;
-							document.querySelector('#checkboxPageHighlightThree').checked = true;
-							document.querySelector('#checkboxPageHighlightFour').checked = false;
-							document.querySelector('#checkboxPageHighlightFive').checked = false;
+						if (document.querySelector('#checkboxPageHighlight3').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = true;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = true;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightThree = false;
+							value.settings.checkboxPageHighlight3 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightFour':
+			case 'checkboxPageHighlight4':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightFour').checked === true) {
-							value.settings.checkboxPageHighlightOne = false;
-							value.settings.checkboxPageHighlightTwo = false;
-							value.settings.checkboxPageHighlightThree = false;
-							value.settings.checkboxPageHighlightFour = true;
-							value.settings.checkboxPageHighlightFive = false;
-							document.querySelector('#checkboxPageHighlightOne').checked = false;
-							document.querySelector('#checkboxPageHighlightTwo').checked = false;
-							document.querySelector('#checkboxPageHighlightThree').checked = false;
-							document.querySelector('#checkboxPageHighlightFour').checked = true;
-							document.querySelector('#checkboxPageHighlightFive').checked = false;
+						if (document.querySelector('#checkboxPageHighlight4').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = true;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = true;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightFour = false;
+							value.settings.checkboxPageHighlight4 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightFive':
+			case 'checkboxPageHighlight5':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightFive').checked === true) {
-							value.settings.checkboxPageHighlightOne = false;
-							value.settings.checkboxPageHighlightTwo = false;
-							value.settings.checkboxPageHighlightThree = false;
-							value.settings.checkboxPageHighlightFour = false;
-							value.settings.checkboxPageHighlightFive = true;
-							document.querySelector('#checkboxPageHighlightOne').checked = false;
-							document.querySelector('#checkboxPageHighlightTwo').checked = false;
-							document.querySelector('#checkboxPageHighlightThree').checked = false;
-							document.querySelector('#checkboxPageHighlightFour').checked = false;
-							document.querySelector('#checkboxPageHighlightFive').checked = true;
+						if (document.querySelector('#checkboxPageHighlight5').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = true;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightFive = false;
+							value.settings.checkboxPageHighlight5 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightSix':
+			case 'checkboxPageHighlight6':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightSix').checked === true) {
-							value.settings.checkboxPageHighlightSix = true;
-							document.querySelector('#checkboxPageHighlightSix').checked = true;
+						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
+							value.settings.checkboxPageHighlight6 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxPageHighlightSix = false;
+							value.settings.checkboxPageHighlight6 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxPageHighlightSeven':
+			case 'checkboxPageHighlight7':
 				allFeatures.map((value, index) => {
 					if (value.id === 'pageHighlight') {
-						if (document.querySelector('#checkboxPageHighlightSeven').checked === true) {
+						if (document.querySelector('#checkboxPageHighlight7').checked === true) {
 							setTimeout(() => {
-								value.settings.checkboxPageHighlightOne = true;
-								value.settings.checkboxPageHighlightTwo = false;
-								value.settings.checkboxPageHighlightThree = false;
-								value.settings.checkboxPageHighlightFour = false;
-								value.settings.checkboxPageHighlightFive = false;
-								value.settings.checkboxPageHighlightSix = false;
-								value.settings.checkboxPageHighlightSeven = false;
-								document.querySelector('#checkboxPageHighlightOne').checked = true;
-								document.querySelector('#checkboxPageHighlightTwo').checked = false;
-								document.querySelector('#checkboxPageHighlightThree').checked = false;
-								document.querySelector('#checkboxPageHighlightFour').checked = false;
-								document.querySelector('#checkboxPageHighlightFive').checked = false;
-								document.querySelector('#checkboxPageHighlightSix').checked = false;
-								document.querySelector('#checkboxPageHighlightSeven').checked = false;
+								value.settings.checkboxPageHighlight1 = true;
+								value.settings.checkboxPageHighlight2 = false;
+								value.settings.checkboxPageHighlight3 = false;
+								value.settings.checkboxPageHighlight4 = false;
+								value.settings.checkboxPageHighlight5 = false;
+								value.settings.checkboxPageHighlight6 = false;
+								value.settings.checkboxPageHighlight7 = false;
+								document.querySelector('#checkboxPageHighlight1').checked = true;
+								document.querySelector('#checkboxPageHighlight2').checked = false;
+								document.querySelector('#checkboxPageHighlight3').checked = false;
+								document.querySelector('#checkboxPageHighlight4').checked = false;
+								document.querySelector('#checkboxPageHighlight5').checked = false;
+								document.querySelector('#checkboxPageHighlight6').checked = false;
+								document.querySelector('#checkboxPageHighlight7').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -185,31 +198,226 @@ export default function ToggleSettings() {
 
 	function ColorPickerSettings(checkbox) {
 		switch (checkbox) {
-			case 'checkboxColorPickerOne':
+			case 'checkboxColorPicker1':
 				allFeatures.map((value, index) => {
 					if (value.id === 'colorPicker') {
-						if (document.querySelector('#checkboxColorPickerOne').checked === true) {
-							value.settings.checkboxColorPickerOne = true;
-							value.settings.checkboxColorPickerTwo = false;
-							document.querySelector('#checkboxColorPickerOne').checked = true;
-							document.querySelector('#checkboxColorPickerTwo').checked = false;
+						if (document.querySelector('#checkboxColorPicker1').checked === true) {
+							value.settings.checkboxColorPicker1 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxColorPickerOne = false;
+							value.settings.checkboxColorPicker1 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxColorPickerTwo':
+			case 'checkboxColorPicker2':
 				allFeatures.map((value, index) => {
 					if (value.id === 'colorPicker') {
-						if (document.querySelector('#checkboxColorPickerTwo').checked === true) {
+						if (document.querySelector('#checkboxColorPicker2').checked === true) {
 							setTimeout(() => {
-								value.settings.checkboxColorPickerOne = false;
-								value.settings.checkboxColorPickerTwo = false;
-								document.querySelector('#checkboxColorPickerOne').checked = false;
-								document.querySelector('#checkboxColorPickerTwo').checked = false;
+								value.settings.checkboxColorPicker1 = false;
+								value.settings.checkboxColorPicker2 = false;
+								document.querySelector('#checkboxColorPicker1').checked = false;
+								document.querySelector('#checkboxColorPicker2').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 300);
+						}
+					}
+				});
+				break;
+		}
+	}
+
+	function ClearCacheSettings(checkbox) {
+		switch (checkbox) {
+			case 'checkboxClearCache1':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache1').checked === true) {
+							value.settings.checkboxClearCache1 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache2':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache2').checked === true) {
+							value.settings.checkboxClearCache2 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache3':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache3').checked === true) {
+							value.settings.checkboxClearCache3 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache3 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache4':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache4').checked === true) {
+							value.settings.checkboxClearCache4 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache4 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache5':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache5').checked === true) {
+							value.settings.checkboxClearCache5 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache5 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache6':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache6').checked === true) {
+							value.settings.checkboxClearCache6 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache6 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache7':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache7').checked === true) {
+							value.settings.checkboxClearCache7 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache7 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache8':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache8').checked === true) {
+							value.settings.checkboxClearCache8 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache8 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache9':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache9').checked === true) {
+							value.settings.checkboxClearCache9 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache9 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache10':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache10').checked === true) {
+							value.settings.checkboxClearCache10 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache10 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache11':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache11').checked === true) {
+							value.settings.checkboxClearCache11 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache11 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache12':
+				allFeatures.map((value, index) => {
+					if (value.id === 'clearCache') {
+						if (document.querySelector('#checkboxClearCache12').checked === true) {
+							value.settings.checkboxClearCache12 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearCache12 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxClearCache13':
+				allFeatures.map((value, index) => {
+					if (value.id === 'colorPicker') {
+						if (document.querySelector('#checkboxClearCache13').checked === true) {
+							setTimeout(() => {
+								value.settings.checkboxClearCache1 = false;
+								value.settings.checkboxClearCache2 = false;
+								value.settings.checkboxClearCache3 = true;
+								value.settings.checkboxClearCache4 = false;
+								value.settings.checkboxClearCache5 = false;
+								value.settings.checkboxClearCache6 = false;
+								value.settings.checkboxClearCache7 = false;
+								value.settings.checkboxClearCache8 = false;
+								value.settings.checkboxClearCache9 = false;
+								value.settings.checkboxClearCache10 = false;
+								value.settings.checkboxClearCache11 = false;
+								value.settings.checkboxClearCache12 = false;
+								value.settings.checkboxClearCache13 = false;
+								document.querySelector('#checkboxClearCache1').checked = false;
+								document.querySelector('#checkboxClearCache2').checked = false;
+								document.querySelector('#checkboxClearCache3').checked = true;
+								document.querySelector('#checkboxClearCache4').checked = false;
+								document.querySelector('#checkboxClearCache5').checked = false;
+								document.querySelector('#checkboxClearCache6').checked = false;
+								document.querySelector('#checkboxClearCache7').checked = false;
+								document.querySelector('#checkboxClearCache8').checked = false;
+								document.querySelector('#checkboxClearCache9').checked = false;
+								document.querySelector('#checkboxClearCache10').checked = false;
+								document.querySelector('#checkboxClearCache11').checked = false;
+								document.querySelector('#checkboxClearCache12').checked = false;
+								document.querySelector('#checkboxClearCache13').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -228,83 +436,29 @@ export default function ToggleSettings() {
 							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
-							<div>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightOne')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightOne'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightOne'>
-									Highlight Semantic/Div Elements
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightTwo')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightTwo'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightTwo'>
-									Highlight Block Level Elements
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightThree')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightThree'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightThree'>
-									Highlight Inline Level Elements
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightFour')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightFour'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightFour'>
-									Highlight Headings/Paragraphs
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightFive')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightFive'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightFive'>
-									Highlight All Page Elements
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightSix')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightSix'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightSix'>
-									Don&apos;t Add Border to Elements
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => PageHighlightSettings('checkboxPageHighlightSeven')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxPageHighlightSeven'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxPageHighlightSeven'>
-									Reset Settings to Default
-								</label>
-							</div>
+							{[
+								'Highlight Semantic/Div Elements',
+								'Highlight Block Level Elements',
+								'Highlight Inline Level Elements',
+								'Highlight Headings/Paragraphs',
+								'Highlight All Page Elements',
+								"Don't Add Border to Elements",
+								'Reset Settings to Default',
+							].map((value, index) => {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={() => PageHighlightSettings('checkboxPageHighlight' + (index + 1))}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={'checkboxPageHighlight' + (index + 1)}
+										/>
+										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxPageHighlight' + (index + 1)}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
 						</div>
 					</div>
 
@@ -312,29 +466,59 @@ export default function ToggleSettings() {
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
 							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Color Picker Settings
 						</div>
+						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
+							{['Copy Color Code in RGB', 'Reset Settings to Default'].map((value, index) => {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={() => ColorPickerSettings('checkboxColorPicker' + (index + 1))}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={'checkboxColorPicker' + (index + 1)}
+										/>
+										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxColorPicker' + (index + 1)}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Clear Cache Settings
+						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
-							<div>
-								<input
-									onClick={() => ColorPickerSettings('checkboxColorPickerOne')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxColorPickerOne'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxColorPickerOne'>
-									Copy Color Code in RGB
-								</label>
-							</div>
-							<div className='mt-2'>
-								<input
-									onClick={() => ColorPickerSettings('checkboxColorPickerTwo')}
-									className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-									type='checkbox'
-									id='checkboxColorPickerTwo'
-								/>
-								<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor='checkboxColorPickerTwo'>
-									Reset Settings to Default
-								</label>
-							</div>
+							{[
+								'Reload After Clearing',
+								'Clear App Cache',
+								'Clear Cache',
+								'Clear Cache Storage',
+								'Clear Cookies',
+								'Clear File Systems',
+								'Clear Form Data',
+								'Clear Indexed DB',
+								'Clear Local Storage',
+								'Clear Plugin Data',
+								'Clear Service Workers',
+								'Clear Web SQL',
+								'Reset Settings to Default',
+							].map((value, index) => {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={() => ClearCacheSettings('checkboxClearCache' + (index + 1))}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={'checkboxClearCache' + (index + 1)}
+										/>
+										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxClearCache' + (index + 1)}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
 						</div>
 					</div>
 				</div>
