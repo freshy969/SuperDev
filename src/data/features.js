@@ -129,7 +129,6 @@ const features = [
 			checkboxClearCache10: false,
 			checkboxClearCache11: false,
 			checkboxClearCache12: false,
-			checkboxClearCache13: false,
 		},
 	},
 	// {

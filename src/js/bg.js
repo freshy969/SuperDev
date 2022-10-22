@@ -57,10 +57,10 @@ chrome.contextMenus.onClicked.addListener((tab) => {
 		!tab.pageUrl.includes('file://') &&
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
 			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 			portTwo.postMessage({action: 'showHideExtension'});
-			portTwo.onMessage.addListener(function (response) {
+			portTwo.onMessage.addListener((response) => {
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -75,10 +75,10 @@ chrome.action.onClicked.addListener((tab) => {
 		!tab.url.includes('file://') &&
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
-			portOne.onMessage.addListener(function (response) {
+			portOne.onMessage.addListener((response) => {
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -86,11 +86,11 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 // Page Ruler + Color Picker + Clear Cache
-chrome.runtime.onConnect.addListener(function (portThree) {
+chrome.runtime.onConnect.addListener((portThree) => {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
 
-	portThree.onMessage.addListener(function (request) {
+	portThree.onMessage.addListener((request) => {
 		switch (request.action) {
 			// Page Ruler + Color Picker
 			case 'takeScreenshot':
@@ -124,19 +124,19 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				getColorAt(request.data);
 				break;
 
-			// // Clear Cache
-			// case 'reloadPage':
-			// 	reloadPage();
+			// Clear Cache
+			case 'clearCache':
+				clearCache();
 		}
 	});
 
-	function takeScreenshot() {
-		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
+	const takeScreenshot = () => {
+		chrome.tabs.captureVisibleTab({format: 'png'}, (dataUrl) => {
 			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
-	}
+	};
 
-	function grayscale(imageData) {
+	const grayscale = (imageData) => {
 		let gray = new Int16Array(imageData.length / 4);
 
 		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
@@ -148,9 +148,9 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		}
 
 		return gray;
-	}
+	};
 
-	function measureDistances(input) {
+	const measureDistances = (input) => {
 		let dimensions = {
 			top: 0,
 			right: 0,
@@ -238,18 +238,16 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 			action: 'showDimensions',
 			data: dimensions,
 		});
-	}
+	};
 
-	function getLightnessAt(data, x, y) {
-		return inBoundaries(x, y) ? data[y * width + x] : -1;
-	}
+	const getLightnessAt = (data, x, y) => (inBoundaries(x, y) ? data[y * width + x] : -1);
 
-	function inBoundaries(x, y) {
+	const inBoundaries = (x, y) => {
 		if (x >= 0 && x < width && y >= 0 && y < height) return true;
 		else return false;
-	}
+	};
 
-	function getColorAt(input) {
+	const getColorAt = (input) => {
 		if (!inBoundaries(input.x, input.y)) return -1;
 		let i = input.y * width * 4 + input.x * 4;
 		let r = imageData[i],
@@ -267,29 +265,59 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 			action: 'showColorPicker',
 			data: spotColor,
 		});
-	}
+	};
 
-	function rgbToHex(r, g, b) {
-		return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
-	}
+	const rgbToHex = (r, g, b) => '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
 
-	function componentToHex(c) {
+	const componentToHex = (c) => {
 		let hex = c.toString(16);
 		return hex.length == 1 ? '0' + hex : hex;
-	}
+	};
 
-	// function reloadPage() {
-	// 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-	// 		chrome.tabs.reload(tabs[0].id).then(function onReloaded() {
-	// 			setTimeout(() => {
-	// 				console.log(1);
-	// 				let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-	// 				portOne.postMessage({action: 'showHideExtension'});
-	// 				portOne.onMessage.addListener(function (response) {
-	// 					console.log('Got Response : ', response.action);
-	// 				});
-	// 			}, 0);
-	// 		});
-	// 	});
-	// }
+	const clearCache = () => {
+		chrome.storage.local.get(['allFeatures'], (result) => {
+			JSON.parse(result.allFeatures).map((value, index) => {
+				if (value.id === 'clearCache') {
+					chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+						chrome.browsingData.remove(
+							{
+								origins: [tabs[0].url],
+							},
+							{
+								cacheStorage: true,
+								cookies: true,
+								fileSystems: true,
+								indexedDB: true,
+								localStorage: true,
+								serviceWorkers: true,
+								webSQL: true,
+							},
+							() => {
+								chrome.browsingData.remove(
+									{},
+									{
+										appcache: true,
+										cache: true,
+										formData: true,
+									},
+									() => {
+										// chrome.tabs.reload(tabs[0].id).then(() => {
+										// 	setTimeout(() => {
+										// 		console.log(1);
+										// 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+										// 		portOne.postMessage({action: 'showHideExtension'});
+										// 		portOne.onMessage.addListener((response) => {
+										// 			console.log('Got Response : ', response.action);
+										// 		});
+										// 	}, 0);
+										// });
+									}
+								);
+							}
+						);
+					});
+				}
+			});
+		});
+	};
 });

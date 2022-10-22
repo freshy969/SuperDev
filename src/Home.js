@@ -21,9 +21,9 @@ export default function Home() {
 		chrome.storage.local.set({whichFeatureActive: null});
 
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], (result) => {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, () => {
 					setAllFeatures(features);
 					setIsLoading(false);
 				});

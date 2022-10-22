@@ -1,6 +1,6 @@
 export default function ActivateDeactivateFeature(allFeatures, featureId) {
 	if (allFeatures.length !== 0) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
 			allFeatures.map((value, index) => {
 				// If Null, Hide All Active Feature With Nothing Active (For Pause Functionality)
@@ -21,14 +21,14 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 	}
 }
 
-function HideMeShowMe(portFour, featureId) {
+const HideMeShowMe = (portFour, featureId) => {
 	// Function for Exceptions
 	if (featureId === 'clearCache') {
 		setTimeout(() => {
 			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}, 50);
 
-		portFour.onMessage.addListener(function (response) {
+		portFour.onMessage.addListener((response) => {
 			if (response.action.includes('Activated')) {
 				chrome.storage.local.set({whichFeatureActive: featureId});
 				console.log('Got Response : ', response.action);
@@ -48,7 +48,7 @@ function HideMeShowMe(portFour, featureId) {
 				portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 			}, 50);
 
-			portFour.onMessage.addListener(function (response) {
+			portFour.onMessage.addListener((response) => {
 				if (response.action.includes('Activated')) {
 					chrome.storage.local.set({whichFeatureActive: featureId});
 					console.log('Got Response : ', response.action);
@@ -62,26 +62,26 @@ function HideMeShowMe(portFour, featureId) {
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
-			portFour.onMessage.addListener(function (response) {
+			portFour.onMessage.addListener((response) => {
 				if (response.action.includes('Deactivated')) {
 					console.log('Got Response : ', response.action);
 				}
 			});
 		}
 	}
-}
+};
 
-function JustHideMe(portFour, featureId) {
+const JustHideMe = (portFour, featureId) => {
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 			portFour.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
-			portFour.onMessage.addListener(function (response) {
+			portFour.onMessage.addListener((response) => {
 				if (response.action.includes('Deactivated')) {
 					console.log('Got Response : ', response.action);
 				}
 			});
 		}
 	}
-}
+};

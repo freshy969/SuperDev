@@ -1,5 +1,5 @@
-chrome.runtime.onConnect.addListener(function (port) {
-	port.onMessage.addListener(function (request) {
+chrome.runtime.onConnect.addListener((port) => {
+	port.onMessage.addListener((request) => {
 		switch (request.action) {
 			case 'showHideExtension':
 				showHideExtension(port, request);
@@ -52,9 +52,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateColorPicker':
 				deactivateColorPicker(port, request);
 				break;
-			// case 'activateClearCache':
-			// 	activateClearCache(port, request);
-			// 	break;
+			case 'activateClearCache':
+				activateClearCache(port, request);
+				break;
 		}
 	});
 });
@@ -161,7 +161,7 @@ const activatePageGuideline = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -170,25 +170,25 @@ const activatePageGuideline = (port, request) => {
 				destroyPageGuideline(false);
 			}
 		}
-	}
+	};
 
-	function onMouseOver(event) {
+	const onMouseOver = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	}
+	};
 
-	function onMouseOut(event) {
+	const onMouseOut = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	}
+	};
 
-	function destroyPageGuideline(isManualEscape) {
+	const destroyPageGuideline = (isManualEscape) => {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -200,7 +200,7 @@ const activatePageGuideline = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -208,9 +208,9 @@ const activatePageGuideline = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	}
+	};
 
-	function renderPageGuideline(toShow) {
+	const renderPageGuideline = (toShow) => {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -233,7 +233,7 @@ const activatePageGuideline = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	}
+	};
 
 	port.postMessage({action: 'Page Guideline Activated'});
 	chrome.storage.local.set({setMinimised: true});
@@ -248,14 +248,14 @@ const activatePageHighlight = (port, request) => {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	function rgba() {
+	const rgba = () => {
 		let o = Math.round,
 			r = Math.random,
 			s = 255;
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
-	}
+	};
 
-	chrome.storage.local.get(['allFeatures'], function (result) {
+	chrome.storage.local.get(['allFeatures'], (result) => {
 		JSON.parse(result.allFeatures).map((value, index) => {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
@@ -452,7 +452,7 @@ const activatePageHighlight = (port, request) => {
 		});
 	});
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -461,23 +461,23 @@ const activatePageHighlight = (port, request) => {
 				destroyPageHighlight(false);
 			}
 		}
-	}
+	};
 
-	function destroyPageHighlight(isManualEscape) {
+	const destroyPageHighlight = (isManualEscape) => {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
 
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], (result) => {
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
@@ -668,7 +668,7 @@ const activatePageHighlight = (port, request) => {
 				}
 			});
 		});
-	}
+	};
 
 	port.postMessage({action: 'Page Highlight Activated'});
 	chrome.storage.local.set({setMinimised: true});
@@ -695,7 +695,7 @@ const activatePageRuler = (port, request) => {
 	let overlay = document.createElement('div');
 	overlay.className = 'pageRulerOverlay';
 
-	portThree.onMessage.addListener(function (request) {
+	portThree.onMessage.addListener((request) => {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -723,7 +723,7 @@ const activatePageRuler = (port, request) => {
 		});
 	}
 
-	function initiate() {
+	const initiate = () => {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
 		document.addEventListener('keyup', onEscape);
@@ -733,9 +733,9 @@ const activatePageRuler = (port, request) => {
 
 		disableCursor();
 		requestNewScreenshot();
-	}
+	};
 
-	function parseScreenshot(dataUrl) {
+	const parseScreenshot = (dataUrl) => {
 		image.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(() => {
@@ -743,9 +743,9 @@ const activatePageRuler = (port, request) => {
 				loadImage();
 			});
 		});
-	}
+	};
 
-	function loadImage() {
+	const loadImage = () => {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -760,9 +760,9 @@ const activatePageRuler = (port, request) => {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	}
+	};
 
-	function destroyPageRuler(isManualEscape) {
+	const destroyPageRuler = (isManualEscape) => {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -774,7 +774,7 @@ const activatePageRuler = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -783,26 +783,26 @@ const activatePageRuler = (port, request) => {
 
 		removeDimensions();
 		enableCursor();
-	}
+	};
 
-	function removeDimensions() {
+	const removeDimensions = () => {
 		let dimensions = body.querySelector('.pageRulerDiv');
 		if (dimensions) body.removeChild(dimensions);
-	}
+	};
 
-	function onPageScroll() {
+	const onPageScroll = () => {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	}
+	};
 
-	function onWindowResize() {
+	const onWindowResize = () => {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	}
+	};
 
-	function requestNewScreenshot() {
+	const requestNewScreenshot = () => {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
@@ -817,28 +817,28 @@ const activatePageRuler = (port, request) => {
 		}
 		// First Screenshot
 		else portThree.postMessage({action: 'takeScreenshot'});
-	}
+	};
 
-	function pause() {
+	const pause = () => {
 		paused = true;
 		removeDimensions();
 		enableCursor();
-	}
+	};
 
-	function resume() {
+	const resume = () => {
 		paused = false;
 		disableCursor();
-	}
+	};
 
-	function disableCursor() {
+	const disableCursor = () => {
 		body.appendChild(overlay);
-	}
+	};
 
-	function enableCursor() {
+	const enableCursor = () => {
 		body.removeChild(overlay);
-	}
+	};
 
-	function onMouseMove(event) {
+	const onMouseMove = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -852,9 +852,9 @@ const activatePageRuler = (port, request) => {
 		} else {
 			removeDimensions();
 		}
-	}
+	};
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -863,18 +863,18 @@ const activatePageRuler = (port, request) => {
 				destroyPageRuler(false);
 			}
 		}
-	}
+	};
 
-	function sendToWorker(event) {
+	const sendToWorker = (event) => {
 		if (paused) return;
 
 		portThree.postMessage({
 			action: 'measureDistances',
 			data: {x: inputX, y: inputY},
 		});
-	}
+	};
 
-	function showDimensions(dimensions) {
+	const showDimensions = (dimensions) => {
 		if (paused) return;
 
 		removeDimensions();
@@ -912,7 +912,7 @@ const activatePageRuler = (port, request) => {
 		newPageRulerDiv.appendChild(pageRulerTooltip);
 
 		body.appendChild(newPageRulerDiv);
-	}
+	};
 };
 
 const deactivatePageRuler = (port, request) => {
@@ -931,7 +931,7 @@ const activateMoveElement = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -940,25 +940,25 @@ const activateMoveElement = (port, request) => {
 				destroyMoveElement(false);
 			}
 		}
-	}
+	};
 
-	function onMouseOver(event) {
+	const onMouseOver = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	}
+	};
 
-	function onMouseOut(event) {
+	const onMouseOut = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	}
+	};
 
-	function onMouseClick(event) {
+	const onMouseClick = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.setProperty('cursor', 'move', 'important');
@@ -967,22 +967,22 @@ const activateMoveElement = (port, request) => {
 				iframeFix: true,
 				containment: 'document',
 				cancel: false,
-				create: function () {
+				create: () => {
 					renderPageGuideline(false);
 				},
-				start: function () {
+				start: () => {
 					document.removeEventListener('mouseover', onMouseOver);
 					document.removeEventListener('mouseout', onMouseOut);
 				},
-				stop: function () {
+				stop: () => {
 					document.addEventListener('mouseover', onMouseOver);
 					document.addEventListener('mouseout', onMouseOut);
 				},
 			});
 		}
-	}
+	};
 
-	function destroyMoveElement(isManualEscape) {
+	const destroyMoveElement = (isManualEscape) => {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -995,7 +995,7 @@ const activateMoveElement = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1011,9 +1011,9 @@ const activateMoveElement = (port, request) => {
 		}
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	}
+	};
 
-	function renderPageGuideline(toShow) {
+	const renderPageGuideline = (toShow) => {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1036,7 +1036,7 @@ const activateMoveElement = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	}
+	};
 
 	port.postMessage({action: 'Move Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
@@ -1058,7 +1058,7 @@ const activateDeleteElement = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1067,33 +1067,33 @@ const activateDeleteElement = (port, request) => {
 				destroyDeleteElement(false);
 			}
 		}
-	}
+	};
 
-	function onMouseOver(event) {
+	const onMouseOver = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	}
+	};
 
-	function onMouseOut(event) {
+	const onMouseOut = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	}
+	};
 
-	function onMouseClick(event) {
+	const onMouseClick = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
-	}
+	};
 
-	function destroyDeleteElement(isManualEscape) {
+	const destroyDeleteElement = (isManualEscape) => {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -1106,7 +1106,7 @@ const activateDeleteElement = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1114,9 +1114,9 @@ const activateDeleteElement = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	}
+	};
 
-	function renderPageGuideline(toShow) {
+	const renderPageGuideline = (toShow) => {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1139,7 +1139,7 @@ const activateDeleteElement = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	}
+	};
 
 	port.postMessage({action: 'Delete Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
@@ -1159,7 +1159,7 @@ const activateTextEditor = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1168,9 +1168,9 @@ const activateTextEditor = (port, request) => {
 				destroyTextEditor(false);
 			}
 		}
-	}
+	};
 
-	function onMouseOver(event) {
+	const onMouseOver = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
@@ -1181,9 +1181,9 @@ const activateTextEditor = (port, request) => {
 				event.target.focus({preventScroll: true});
 			}
 		}
-	}
+	};
 
-	function onMouseOut(event) {
+	const onMouseOut = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
@@ -1193,9 +1193,9 @@ const activateTextEditor = (port, request) => {
 				renderPageGuideline(false);
 			}
 		}
-	}
+	};
 
-	function destroyTextEditor(isManualEscape) {
+	const destroyTextEditor = (isManualEscape) => {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -1209,7 +1209,7 @@ const activateTextEditor = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1217,9 +1217,9 @@ const activateTextEditor = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	}
+	};
 
-	function renderPageGuideline(toShow) {
+	const renderPageGuideline = (toShow) => {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1242,7 +1242,7 @@ const activateTextEditor = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	}
+	};
 
 	port.postMessage({action: 'Text Editor Activated'});
 	chrome.storage.local.set({setMinimised: true});
@@ -1269,7 +1269,7 @@ const activateColorPicker = (port, request) => {
 	let overlay = document.createElement('div');
 	overlay.className = 'colorPickerOverlay';
 
-	portThree.onMessage.addListener(function (request) {
+	portThree.onMessage.addListener((request) => {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -1297,7 +1297,7 @@ const activateColorPicker = (port, request) => {
 		});
 	}
 
-	function initiate() {
+	const initiate = () => {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
 		document.addEventListener('keyup', onEscape);
@@ -1308,9 +1308,9 @@ const activateColorPicker = (port, request) => {
 
 		disableCursor();
 		requestNewScreenshot();
-	}
+	};
 
-	function parseScreenshot(dataUrl) {
+	const parseScreenshot = (dataUrl) => {
 		image.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(() => {
@@ -1318,9 +1318,9 @@ const activateColorPicker = (port, request) => {
 				loadImage();
 			});
 		});
-	}
+	};
 
-	function loadImage() {
+	const loadImage = () => {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -1335,9 +1335,9 @@ const activateColorPicker = (port, request) => {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	}
+	};
 
-	function destroyColorPicker(isManualEscape) {
+	const destroyColorPicker = (isManualEscape) => {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -1350,7 +1350,7 @@ const activateColorPicker = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
+		chrome.storage.local.get(['isPopupPaused'], (result) => {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1359,26 +1359,26 @@ const activateColorPicker = (port, request) => {
 
 		removeColorPicker();
 		enableCursor();
-	}
+	};
 
-	function removeColorPicker() {
+	const removeColorPicker = () => {
 		let colorPickerDiv = body.querySelector('.colorPickerDiv');
 		if (colorPickerDiv) body.removeChild(colorPickerDiv);
-	}
+	};
 
-	function onPageScroll() {
+	const onPageScroll = () => {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	}
+	};
 
-	function onWindowResize() {
+	const onWindowResize = () => {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	}
+	};
 
-	function requestNewScreenshot() {
+	const requestNewScreenshot = () => {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
@@ -1393,28 +1393,28 @@ const activateColorPicker = (port, request) => {
 		}
 		// First Screenshot
 		else portThree.postMessage({action: 'takeScreenshot'});
-	}
+	};
 
-	function pause() {
+	const pause = () => {
 		paused = true;
 		removeColorPicker();
 		enableCursor();
-	}
+	};
 
-	function resume() {
+	const resume = () => {
 		paused = false;
 		disableCursor();
-	}
+	};
 
-	function disableCursor() {
+	const disableCursor = () => {
 		body.appendChild(overlay);
-	}
+	};
 
-	function enableCursor() {
+	const enableCursor = () => {
 		body.removeChild(overlay);
-	}
+	};
 
-	function onMouseMove(event) {
+	const onMouseMove = (event) => {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -1428,16 +1428,16 @@ const activateColorPicker = (port, request) => {
 		} else {
 			removeColorPicker();
 		}
-	}
+	};
 
-	function onMouseClick(event) {
+	const onMouseClick = (event) => {
 		if (document.querySelector('.colorPickerTooltipColorCode')) {
 			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
 			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
 		}
-	}
+	};
 
-	function onEscape(event) {
+	const onEscape = (event) => {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1446,18 +1446,18 @@ const activateColorPicker = (port, request) => {
 				destroyColorPicker(false);
 			}
 		}
-	}
+	};
 
-	function sendToWorker(event) {
+	const sendToWorker = (event) => {
 		if (paused) return;
 
 		portThree.postMessage({
 			action: 'getColorAt',
 			data: {x: inputX, y: inputY},
 		});
-	}
+	};
 
-	function showColorPicker(spotColor) {
+	const showColorPicker = (spotColor) => {
 		if (paused) return;
 
 		removeColorPicker();
@@ -1477,7 +1477,7 @@ const activateColorPicker = (port, request) => {
 		let colorPickerTooltipColorCode = document.createElement('div');
 		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
 
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], (result) => {
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
@@ -1499,7 +1499,7 @@ const activateColorPicker = (port, request) => {
 		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
 		newColorPickerDiv.appendChild(colorPickerTooltip);
 		body.appendChild(newColorPickerDiv);
-	}
+	};
 };
 
 const deactivateColorPicker = (port, request) => {
@@ -1507,7 +1507,7 @@ const deactivateColorPicker = (port, request) => {
 	port.postMessage({action: 'Color Picker Deactivated'});
 };
 
-// const activateClearCache = (port, request) => {
-// 	let portThree = chrome.runtime.connect({name: 'portThree'});
-// 	portThree.postMessage({action: 'reloadPage'});
-// };
+const activateClearCache = (port, request) => {
+	let portThree = chrome.runtime.connect({name: 'portThree'});
+	portThree.postMessage({action: 'clearCache'});
+};

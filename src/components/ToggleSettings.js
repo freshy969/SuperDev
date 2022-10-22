@@ -5,7 +5,7 @@ export default function ToggleSettings() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], (result) => {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			JSON.parse(result.allFeatures).map((value, index) => {
 				if (value.id === 'pageHighlight') {
@@ -32,19 +32,18 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxClearCache10').checked = value.settings.checkboxClearCache10;
 					document.querySelector('#checkboxClearCache11').checked = value.settings.checkboxClearCache11;
 					document.querySelector('#checkboxClearCache12').checked = value.settings.checkboxClearCache12;
-					document.querySelector('#checkboxClearCache13').checked = value.settings.checkboxClearCache13;
 				}
 			});
 		});
 
-		chrome.storage.onChanged.addListener(function (changes) {
+		chrome.storage.onChanged.addListener((changes) => {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 	}, []);
 
-	function PageHighlightSettings(checkbox) {
+	const PageHighlightSettings = (checkbox) => {
 		switch (checkbox) {
 			case 'checkboxPageHighlight1':
 				allFeatures.map((value, index) => {
@@ -195,9 +194,9 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	}
+	};
 
-	function ColorPickerSettings(checkbox) {
+	const ColorPickerSettings = (checkbox) => {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
 				allFeatures.map((value, index) => {
@@ -228,9 +227,9 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	}
+	};
 
-	function ClearCacheSettings(checkbox) {
+	const ClearCacheSettings = (checkbox) => {
 		switch (checkbox) {
 			case 'checkboxClearCache1':
 				allFeatures.map((value, index) => {
@@ -377,21 +376,8 @@ export default function ToggleSettings() {
 				break;
 			case 'checkboxClearCache12':
 				allFeatures.map((value, index) => {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache12').checked === true) {
-							value.settings.checkboxClearCache12 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache12 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache13':
-				allFeatures.map((value, index) => {
 					if (value.id === 'colorPicker') {
-						if (document.querySelector('#checkboxClearCache13').checked === true) {
+						if (document.querySelector('#checkboxClearCache12').checked === true) {
 							setTimeout(() => {
 								value.settings.checkboxClearCache1 = false;
 								value.settings.checkboxClearCache2 = false;
@@ -405,7 +391,6 @@ export default function ToggleSettings() {
 								value.settings.checkboxClearCache10 = false;
 								value.settings.checkboxClearCache11 = false;
 								value.settings.checkboxClearCache12 = false;
-								value.settings.checkboxClearCache13 = false;
 								document.querySelector('#checkboxClearCache1').checked = false;
 								document.querySelector('#checkboxClearCache2').checked = false;
 								document.querySelector('#checkboxClearCache3').checked = true;
@@ -418,7 +403,6 @@ export default function ToggleSettings() {
 								document.querySelector('#checkboxClearCache10').checked = false;
 								document.querySelector('#checkboxClearCache11').checked = false;
 								document.querySelector('#checkboxClearCache12').checked = false;
-								document.querySelector('#checkboxClearCache13').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -426,7 +410,7 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	}
+	};
 
 	return (
 		<section id='toggleSettings' className='hidden'>
@@ -501,7 +485,6 @@ export default function ToggleSettings() {
 								'Clear Form Data',
 								'Clear Indexed DB',
 								'Clear Local Storage',
-								'Clear Plugin Data',
 								'Clear Service Workers',
 								'Clear Web SQL',
 								'Reset Settings to Default',

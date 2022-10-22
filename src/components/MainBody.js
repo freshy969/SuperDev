@@ -6,10 +6,10 @@ export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(() => {
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], (result) => {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
-		chrome.storage.onChanged.addListener(function (changes) {
+		chrome.storage.onChanged.addListener((changes) => {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
