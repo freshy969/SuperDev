@@ -1,5 +1,6 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
-import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
+import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function MainBody() {
 	const [allFeatures, setAllFeatures] = useState([]);
@@ -27,9 +28,9 @@ export default function MainBody() {
 								onClick={() => ActivateDeactivateFeature(allFeatures, value.id)}
 								className={
 									value.id +
-									' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-btnText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
+									' rounded-md text-left bg-gradient-to-r from-btnOne to-btnTwo hover:from-pink-500 hover:via-red-500 hover:to-yellow-500 shadow-lg text-xs text-allText p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
 								}>
-								<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText'}></i> {value.title}
+								<i className={'fa-regular ' + value.icon + ' px-[5px] text-allText'}></i> {value.title}
 							</button>
 						);
 					})}

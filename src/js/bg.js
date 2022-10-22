@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 			) {
 				chrome.scripting.executeScript({
 					target: {tabId: tab.id},
-					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
 				});
 				chrome.scripting.insertCSS({
 					target: {tabId: tab.id},
@@ -37,7 +37,7 @@ chrome.management.onEnabled.addListener(async (extension) => {
 				) {
 					chrome.scripting.executeScript({
 						target: {tabId: tab.id},
-						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/content.js'],
+						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
 					});
 					chrome.scripting.insertCSS({
 						target: {tabId: tab.id},

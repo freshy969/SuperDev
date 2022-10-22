@@ -1,3 +1,4 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
 
 export default function ToggleSettings() {
@@ -432,8 +433,8 @@ export default function ToggleSettings() {
 			<div className='border border-t-0 border-borderOne box-border rounded-b-lg'>
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Page Highlight Settings
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{[
@@ -453,7 +454,7 @@ export default function ToggleSettings() {
 											type='checkbox'
 											id={'checkboxPageHighlight' + (index + 1)}
 										/>
-										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxPageHighlight' + (index + 1)}>
+										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxPageHighlight' + (index + 1)}>
 											{value}
 										</label>
 									</div>
@@ -463,8 +464,8 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Color Picker Settings
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{['Copy Color Code in RGB', 'Reset Settings to Default'].map((value, index) => {
@@ -476,7 +477,7 @@ export default function ToggleSettings() {
 											type='checkbox'
 											id={'checkboxColorPicker' + (index + 1)}
 										/>
-										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxColorPicker' + (index + 1)}>
+										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxColorPicker' + (index + 1)}>
 											{value}
 										</label>
 									</div>
@@ -486,8 +487,8 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-btnText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-btnText'></i>Clear Cache Settings
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Clear Cache Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
 							{[
@@ -513,7 +514,7 @@ export default function ToggleSettings() {
 											type='checkbox'
 											id={'checkboxClearCache' + (index + 1)}
 										/>
-										<label className='inline-block text-xs text-btnText font-normal cursor-pointer select-none' htmlFor={'checkboxClearCache' + (index + 1)}>
+										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxClearCache' + (index + 1)}>
 											{value}
 										</label>
 									</div>

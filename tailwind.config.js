@@ -1,18 +1,17 @@
 module.exports = {
-	darkMode: 'class',
-	content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+	content: ['./src/**/*.js', './public/**/*.html'],
 	theme: {
 		extend: {
 			colors: {
-				navBar: '#000000FF',
-				navText: '#F3F3F3FF',
-
-				bodyBG: '#000000FF',
+				allBG: '#000000FF',
+				allText: '#F3F3F3FF',
 				settingsBG: '#18181BFF',
 
-				btnOne: '#007CF0ff',
+				btnOne: '#007CF0FF',
 				btnTwo: '#06B6D4FF',
-				btnText: '#F3F3F3FF',
+
+				// Other Used Colors
+				// pink-500, red-500, yellow-500,
 
 				borderOne: '#27272ACC',
 				borderTwo: '#27272AFF',

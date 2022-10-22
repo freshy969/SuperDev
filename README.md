@@ -33,5 +33,5 @@ List of Feature below -
 ## Commands
 
 ```
-yarn install && yarn run build && clear
+pnpm run build && pnpm run move && pnpm run copy && pnpm run remove && pnpm run renameCSS && pnpm run renameHTML && clear
 ```

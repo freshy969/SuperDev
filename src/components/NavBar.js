@@ -1,9 +1,10 @@
+import React from 'react';
 import {useState, useEffect} from 'react';
-import HideAllComponentExcept from '/components/functions/HideAllComponentExcept';
-import PopupHeight from '/components/functions/PopupHeight';
-import ChangeHeight from '/components/functions/ChangeHeight';
-import JustChangeHeight from '/components/functions/JustChangeHeight';
-import ActivateDeactivateFeature from '/components/functions/ActivateDeactivateFeature';
+import HideAllComponentExcept from './functions/HideAllComponentExcept';
+import PopupHeight from './functions/PopupHeight';
+import ChangeHeight from './functions/ChangeHeight';
+import JustChangeHeight from './functions/JustChangeHeight';
+import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
@@ -118,30 +119,30 @@ export default function NavBar() {
 
 	if (allFeatures.length !== 0) {
 		return (
-			<header id='navBar' className='bg-navBar'>
+			<header id='navBar'>
 				<div className='flex justify-between border border-borderOne box-border rounded-t-lg py-[8px] px-[18px]'>
-					<h1 className='text-[13px] text-navText font-regular cursor-default select-none relative top-[2px]'>
+					<h1 className='text-[13px] text-allText font-regular cursor-default select-none relative top-[2px]'>
 						SuperDev<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
 					<nav>
 						<button
 							id='pauseExtensionButton'
-							className='text-navText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
+							className='text-allText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
 							onClick={pauseExtension}></button>
 						<button
 							id='movePopupButton'
-							className='text-navText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
+							className='text-allText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
 						<button
 							id='toggleSettingsButton'
-							className='text-navText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
+							className='text-allText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
 							onClick={toggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
-							className='text-navText text-right fa-solid fa-down-left-and-up-right-to-center text-[11.5px] ml-[6px] p-1 relative bottom-[1.3px]'
+							className='text-allText text-right fa-solid fa-down-left-and-up-right-to-center text-[11.5px] ml-[6px] p-1 relative bottom-[1.3px]'
 							onClick={minimiseExtension}></button>
 						<button
 							id='showHideExtensionButton'
-							className='text-navText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0px]'
+							className='text-allText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0px]'
 							onClick={showHideExtension}></button>
 					</nav>
 				</div>

@@ -1,10 +1,11 @@
-import features from '../data/features';
+import React from 'react';
+import features from './data/features';
 import {useState, useEffect} from 'react';
-import NavBar from '../components/NavBar';
-import MainBody from '../components/MainBody';
-import ToggleSettings from '../components/ToggleSettings';
-import PopupHeight from '../components/functions/PopupHeight';
-import ChangeHeight from '../components/functions/ChangeHeight';
+import NavBar from './components/NavBar';
+import MainBody from './components/MainBody';
+import ToggleSettings from './components/ToggleSettings';
+import PopupHeight from './components/functions/PopupHeight';
+import ChangeHeight from './components/functions/ChangeHeight';
 
 export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);

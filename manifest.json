@@ -8,7 +8,7 @@
 	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "browsingData"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
-		"service_worker": "js/background.js"
+		"service_worker": "js/bg.js"
 	},
 	"commands": {
 		"_execute_action": {
@@ -31,7 +31,7 @@
 	"content_scripts": [
 		{
 			"css": ["css/tabs.css"],
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/content.js"],
+			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/cs.js"],
 			"matches": ["http://*/*", "https://*/*"]
 		}
 	],
