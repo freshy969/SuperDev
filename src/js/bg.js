@@ -306,16 +306,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 									},
 									function () {
 										if (value.settings.checkboxClearCache1 === true) {
-											chrome.tabs.reload(tabs[0].id).then(function () {
-												setTimeout(function () {
-													console.log(1);
-													let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-													portOne.postMessage({action: 'showHideExtension'});
-													portOne.onMessage.addListener(function (response) {
-														console.log('Got Response : ', response.action);
-													});
-												}, 5000);
-											});
+											chrome.tabs.reload(tabs[0].id);
 										}
 									}
 								);
