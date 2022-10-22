@@ -43,12 +43,14 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		}
 	});
 
+	// Page Ruler + Color Picker
 	function takeScreenshot() {
 		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
 			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
 	}
 
+	// Page Ruler
 	function grayscale(imageData) {
 		let gray = new Int16Array(imageData.length / 4);
 
@@ -63,6 +65,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		return gray;
 	}
 
+	// Page Ruler
 	function measureDistances(input) {
 		let dimensions = {
 			top: 0,
@@ -153,15 +156,18 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		});
 	}
 
+	// Page Ruler
 	function getLightnessAt(data, x, y) {
 		return inBoundaries(x, y) ? data[y * width + x] : -1;
 	}
 
+	// Color Picker
 	function inBoundaries(x, y) {
 		if (x >= 0 && x < width && y >= 0 && y < height) return true;
 		else return false;
 	}
 
+	// Color Picker
 	function getColorAt(input) {
 		if (!inBoundaries(input.x, input.y)) return -1;
 		let i = input.y * width * 4 + input.x * 4;
@@ -182,15 +188,18 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		});
 	}
 
+	// Color Picker
 	function rgbToHex(r, g, b) {
 		return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
 	}
 
+	// Color Picker
 	function componentToHex(c) {
 		let hex = c.toString(16);
 		return hex.length == 1 ? '0' + hex : hex;
 	}
 
+	// Clear Cache
 	function clearCache(settings) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.browsingData.remove(
@@ -226,7 +235,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	}
 });
 
-// Open Extension on Icon Click
+// Open Extension on Extension Icon Click
 chrome.action.onClicked.addListener(function (tab) {
 	if (
 		!tab.url.includes('chrome://') &&
@@ -262,7 +271,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 	}
 });
 
-// ContentJs Reinjection on Extension Install/Update
+// Content Scripts Reinjection on Extension Install/Update
 chrome.runtime.onInstalled.addListener(async function () {
 	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
@@ -288,7 +297,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
 });
 
-// ContentJs Reinjection on Extension Enable
+// Content Scripts Reinjection on Extension Enable
 chrome.management.onEnabled.addListener(async function (extension) {
 	if (extension.name === chrome.runtime.getManifest().name) {
 		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
