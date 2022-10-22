@@ -1512,6 +1512,12 @@ function deactivateColorPicker(port, request) {
 }
 
 function activateClearCache(port, request) {
-	let portThree = chrome.runtime.connect({name: 'portThree'});
-	portThree.postMessage({action: 'clearCache'});
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		JSON.parse(result.allFeatures).map(function (value, index) {
+			if (value.id === 'clearCache') {
+				let portThree = chrome.runtime.connect({name: 'portThree'});
+				portThree.postMessage({action: 'clearCache', settings: value.settings});
+			}
+		});
+	});
 }

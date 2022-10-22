@@ -1,90 +1,3 @@
-// ContentJs Reinjection on Extension Install/Update
-chrome.runtime.onInstalled.addListener(async function () {
-	// ContentJs Reinjection
-	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-			if (
-				!tab.url.includes('chrome://') &&
-				!tab.url.includes('chrome-extension://') &&
-				!tab.url.includes('file://') &&
-				!tab.url.includes('https://chrome.google.com/webstore')
-			) {
-				chrome.scripting.executeScript({
-					target: {tabId: tab.id},
-					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: tab.id},
-					files: ['css/tabs.css'],
-				});
-			}
-		}
-	}
-	// Creating Chrome Context Menu
-	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
-});
-
-// ContentJs Reinjection on Extension Enable
-chrome.management.onEnabled.addListener(async function (extension) {
-	if (extension.name === chrome.runtime.getManifest().name) {
-		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-				if (
-					!tab.url.includes('chrome://') &&
-					!tab.url.includes('chrome-extension://') &&
-					!tab.url.includes('file://') &&
-					!tab.url.includes('https://chrome.google.com/webstore')
-				) {
-					chrome.scripting.executeScript({
-						target: {tabId: tab.id},
-						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
-					});
-					chrome.scripting.insertCSS({
-						target: {tabId: tab.id},
-						files: ['css/tabs.css'],
-					});
-				}
-			}
-		}
-	}
-});
-
-// Open Extension on Context Menu Click
-chrome.contextMenus.onClicked.addListener(function (tab) {
-	if (
-		!tab.pageUrl.includes('chrome://') &&
-		!tab.pageUrl.includes('chrome-extension://') &&
-		!tab.pageUrl.includes('file://') &&
-		!tab.pageUrl.includes('https://chrome.google.com/webstore')
-	) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-			portTwo.postMessage({action: 'showHideExtension'});
-			portTwo.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
-		});
-	}
-});
-
-// Open Extension on Icon Click
-chrome.action.onClicked.addListener(function (tab) {
-	if (
-		!tab.url.includes('chrome://') &&
-		!tab.url.includes('chrome-extension://') &&
-		!tab.url.includes('file://') &&
-		!tab.url.includes('https://chrome.google.com/webstore')
-	) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension'});
-			portOne.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
-		});
-	}
-});
-
 // Page Ruler + Color Picker + Clear Cache
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let dimensionsThreshold = 6;
@@ -126,7 +39,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 
 			// Clear Cache
 			case 'clearCache':
-				clearCache();
+				clearCache(request.settings);
 		}
 	});
 
@@ -278,43 +191,124 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		return hex.length == 1 ? '0' + hex : hex;
 	}
 
-	function clearCache() {
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result.allFeatures).map(function (value, index) {
-				if (value.id === 'clearCache') {
-					chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-						chrome.browsingData.remove(
-							{
-								origins: [tabs[0].url],
-							},
-							{
-								cacheStorage: value.settings.checkboxClearCache4,
-								cookies: value.settings.checkboxClearCache5,
-								fileSystems: value.settings.checkboxClearCache6,
-								indexedDB: value.settings.checkboxClearCache8,
-								localStorage: value.settings.checkboxClearCache9,
-								serviceWorkers: value.settings.checkboxClearCache10,
-								webSQL: value.settings.checkboxClearCache11,
-							},
-							function () {
-								chrome.browsingData.remove(
-									{},
-									{
-										appcache: value.settings.checkboxClearCache2,
-										cache: value.settings.checkboxClearCache3,
-										formData: value.settings.checkboxClearCache7,
-									},
-									function () {
-										if (value.settings.checkboxClearCache1 === true) {
-											chrome.tabs.reload(tabs[0].id);
-										}
-									}
-								);
+	function clearCache(settings) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			chrome.browsingData.remove(
+				{
+					origins: [tabs[0].url],
+				},
+				{
+					cacheStorage: settings.checkboxClearCache4,
+					cookies: settings.checkboxClearCache5,
+					fileSystems: settings.checkboxClearCache6,
+					indexedDB: settings.checkboxClearCache8,
+					localStorage: settings.checkboxClearCache9,
+					serviceWorkers: settings.checkboxClearCache10,
+					webSQL: settings.checkboxClearCache11,
+				},
+				function () {
+					chrome.browsingData.remove(
+						{},
+						{
+							appcache: settings.checkboxClearCache2,
+							cache: settings.checkboxClearCache3,
+							formData: settings.checkboxClearCache7,
+						},
+						function () {
+							if (settings.checkboxClearCache1 === true) {
+								chrome.tabs.reload(tabs[0].id);
 							}
-						);
-					});
+						}
+					);
 				}
+			);
+		});
+	}
+});
+
+// Open Extension on Icon Click
+chrome.action.onClicked.addListener(function (tab) {
+	if (
+		!tab.url.includes('chrome://') &&
+		!tab.url.includes('chrome-extension://') &&
+		!tab.url.includes('file://') &&
+		!tab.url.includes('https://chrome.google.com/webstore')
+	) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension'});
+			portOne.onMessage.addListener(function (response) {
+				console.log('Got Response : ', response.action);
 			});
 		});
+	}
+});
+
+// Open Extension on Context Menu Click
+chrome.contextMenus.onClicked.addListener(function (tab) {
+	if (
+		!tab.pageUrl.includes('chrome://') &&
+		!tab.pageUrl.includes('chrome-extension://') &&
+		!tab.pageUrl.includes('file://') &&
+		!tab.pageUrl.includes('https://chrome.google.com/webstore')
+	) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
+			portTwo.postMessage({action: 'showHideExtension'});
+			portTwo.onMessage.addListener(function (response) {
+				console.log('Got Response : ', response.action);
+			});
+		});
+	}
+});
+
+// ContentJs Reinjection on Extension Install/Update
+chrome.runtime.onInstalled.addListener(async function () {
+	// ContentJs Reinjection
+	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+			if (
+				!tab.url.includes('chrome://') &&
+				!tab.url.includes('chrome-extension://') &&
+				!tab.url.includes('file://') &&
+				!tab.url.includes('https://chrome.google.com/webstore')
+			) {
+				chrome.scripting.executeScript({
+					target: {tabId: tab.id},
+					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
+				});
+				chrome.scripting.insertCSS({
+					target: {tabId: tab.id},
+					files: ['css/tabs.css'],
+				});
+			}
+		}
+	}
+	// Creating Chrome Context Menu
+	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
+});
+
+// ContentJs Reinjection on Extension Enable
+chrome.management.onEnabled.addListener(async function (extension) {
+	if (extension.name === chrome.runtime.getManifest().name) {
+		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+				if (
+					!tab.url.includes('chrome://') &&
+					!tab.url.includes('chrome-extension://') &&
+					!tab.url.includes('file://') &&
+					!tab.url.includes('https://chrome.google.com/webstore')
+				) {
+					chrome.scripting.executeScript({
+						target: {tabId: tab.id},
+						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
+					});
+					chrome.scripting.insertCSS({
+						target: {tabId: tab.id},
+						files: ['css/tabs.css'],
+					});
+				}
+			}
+		}
 	}
 });
