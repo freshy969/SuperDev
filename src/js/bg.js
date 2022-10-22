@@ -1,5 +1,5 @@
 // ContentJs Reinjection on Extension Install/Update
-chrome.runtime.onInstalled.addListener(async () => {
+chrome.runtime.onInstalled.addListener(async function () {
 	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
@@ -25,7 +25,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // ContentJs Reinjection on Extension Enable
-chrome.management.onEnabled.addListener(async (extension) => {
+chrome.management.onEnabled.addListener(async function (extension) {
 	if (extension.name === chrome.runtime.getManifest().name) {
 		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
@@ -50,17 +50,17 @@ chrome.management.onEnabled.addListener(async (extension) => {
 });
 
 // Open Extension on Context Menu Click
-chrome.contextMenus.onClicked.addListener((tab) => {
+chrome.contextMenus.onClicked.addListener(function (tab) {
 	if (
 		!tab.pageUrl.includes('chrome://') &&
 		!tab.pageUrl.includes('chrome-extension://') &&
 		!tab.pageUrl.includes('file://') &&
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
-		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
 			portTwo.postMessage({action: 'showHideExtension'});
-			portTwo.onMessage.addListener((response) => {
+			portTwo.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -68,17 +68,17 @@ chrome.contextMenus.onClicked.addListener((tab) => {
 });
 
 // Open Extension on Icon Click
-chrome.action.onClicked.addListener((tab) => {
+chrome.action.onClicked.addListener(function (tab) {
 	if (
 		!tab.url.includes('chrome://') &&
 		!tab.url.includes('chrome-extension://') &&
 		!tab.url.includes('file://') &&
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
-		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
-			portOne.onMessage.addListener((response) => {
+			portOne.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
 			});
 		});
@@ -86,11 +86,11 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 // Page Ruler + Color Picker + Clear Cache
-chrome.runtime.onConnect.addListener((portThree) => {
+chrome.runtime.onConnect.addListener(function (portThree) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
 
-	portThree.onMessage.addListener((request) => {
+	portThree.onMessage.addListener(function (request) {
 		switch (request.action) {
 			// Page Ruler + Color Picker
 			case 'takeScreenshot':
@@ -130,13 +130,13 @@ chrome.runtime.onConnect.addListener((portThree) => {
 		}
 	});
 
-	const takeScreenshot = () => {
-		chrome.tabs.captureVisibleTab({format: 'png'}, (dataUrl) => {
+	function takeScreenshot() {
+		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
 			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
-	};
+	}
 
-	const grayscale = (imageData) => {
+	function grayscale(imageData) {
 		let gray = new Int16Array(imageData.length / 4);
 
 		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
@@ -148,9 +148,9 @@ chrome.runtime.onConnect.addListener((portThree) => {
 		}
 
 		return gray;
-	};
+	}
 
-	const measureDistances = (input) => {
+	function measureDistances(input) {
 		let dimensions = {
 			top: 0,
 			right: 0,
@@ -238,16 +238,18 @@ chrome.runtime.onConnect.addListener((portThree) => {
 			action: 'showDimensions',
 			data: dimensions,
 		});
-	};
+	}
 
-	const getLightnessAt = (data, x, y) => (inBoundaries(x, y) ? data[y * width + x] : -1);
+	function getLightnessAt(data, x, y) {
+		return inBoundaries(x, y) ? data[y * width + x] : -1;
+	}
 
-	const inBoundaries = (x, y) => {
+	function inBoundaries(x, y) {
 		if (x >= 0 && x < width && y >= 0 && y < height) return true;
 		else return false;
-	};
+	}
 
-	const getColorAt = (input) => {
+	function getColorAt(input) {
 		if (!inBoundaries(input.x, input.y)) return -1;
 		let i = input.y * width * 4 + input.x * 4;
 		let r = imageData[i],
@@ -265,20 +267,22 @@ chrome.runtime.onConnect.addListener((portThree) => {
 			action: 'showColorPicker',
 			data: spotColor,
 		});
-	};
+	}
 
-	const rgbToHex = (r, g, b) => '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	function rgbToHex(r, g, b) {
+		return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	}
 
-	const componentToHex = (c) => {
+	function componentToHex(c) {
 		let hex = c.toString(16);
 		return hex.length == 1 ? '0' + hex : hex;
-	};
+	}
 
-	const clearCache = () => {
-		chrome.storage.local.get(['allFeatures'], (result) => {
-			JSON.parse(result.allFeatures).map((value, index) => {
+	function clearCache() {
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'clearCache') {
-					chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+					chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 						chrome.browsingData.remove(
 							{
 								origins: [tabs[0].url],
@@ -292,7 +296,7 @@ chrome.runtime.onConnect.addListener((portThree) => {
 								serviceWorkers: true,
 								webSQL: true,
 							},
-							() => {
+							function () {
 								chrome.browsingData.remove(
 									{},
 									{
@@ -300,13 +304,13 @@ chrome.runtime.onConnect.addListener((portThree) => {
 										cache: true,
 										formData: true,
 									},
-									() => {
-										// chrome.tabs.reload(tabs[0].id).then(() => {
-										// 	setTimeout(() => {
+									function () {
+										// chrome.tabs.reload(tabs[0].id).then(function () {
+										// 	setTimeout(function () {
 										// 		console.log(1);
 										// 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 										// 		portOne.postMessage({action: 'showHideExtension'});
-										// 		portOne.onMessage.addListener((response) => {
+										// 		portOne.onMessage.addListener(function (response) {
 										// 			console.log('Got Response : ', response.action);
 										// 		});
 										// 	}, 0);
@@ -319,5 +323,5 @@ chrome.runtime.onConnect.addListener((portThree) => {
 				}
 			});
 		});
-	};
+	}
 });

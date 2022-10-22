@@ -1,5 +1,5 @@
-chrome.runtime.onConnect.addListener((port) => {
-	port.onMessage.addListener((request) => {
+chrome.runtime.onConnect.addListener(function (port) {
+	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			case 'showHideExtension':
 				showHideExtension(port, request);
@@ -59,7 +59,7 @@ chrome.runtime.onConnect.addListener((port) => {
 	});
 });
 
-const showHideExtension = (port, request) => {
+function showHideExtension(port, request) {
 	// If Popup Doesn't Exists
 	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
@@ -115,6 +115,7 @@ const showHideExtension = (port, request) => {
 		});
 		port.postMessage({action: 'Popup Created'});
 	}
+
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 		chrome.storage.local.set({isPopupHidden: true});
@@ -122,6 +123,7 @@ const showHideExtension = (port, request) => {
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
+
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
@@ -138,20 +140,20 @@ const showHideExtension = (port, request) => {
 
 		port.postMessage({action: 'Popup Visible'});
 	}
-};
+}
 
-const changeHeight = (port, request) => {
+function changeHeight(port, request) {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
-};
+}
 
-const justChangeHeight = (port, request) => {
+function justChangeHeight(port, request) {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	port.postMessage({action: 'Just Height Changed'});
-};
+}
 
-const activatePageGuideline = (port, request) => {
+function activatePageGuideline(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -161,7 +163,7 @@ const activatePageGuideline = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -170,25 +172,25 @@ const activatePageGuideline = (port, request) => {
 				destroyPageGuideline(false);
 			}
 		}
-	};
+	}
 
-	const onMouseOver = (event) => {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	};
+	}
 
-	const onMouseOut = (event) => {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	};
+	}
 
-	const destroyPageGuideline = (isManualEscape) => {
+	function destroyPageGuideline(isManualEscape) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -200,7 +202,7 @@ const activatePageGuideline = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -208,9 +210,9 @@ const activatePageGuideline = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	};
+	}
 
-	const renderPageGuideline = (toShow) => {
+	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -233,33 +235,33 @@ const activatePageGuideline = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	};
+	}
 
 	port.postMessage({action: 'Page Guideline Activated'});
 	chrome.storage.local.set({setMinimised: true});
-};
+}
 
-const deactivatePageGuideline = (port, request) => {
+function deactivatePageGuideline(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Guideline Deactivated'});
-};
+}
 
-const activatePageHighlight = (port, request) => {
+function activatePageHighlight(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	const rgba = () => {
+	function rgba() {
 		let o = Math.round,
 			r = Math.random,
 			s = 255;
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
-	};
+	}
 
-	chrome.storage.local.get(['allFeatures'], (result) => {
-		JSON.parse(result.allFeatures).map((value, index) => {
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
-					document.querySelectorAll('*').forEach((element) => {
+					document.querySelectorAll('*').forEach(function (element) {
 						if (
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
@@ -293,7 +295,7 @@ const activatePageHighlight = (port, request) => {
 						}
 					});
 				} else if (value.settings.checkboxPageHighlight2 === true) {
-					document.querySelectorAll('*').forEach((element) => {
+					document.querySelectorAll('*').forEach(function (element) {
 						if (
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
@@ -348,7 +350,7 @@ const activatePageHighlight = (port, request) => {
 						}
 					});
 				} else if (value.settings.checkboxPageHighlight3 === true) {
-					document.querySelectorAll('*').forEach((element) => {
+					document.querySelectorAll('*').forEach(function (element) {
 						if (
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
@@ -402,7 +404,7 @@ const activatePageHighlight = (port, request) => {
 						}
 					});
 				} else if (value.settings.checkboxPageHighlight4 === true) {
-					document.querySelectorAll('*').forEach((element) => {
+					document.querySelectorAll('*').forEach(function (element) {
 						if (
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
@@ -430,7 +432,7 @@ const activatePageHighlight = (port, request) => {
 						}
 					});
 				} else if (value.settings.checkboxPageHighlight5 === true) {
-					document.querySelectorAll('*').forEach((element) => {
+					document.querySelectorAll('*').forEach(function (element) {
 						if (
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
@@ -452,7 +454,7 @@ const activatePageHighlight = (port, request) => {
 		});
 	});
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -461,27 +463,27 @@ const activatePageHighlight = (port, request) => {
 				destroyPageHighlight(false);
 			}
 		}
-	};
+	}
 
-	const destroyPageHighlight = (isManualEscape) => {
+	function destroyPageHighlight(isManualEscape) {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
 			}
 		});
 
-		chrome.storage.local.get(['allFeatures'], (result) => {
-			JSON.parse(result.allFeatures).map((value, index) => {
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
-						document.querySelectorAll('*').forEach((element) => {
+						document.querySelectorAll('*').forEach(function (element) {
 							if (
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
@@ -514,7 +516,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						});
 					} else if (value.settings.checkboxPageHighlight2 === true) {
-						document.querySelectorAll('*').forEach((element) => {
+						document.querySelectorAll('*').forEach(function (element) {
 							if (
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
@@ -568,7 +570,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						});
 					} else if (value.settings.checkboxPageHighlight3 === true) {
-						document.querySelectorAll('*').forEach((element) => {
+						document.querySelectorAll('*').forEach(function (element) {
 							if (
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
@@ -621,7 +623,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						});
 					} else if (value.settings.checkboxPageHighlight4 === true) {
-						document.querySelectorAll('*').forEach((element) => {
+						document.querySelectorAll('*').forEach(function (element) {
 							if (
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
@@ -648,7 +650,7 @@ const activatePageHighlight = (port, request) => {
 							}
 						});
 					} else if (value.settings.checkboxPageHighlight5 === true) {
-						document.querySelectorAll('*').forEach((element) => {
+						document.querySelectorAll('*').forEach(function (element) {
 							if (
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
@@ -668,18 +670,18 @@ const activatePageHighlight = (port, request) => {
 				}
 			});
 		});
-	};
+	}
 
 	port.postMessage({action: 'Page Highlight Activated'});
 	chrome.storage.local.set({setMinimised: true});
-};
+}
 
-const deactivatePageHighlight = (port, request) => {
+function deactivatePageHighlight(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Highlight Deactivated'});
-};
+}
 
-const activatePageRuler = (port, request) => {
+function activatePageRuler(port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -695,7 +697,7 @@ const activatePageRuler = (port, request) => {
 	let overlay = document.createElement('div');
 	overlay.className = 'pageRulerOverlay';
 
-	portThree.onMessage.addListener((request) => {
+	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -715,15 +717,15 @@ const activatePageRuler = (port, request) => {
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
 				initiate();
 				port.postMessage({action: 'Page Ruler Activated'});
 			});
 		});
 	}
 
-	const initiate = () => {
+	function initiate() {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
 		document.addEventListener('keyup', onEscape);
@@ -733,19 +735,19 @@ const activatePageRuler = (port, request) => {
 
 		disableCursor();
 		requestNewScreenshot();
-	};
+	}
 
-	const parseScreenshot = (dataUrl) => {
+	function parseScreenshot(dataUrl) {
 		image.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
 				loadImage();
 			});
 		});
-	};
+	}
 
-	const loadImage = () => {
+	function loadImage() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -760,9 +762,9 @@ const activatePageRuler = (port, request) => {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	};
+	}
 
-	const destroyPageRuler = (isManualEscape) => {
+	function destroyPageRuler(isManualEscape) {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -774,7 +776,7 @@ const activatePageRuler = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -783,62 +785,63 @@ const activatePageRuler = (port, request) => {
 
 		removeDimensions();
 		enableCursor();
-	};
+	}
 
-	const removeDimensions = () => {
+	function removeDimensions() {
 		let dimensions = body.querySelector('.pageRulerDiv');
 		if (dimensions) body.removeChild(dimensions);
-	};
+	}
 
-	const onPageScroll = () => {
+	function onPageScroll() {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	};
+	}
 
-	const onWindowResize = () => {
+	function onWindowResize() {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	};
+	}
 
-	const requestNewScreenshot = () => {
+	function requestNewScreenshot() {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
 			chrome.storage.local.set({setMinimised: null});
 			port.postMessage({action: 'Popup Hidden'});
 
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
 					portThree.postMessage({action: 'takeScreenshot'});
 				});
 			});
 		}
+
 		// First Screenshot
 		else portThree.postMessage({action: 'takeScreenshot'});
-	};
+	}
 
-	const pause = () => {
+	function pause() {
 		paused = true;
 		removeDimensions();
 		enableCursor();
-	};
+	}
 
-	const resume = () => {
+	function resume() {
 		paused = false;
 		disableCursor();
-	};
+	}
 
-	const disableCursor = () => {
+	function disableCursor() {
 		body.appendChild(overlay);
-	};
+	}
 
-	const enableCursor = () => {
+	function enableCursor() {
 		body.removeChild(overlay);
-	};
+	}
 
-	const onMouseMove = (event) => {
+	function onMouseMove(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -852,9 +855,9 @@ const activatePageRuler = (port, request) => {
 		} else {
 			removeDimensions();
 		}
-	};
+	}
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -863,18 +866,18 @@ const activatePageRuler = (port, request) => {
 				destroyPageRuler(false);
 			}
 		}
-	};
+	}
 
-	const sendToWorker = (event) => {
+	function sendToWorker(event) {
 		if (paused) return;
 
 		portThree.postMessage({
 			action: 'measureDistances',
 			data: {x: inputX, y: inputY},
 		});
-	};
+	}
 
-	const showDimensions = (dimensions) => {
+	function showDimensions(dimensions) {
 		if (paused) return;
 
 		removeDimensions();
@@ -912,15 +915,15 @@ const activatePageRuler = (port, request) => {
 		newPageRulerDiv.appendChild(pageRulerTooltip);
 
 		body.appendChild(newPageRulerDiv);
-	};
-};
+	}
+}
 
-const deactivatePageRuler = (port, request) => {
+function deactivatePageRuler(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
-};
+}
 
-const activateMoveElement = (port, request) => {
+function activateMoveElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -931,7 +934,7 @@ const activateMoveElement = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -940,25 +943,25 @@ const activateMoveElement = (port, request) => {
 				destroyMoveElement(false);
 			}
 		}
-	};
+	}
 
-	const onMouseOver = (event) => {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	};
+	}
 
-	const onMouseOut = (event) => {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	};
+	}
 
-	const onMouseClick = (event) => {
+	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.style.setProperty('cursor', 'move', 'important');
@@ -967,22 +970,22 @@ const activateMoveElement = (port, request) => {
 				iframeFix: true,
 				containment: 'document',
 				cancel: false,
-				create: () => {
+				create: function () {
 					renderPageGuideline(false);
 				},
-				start: () => {
+				start: function () {
 					document.removeEventListener('mouseover', onMouseOver);
 					document.removeEventListener('mouseout', onMouseOut);
 				},
-				stop: () => {
+				stop: function () {
 					document.addEventListener('mouseover', onMouseOver);
 					document.addEventListener('mouseout', onMouseOut);
 				},
 			});
 		}
-	};
+	}
 
-	const destroyMoveElement = (isManualEscape) => {
+	function destroyMoveElement(isManualEscape) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -995,7 +998,7 @@ const activateMoveElement = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1004,16 +1007,16 @@ const activateMoveElement = (port, request) => {
 
 		if (document.querySelector('.moveElementDraggable')) {
 			$('.moveElementDraggable').draggable('destroy');
-			document.querySelectorAll('.moveElementDraggable').forEach((element) => {
+			document.querySelectorAll('.moveElementDraggable').forEach(function (element) {
 				element.style.setProperty('cursor', 'default', 'important');
 			});
 			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		}
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	};
+	}
 
-	const renderPageGuideline = (toShow) => {
+	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1036,18 +1039,18 @@ const activateMoveElement = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	};
+	}
 
 	port.postMessage({action: 'Move Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
-};
+}
 
-const deactivateMoveElement = (port, request) => {
+function deactivateMoveElement(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
-};
+}
 
-const activateDeleteElement = (port, request) => {
+function activateDeleteElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -1058,7 +1061,7 @@ const activateDeleteElement = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1067,33 +1070,33 @@ const activateDeleteElement = (port, request) => {
 				destroyDeleteElement(false);
 			}
 		}
-	};
+	}
 
-	const onMouseOver = (event) => {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
-	};
+	}
 
-	const onMouseOut = (event) => {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
-	};
+	}
 
-	const onMouseClick = (event) => {
+	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
-	};
+	}
 
-	const destroyDeleteElement = (isManualEscape) => {
+	function destroyDeleteElement(isManualEscape) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -1106,7 +1109,7 @@ const activateDeleteElement = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1114,9 +1117,9 @@ const activateDeleteElement = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	};
+	}
 
-	const renderPageGuideline = (toShow) => {
+	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1139,18 +1142,18 @@ const activateDeleteElement = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	};
+	}
 
 	port.postMessage({action: 'Delete Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
-};
+}
 
-const deactivateDeleteElement = (port, request) => {
+function deactivateDeleteElement(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Delete Element Deactivated'});
-};
+}
 
-const activateTextEditor = (port, request) => {
+function activateTextEditor(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -1159,7 +1162,7 @@ const activateTextEditor = (port, request) => {
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1168,9 +1171,9 @@ const activateTextEditor = (port, request) => {
 				destroyTextEditor(false);
 			}
 		}
-	};
+	}
 
-	const onMouseOver = (event) => {
+	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
@@ -1181,9 +1184,9 @@ const activateTextEditor = (port, request) => {
 				event.target.focus({preventScroll: true});
 			}
 		}
-	};
+	}
 
-	const onMouseOut = (event) => {
+	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
@@ -1193,9 +1196,9 @@ const activateTextEditor = (port, request) => {
 				renderPageGuideline(false);
 			}
 		}
-	};
+	}
 
-	const destroyTextEditor = (isManualEscape) => {
+	function destroyTextEditor(isManualEscape) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
@@ -1209,7 +1212,7 @@ const activateTextEditor = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1217,9 +1220,9 @@ const activateTextEditor = (port, request) => {
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
-	};
+	}
 
-	const renderPageGuideline = (toShow) => {
+	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth = document.body.scrollWidth;
@@ -1242,18 +1245,18 @@ const activateTextEditor = (port, request) => {
 		} else {
 			pageGuidelineWrapper.innerHTML = ``;
 		}
-	};
+	}
 
 	port.postMessage({action: 'Text Editor Activated'});
 	chrome.storage.local.set({setMinimised: true});
-};
+}
 
-const deactivateTextEditor = (port, request) => {
+function deactivateTextEditor(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Text Editor Deactivated'});
-};
+}
 
-const activateColorPicker = (port, request) => {
+function activateColorPicker(port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -1269,7 +1272,7 @@ const activateColorPicker = (port, request) => {
 	let overlay = document.createElement('div');
 	overlay.className = 'colorPickerOverlay';
 
-	portThree.onMessage.addListener((request) => {
+	portThree.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -1289,15 +1292,15 @@ const activateColorPicker = (port, request) => {
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
 				initiate();
 				port.postMessage({action: 'Color Picker Activated'});
 			});
 		});
 	}
 
-	const initiate = () => {
+	function initiate() {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
 		document.addEventListener('keyup', onEscape);
@@ -1308,19 +1311,19 @@ const activateColorPicker = (port, request) => {
 
 		disableCursor();
 		requestNewScreenshot();
-	};
+	}
 
-	const parseScreenshot = (dataUrl) => {
+	function parseScreenshot(dataUrl) {
 		image.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
 				loadImage();
 			});
 		});
-	};
+	}
 
-	const loadImage = () => {
+	function loadImage() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -1335,9 +1338,9 @@ const activateColorPicker = (port, request) => {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	};
+	}
 
-	const destroyColorPicker = (isManualEscape) => {
+	function destroyColorPicker(isManualEscape) {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -1350,7 +1353,7 @@ const activateColorPicker = (port, request) => {
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], (result) => {
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
 			if (result.isPopupPaused === true || isManualEscape === true) {
 				chrome.storage.local.set({setMinimised: false});
 				chrome.storage.local.set({isPopupPaused: false});
@@ -1359,62 +1362,63 @@ const activateColorPicker = (port, request) => {
 
 		removeColorPicker();
 		enableCursor();
-	};
+	}
 
-	const removeColorPicker = () => {
+	function removeColorPicker() {
 		let colorPickerDiv = body.querySelector('.colorPickerDiv');
 		if (colorPickerDiv) body.removeChild(colorPickerDiv);
-	};
+	}
 
-	const onPageScroll = () => {
+	function onPageScroll() {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	};
+	}
 
-	const onWindowResize = () => {
+	function onWindowResize() {
 		if (!paused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	};
+	}
 
-	const requestNewScreenshot = () => {
+	function requestNewScreenshot() {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
 			document.querySelector('#superDev').style.visibility = 'hidden';
 			chrome.storage.local.set({setMinimised: null});
 			port.postMessage({action: 'Popup Hidden'});
 
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
 					portThree.postMessage({action: 'takeScreenshot'});
 				});
 			});
 		}
+
 		// First Screenshot
 		else portThree.postMessage({action: 'takeScreenshot'});
-	};
+	}
 
-	const pause = () => {
+	function pause() {
 		paused = true;
 		removeColorPicker();
 		enableCursor();
-	};
+	}
 
-	const resume = () => {
+	function resume() {
 		paused = false;
 		disableCursor();
-	};
+	}
 
-	const disableCursor = () => {
+	function disableCursor() {
 		body.appendChild(overlay);
-	};
+	}
 
-	const enableCursor = () => {
+	function enableCursor() {
 		body.removeChild(overlay);
-	};
+	}
 
-	const onMouseMove = (event) => {
+	function onMouseMove(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			if (event.touches) {
@@ -1428,16 +1432,16 @@ const activateColorPicker = (port, request) => {
 		} else {
 			removeColorPicker();
 		}
-	};
+	}
 
-	const onMouseClick = (event) => {
+	function onMouseClick(event) {
 		if (document.querySelector('.colorPickerTooltipColorCode')) {
 			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
 			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
 		}
-	};
+	}
 
-	const onEscape = (event) => {
+	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
@@ -1446,18 +1450,18 @@ const activateColorPicker = (port, request) => {
 				destroyColorPicker(false);
 			}
 		}
-	};
+	}
 
-	const sendToWorker = (event) => {
+	function sendToWorker(event) {
 		if (paused) return;
 
 		portThree.postMessage({
 			action: 'getColorAt',
 			data: {x: inputX, y: inputY},
 		});
-	};
+	}
 
-	const showColorPicker = (spotColor) => {
+	function showColorPicker(spotColor) {
 		if (paused) return;
 
 		removeColorPicker();
@@ -1477,8 +1481,8 @@ const activateColorPicker = (port, request) => {
 		let colorPickerTooltipColorCode = document.createElement('div');
 		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
 
-		chrome.storage.local.get(['allFeatures'], (result) => {
-			JSON.parse(result.allFeatures).map((value, index) => {
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
 						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
@@ -1499,15 +1503,15 @@ const activateColorPicker = (port, request) => {
 		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
 		newColorPickerDiv.appendChild(colorPickerTooltip);
 		body.appendChild(newColorPickerDiv);
-	};
-};
+	}
+}
 
-const deactivateColorPicker = (port, request) => {
+function deactivateColorPicker(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Picker Deactivated'});
-};
+}
 
-const activateClearCache = (port, request) => {
+function activateClearCache(port, request) {
 	let portThree = chrome.runtime.connect({name: 'portThree'});
 	portThree.postMessage({action: 'clearCache'});
-};
+}

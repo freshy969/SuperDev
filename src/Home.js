@@ -11,7 +11,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
-	useEffect(() => {
+	useEffect(function () {
 		// Initialisation/Reset on First Load
 		// SetMinimised, DisableActiveFeature, WhichFeatureActive
 		chrome.storage.local.set({isPopupPaused: false});
@@ -21,9 +21,9 @@ export default function Home() {
 		chrome.storage.local.set({whichFeatureActive: null});
 
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], (result) => {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, () => {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {
 					setAllFeatures(features);
 					setIsLoading(false);
 				});

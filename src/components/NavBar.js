@@ -9,28 +9,28 @@ import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 export default function NavBar() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
-	useEffect(() => {
+	useEffect(function () {
 		// Get All Features
-		chrome.storage.local.get(['allFeatures'], (result) => {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 		});
 
 		// On AllFeatures Change
-		chrome.storage.onChanged.addListener((changes) => {
+		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 
 		// On SetMinimised Change
-		chrome.storage.onChanged.addListener((changes) => {
+		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(42); // 42 = Header Height
 					console.log('Popup Minimised');
 				} else if (changes.setMinimised.newValue === false) {
-					chrome.storage.local.get(['allFeatures'], (result) => {
+					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
@@ -46,11 +46,11 @@ export default function NavBar() {
 		});
 
 		// On IsPopupHidden Change
-		chrome.storage.onChanged.addListener((changes) => {
+		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.isPopupHidden) {
 				if (changes.isPopupHidden.newValue === true) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
-						chrome.storage.local.get(['allFeatures'], (result) => {
+						chrome.storage.local.get(['allFeatures'], function (result) {
 							JustChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
 							console.log('Set Homepage as Default');
@@ -61,10 +61,10 @@ export default function NavBar() {
 		});
 
 		// On DisableActiveFeature Change
-		chrome.storage.onChanged.addListener((changes) => {
+		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
-					chrome.storage.local.get(['allFeatures'], (result) => {
+					chrome.storage.local.get(['allFeatures'], function (result) {
 						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 						chrome.storage.local.set({setActiveFeatureDisabled: false});
 						console.log('Deactivated Active Feature');
@@ -74,7 +74,7 @@ export default function NavBar() {
 		});
 	}, []);
 
-	const toggleSettings = () => {
+	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			ActivateDeactivateFeature(allFeatures, null);
 			ChangeHeight(PopupHeight(allFeatures));
@@ -91,31 +91,31 @@ export default function NavBar() {
 			chrome.storage.local.set({setMinimised: false});
 			console.log('Toggle Settings Dectivated');
 		}
-	};
+	}
 
-	const pauseExtension = () => {
+	function pauseExtension() {
 		ActivateDeactivateFeature(allFeatures, null);
 		chrome.storage.local.set({isPopupPaused: true});
 		console.log('Extension Paused');
-	};
+	}
 
-	const minimiseExtension = () => {
-		chrome.storage.local.get(['setMinimised'], (result) => {
+	function minimiseExtension() {
+		chrome.storage.local.get(['setMinimised'], function (result) {
 			if (result.setMinimised === true) chrome.storage.local.set({setMinimised: false});
 			else if (result.setMinimised === false) chrome.storage.local.set({setMinimised: true});
 			else if (result.setMinimised === null) chrome.storage.local.set({setMinimised: true});
 		});
-	};
+	}
 
-	const showHideExtension = () => {
-		chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+	function showHideExtension() {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
 			portFour.postMessage({action: 'showHideExtension'});
-			portFour.onMessage.addListener((response) => {
+			portFour.onMessage.addListener(function (response) {
 				console.log('Got Response : ', response.action);
 			});
 		});
-	};
+	}
 
 	if (allFeatures.length !== 0) {
 		return (

@@ -4,10 +4,10 @@ import {useState, useEffect} from 'react';
 export default function ToggleSettings() {
 	const [allFeatures, setAllFeatures] = useState([]);
 
-	useEffect(() => {
-		chrome.storage.local.get(['allFeatures'], (result) => {
+	useEffect(function () {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
-			JSON.parse(result.allFeatures).map((value, index) => {
+			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
 					document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
@@ -36,17 +36,17 @@ export default function ToggleSettings() {
 			});
 		});
 
-		chrome.storage.onChanged.addListener((changes) => {
+		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 	}, []);
 
-	const PageHighlightSettings = (checkbox) => {
+	function PageHighlightSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxPageHighlight1':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight1').checked === true) {
 							value.settings.checkboxPageHighlight1 = true;
@@ -68,7 +68,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight2':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight2').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -90,7 +90,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight3':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight3').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -112,7 +112,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight4':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight4').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -134,7 +134,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight5':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight5').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -156,7 +156,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight6':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
 							value.settings.checkboxPageHighlight6 = true;
@@ -169,10 +169,10 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxPageHighlight7':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight7').checked === true) {
-							setTimeout(() => {
+							setTimeout(function () {
 								value.settings.checkboxPageHighlight1 = true;
 								value.settings.checkboxPageHighlight2 = false;
 								value.settings.checkboxPageHighlight3 = false;
@@ -194,12 +194,12 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	};
+	}
 
-	const ColorPickerSettings = (checkbox) => {
+	function ColorPickerSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker1').checked === true) {
 							value.settings.checkboxColorPicker1 = true;
@@ -212,10 +212,10 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxColorPicker2':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker2').checked === true) {
-							setTimeout(() => {
+							setTimeout(function () {
 								value.settings.checkboxColorPicker1 = false;
 								value.settings.checkboxColorPicker2 = false;
 								document.querySelector('#checkboxColorPicker1').checked = false;
@@ -227,12 +227,12 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	};
+	}
 
-	const ClearCacheSettings = (checkbox) => {
+	function ClearCacheSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxClearCache1':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache1').checked === true) {
 							value.settings.checkboxClearCache1 = true;
@@ -245,7 +245,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache2':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache2').checked === true) {
 							value.settings.checkboxClearCache2 = true;
@@ -258,7 +258,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache3':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache3').checked === true) {
 							value.settings.checkboxClearCache3 = true;
@@ -271,7 +271,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache4':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache4').checked === true) {
 							value.settings.checkboxClearCache4 = true;
@@ -284,7 +284,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache5':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache5').checked === true) {
 							value.settings.checkboxClearCache5 = true;
@@ -297,7 +297,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache6':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache6').checked === true) {
 							value.settings.checkboxClearCache6 = true;
@@ -310,7 +310,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache7':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache7').checked === true) {
 							value.settings.checkboxClearCache7 = true;
@@ -323,7 +323,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache8':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache8').checked === true) {
 							value.settings.checkboxClearCache8 = true;
@@ -336,7 +336,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache9':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache9').checked === true) {
 							value.settings.checkboxClearCache9 = true;
@@ -349,7 +349,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache10':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache10').checked === true) {
 							value.settings.checkboxClearCache10 = true;
@@ -362,7 +362,7 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache11':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache11').checked === true) {
 							value.settings.checkboxClearCache11 = true;
@@ -375,10 +375,10 @@ export default function ToggleSettings() {
 				});
 				break;
 			case 'checkboxClearCache12':
-				allFeatures.map((value, index) => {
+				allFeatures.map(function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxClearCache12').checked === true) {
-							setTimeout(() => {
+							setTimeout(function () {
 								value.settings.checkboxClearCache1 = false;
 								value.settings.checkboxClearCache2 = false;
 								value.settings.checkboxClearCache3 = true;
@@ -410,7 +410,7 @@ export default function ToggleSettings() {
 				});
 				break;
 		}
-	};
+	}
 
 	return (
 		<section id='toggleSettings' className='hidden'>
@@ -429,11 +429,13 @@ export default function ToggleSettings() {
 								'Highlight All Page Elements',
 								"Don't Add Border to Elements",
 								'Reset Settings to Default',
-							].map((value, index) => {
+							].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
-											onClick={() => PageHighlightSettings('checkboxPageHighlight' + (index + 1))}
+											onClick={function () {
+												PageHighlightSettings('checkboxPageHighlight' + (index + 1));
+											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
 											id={'checkboxPageHighlight' + (index + 1)}
@@ -452,11 +454,13 @@ export default function ToggleSettings() {
 							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
-							{['Copy Color Code in RGB', 'Reset Settings to Default'].map((value, index) => {
+							{['Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
-											onClick={() => ColorPickerSettings('checkboxColorPicker' + (index + 1))}
+											onClick={function () {
+												ColorPickerSettings('checkboxColorPicker' + (index + 1));
+											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
 											id={'checkboxColorPicker' + (index + 1)}
@@ -488,11 +492,13 @@ export default function ToggleSettings() {
 								'Clear Service Workers',
 								'Clear Web SQL',
 								'Reset Settings to Default',
-							].map((value, index) => {
+							].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
-											onClick={() => ClearCacheSettings('checkboxClearCache' + (index + 1))}
+											onClick={function () {
+												ClearCacheSettings('checkboxClearCache' + (index + 1));
+											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
 											id={'checkboxClearCache' + (index + 1)}
