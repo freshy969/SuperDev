@@ -52,9 +52,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateColorPicker':
 				deactivateColorPicker(port, request);
 				break;
-			case 'activateClearCache':
-				activateClearCache(port, request);
-				break;
+			// case 'activateClearCache':
+			// 	activateClearCache(port, request);
+			// 	break;
 		}
 	});
 });
@@ -128,7 +128,6 @@ const showHideExtension = (port, request) => {
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({setActiveFeatureDisabled: false});
-		chrome.storage.local.set({setReload: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 
@@ -1508,6 +1507,7 @@ const deactivateColorPicker = (port, request) => {
 	port.postMessage({action: 'Color Picker Deactivated'});
 };
 
-const activateClearCache = (port, request) => {
-	console.log(1);
-};
+// const activateClearCache = (port, request) => {
+// 	let portThree = chrome.runtime.connect({name: 'portThree'});
+// 	portThree.postMessage({action: 'reloadPage'});
+// };

@@ -16,7 +16,6 @@ export default function Home() {
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({setActiveFeatureDisabled: false});
-		chrome.storage.local.set({setReload: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 

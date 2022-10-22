@@ -1,4 +1,4 @@
-// Called on Extension Install/Update and Chrome Update
+// ContentJs Reinjection on Extension Install/Update
 chrome.runtime.onInstalled.addListener(async () => {
 	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
@@ -49,7 +49,7 @@ chrome.management.onEnabled.addListener(async (extension) => {
 	}
 });
 
-// Context Menu onClick
+// Open Extension on Context Menu Click
 chrome.contextMenus.onClicked.addListener((tab) => {
 	if (
 		!tab.pageUrl.includes('chrome://') &&
@@ -85,7 +85,7 @@ chrome.action.onClicked.addListener((tab) => {
 	}
 });
 
-// Page Ruler + Color Picker
+// Page Ruler + Color Picker + Clear Cache
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
@@ -106,6 +106,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				portThree.postMessage({action: 'screenshotProcessed'});
 				break;
 
+			// Page Ruler
 			case 'measureDistances':
 				measureDistances(request.data);
 				break;
@@ -118,9 +119,14 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				portThree.postMessage({action: 'colorPickerSet'});
 				break;
 
+			// Color Picker
 			case 'getColorAt':
 				getColorAt(request.data);
 				break;
+
+			// // Clear Cache
+			// case 'reloadPage':
+			// 	reloadPage();
 		}
 	});
 
@@ -271,4 +277,19 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		let hex = c.toString(16);
 		return hex.length == 1 ? '0' + hex : hex;
 	}
+
+	// function reloadPage() {
+	// 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+	// 		chrome.tabs.reload(tabs[0].id).then(function onReloaded() {
+	// 			setTimeout(() => {
+	// 				console.log(1);
+	// 				let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+	// 				portOne.postMessage({action: 'showHideExtension'});
+	// 				portOne.onMessage.addListener(function (response) {
+	// 					console.log('Got Response : ', response.action);
+	// 				});
+	// 			}, 0);
+	// 		});
+	// 	});
+	// }
 });
