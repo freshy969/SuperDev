@@ -7,7 +7,7 @@ const features = [
 	},
 	{
 		title: 'Page Highlight',
-		icon: 'fa-paint-roller',
+		icon: 'fa-brush',
 		id: 'pageHighlight',
 		settings: {
 			checkboxPageHighlight1: true,
