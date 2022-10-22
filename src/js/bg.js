@@ -288,33 +288,35 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 								origins: [tabs[0].url],
 							},
 							{
-								cacheStorage: true,
-								cookies: true,
-								fileSystems: true,
-								indexedDB: true,
-								localStorage: true,
-								serviceWorkers: true,
-								webSQL: true,
+								cacheStorage: value.settings.checkboxClearCache4,
+								cookies: value.settings.checkboxClearCache5,
+								fileSystems: value.settings.checkboxClearCache6,
+								indexedDB: value.settings.checkboxClearCache8,
+								localStorage: value.settings.checkboxClearCache9,
+								serviceWorkers: value.settings.checkboxClearCache10,
+								webSQL: value.settings.checkboxClearCache11,
 							},
 							function () {
 								chrome.browsingData.remove(
 									{},
 									{
-										appcache: true,
-										cache: true,
-										formData: true,
+										appcache: value.settings.checkboxClearCache2,
+										cache: value.settings.checkboxClearCache3,
+										formData: value.settings.checkboxClearCache7,
 									},
 									function () {
-										// chrome.tabs.reload(tabs[0].id).then(function () {
-										// 	setTimeout(function () {
-										// 		console.log(1);
-										// 		let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-										// 		portOne.postMessage({action: 'showHideExtension'});
-										// 		portOne.onMessage.addListener(function (response) {
-										// 			console.log('Got Response : ', response.action);
-										// 		});
-										// 	}, 0);
-										// });
+										if (value.settings.checkboxClearCache1 === true) {
+											chrome.tabs.reload(tabs[0].id).then(function () {
+												setTimeout(function () {
+													console.log(1);
+													let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+													portOne.postMessage({action: 'showHideExtension'});
+													portOne.onMessage.addListener(function (response) {
+														console.log('Got Response : ', response.action);
+													});
+												}, 5000);
+											});
+										}
 									}
 								);
 							}
