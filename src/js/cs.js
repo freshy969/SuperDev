@@ -1207,7 +1207,7 @@ function activateExportElement(port, request) {
 						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
 								description: 'Copied with SuperDev',
-								html: 'XXX',
+								html: event.target.outerHTML,
 								css: 'XXX',
 								tags: ['SuperDev'],
 							});
@@ -1223,7 +1223,7 @@ function activateExportElement(port, request) {
 						}
 						// Export to File
 						else if (value.settings.checkboxExportElement2 === true) {
-							let text = 'XXXHTMLELEMENT <style> XXXCSS </style>';
+							let text = `${event.target.outerHTML} <style> XXX </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 
 							let a = document.createElement('a');
