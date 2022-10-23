@@ -71,6 +71,7 @@ function showHideExtension(port, request) {
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
+			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
 			position: fixed !important;
@@ -85,6 +86,7 @@ function showHideExtension(port, request) {
 		let superDevHandler = document.createElement('div');
 		superDevHandler.id = 'superDevHandler';
 		superDevHandler.style.cssText = `
+			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
 			position: relative !important;
@@ -102,12 +104,12 @@ function showHideExtension(port, request) {
 		superDevIframe.id = 'superDevIframe';
 		superDevIframe.scrolling = 'no';
 		superDevIframe.style.cssText = `
+			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
 			width: 335px !important;
 			border: 0px !important;
 			border-radius: 8px !important;
-			display: block !important;
 			background-color: rgba(0,0,0,0) !important;
 			z-index: 2147483646 !important;
 			overflow: hidden !important;
@@ -1202,6 +1204,7 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
+		console.log(event);
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
