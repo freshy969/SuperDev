@@ -16,9 +16,14 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
 					document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
 					document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
+				} else if (value.id === 'exportElement') {
+					document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
+					document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
+					document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
 				} else if (value.id === 'colorPicker') {
 					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
 					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
+					document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
 				} else if (value.id === 'clearCache') {
 					document.querySelector('#checkboxClearCache1').checked = value.settings.checkboxClearCache1;
 					document.querySelector('#checkboxClearCache2').checked = value.settings.checkboxClearCache2;
@@ -196,6 +201,60 @@ export default function ToggleSettings() {
 		}
 	}
 
+	function ExportElementSettings(checkbox) {
+		switch (checkbox) {
+			case 'checkboxExportElement1':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement1').checked === true) {
+							value.settings.checkboxExportElement1 = true;
+							value.settings.checkboxExportElement2 = false;
+							document.querySelector('#checkboxExportElement1').checked = true;
+							document.querySelector('#checkboxExportElement2').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxExportElement1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxExportElement2':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement2').checked === true) {
+							value.settings.checkboxExportElement1 = false;
+							value.settings.checkboxExportElement2 = true;
+							document.querySelector('#checkboxExportElement1').checked = false;
+							document.querySelector('#checkboxExportElement2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxExportElement2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxExportElement3':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement3').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxExportElement1 = true;
+								value.settings.checkboxExportElement2 = false;
+								value.settings.checkboxExportElement3 = false;
+								document.querySelector('#checkboxExportElement1').checked = true;
+								document.querySelector('#checkboxExportElement2').checked = false;
+								document.querySelector('#checkboxExportElement3').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 300);
+						}
+					}
+				});
+				break;
+		}
+	}
+
 	function ColorPickerSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
@@ -203,6 +262,9 @@ export default function ToggleSettings() {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker1').checked === true) {
 							value.settings.checkboxColorPicker1 = true;
+							value.settings.checkboxColorPicker2 = false;
+							document.querySelector('#checkboxColorPicker1').checked = true;
+							document.querySelector('#checkboxColorPicker2').checked = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPicker1 = false;
@@ -215,11 +277,29 @@ export default function ToggleSettings() {
 				allFeatures.map(function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker2').checked === true) {
+							value.settings.checkboxColorPicker1 = false;
+							value.settings.checkboxColorPicker2 = true;
+							document.querySelector('#checkboxColorPicker1').checked = false;
+							document.querySelector('#checkboxColorPicker2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPicker2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxColorPicker3':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPicker') {
+						if (document.querySelector('#checkboxColorPicker3').checked === true) {
 							setTimeout(function () {
-								value.settings.checkboxColorPicker1 = false;
+								value.settings.checkboxColorPicker1 = true;
 								value.settings.checkboxColorPicker2 = false;
-								document.querySelector('#checkboxColorPicker1').checked = false;
+								value.settings.checkboxColorPicker3 = false;
+								document.querySelector('#checkboxColorPicker1').checked = true;
 								document.querySelector('#checkboxColorPicker2').checked = false;
+								document.querySelector('#checkboxColorPicker3').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -376,7 +456,7 @@ export default function ToggleSettings() {
 				break;
 			case 'checkboxClearCache12':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'colorPicker') {
+					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache12').checked === true) {
 							setTimeout(function () {
 								value.settings.checkboxClearCache1 = false;
@@ -451,10 +531,35 @@ export default function ToggleSettings() {
 
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Export Element Settings
+						</div>
+						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
+							{['Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={function () {
+												ExportElementSettings('checkboxExportElement' + (index + 1));
+											}}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={'checkboxExportElement' + (index + 1)}
+										/>
+										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxExportElement' + (index + 1)}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
 							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
-							{['Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
+							{['Copy Color Code in Hex', 'Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input

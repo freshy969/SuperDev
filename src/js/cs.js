@@ -1485,15 +1485,15 @@ function activateColorPicker(port, request) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
-						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
-						colorPickerTooltipColorCode.textContent = spotColor.rgb;
-						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
-						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
-					} else {
 						colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
 						colorPickerTooltipColorCode.textContent = spotColor.hex;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
 						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
+					} else if (value.settings.checkboxColorPicker2 === true) {
+						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
+						colorPickerTooltipColorCode.textContent = spotColor.rgb;
+						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
 					}
 				}
 			});

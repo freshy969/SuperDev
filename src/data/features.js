@@ -37,12 +37,16 @@ const features = [
 		id: 'deleteElement',
 		settings: {},
 	},
-	// {
-	// 	title: 'Export Element',
-	// 	icon: 'fa-up-right-from-square',
-	// 	id: 'exportElement',
-	// 	settings: {},
-	// },
+	{
+		title: 'Export Element',
+		icon: 'fa-up-right-from-square',
+		id: 'exportElement',
+		settings: {
+			checkboxExportElement1: true,
+			checkboxExportElement2: false,
+			checkboxExportElement3: false,
+		},
+	},
 	{
 		title: 'Text Editor',
 		icon: 'fa-pencil',
@@ -54,64 +58,65 @@ const features = [
 		icon: 'fa-eye-dropper',
 		id: 'colorPicker',
 		settings: {
-			checkboxColorPicker1: false,
+			checkboxColorPicker1: true,
 			checkboxColorPicker2: false,
+			checkboxColorPicker3: false,
 		},
 	},
-	// {
-	// 	title: 'Color Palette',
-	// 	icon: 'fa-swatchbook',
-	// 	id: 'colorPalette',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'CSS Copier',
-	// 	icon: 'fa-copy',
-	// 	id: 'cssCopier',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Custom CSS',
-	// 	icon: 'fa-code',
-	// 	id: 'customCSS',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Custom JS',
-	// 	icon: 'fa-brackets-curly',
-	// 	id: 'customJS',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Font List',
-	// 	icon: 'fa-text-size',
-	// 	id: 'fontList',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Font Changer',
-	// 	icon: 'fa-font-case',
-	// 	id: 'fontChanger',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Extract Media',
-	// 	icon: 'fa-image',
-	// 	id: 'extractMedia',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'Take Screenshot',
-	// 	icon: 'fa-aperture',
-	// 	id: 'takeScreenshot',
-	// 	settings: {},
-	// },
-	// {
-	// 	title: 'View Responsive',
-	// 	icon: 'fa-laptop-mobile',
-	// 	id: 'viewResponsive',
-	// 	settings: {},
-	// },
+	{
+		title: 'Color Palette',
+		icon: 'fa-swatchbook',
+		id: 'colorPalette',
+		settings: {},
+	},
+	{
+		title: 'CSS Copier',
+		icon: 'fa-copy',
+		id: 'cssCopier',
+		settings: {},
+	},
+	{
+		title: 'Custom CSS',
+		icon: 'fa-code',
+		id: 'customCSS',
+		settings: {},
+	},
+	{
+		title: 'Custom JS',
+		icon: 'fa-brackets-curly',
+		id: 'customJS',
+		settings: {},
+	},
+	{
+		title: 'Fonts List',
+		icon: 'fa-text-size',
+		id: 'fontsList',
+		settings: {},
+	},
+	{
+		title: 'Font Changer',
+		icon: 'fa-font-case',
+		id: 'fontChanger',
+		settings: {},
+	},
+	{
+		title: 'Extract Media',
+		icon: 'fa-image',
+		id: 'extractMedia',
+		settings: {},
+	},
+	{
+		title: 'Take Screenshot',
+		icon: 'fa-aperture',
+		id: 'takeScreenshot',
+		settings: {},
+	},
+	{
+		title: 'View Responsive',
+		icon: 'fa-laptop-mobile',
+		id: 'viewResponsive',
+		settings: {},
+	},
 	{
 		title: 'Clear Cache',
 		icon: 'fa-recycle',
@@ -131,12 +136,12 @@ const features = [
 			checkboxClearCache12: false,
 		},
 	},
-	// {
-	// 	title: 'Built With',
-	// 	icon: 'fa-server',
-	// 	id: 'builtWith',
-	// 	settings: {},
-	// },
+	{
+		title: 'Built With',
+		icon: 'fa-server',
+		id: 'builtWith',
+		settings: {},
+	},
 ];
 
 export default features;
