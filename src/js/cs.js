@@ -40,6 +40,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateDeleteElement':
 				deactivateDeleteElement(port, request);
 				break;
+			case 'activateExportElement':
+				activateExportElement(port, request);
+				break;
+			case 'deactivateExportElement':
+				deactivateExportElement(port, request);
+				break;
 			case 'activateTextEditor':
 				activateTextEditor(port, request);
 				break;
@@ -1151,6 +1157,149 @@ function activateDeleteElement(port, request) {
 function deactivateDeleteElement(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Delete Element Deactivated'});
+}
+
+function activateExportElement(port, request) {
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
+	window.focus({preventScroll: true});
+
+	let pageGuidelineWrapper = document.createElement('div');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyExportElement(true);
+			} else if (event.isTrusted === false) {
+				destroyExportElement(false);
+			}
+		}
+	}
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('pageGuidelineOutline');
+			renderPageGuideline(true);
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			renderPageGuideline(false);
+			event.target.classList.remove('pageGuidelineOutline');
+		}
+	}
+
+	function onMouseClick(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			chrome.storage.local.get(['allFeatures'], function (result) {
+				JSON.parse(result.allFeatures).map(function (value, index) {
+					if (value.id === 'exportElement') {
+						// Export to Codepen
+						if (value.settings.checkboxExportElement1 === true) {
+							let codepenValue = JSON.stringify({
+								description: 'Copied with SuperDev',
+								html: 'XXX',
+								css: 'XXX',
+								tags: ['SuperDev'],
+							});
+							let codepenForm = document.createElement('form');
+							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
+							codepenForm.setAttribute('method', 'POST');
+							codepenForm.setAttribute('target', '_blank');
+							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
+							codepenForm.querySelector('#codepenValue').value = codepenValue;
+							document.body.appendChild(codepenForm);
+							codepenForm.submit();
+							codepenForm.remove();
+						}
+						// Export to File
+						else if (value.settings.checkboxExportElement2 === true) {
+							let text = 'XXXHTMLELEMENT <style> XXXCSS </style>';
+							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
+
+							let a = document.createElement('a');
+							a.href = URL.createObjectURL(file);
+							a.download = 'exported-element.html';
+							document.body.appendChild(a);
+
+							let clickEvent = new MouseEvent('click', {bubbles: false});
+							a.dispatchEvent(clickEvent);
+
+							setTimeout(function () {
+								URL.revokeObjectURL(a.href);
+								document.body.removeChild(a);
+							}, 50);
+						}
+					}
+				});
+			});
+		}
+	}
+
+	function destroyExportElement(isManualEscape) {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('click', onMouseClick);
+
+		if (isManualEscape === true) {
+			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+			}
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		document.querySelector('.pageGuidelineWrapper').remove();
+	}
+
+	function renderPageGuideline(toShow) {
+		if (toShow === true) {
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+
+			pageGuidelineWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelineWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Export Element Activated'});
+	chrome.storage.local.set({setMinimised: true});
+}
+
+function deactivateExportElement(port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Export Element Deactivated'});
 }
 
 function activateTextEditor(port, request) {
