@@ -31,7 +31,14 @@
 	"content_scripts": [
 		{
 			"css": ["css/tabs.css"],
-			"js": ["libs/js/jquery.min.js", "libs/js/jquery-ui.min.js", "js/cs.js"],
+			"js": [
+				"libs/js/jquery.min.js",
+				"libs/js/jquery-ui.min.js",
+				"libs/js/beautify.min.js",
+				"libs/js/beautify-css.min.js",
+				"libs/js/beautify-html.min.js",
+				"js/cs.js"
+			],
 			"matches": ["http://*/*", "https://*/*"]
 		}
 	],

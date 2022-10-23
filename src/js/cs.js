@@ -1206,7 +1206,8 @@ function activateExportElement(port, request) {
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
-						let html = event.target.outerHTML;
+						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
+
 						let css = [...document.styleSheets]
 							.map((styleSheet) => {
 								try {

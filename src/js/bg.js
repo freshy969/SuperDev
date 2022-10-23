@@ -284,7 +284,14 @@ chrome.runtime.onInstalled.addListener(async function () {
 			) {
 				chrome.scripting.executeScript({
 					target: {tabId: tab.id},
-					files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
+					files: [
+						'libs/js/jquery.min.js',
+						'libs/js/jquery-ui.min.js',
+						'libs/js/beautify.min.js',
+						'libs/js/beautify-css.min.js',
+						'libs/js/beautify-html.min.js',
+						'js/cs.js',
+					],
 				});
 				chrome.scripting.insertCSS({
 					target: {tabId: tab.id},
@@ -310,7 +317,14 @@ chrome.management.onEnabled.addListener(async function (extension) {
 				) {
 					chrome.scripting.executeScript({
 						target: {tabId: tab.id},
-						files: ['libs/js/jquery.min.js', 'libs/js/jquery-ui.min.js', 'js/cs.js'],
+						files: [
+							'libs/js/jquery.min.js',
+							'libs/js/jquery-ui.min.js',
+							'libs/js/beautify.min.js',
+							'libs/js/beautify-css.min.js',
+							'libs/js/beautify-html.min.js',
+							'js/cs.js',
+						],
 					});
 					chrome.scripting.insertCSS({
 						target: {tabId: tab.id},

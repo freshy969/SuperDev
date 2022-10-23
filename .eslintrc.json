@@ -4,10 +4,15 @@
     "webextensions": true,
     "es2021": true,
     "jquery": true
+    
   },
   "globals": {
     "window": true,
-    "module": true
+    "module": true,
+    "js_beautify" : true,
+    "css_beautify" : true,
+    "html_beautify" : true
+
   },
   "extends": [
     "eslint:recommended",
