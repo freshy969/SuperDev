@@ -88,9 +88,15 @@ const features = [
 		settings: {},
 	},
 	{
-		title: 'Fonts List',
+		title: 'All Fonts List',
+		icon: 'fa-font',
+		id: 'allFontsList',
+		settings: {},
+	},
+	{
+		title: 'Font Inspector',
 		icon: 'fa-text-size',
-		id: 'fontsList',
+		id: 'fontInspector',
 		settings: {},
 	},
 	{
