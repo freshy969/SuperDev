@@ -70,9 +70,9 @@ const features = [
 		settings: {},
 	},
 	{
-		title: 'CSS Copier',
-		icon: 'fa-copy',
-		id: 'cssCopier',
+		title: 'CSS Inspector',
+		icon: 'fa-search',
+		id: 'cssInspector',
 		settings: {},
 	},
 	{
