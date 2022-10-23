@@ -1207,7 +1207,19 @@ function activateExportElement(port, request) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = event.target.outerHTML;
-						let css = event.target.outerHTML;
+						let css = [...document.styleSheets]
+							.map((styleSheet) => {
+								try {
+									return [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+								} catch (e) {
+									console.log('Access to stylesheet %s is denied. Ignoring…', styleSheet.href);
+								}
+							})
+							.filter(Boolean)
+							.join('\n');
+						let tagName = event.target.tagName.toLowerCase();
+						let classList = event.target.classList;
+						let id = event.target.id;
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
@@ -1220,6 +1232,8 @@ function activateExportElement(port, request) {
 						if (html.includes('cursor: default !important; ')) {
 							html = html.replace('cursor: default !important; ', '');
 						}
+
+						// CSS Computation
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
