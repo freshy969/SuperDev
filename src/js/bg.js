@@ -207,21 +207,15 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 					origins: [tabs[0].url],
 				},
 				{
-					cacheStorage: settings.checkboxClearCache4,
-					cookies: settings.checkboxClearCache5,
-					fileSystems: settings.checkboxClearCache6,
-					indexedDB: settings.checkboxClearCache8,
-					localStorage: settings.checkboxClearCache9,
-					serviceWorkers: settings.checkboxClearCache10,
-					webSQL: settings.checkboxClearCache11,
+					cookies: settings.checkboxClearCache3,
+					localStorage: settings.checkboxClearCache5,
 				},
 				function () {
 					chrome.browsingData.remove(
 						{},
 						{
-							appcache: settings.checkboxClearCache2,
-							cache: settings.checkboxClearCache3,
-							formData: settings.checkboxClearCache7,
+							cache: settings.checkboxClearCache2,
+							formData: settings.checkboxClearCache4,
 						},
 						function () {
 							if (settings.checkboxClearCache1 === true) {

@@ -31,12 +31,6 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxClearCache4').checked = value.settings.checkboxClearCache4;
 					document.querySelector('#checkboxClearCache5').checked = value.settings.checkboxClearCache5;
 					document.querySelector('#checkboxClearCache6').checked = value.settings.checkboxClearCache6;
-					document.querySelector('#checkboxClearCache7').checked = value.settings.checkboxClearCache7;
-					document.querySelector('#checkboxClearCache8').checked = value.settings.checkboxClearCache8;
-					document.querySelector('#checkboxClearCache9').checked = value.settings.checkboxClearCache9;
-					document.querySelector('#checkboxClearCache10').checked = value.settings.checkboxClearCache10;
-					document.querySelector('#checkboxClearCache11').checked = value.settings.checkboxClearCache11;
-					document.querySelector('#checkboxClearCache12').checked = value.settings.checkboxClearCache12;
 				}
 			});
 		});
@@ -178,15 +172,15 @@ export default function ToggleSettings() {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight7').checked === true) {
 							setTimeout(function () {
-								value.settings.checkboxPageHighlight1 = true;
-								value.settings.checkboxPageHighlight2 = false;
+								value.settings.checkboxPageHighlight1 = false;
+								value.settings.checkboxPageHighlight2 = true;
 								value.settings.checkboxPageHighlight3 = false;
 								value.settings.checkboxPageHighlight4 = false;
 								value.settings.checkboxPageHighlight5 = false;
 								value.settings.checkboxPageHighlight6 = false;
 								value.settings.checkboxPageHighlight7 = false;
-								document.querySelector('#checkboxPageHighlight1').checked = true;
-								document.querySelector('#checkboxPageHighlight2').checked = false;
+								document.querySelector('#checkboxPageHighlight1').checked = false;
+								document.querySelector('#checkboxPageHighlight2').checked = true;
 								document.querySelector('#checkboxPageHighlight3').checked = false;
 								document.querySelector('#checkboxPageHighlight4').checked = false;
 								document.querySelector('#checkboxPageHighlight5').checked = false;
@@ -380,109 +374,19 @@ export default function ToggleSettings() {
 				allFeatures.map(function (value, index) {
 					if (value.id === 'clearCache') {
 						if (document.querySelector('#checkboxClearCache6').checked === true) {
-							value.settings.checkboxClearCache6 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache6 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache7':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache7').checked === true) {
-							value.settings.checkboxClearCache7 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache7 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache8':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache8').checked === true) {
-							value.settings.checkboxClearCache8 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache8 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache9':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache9').checked === true) {
-							value.settings.checkboxClearCache9 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache9 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache10':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache10').checked === true) {
-							value.settings.checkboxClearCache10 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache10 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache11':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache11').checked === true) {
-							value.settings.checkboxClearCache11 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						} else {
-							value.settings.checkboxClearCache11 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-						}
-					}
-				});
-				break;
-			case 'checkboxClearCache12':
-				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache12').checked === true) {
 							setTimeout(function () {
 								value.settings.checkboxClearCache1 = false;
-								value.settings.checkboxClearCache2 = false;
-								value.settings.checkboxClearCache3 = true;
+								value.settings.checkboxClearCache2 = true;
+								value.settings.checkboxClearCache3 = false;
 								value.settings.checkboxClearCache4 = false;
 								value.settings.checkboxClearCache5 = false;
 								value.settings.checkboxClearCache6 = false;
-								value.settings.checkboxClearCache7 = false;
-								value.settings.checkboxClearCache8 = false;
-								value.settings.checkboxClearCache9 = false;
-								value.settings.checkboxClearCache10 = false;
-								value.settings.checkboxClearCache11 = false;
-								value.settings.checkboxClearCache12 = false;
 								document.querySelector('#checkboxClearCache1').checked = false;
-								document.querySelector('#checkboxClearCache2').checked = false;
-								document.querySelector('#checkboxClearCache3').checked = true;
+								document.querySelector('#checkboxClearCache2').checked = true;
+								document.querySelector('#checkboxClearCache3').checked = false;
 								document.querySelector('#checkboxClearCache4').checked = false;
 								document.querySelector('#checkboxClearCache5').checked = false;
 								document.querySelector('#checkboxClearCache6').checked = false;
-								document.querySelector('#checkboxClearCache7').checked = false;
-								document.querySelector('#checkboxClearCache8').checked = false;
-								document.querySelector('#checkboxClearCache9').checked = false;
-								document.querySelector('#checkboxClearCache10').checked = false;
-								document.querySelector('#checkboxClearCache11').checked = false;
-								document.querySelector('#checkboxClearCache12').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -502,11 +406,11 @@ export default function ToggleSettings() {
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{[
-								'Highlight Semantic/Div Elements',
+								'Highlight All Page Elements',
 								'Highlight Block Level Elements',
 								'Highlight Inline Level Elements',
-								'Highlight Headings/Paragraphs',
-								'Highlight All Page Elements',
+								'Highlight Semantic + Div Elements',
+								'Highlight Headings + Paragraphs',
 								"Don't Add Border to Elements",
 								'Reset Settings to Default',
 							].map(function (value, index) {
@@ -584,20 +488,10 @@ export default function ToggleSettings() {
 							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Clear Cache Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
-							{[
-								'Reload After Clearing',
-								'Clear App Cache',
-								'Clear Cache',
-								'Clear Cache Storage',
-								'Clear Cookies',
-								'Clear File Systems',
-								'Clear Form Data',
-								'Clear Indexed DB',
-								'Clear Local Storage',
-								'Clear Service Workers',
-								'Clear Web SQL',
-								'Reset Settings to Default',
-							].map(function (value, index) {
+							{['Reload After Clearing', 'Clear Cache', 'Clear Cookies', 'Clear Form Data', 'Clear Local Storage', 'Reset Settings to Default'].map(function (
+								value,
+								index
+							) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
