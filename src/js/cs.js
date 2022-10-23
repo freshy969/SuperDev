@@ -1208,16 +1208,19 @@ function activateExportElement(port, request) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
 
-						let css = [...document.styleSheets]
-							.map((styleSheet) => {
-								try {
-									return [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
-								} catch (e) {
-									console.log('Access to stylesheet %s is denied. Ignoring…', styleSheet.href);
-								}
-							})
-							.filter(Boolean)
-							.join('\n');
+						let css = css_beautify(
+							[...document.styleSheets]
+								.map((styleSheet) => {
+									try {
+										return [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+									} catch (e) {
+										console.log('Access to stylesheet %s is denied. Ignoring…', styleSheet.href);
+									}
+								})
+								.filter(Boolean)
+								.join('\n'),
+							{indent_size: 2, indent_with_tabs: true}
+						);
 						let tagName = event.target.tagName.toLowerCase();
 						let classList = event.target.classList;
 						let id = event.target.id;
@@ -1227,11 +1230,15 @@ function activateExportElement(port, request) {
 							html = html.replace('class="pageGuidelineOutline"', '');
 						} else if (html.includes(' pageGuidelineOutline')) {
 							html = html.replace(' pageGuidelineOutline', '');
+						} else if (html.includes('pageGuidelineOutline ')) {
+							html = html.replace('pageGuidelineOutline ', '');
 						}
 
 						// Remove MoveElement Cursor From OuterHTML
 						if (html.includes('cursor: default !important; ')) {
 							html = html.replace('cursor: default !important; ', '');
+						} else if (html.includes(' cursor: default !important;')) {
+							html = html.replace(' cursor: default !important;', '');
 						}
 
 						// CSS Computation
