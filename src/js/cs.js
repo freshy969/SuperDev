@@ -203,6 +203,7 @@ function activatePageGuideline(port, request) {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
@@ -999,6 +1000,7 @@ function activateMoveElement(port, request) {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
@@ -1110,6 +1112,7 @@ function activateDeleteElement(port, request) {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
@@ -1203,12 +1206,27 @@ function activateExportElement(port, request) {
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
+						let html = event.target.outerHTML;
+						let css = event.target.outerHTML;
+
+						// Remove PageGuidelineOutline Class From OuterHTML
+						if (html.includes('class="pageGuidelineOutline"')) {
+							html = html.replace('class="pageGuidelineOutline"', '');
+						} else if (html.includes(' pageGuidelineOutline')) {
+							html = html.replace(' pageGuidelineOutline', '');
+						}
+
+						// Remove MoveElement Cursor From OuterHTML
+						if (html.includes('cursor: default !important; ')) {
+							html = html.replace('cursor: default !important; ', '');
+						}
+
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
 								description: 'Copied with SuperDev',
-								html: event.target.outerHTML,
-								css: 'XXX',
+								html: html,
+								css: css,
 								tags: ['SuperDev'],
 							});
 							let codepenForm = document.createElement('form');
@@ -1223,7 +1241,7 @@ function activateExportElement(port, request) {
 						}
 						// Export to File
 						else if (value.settings.checkboxExportElement2 === true) {
-							let text = `${event.target.outerHTML} <style> XXX </style>`;
+							let text = `${html} <style> ${css} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 
 							let a = document.createElement('a');
@@ -1253,6 +1271,7 @@ function activateExportElement(port, request) {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
@@ -1354,6 +1373,7 @@ function activateTextEditor(port, request) {
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
 				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
