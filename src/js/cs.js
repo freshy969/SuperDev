@@ -72,16 +72,19 @@ function showHideExtension(port, request) {
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
 			display: block !important;
-			position: fixed !important;
-			top: 18px !important;
-			right: 18px !important;
 			padding: 0 !important;
 			margin: 0 !important;
 			border: 0 !important;
 			outline: 0 !important;
 			background-color: transparent !important;
-			z-index: 2147483646 !important;
-			visibility: hidden !important;`;
+			box-sizing: border-box !important;
+			
+			position: fixed !important;
+			top: 18px !important;
+			right: 18px !important;
+			width: 335px !important;
+			visibility: hidden !important;
+			z-index: 2147483646 !important;`;
 		document.body.appendChild(superDev);
 
 		let superDevHandler = document.createElement('div');
@@ -94,6 +97,8 @@ function showHideExtension(port, request) {
 			border: 0 !important;
 			outline: 0 !important;
 			background-color: transparent !important;
+			box-sizing: border-box !important;
+
 			cursor: move !important;
 			width: 18px !important;
 			height: 42px !important;
@@ -113,11 +118,12 @@ function showHideExtension(port, request) {
 			border: 0 !important;
 			outline: 0 !important;
 			background-color: transparent !important;
+			box-sizing: border-box !important;
+
 			width: 335px !important;
 			border-radius: 8px !important;
-			z-index: 2147483646 !important;
-			overflow: hidden !important;
-			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px !important;`;
+			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px !important;
+			z-index: 2147483646 !important;`;
 		document.querySelector('#superDev').appendChild(superDevIframe);
 
 		$('#superDev').draggable({
