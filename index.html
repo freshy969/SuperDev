@@ -40,4 +40,215 @@
 			<div><h1>Naam Hai Abdullah</h1></div>
 		</section>
 	</body>
+	<script>
+		document.addEventListener('click', (t) => {
+			console.log('Click Event', t);
+			let e = t;
+			const {html: n, css: r} = (function (e) {
+				console.log('OuterHTML', e);
+				const t = {style: {}, media_queries: {}, animations: {}},
+					n = (e) => {
+						((e) => {
+							const n = Ot.computed(e);
+							let r = e.tagName.toLowerCase();
+							r += qe.getSelector(e);
+							for (const i of n.styles) {
+								let n = r;
+								if (('pseudo' === i.type && (n += i.selector), !t.style[n] || t.style[n] !== i.rules))
+									if (t.style[n] && t.style[n] !== i.rules) {
+										let n = Ie(e, {root: document.body});
+										'pseudo' === i.type && (n += i.selector), (t.style[n] = i.rules);
+									} else t.style[n] = i.rules;
+							}
+							for (const [i, o] of Object.entries(n.media_queries)) {
+								t.media_queries[i] || (t.media_queries[i] = {});
+								for (const n of o) {
+									let o = r;
+									if (('pseudo' === n.type && (o += n.selector), !t.media_queries[i][o] || t.media_queries[i][o] !== n.rules))
+										if (t.media_queries[i][o] && t.media_queries[i][o] !== n.rules) {
+											let r = Ie(e, {root: document.body});
+											'pseudo' === n.type && (r += n.selector), (t.media_queries[i][r] = n.rules);
+										} else t.media_queries[i][o] = n.rules;
+								}
+							}
+							for (const [e, r] of Object.entries(n.animations)) t.animations[e] = r;
+						})(e);
+						for (const t of e.children) n(t);
+					};
+				n(e);
+				let r = 'body\n{\n\tbackground: #eee; /* For visibility of elements. */\n}\n\n';
+				for (const [e, n] of Object.entries(t.style)) {
+					r += e + ' { \n';
+					for (const [e, t] of Object.entries(n)) r += `\t${e}: ${t};\n`;
+					r += '}\n\n';
+				}
+				for (const [e, n] of Object.entries(t.animations)) {
+					r += `@keyframes ${e} { \n`;
+					for (const [e, t] of Object.entries(n)) {
+						r += `\t${e} { \n`;
+						for (const [e, n] of Object.entries(t)) r += `\t\t${e}: ${n};\n`;
+						r += '\t}\n\n';
+					}
+					r += '}\n\n';
+				}
+				for (const [e, n] of Object.entries(t.media_queries)) {
+					r += e + ' { \n';
+					for (const [e, t] of Object.entries(n)) {
+						r += `\t${e} { \n`;
+						for (const [e, n] of Object.entries(t)) r += `\t\t${e}: ${n};\n`;
+						r += '\t}\n\n';
+					}
+					r += '}\n\n';
+				}
+				return {html: qe.getHtml(e), css: r};
+			})(e.target.element);
+			console.log(n, r);
+		});
+
+		var Ot = {
+			computed: function (e) {
+				const t = {styles: [], media_queries: {}, animations: {}},
+					n = {},
+					r = {normal: {}, pseudo_class: {}, pseudo_element: {}};
+				let i = [];
+				const o = bt();
+				for (const t of o) {
+					let o = [];
+					try {
+						o = t.rules || t.cssRules;
+					} catch (e) {
+						continue;
+					}
+					for (const t of o)
+						if ((t instanceof CSSMediaRule || 'CSSMediaRule' === t.constructor.name) && ft.get().inspector.view.media) {
+							const r = {normal: {}, pseudo_class: {}, pseudo_element: {}},
+								i = Lt(t, e);
+							for (const e of i) kt(e.match_result, e.rules, r);
+							if (Object.keys(r.normal).length || Object.keys(r.pseudo_class).length || Object.keys(r.pseudo_element).length) {
+								Ct(t.cssText.split('{')[0].trim(), r, n);
+							}
+						} else if ((t instanceof CSSKeyframesRule || 'CSSKeyframesRule' === t.constructor.name) && ft.get().inspector.view.animations) {
+							const n = t.name,
+								r = t.rules || t.cssRules,
+								i = {};
+							for (const t of r) {
+								const n = dt.cssToJson(t.style.cssText);
+								i[t.keyText] = dt.parseRules(n, e, !0);
+							}
+							yt.animations[n] = i;
+						} else if (t instanceof CSSStyleRule || 'CSSStyleRule' === t.constructor.name) {
+							const n = xt(t.selectorText, ',');
+							for (const o of n) {
+								const n = St(e, o);
+								if (n) {
+									const e = dt.cssToJson(t.style.cssText);
+									'normal' === n.type && ((i = [...Object.keys(r.normal).filter((t) => t in e), ...i]), (i = [...new Set(i)])), kt(n, e, r);
+								}
+							}
+						}
+				}
+				const a = (function (e) {
+					const t = [];
+					window.hvElementIframe ||
+						((window.hvElementIframe = document.createElement('iframe')),
+						document.body.appendChild(window.hvElementIframe),
+						(window.hvElementIframe.style.display = 'none'));
+					const n = window.hvElementIframe.contentDocument,
+						r = n.createElement(e.tagName);
+					(r.innerHTML = e.innerHTML), n.body.appendChild(r);
+					const i = window.getComputedStyle(e),
+						o = window.getComputedStyle(r);
+					for (let e of dt.properties) {
+						const n = o.getPropertyValue(e),
+							r = i.getPropertyValue(e);
+						n !== r && (t[e] = r);
+					}
+					return r.remove(), t;
+				})(e);
+				for (const [e, t] of Object.entries(r.pseudo_class)) for (const [e, n] of Object.entries(t)) a[e] && delete a[e];
+				for (const e of i) a[e] && (r.normal[e] = a[e]);
+				(r.normal = dt.filterCSS({...a, ...r.normal, ...wt(e)})),
+					(t.animations = Mt(e, r, t.media_queries)),
+					t.styles.push({selector: '', type: 'normal', rules: dt.parseRules(r.normal, e, !0)});
+				for (const [n, i] of Object.entries(r.pseudo_class)) t.styles.push({selector: n, type: 'pseudo', rules: dt.parseRules(i, e, !0)});
+				for (const [n, i] of Object.entries(r.pseudo_element)) t.styles.push({selector: n, type: 'pseudo', rules: dt.parseRules(i, e, !0)});
+				for (const [r, i] of Object.entries(n)) {
+					(t.media_queries[r] = []),
+						Object.keys(i.normal).length && t.media_queries[r].push({selector: '', type: 'normal', rules: dt.parseRules(i.normal, e, !0)});
+					for (const [n, o] of Object.entries(i.pseudo_class)) t.media_queries[r].push({selector: n, type: 'pseudo', rules: dt.parseRules(o, e, !0)});
+					for (const [n, o] of Object.entries(i.pseudo_element)) t.media_queries[r].push({selector: n, type: 'pseudo', rules: dt.parseRules(o, e, !0)});
+				}
+				return t;
+			},
+		};
+
+		function bt() {
+			let e = [...document.styleSheets];
+			return e;
+		}
+
+		function xt(e, t) {
+			const n = [];
+			if (e) {
+				const r = e.split(t);
+				let i = !1;
+				for (let e = 0; e < r.length; e++) {
+					const o = r[e].replaceAll('\n'),
+						a = o.includes('('),
+						s = o.includes(')');
+					a && !s ? ((i = !0), n.push(o)) : i ? ((n[n.length - 1] += `${t}${o}`), s && (i = !1)) : n.push(o);
+				}
+			}
+			return n;
+		}
+
+		function St(e, t) {
+			let n = !1,
+				r = !1;
+			try {
+				r = e.matches(t);
+			} catch (e) {}
+			if (r) {
+				const e = t.match(new RegExp(`:(${pt})$`, 'gi')),
+					r = t.match(new RegExp(`:(${mt})`, 'gi')),
+					i = t.match(new RegExp(`:(${gt})\\((.*)\\)$`, 'g'));
+				n =
+					r && ft.get().inspector.view.pseudo
+						? {type: 'pseudoClass', matched: r[0]}
+						: i && ft.get().inspector.view.pseudo
+						? {type: 'pseudoClass', matched: i[0]}
+						: e && ft.get().inspector.view.pseudo
+						? {type: 'pseudoClass', matched: e[0]}
+						: {type: 'normal'};
+			} else if (ft.get().inspector.view.pseudo) {
+				t.match(new RegExp(`:(${pt})$`, 'gi')), t.match(new RegExp(`:(${gt})\\((.*)\\)`, 'g'));
+				const i = t.match(new RegExp(`:(${mt})$`, 'gi')),
+					o = t.match(new RegExp(`(:|::)(${vt})$`, 'gi'));
+				if (i) {
+					const o = t.replace(new RegExp(`:(${mt})$`, 'gi'), '');
+					try {
+						r = e.matches(o);
+					} catch (e) {}
+					r && (n = {type: 'pseudoClass', matched: i[0]});
+				} else if (o) {
+					const i = t.replace(new RegExp(`(:|::)(${vt})$`, 'gi'), '');
+					try {
+						r = e.matches(i);
+					} catch (e) {}
+					r && (n = {type: 'pseudoElement', matched: o[0]});
+				}
+			}
+			return n;
+		}
+
+		let ht = {};
+		var ft = {
+			set: function (e) {
+				ht = e;
+			},
+			get: function () {
+				return ht;
+			},
+		};
+	</script>
 </html>

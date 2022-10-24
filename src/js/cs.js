@@ -78,7 +78,7 @@ function showHideExtension(port, request) {
 			outline: 0 !important;
 			background-color: transparent !important;
 			box-sizing: border-box !important;
-			
+
 			position: fixed !important;
 			top: 18px !important;
 			right: 18px !important;
@@ -1224,13 +1224,11 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		console.log(event);
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-
 						let css = css_beautify(
 							[...document.styleSheets]
 								.map((styleSheet) => {
@@ -1244,9 +1242,24 @@ function activateExportElement(port, request) {
 								.join('\n'),
 							{indent_size: 2, indent_with_tabs: true}
 						);
-						let tagName = event.target.tagName.toLowerCase();
-						let classList = event.target.classList;
-						let id = event.target.id;
+
+						// let styleSheets = [...document.styleSheets];
+						// styleSheets.map((styleSheet) => {
+						// 	try {
+						// 		if (!JSON.stringify(styleSheet.href).includes('chrome-extension://') && styleSheet.cssRules.length !== 0 && styleSheet.disabled !== true) {
+						// 			// console.log(styleSheet);
+						// 			[...styleSheet.cssRules].map((cssRules) => {
+						// 				//console.warn(cssRules.selectorText);
+						// 				//console.log(cssRules.cssText);
+						// 				[...cssRules.style].map((style) => {
+						// 					console.log(style);
+						// 				});
+						// 			});
+						// 		}
+						// 	} catch (e) {
+						// 		console.log('Access Denied, Ignoring', styleSheet.href);
+						// 	}
+						// });
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
@@ -1263,8 +1276,6 @@ function activateExportElement(port, request) {
 						} else if (html.includes(' cursor: default !important;')) {
 							html = html.replace(' cursor: default !important;', '');
 						}
-
-						// CSS Computation
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
