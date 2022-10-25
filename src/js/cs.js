@@ -1223,8 +1223,6 @@ function activateExportElement(port, request) {
 		}
 	});
 
-	console.log(styleSheets);
-
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -1269,7 +1267,14 @@ function activateExportElement(port, request) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css; //css_beautify({indent_size: 2, indent_with_tabs: true});
+						let css = css_beautify(
+							styleSheets
+								.map((cssRules) => {
+									return cssRules.cssText;
+								})
+								.join(''),
+							{indent_size: 2, indent_with_tabs: true}
+						);
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
