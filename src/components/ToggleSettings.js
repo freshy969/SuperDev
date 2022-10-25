@@ -401,19 +401,20 @@ export default function ToggleSettings() {
 			<div className='border border-t-0 border-borderOne box-border rounded-b-lg'>
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText'></i>Extension Shortcuts
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{[
-								`Open/Close Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
-								`Close Active Feature : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
-								`Clear All Cache : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+								`Open Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+								`Close Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+								`Close Active Feature : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'ESC' : 'ESC'}`,
+								`Clear All Cache : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+E' : 'Ctrl+Shift+E'}`,
 							].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6 className='inline-block text-xs text-allText font-normal select-none' htmlFor={'checkboxExportElement' + (index + 1)}>
-											<i className='fa-solid fa-check pr-[5px] text-allText'></i>
+											<i className='fa-regular fa-square-info pr-[5px] text-allText'></i>
 											{value}
 										</h6>
 									</div>
@@ -423,7 +424,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-paintbrush px-[5px] text-allText'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
@@ -456,7 +457,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText'></i>Export Element Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
@@ -481,7 +482,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-eye-dropper px-[5px] text-allText'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
@@ -506,7 +507,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-recycle px-[5px] text-allText'></i>Clear All Cache Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>

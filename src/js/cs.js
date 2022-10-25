@@ -715,7 +715,7 @@ function activatePageRuler(port, request) {
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
 	let body = document.querySelector('body');
-	let portThree = chrome.runtime.connect({name: 'portThree'});
+	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
@@ -726,7 +726,7 @@ function activatePageRuler(port, request) {
 	let overlay = document.createElement('div');
 	overlay.className = 'pageRulerOverlay';
 
-	portThree.onMessage.addListener(function (request) {
+	portTwo.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -785,7 +785,7 @@ function activatePageRuler(port, request) {
 		// Show Minimised Popup
 		chrome.storage.local.set({setMinimised: true});
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'toGrayscale',
 			imageData: Array.from(imageData),
 			width: canvas.width,
@@ -842,13 +842,13 @@ function activatePageRuler(port, request) {
 
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () {
-					portThree.postMessage({action: 'takeScreenshot'});
+					portTwo.postMessage({action: 'takeScreenshot'});
 				});
 			});
 		}
 
 		// First Screenshot
-		else portThree.postMessage({action: 'takeScreenshot'});
+		else portTwo.postMessage({action: 'takeScreenshot'});
 	}
 
 	function pause() {
@@ -900,7 +900,7 @@ function activatePageRuler(port, request) {
 	function sendToWorker(event) {
 		if (paused) return;
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'measureDistances',
 			data: {x: inputX, y: inputY},
 		});
@@ -1185,7 +1185,7 @@ function deactivateDeleteElement(port, request) {
 }
 
 function activateExportElement(port, request) {
-	let portThree = chrome.runtime.connect({name: 'portThree'});
+	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let styleSheets = [];
 
 	// Iterating All Stylesheets
@@ -1196,7 +1196,7 @@ function activateExportElement(port, request) {
 			});
 		} catch (e) {
 			styleSheets.push(null);
-			portThree.postMessage({action: 'getStylesheet', styleSheetUrl: styleSheet.href});
+			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: styleSheet.href});
 		}
 	});
 
@@ -1207,7 +1207,7 @@ function activateExportElement(port, request) {
 	let style = document.createElement('style');
 	iframe.contentDocument.head.appendChild(style);
 
-	portThree.onMessage.addListener(function (request) {
+	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
 			for (var i = 0; i < styleSheets.length; i++) {
 				if (styleSheets[i] === null) {
@@ -1501,7 +1501,7 @@ function activateColorPicker(port, request) {
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
 	let body = document.querySelector('body');
-	let portThree = chrome.runtime.connect({name: 'portThree'});
+	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
@@ -1512,7 +1512,7 @@ function activateColorPicker(port, request) {
 	let overlay = document.createElement('div');
 	overlay.className = 'colorPickerOverlay';
 
-	portThree.onMessage.addListener(function (request) {
+	portTwo.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
 
 		switch (request.action) {
@@ -1572,7 +1572,7 @@ function activateColorPicker(port, request) {
 		// Show Minimised Popup
 		chrome.storage.local.set({setMinimised: true});
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'setColorPicker',
 			imageData: Array.from(imageData),
 			width: canvas.width,
@@ -1630,13 +1630,13 @@ function activateColorPicker(port, request) {
 
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () {
-					portThree.postMessage({action: 'takeScreenshot'});
+					portTwo.postMessage({action: 'takeScreenshot'});
 				});
 			});
 		}
 
 		// First Screenshot
-		else portThree.postMessage({action: 'takeScreenshot'});
+		else portTwo.postMessage({action: 'takeScreenshot'});
 	}
 
 	function pause() {
@@ -1695,7 +1695,7 @@ function activateColorPicker(port, request) {
 	function sendToWorker(event) {
 		if (paused) return;
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'getColorAt',
 			data: {x: inputX, y: inputY},
 		});
@@ -1755,8 +1755,8 @@ function activateClearAllCache(port, request) {
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'clearAllCache') {
-				let portThree = chrome.runtime.connect({name: 'portThree'});
-				portThree.postMessage({action: 'clearAllCache', settings: value.settings});
+				let portTwo = chrome.runtime.connect({name: 'portTwo'});
+				portTwo.postMessage({action: 'clearAllCache', settings: value.settings});
 			}
 		});
 	});

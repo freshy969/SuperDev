@@ -1,9 +1,9 @@
-// Page Ruler + Color Picker + Clear All Cache
-chrome.runtime.onConnect.addListener(function (portThree) {
+// Page Ruler + Export Element + Color Picker + Clear All Cache
+chrome.runtime.onConnect.addListener(function (portTwo) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
 
-	portThree.onMessage.addListener(function (request) {
+	portTwo.onMessage.addListener(function (request) {
 		switch (request.action) {
 			// Page Ruler + Color Picker
 			case 'takeScreenshot':
@@ -16,7 +16,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				data = grayscale(imageData);
 				width = request.width;
 				height = request.height;
-				portThree.postMessage({action: 'screenshotProcessed'});
+				portTwo.postMessage({action: 'screenshotProcessed'});
 				break;
 
 			// Page Ruler
@@ -29,7 +29,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				imageData = new Uint8ClampedArray(request.imageData);
 				width = request.width;
 				height = request.height;
-				portThree.postMessage({action: 'colorPickerSet'});
+				portTwo.postMessage({action: 'colorPickerSet'});
 				break;
 
 			// Export Element
@@ -51,7 +51,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	// Page Ruler + Color Picker
 	function takeScreenshot() {
 		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
-			portThree.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
+			portTwo.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
 	}
 
@@ -155,7 +155,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		dimensions.x = input.x;
 		dimensions.y = input.y;
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'showDimensions',
 			data: dimensions,
 		});
@@ -174,7 +174,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				else return false;
 			})
 			.then(function (styleSheet) {
-				portThree.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
+				portTwo.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
 			});
 	}
 
@@ -199,7 +199,7 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 			hex: rgbToHex(r, g, b),
 		};
 
-		portThree.postMessage({
+		portTwo.postMessage({
 			action: 'showColorPicker',
 			data: spotColor,
 		});
@@ -257,9 +257,6 @@ chrome.action.onClicked.addListener(function (tab) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
-			portOne.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
 		});
 	}
 });
@@ -273,11 +270,8 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portTwo = chrome.tabs.connect(tabs[0].id, {name: 'portTwo'});
-			portTwo.postMessage({action: 'showHideExtension'});
-			portTwo.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension'});
 		});
 	}
 });
@@ -344,5 +338,15 @@ chrome.management.onEnabled.addListener(async function (extension) {
 				}
 			}
 		}
+	}
+});
+
+// Extension Shortcuts
+chrome.commands.onCommand.addListener((command) => {
+	if (command === 'clearAllCache') {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'activateClearAllCache'});
+		});
 	}
 });

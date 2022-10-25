@@ -28,17 +28,14 @@ export default function NavBar() {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(42); // 42 = Header Height
-					console.log('Popup Minimised');
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
-							console.log('Popup Expanded');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('toggleSettings');
-							console.log('Popup Expanded');
 						}
 					});
 				}
@@ -53,7 +50,6 @@ export default function NavBar() {
 						chrome.storage.local.get(['allFeatures'], function (result) {
 							JustChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
-							console.log('Set Homepage as Default');
 						});
 					}
 				}
@@ -67,7 +63,6 @@ export default function NavBar() {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 						chrome.storage.local.set({setActiveFeatureDisabled: false});
-						console.log('Deactivated Active Feature');
 					});
 				}
 			}
@@ -84,19 +79,16 @@ export default function NavBar() {
 			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
 
 			chrome.storage.local.set({setMinimised: false});
-			console.log('Toggle Settings Activated');
 		} else {
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
-			console.log('Toggle Settings Dectivated');
 		}
 	}
 
 	function pauseExtension() {
 		ActivateDeactivateFeature(allFeatures, null);
 		chrome.storage.local.set({isPopupPaused: true});
-		console.log('Extension Paused');
 	}
 
 	function minimiseExtension() {
@@ -109,11 +101,8 @@ export default function NavBar() {
 
 	function showHideExtension() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portFour = chrome.tabs.connect(tabs[0].id, {name: 'portFour'});
-			portFour.postMessage({action: 'showHideExtension'});
-			portFour.onMessage.addListener(function (response) {
-				console.log('Got Response : ', response.action);
-			});
+			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
+			portThree.postMessage({action: 'showHideExtension'});
 		});
 	}
 
