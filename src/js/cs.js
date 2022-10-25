@@ -1185,6 +1185,46 @@ function deactivateDeleteElement(port, request) {
 }
 
 function activateExportElement(port, request) {
+	let portThree = chrome.runtime.connect({name: 'portThree'});
+	let styleSheets = [];
+
+	// Iterating All Stylesheets
+	[...document.styleSheets].map(function (styleSheet) {
+		try {
+			[...styleSheet.cssRules].map(function (cssRule) {
+				styleSheets.push(cssRule);
+			});
+		} catch (e) {
+			styleSheets.push(null);
+			portThree.postMessage({action: 'getStylesheet', styleSheetUrl: styleSheet.href});
+		}
+	});
+
+	// Will Add Styles to Iframe
+	let iframe = document.createElement('iframe');
+	iframe.setAttribute('style', 'display: none');
+	document.body.appendChild(iframe);
+	let style = document.createElement('style');
+	iframe.contentDocument.head.appendChild(style);
+
+	portThree.onMessage.addListener(function (request) {
+		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
+			for (var i = 0; i < styleSheets.length; i++) {
+				if (styleSheets[i] === null) {
+					style.textContent = request.styleSheet;
+					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet) {
+						[...styleSheet.cssRules].map(function (cssRule) {
+							styleSheets[i] = cssRule;
+						});
+					});
+					break;
+				}
+			}
+		}
+	});
+
+	console.log(styleSheets);
+
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -1229,37 +1269,7 @@ function activateExportElement(port, request) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css = css_beautify(
-							[...document.styleSheets]
-								.map((styleSheet) => {
-									try {
-										return [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
-									} catch (e) {
-										console.log('Access to stylesheet %s is denied. Ignoring…', styleSheet.href);
-									}
-								})
-								.filter(Boolean)
-								.join('\n'),
-							{indent_size: 2, indent_with_tabs: true}
-						);
-
-						// let styleSheets = [...document.styleSheets];
-						// styleSheets.map((styleSheet) => {
-						// 	try {
-						// 		if (!JSON.stringify(styleSheet.href).includes('chrome-extension://') && styleSheet.cssRules.length !== 0 && styleSheet.disabled !== true) {
-						// 			// console.log(styleSheet);
-						// 			[...styleSheet.cssRules].map((cssRules) => {
-						// 				//console.warn(cssRules.selectorText);
-						// 				//console.log(cssRules.cssText);
-						// 				[...cssRules.style].map((style) => {
-						// 					console.log(style);
-						// 				});
-						// 			});
-						// 		}
-						// 	} catch (e) {
-						// 		console.log('Access Denied, Ignoring', styleSheet.href);
-						// 	}
-						// });
+						let css; //css_beautify({indent_size: 2, indent_with_tabs: true});
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {

@@ -32,6 +32,11 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				portThree.postMessage({action: 'colorPickerSet'});
 				break;
 
+			// Export Element
+			case 'getStylesheet':
+				getStylesheet(request.styleSheetUrl);
+				break;
+
 			// Color Picker
 			case 'getColorAt':
 				getColorAt(request.data);
@@ -159,6 +164,18 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 	// Page Ruler
 	function getLightnessAt(data, x, y) {
 		return inBoundaries(x, y) ? data[y * width + x] : -1;
+	}
+
+	// Export Element
+	function getStylesheet(styleSheetUrl) {
+		fetch(styleSheetUrl)
+			.then(function (response) {
+				if (response.status >= 200 && response.status < 300) return response.text();
+				else return false;
+			})
+			.then(function (styleSheet) {
+				portThree.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
+			});
 	}
 
 	// Color Picker
