@@ -402,7 +402,7 @@ export default function ToggleSettings() {
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Page Highlight Settings
+							<i className='fa-regular fa-brush px-[5px] text-allText'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{[
@@ -435,7 +435,7 @@ export default function ToggleSettings() {
 
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Export Element Settings
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText'></i>Export Element Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{['Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
@@ -460,7 +460,7 @@ export default function ToggleSettings() {
 
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Color Picker Settings
+							<i className='fa-regular fa-eye-dropper px-[5px] text-allText'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{['Copy Color Code in Hex', 'Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
@@ -485,7 +485,7 @@ export default function ToggleSettings() {
 
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-border-all px-[5px] text-allText'></i>Clear Cache Settings
+							<i className='fa-regular fa-recycle px-[5px] text-allText'></i>Clear Cache Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
 							{['Reload After Clearing', 'Clear Cache', 'Clear Cookies', 'Clear Form Data', 'Clear Local Storage', 'Reset Settings to Default'].map(function (
