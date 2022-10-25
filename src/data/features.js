@@ -7,7 +7,7 @@ const features = [
 	},
 	{
 		title: 'Page Highlight',
-		icon: 'fa-brush',
+		icon: 'fa-paintbrush',
 		id: 'pageHighlight',
 		settings: {
 			checkboxPageHighlight1: false,
@@ -124,16 +124,16 @@ const features = [
 		settings: {},
 	},
 	{
-		title: 'Clear Cache',
+		title: 'Clear All Cache',
 		icon: 'fa-recycle',
-		id: 'clearCache',
+		id: 'clearAllCache',
 		settings: {
-			checkboxClearCache1: false,
-			checkboxClearCache2: true,
-			checkboxClearCache3: false,
-			checkboxClearCache4: false,
-			checkboxClearCache5: false,
-			checkboxClearCache6: false,
+			checkboxClearAllCache1: false,
+			checkboxClearAllCache2: true,
+			checkboxClearAllCache3: false,
+			checkboxClearAllCache4: false,
+			checkboxClearAllCache5: false,
+			checkboxClearAllCache6: false,
 		},
 	},
 	{

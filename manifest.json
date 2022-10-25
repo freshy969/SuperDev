@@ -18,6 +18,15 @@
 				"mac": "Ctrl+Shift+S",
 				"windows": "Ctrl+Shift+S"
 			}
+		},
+		"clearAllCache": {
+			"description": "Clear All Cache",
+			"suggested_key": {
+				"chromeos": "Ctrl+Shift+E",
+				"linux": "Ctrl+Shift+E",
+				"mac": "Ctrl+Shift+E",
+				"windows": "Ctrl+Shift+E"
+			}
 		}
 	},
 	"action": {

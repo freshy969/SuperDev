@@ -24,13 +24,13 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
 					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
 					document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
-				} else if (value.id === 'clearCache') {
-					document.querySelector('#checkboxClearCache1').checked = value.settings.checkboxClearCache1;
-					document.querySelector('#checkboxClearCache2').checked = value.settings.checkboxClearCache2;
-					document.querySelector('#checkboxClearCache3').checked = value.settings.checkboxClearCache3;
-					document.querySelector('#checkboxClearCache4').checked = value.settings.checkboxClearCache4;
-					document.querySelector('#checkboxClearCache5').checked = value.settings.checkboxClearCache5;
-					document.querySelector('#checkboxClearCache6').checked = value.settings.checkboxClearCache6;
+				} else if (value.id === 'clearAllCache') {
+					document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
+					document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
+					document.querySelector('#checkboxClearAllCache3').checked = value.settings.checkboxClearAllCache3;
+					document.querySelector('#checkboxClearAllCache4').checked = value.settings.checkboxClearAllCache4;
+					document.querySelector('#checkboxClearAllCache5').checked = value.settings.checkboxClearAllCache5;
+					document.querySelector('#checkboxClearAllCache6').checked = value.settings.checkboxClearAllCache6;
 				}
 			});
 		});
@@ -303,90 +303,90 @@ export default function ToggleSettings() {
 		}
 	}
 
-	function ClearCacheSettings(checkbox) {
+	function ClearAllCacheSettings(checkbox) {
 		switch (checkbox) {
-			case 'checkboxClearCache1':
+			case 'checkboxClearAllCache1':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache1').checked === true) {
-							value.settings.checkboxClearCache1 = true;
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache1').checked === true) {
+							value.settings.checkboxClearAllCache1 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxClearCache1 = false;
+							value.settings.checkboxClearAllCache1 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxClearCache2':
+			case 'checkboxClearAllCache2':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache2').checked === true) {
-							value.settings.checkboxClearCache2 = true;
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache2').checked === true) {
+							value.settings.checkboxClearAllCache2 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxClearCache2 = false;
+							value.settings.checkboxClearAllCache2 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxClearCache3':
+			case 'checkboxClearAllCache3':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache3').checked === true) {
-							value.settings.checkboxClearCache3 = true;
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache3').checked === true) {
+							value.settings.checkboxClearAllCache3 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxClearCache3 = false;
+							value.settings.checkboxClearAllCache3 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxClearCache4':
+			case 'checkboxClearAllCache4':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache4').checked === true) {
-							value.settings.checkboxClearCache4 = true;
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache4').checked === true) {
+							value.settings.checkboxClearAllCache4 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxClearCache4 = false;
+							value.settings.checkboxClearAllCache4 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxClearCache5':
+			case 'checkboxClearAllCache5':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache5').checked === true) {
-							value.settings.checkboxClearCache5 = true;
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache5').checked === true) {
+							value.settings.checkboxClearAllCache5 = true;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
-							value.settings.checkboxClearCache5 = false;
+							value.settings.checkboxClearAllCache5 = false;
 							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
 				break;
-			case 'checkboxClearCache6':
+			case 'checkboxClearAllCache6':
 				allFeatures.map(function (value, index) {
-					if (value.id === 'clearCache') {
-						if (document.querySelector('#checkboxClearCache6').checked === true) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache6').checked === true) {
 							setTimeout(function () {
-								value.settings.checkboxClearCache1 = false;
-								value.settings.checkboxClearCache2 = true;
-								value.settings.checkboxClearCache3 = false;
-								value.settings.checkboxClearCache4 = false;
-								value.settings.checkboxClearCache5 = false;
-								value.settings.checkboxClearCache6 = false;
-								document.querySelector('#checkboxClearCache1').checked = false;
-								document.querySelector('#checkboxClearCache2').checked = true;
-								document.querySelector('#checkboxClearCache3').checked = false;
-								document.querySelector('#checkboxClearCache4').checked = false;
-								document.querySelector('#checkboxClearCache5').checked = false;
-								document.querySelector('#checkboxClearCache6').checked = false;
+								value.settings.checkboxClearAllCache1 = false;
+								value.settings.checkboxClearAllCache2 = true;
+								value.settings.checkboxClearAllCache3 = false;
+								value.settings.checkboxClearAllCache4 = false;
+								value.settings.checkboxClearAllCache5 = false;
+								value.settings.checkboxClearAllCache6 = false;
+								document.querySelector('#checkboxClearAllCache1').checked = false;
+								document.querySelector('#checkboxClearAllCache2').checked = true;
+								document.querySelector('#checkboxClearAllCache3').checked = false;
+								document.querySelector('#checkboxClearAllCache4').checked = false;
+								document.querySelector('#checkboxClearAllCache5').checked = false;
+								document.querySelector('#checkboxClearAllCache6').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 300);
 						}
@@ -402,7 +402,29 @@ export default function ToggleSettings() {
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-brush px-[5px] text-allText'></i>Page Highlight Settings
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText'></i>Extension Shortcuts
+						</div>
+						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
+							{[
+								`Open/Close Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+								`Close Active Feature : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+								`Clear All Cache : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
+							].map(function (value, index) {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<h6 className='inline-block text-xs text-allText font-normal select-none' htmlFor={'checkboxExportElement' + (index + 1)}>
+											<i className='fa-solid fa-check pr-[5px] text-allText'></i>
+											{value}
+										</h6>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
+							<i className='fa-regular fa-paintbrush px-[5px] text-allText'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3 mb-3'>
 							{[
@@ -485,7 +507,7 @@ export default function ToggleSettings() {
 
 					<div>
 						<div className='rounded-md text-left bg-settingsBG border border-borderTwo shadow-lg text-xs text-allText p-2 mb-3 font-normal'>
-							<i className='fa-regular fa-recycle px-[5px] text-allText'></i>Clear Cache Settings
+							<i className='fa-regular fa-recycle px-[5px] text-allText'></i>Clear All Cache Settings
 						</div>
 						<div className='rounded-md border bg-settingsBG border-borderTwo shadow-lg p-3'>
 							{['Reload After Clearing', 'Clear Cache', 'Clear Cookies', 'Clear Form Data', 'Clear Local Storage', 'Reset Settings to Default'].map(function (
@@ -496,13 +518,13 @@ export default function ToggleSettings() {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ClearCacheSettings('checkboxClearCache' + (index + 1));
+												ClearAllCacheSettings('checkboxClearAllCache' + (index + 1));
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 form-check-input appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
-											id={'checkboxClearCache' + (index + 1)}
+											id={'checkboxClearAllCache' + (index + 1)}
 										/>
-										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxClearCache' + (index + 1)}>
+										<label className='inline-block text-xs text-allText font-normal cursor-pointer select-none' htmlFor={'checkboxClearAllCache' + (index + 1)}>
 											{value}
 										</label>
 									</div>

@@ -23,7 +23,7 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 
 function HideMeShowMe(portFour, featureId) {
 	// Function for Exceptions
-	if (featureId === 'clearCache') {
+	if (featureId === 'clearAllCache') {
 		setTimeout(function () {
 			portFour.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}, 50);

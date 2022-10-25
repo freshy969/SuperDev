@@ -1,4 +1,4 @@
-// Page Ruler + Color Picker + Clear Cache
+// Page Ruler + Color Picker + Clear All Cache
 chrome.runtime.onConnect.addListener(function (portThree) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
@@ -42,9 +42,9 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 				getColorAt(request.data);
 				break;
 
-			// Clear Cache
-			case 'clearCache':
-				clearCache(request.settings);
+			// Clear All Cache
+			case 'clearAllCache':
+				clearAllCache(request.settings);
 		}
 	});
 
@@ -216,26 +216,26 @@ chrome.runtime.onConnect.addListener(function (portThree) {
 		return hex.length == 1 ? '0' + hex : hex;
 	}
 
-	// Clear Cache
-	function clearCache(settings) {
+	// Clear All Cache
+	function clearAllCache(settings) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.browsingData.remove(
 				{
 					origins: [tabs[0].url],
 				},
 				{
-					cookies: settings.checkboxClearCache3,
-					localStorage: settings.checkboxClearCache5,
+					cookies: settings.checkboxClearAllCache3,
+					localStorage: settings.checkboxClearAllCache5,
 				},
 				function () {
 					chrome.browsingData.remove(
 						{},
 						{
-							cache: settings.checkboxClearCache2,
-							formData: settings.checkboxClearCache4,
+							cache: settings.checkboxClearAllCache2,
+							formData: settings.checkboxClearAllCache4,
 						},
 						function () {
-							if (settings.checkboxClearCache1 === true) {
+							if (settings.checkboxClearAllCache1 === true) {
 								chrome.tabs.reload(tabs[0].id);
 							}
 						}
