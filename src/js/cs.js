@@ -1263,6 +1263,19 @@ function activateExportElement(port, request) {
 	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			// All Selectors
+			let allSelectors = [];
+			event.target.querySelectorAll('*').forEach(function (element) {
+				let tempSelectors = [];
+				if (element.id !== '') tempSelectors.push('#' + element.id);
+				if (element.className !== '') {
+					[...element.classList].map(function (value) {
+						tempSelectors.push('.' + value);
+					});
+				}
+				tempSelectors.push(element.tagName.toLowerCase());
+				allSelectors.push(tempSelectors);
+			});
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
