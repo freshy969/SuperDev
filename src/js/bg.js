@@ -343,10 +343,19 @@ chrome.management.onEnabled.addListener(async function (extension) {
 
 // Extension Shortcuts
 chrome.commands.onCommand.addListener((command) => {
-	if (command === 'clearAllCache') {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'activateClearAllCache'});
-		});
-	}
+	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		if (
+			!tabs[0].url.includes('chrome://') &&
+			!tabs[0].url.includes('chrome-extension://') &&
+			!tabs[0].url.includes('file://') &&
+			!tabs[0].url.includes('https://chrome.google.com/webstore')
+		) {
+			if (command === 'clearAllCache') {
+				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+					let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+					portOne.postMessage({action: 'activateClearAllCache'});
+				});
+			}
+		}
+	});
 });

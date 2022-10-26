@@ -33,6 +33,9 @@ export default function NavBar() {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('mainBody');
+						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
+							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							HideAllComponentExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllComponentExcept('toggleSettings');
@@ -68,6 +71,23 @@ export default function NavBar() {
 			}
 		});
 	}, []);
+
+	function toggleInfo() {
+		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
+			ActivateDeactivateFeature(allFeatures, null);
+			ChangeHeight(PopupHeight(allFeatures));
+			HideAllComponentExcept('toggleInfo');
+
+			let bodyHeight = PopupHeight(allFeatures) - 43;
+			document.querySelector('#toggleInfoChild').style.height = `${bodyHeight}px`;
+
+			chrome.storage.local.set({setMinimised: false});
+		} else {
+			ChangeHeight(PopupHeight(allFeatures));
+			HideAllComponentExcept('mainBody');
+			chrome.storage.local.set({setMinimised: false});
+		}
+	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
@@ -120,18 +140,22 @@ export default function NavBar() {
 							onClick={pauseExtension}></button>
 						<button
 							id='movePopupButton'
-							className='text-allText text-right fa-regular fa-up-down-left-right text-[12.5px] ml-[6px] p-1 relative bottom-[1px]'></button>
+							className='text-allText text-right fa-regular fa-up-down-left-right text-xs ml-[6px] p-1 relative bottom-[1px]'></button>
+						<button
+							id='toggleSettingsButton'
+							className='text-allText text-right fa-regular fa-circle-info text-xs ml-[6px] p-1 relative bottom-[1px]'
+							onClick={toggleInfo}></button>
 						<button
 							id='toggleSettingsButton'
 							className='text-allText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
 							onClick={toggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
-							className='text-allText text-right fa-solid fa-down-left-and-up-right-to-center text-[11.5px] ml-[6px] p-1 relative bottom-[1.3px]'
+							className='text-allText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[1px]'
 							onClick={minimiseExtension}></button>
 						<button
 							id='showHideExtensionButton'
-							className='text-allText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[0px]'
+							className='text-allText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[-0.2px]'
 							onClick={showHideExtension}></button>
 					</nav>
 				</div>

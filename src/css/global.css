@@ -74,18 +74,22 @@ p {
 /**  Custom Checkbox **/
 
 /**  Custom Scrollbar **/
+#toggleInfoChild,
 #toggleSettingsChild {
 	overflow-y: scroll !important;
 }
 
+#toggleInfoChild::-webkit-scrollbar,
 #toggleSettingsChild::-webkit-scrollbar {
 	width: 0px;
 }
 
+#toggleInfoChild::-webkit-scrollbar-track,
 #toggleSettingsChild::-webkit-scrollbar-track {
 	background: #00000000;
 }
 
+#toggleInfoChild::-webkit-scrollbar-thumb,
 #toggleSettingsChild::-webkit-scrollbar-thumb {
 	background: #00000000;
 }

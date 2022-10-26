@@ -3,6 +3,7 @@ import features from './data/features';
 import {useState, useEffect} from 'react';
 import NavBar from './components/NavBar';
 import MainBody from './components/MainBody';
+import ToggleInfo from './components/ToggleInfo';
 import ToggleSettings from './components/ToggleSettings';
 import PopupHeight from './components/functions/PopupHeight';
 import ChangeHeight from './components/functions/ChangeHeight';
@@ -40,6 +41,7 @@ export default function Home() {
 			<>
 				<NavBar />
 				<MainBody />
+				<ToggleInfo />
 				<ToggleSettings />
 			</>
 		);

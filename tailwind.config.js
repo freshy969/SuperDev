@@ -3,9 +3,9 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				allBG: '#000000FF',
+				bgOne: '#000000FF',
+				bgTwo: '#18181BFF',
 				allText: '#F3F3F3FF',
-				settingsBG: '#18181BFF',
 
 				btnOne: '#007CF0FF',
 				btnTwo: '#06B6D4FF',
