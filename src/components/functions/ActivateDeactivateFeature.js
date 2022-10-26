@@ -40,10 +40,10 @@ function HideMeShowMe(portThree, featureId) {
 		// Activate On Click If Not Active
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
-			document.querySelector('#' + featureId).classList.remove('from-btnOne dark:from-btnOneD', 'to-btnTwo dark:to-btnTwoD');
+			document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
 			document
 				.querySelector('#' + featureId)
-				.classList.add('from-btnThree dark:from-btnThreeD', 'via-btnFour dark:via-btnFourD', 'to-btnFive dark:to-btnFiveD', 'active');
+				.classList.add('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
 
 			setTimeout(function () {
 				portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
@@ -61,8 +61,8 @@ function HideMeShowMe(portThree, featureId) {
 			document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
 			document
 				.querySelector('#' + featureId)
-				.classList.remove('from-btnThree dark:from-btnThreeD', 'via-btnFour dark:via-btnFourD', 'to-btnFive dark:to-btnFiveD', 'active');
-			document.querySelector('#' + featureId).classList.add('from-btnOne dark:from-btnOneD', 'to-btnTwo dark:to-btnTwoD');
+				.classList.remove('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
+			document.querySelector('#' + featureId).classList.add('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
 			portThree.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}
 	}
@@ -73,8 +73,8 @@ function JustHideMe(portThree, featureId) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			document
 				.querySelector('#' + featureId)
-				.classList.remove('from-btnThree dark:from-btnThreeD', 'via-btnFour dark:via-btnFourD', 'to-btnFive dark:to-btnFiveD', 'active');
-			document.querySelector('#' + featureId).classList.add('from-btnOne dark:from-btnOneD', 'to-btnTwo dark:to-btnTwoD');
+				.classList.remove('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
+			document.querySelector('#' + featureId).classList.add('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
 			portThree.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}
 	}
