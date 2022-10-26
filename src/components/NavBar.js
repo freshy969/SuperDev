@@ -77,11 +77,9 @@ export default function NavBar() {
 			if (result.colorTheme === 'light') {
 				document.documentElement.classList.add('dark');
 				chrome.storage.local.set({colorTheme: 'dark'});
-				console.log('Dark Mode Activated');
 			} else if (result.colorTheme === 'dark') {
 				document.documentElement.classList.remove('dark');
 				chrome.storage.local.set({colorTheme: 'light'});
-				console.log('Light Mode Activated');
 			}
 		});
 	}

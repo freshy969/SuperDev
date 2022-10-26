@@ -28,19 +28,18 @@ export default function Home() {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
 					chrome.storage.local.set({colorTheme: 'dark'});
-					console.log('Dark Mode Activated');
 					setIsLoadingOne(false);
 				} else {
-					chrome.storage.local.set({colorTheme: 'light'});
-					console.log('Light Mode Activated');
+					// Dark Theme as Default
+					chrome.storage.local.set({colorTheme: 'dark'});
+					document.documentElement.classList.add('dark');
+
 					setIsLoadingOne(false);
 				}
 			} else if (result.colorTheme === 'dark') {
 				document.documentElement.classList.add('dark');
-				console.log('Dark Mode Activated');
 				setIsLoadingOne(false);
 			} else if (result.colorTheme === 'light') {
-				console.log('Light Mode Activated');
 				setIsLoadingOne(false);
 			}
 		});
