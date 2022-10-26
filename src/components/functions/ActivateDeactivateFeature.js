@@ -41,7 +41,7 @@ function HideMeShowMe(portThree, featureId) {
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 			document.querySelector('#' + featureId).classList.remove('from-btnOne', 'to-btnTwo');
-			document.querySelector('#' + featureId).classList.add('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+			document.querySelector('#' + featureId).classList.add('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 
 			setTimeout(function () {
 				portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
@@ -57,7 +57,7 @@ function HideMeShowMe(portThree, featureId) {
 		// Deactivate On Click If Active
 		else {
 			document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
-			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+			document.querySelector('#' + featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 			portThree.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}
@@ -67,7 +67,7 @@ function HideMeShowMe(portThree, featureId) {
 function JustHideMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
-			document.querySelector('#' + featureId).classList.remove('from-pink-500', 'via-red-500', 'to-yellow-500', 'active');
+			document.querySelector('#' + featureId).classList.remove('from-btnThree', 'via-btnFour', 'to-btnFive', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'to-btnTwo');
 			portThree.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
 		}
