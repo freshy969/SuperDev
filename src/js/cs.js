@@ -101,9 +101,9 @@ function showHideExtension(port, request) {
 
 			cursor: move !important;
 			width: 18px !important;
-			height: 42px !important;
-			margin-left: 199px !important;
-			margin-bottom: -42px !important;
+			height: 38.5px !important;
+			margin-left: 168px !important;
+			margin-bottom: -38.5px !important;
 			z-index: 2147483647 !important;`;
 		document.querySelector('#superDev').appendChild(superDevHandler);
 

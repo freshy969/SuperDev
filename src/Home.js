@@ -9,7 +9,8 @@ import PopupHeight from './components/functions/PopupHeight';
 import ChangeHeight from './components/functions/ChangeHeight';
 
 export default function Home() {
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingOne, setIsLoadingOne] = useState(true);
+	const [isLoadingTwo, setIsLoadingTwo] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(function () {
@@ -21,21 +22,44 @@ export default function Home() {
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
 
+		// Dark Mode Initialisation
+		chrome.storage.local.get(['colorTheme'], function (result) {
+			if (result.colorTheme === undefined) {
+				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					document.documentElement.classList.add('dark');
+					chrome.storage.local.set({colorTheme: 'dark'});
+					console.log('Dark Mode Activated');
+					setIsLoadingOne(false);
+				} else {
+					chrome.storage.local.set({colorTheme: 'light'});
+					console.log('Light Mode Activated');
+					setIsLoadingOne(false);
+				}
+			} else if (result.colorTheme === 'dark') {
+				document.documentElement.classList.add('dark');
+				console.log('Dark Mode Activated');
+				setIsLoadingOne(false);
+			} else if (result.colorTheme === 'light') {
+				console.log('Light Mode Activated');
+				setIsLoadingOne(false);
+			}
+		});
+
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {
 					setAllFeatures(features);
-					setIsLoading(false);
+					setIsLoadingTwo(false);
 				});
 			} else {
 				setAllFeatures(JSON.parse(result.allFeatures));
-				setIsLoading(false);
+				setIsLoadingTwo(false);
 			}
 		});
 	}, []);
 
-	if (!isLoading) {
+	if (!isLoadingOne && !isLoadingTwo) {
 		ChangeHeight(PopupHeight(allFeatures));
 		return (
 			<>

@@ -27,7 +27,7 @@ export default function NavBar() {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(42); // 42 = Header Height
+					ChangeHeight(38.5); // 38.5 = Header Height
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
@@ -72,13 +72,27 @@ export default function NavBar() {
 		});
 	}, []);
 
+	function darkMode() {
+		chrome.storage.local.get(['colorTheme'], function (result) {
+			if (result.colorTheme === 'light') {
+				document.documentElement.classList.add('dark');
+				chrome.storage.local.set({colorTheme: 'dark'});
+				console.log('Dark Mode Activated');
+			} else if (result.colorTheme === 'dark') {
+				document.documentElement.classList.remove('dark');
+				chrome.storage.local.set({colorTheme: 'light'});
+				console.log('Light Mode Activated');
+			}
+		});
+	}
+
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
 			ActivateDeactivateFeature(allFeatures, null);
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleInfo');
 
-			let bodyHeight = PopupHeight(allFeatures) - 43;
+			let bodyHeight = PopupHeight(allFeatures) - 39.5;
 			document.querySelector('#toggleInfoChild').style.height = `${bodyHeight}px`;
 
 			chrome.storage.local.set({setMinimised: false});
@@ -95,7 +109,7 @@ export default function NavBar() {
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleSettings');
 
-			let bodyHeight = PopupHeight(allFeatures) - 43;
+			let bodyHeight = PopupHeight(allFeatures) - 39.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
 
 			chrome.storage.local.set({setMinimised: false});
@@ -129,33 +143,35 @@ export default function NavBar() {
 	if (allFeatures.length !== 0) {
 		return (
 			<header id='navBar'>
-				<div className='flex justify-between border border-borderOne box-border rounded-t-lg py-[8px] px-[18px]'>
-					<h1 className='text-[13px] text-allText font-regular cursor-default select-none relative top-[2px]'>
-						SuperDev<img className='inline relative ml-[6px] mt-[-3px]' src='../icons/icon128.png' alt='logo' width='14'></img>
+				<div className='flex justify-between border border-borderOne dark:border-borderOneD box-border rounded-t-lg py-[8px] px-[18px]'>
+					<h1 className='text-[13px] text-titleText dark:text-titleTextD font-medium cursor-default select-none relative top-[0.5px]'>
+						SuperDev<img className='inline ml-[6px] relative bottom-[1.5px]' src='../icons/icon128.png' alt='logo' width='14'></img>
 					</h1>
-					<nav>
+					<nav className='relative bottom-[0.5px]'>
 						<button
 							id='pauseExtensionButton'
-							className='text-allText text-right fa-regular fa-circle-stop text-xs ml-[6px] p-1 relative bottom-[1px] invisible'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 invisible'
 							onClick={pauseExtension}></button>
+						<button id='movePopupButton' className='text-faText dark:text-faTextD text-right fa-solid fa-up-down-left-right text-xs ml-[6px] p-1'></button>
 						<button
-							id='movePopupButton'
-							className='text-allText text-right fa-regular fa-up-down-left-right text-xs ml-[6px] p-1 relative bottom-[1px]'></button>
-						<button
-							id='toggleSettingsButton'
-							className='text-allText text-right fa-regular fa-circle-info text-xs ml-[6px] p-1 relative bottom-[1px]'
+							id='toggleInfoButton'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1'
 							onClick={toggleInfo}></button>
 						<button
+							id='darkModeButton'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1'
+							onClick={darkMode}></button>
+						<button
 							id='toggleSettingsButton'
-							className='text-allText text-right fa-regular fa-gear text-xs ml-[6px] p-1 relative bottom-[1px]'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1'
 							onClick={toggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
-							className='text-allText text-right fa-solid fa-down-left-and-up-right-to-center text-xs ml-[6px] p-1 relative bottom-[1px]'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1'
 							onClick={minimiseExtension}></button>
 						<button
 							id='showHideExtensionButton'
-							className='text-allText text-right fa-solid fa-xmark text-[16px] ml-[6px] p-1 pr-0 relative bottom-[-0.2px]'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 pr-0'
 							onClick={showHideExtension}></button>
 					</nav>
 				</div>
