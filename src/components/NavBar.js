@@ -27,7 +27,7 @@ export default function NavBar() {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(38.5); // 38.5 = Header Height
+					ChangeHeight(40.5); // 40.5 = Header Height
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
@@ -92,7 +92,7 @@ export default function NavBar() {
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleInfo');
 
-			let bodyHeight = PopupHeight(allFeatures) - 39.5;
+			let bodyHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${bodyHeight}px`;
 
 			chrome.storage.local.set({setMinimised: false});
@@ -109,7 +109,7 @@ export default function NavBar() {
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllComponentExcept('toggleSettings');
 
-			let bodyHeight = PopupHeight(allFeatures) - 39.5;
+			let bodyHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
 
 			chrome.storage.local.set({setMinimised: false});
@@ -150,28 +150,30 @@ export default function NavBar() {
 					<nav className='relative bottom-[0.5px]'>
 						<button
 							id='pauseExtensionButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 invisible'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 py-[5px] invisible'
 							onClick={pauseExtension}></button>
-						<button id='movePopupButton' className='text-faText dark:text-faTextD text-right fa-solid fa-up-down-left-right text-xs ml-[6px] p-1'></button>
+						<button
+							id='movePopupButton'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-up-down-left-right text-xs ml-[6px] p-1 py-[5px]'></button>
 						<button
 							id='toggleInfoButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1 py-[5px]'
 							onClick={toggleInfo}></button>
 						<button
 							id='darkModeButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1 py-[5px]'
 							onClick={darkMode}></button>
 						<button
 							id='toggleSettingsButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1 py-[5px]'
 							onClick={toggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1 py-[5px]'
 							onClick={minimiseExtension}></button>
 						<button
 							id='showHideExtensionButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 pr-0'
+							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 py-[5px] pr-0'
 							onClick={showHideExtension}></button>
 					</nav>
 				</div>

@@ -401,7 +401,7 @@ export default function ToggleSettings() {
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-paintbrush px-[5px] text-allText dark:text-allTextD'></i>Page Highlight Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
@@ -436,7 +436,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
@@ -463,7 +463,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-eye-dropper px-[5px] text-allText dark:text-allTextD'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
@@ -490,7 +490,7 @@ export default function ToggleSettings() {
 					</div>
 
 					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-recycle px-[5px] text-allText dark:text-allTextD'></i>Clear All Cache Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3'>

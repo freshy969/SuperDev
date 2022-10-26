@@ -11,10 +11,10 @@ module.exports = {
 				bgTwoD: '#18181BFF',
 
 				// All Text
-				titleText: '#666666FF',
+				titleText: '#444444FF',
 				allText: '#333333FF',
 				btnText: '#F3F3F3FF',
-				faText: '#666666FF',
+				faText: '#444444FF',
 				titleTextD: '#F3F3F3FF',
 				allTextD: '#F3F3F3FF',
 				btnTextD: '#F3F3F3FF',
