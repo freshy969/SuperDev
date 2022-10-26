@@ -29,16 +29,16 @@ export default function ToggleInfo() {
 						</div>
 					</div>
 
-					{/* <div>
+					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
 						</div>
-						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{[`Open Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`].map(function (value, index) {
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3'>
+							{["As of this version, Export Element's exported CSS is inconsistent, it will be fixed soon."].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal select-none'
+											className='inline-block text-xs text-allText dark:text-allTextD font-normal leading-relaxed select-none'
 											htmlFor={'checkboxExportElement' + (index + 1)}>
 											<i className='fa-regular fa-square-info pr-[5px] text-allText dark:text-allTextD'></i>
 											{value}
@@ -47,7 +47,7 @@ export default function ToggleInfo() {
 								);
 							})}
 						</div>
-					</div> */}
+					</div>
 				</div>
 			</div>
 		</section>
