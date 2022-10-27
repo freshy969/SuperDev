@@ -1,4 +1,4 @@
-export default function ActivateDeactivateFeature(allFeatures, featureId) {
+export default function ActDeactFeature(allFeatures, featureId) {
 	if (allFeatures.length !== 0) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
@@ -22,28 +22,17 @@ export default function ActivateDeactivateFeature(allFeatures, featureId) {
 }
 
 function HideMeShowMe(portThree, featureId) {
-	// Function for Exceptions
-	if (featureId === 'clearAllCache') {
-		setTimeout(function () {
-			portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
-		}, 50);
-
-		portThree.onMessage.addListener(function (response) {
-			if (response.action.includes('Activated')) {
-				chrome.storage.local.set({whichFeatureActive: featureId});
-			}
-		});
-	}
-
-	// Function for Most Features
-	else if (document.querySelector('#' + featureId)) {
+	if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Not Active
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
-			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
-			document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
-			document
-				.querySelector('#' + featureId)
-				.classList.add('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
+			// If Not Exception
+			if (featureId !== 'clearAllCache' && featureId !== 'colorPalette') {
+				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
+				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
+				document
+					.querySelector('#' + featureId)
+					.classList.add('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
+			}
 
 			setTimeout(function () {
 				portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});

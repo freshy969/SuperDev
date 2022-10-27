@@ -69,22 +69,26 @@ p {
 
 /**  Custom Scrollbar **/
 #toggleInfoChild,
-#toggleSettingsChild {
+#toggleSettingsChild,
+#colorPickerPageChild {
 	overflow-y: scroll !important;
 }
 
 #toggleInfoChild::-webkit-scrollbar,
-#toggleSettingsChild::-webkit-scrollbar {
+#toggleSettingsChild::-webkit-scrollbar,
+#colorPickerPageChild::-webkit-scrollbar {
 	width: 0px;
 }
 
 #toggleInfoChild::-webkit-scrollbar-track,
-#toggleSettingsChild::-webkit-scrollbar-track {
+#toggleSettingsChild::-webkit-scrollbar-track,
+#colorPickerPageChild::-webkit-scrollbar-track {
 	background: #00000000;
 }
 
 #toggleInfoChild::-webkit-scrollbar-thumb,
-#toggleSettingsChild::-webkit-scrollbar-thumb {
+#toggleSettingsChild::-webkit-scrollbar-thumb,
+#colorPickerPageChild::-webkit-scrollbar-thumb {
 	background: #00000000;
 }
 /**  Custom Scrollbar **/

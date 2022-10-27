@@ -1,6 +1,38 @@
 // All Features Array
 const allFeatures = [
 	{
+		title: 'Text Editor',
+		icon: 'fa-pencil',
+		id: 'textEditor',
+		settings: {},
+	},
+	{
+		title: 'Page Ruler',
+		icon: 'fa-ruler-combined',
+		id: 'pageRuler',
+		settings: {},
+	},
+	{
+		title: 'Color Picker',
+		icon: 'fa-eye-dropper',
+		id: 'colorPicker',
+		settings: {
+			checkboxColorPicker1: true,
+			checkboxColorPicker2: false,
+			checkboxColorPicker3: false,
+		},
+	},
+	{
+		title: 'Color Palette',
+		icon: 'fa-swatchbook',
+		id: 'colorPalette',
+		settings: {
+			checkboxColorPalette1: true,
+			checkboxColorPalette2: false,
+			checkboxColorPalette3: false,
+		},
+	},
+	{
 		title: 'Page Guideline',
 		icon: 'fa-ruler',
 		id: 'pageGuideline',
@@ -19,12 +51,6 @@ const allFeatures = [
 			checkboxPageHighlight6: false,
 			checkboxPageHighlight7: false,
 		},
-	},
-	{
-		title: 'Page Ruler',
-		icon: 'fa-ruler-combined',
-		id: 'pageRuler',
-		settings: {},
 	},
 	{
 		title: 'Move Element',
@@ -48,28 +74,6 @@ const allFeatures = [
 			checkboxExportElement3: false,
 		},
 	},
-	{
-		title: 'Text Editor',
-		icon: 'fa-pencil',
-		id: 'textEditor',
-		settings: {},
-	},
-	{
-		title: 'Color Picker',
-		icon: 'fa-eye-dropper',
-		id: 'colorPicker',
-		settings: {
-			checkboxColorPicker1: true,
-			checkboxColorPicker2: false,
-			checkboxColorPicker3: false,
-		},
-	},
-	// {
-	// 	title: 'Color Palette',
-	// 	icon: 'fa-swatchbook',
-	// 	id: 'colorPalette',
-	// 	settings: {},
-	// },
 	// {
 	// 	title: 'CSS Inspector',
 	// 	icon: 'fa-search',
@@ -280,7 +284,7 @@ chrome.commands.onCommand.addListener((command) => {
 	});
 });
 
-// Page Ruler + Export Element + Color Picker + Clear All Cache
+// Page Ruler + Color Picker + Export Element + Clear All Cache
 chrome.runtime.onConnect.addListener(function (portTwo) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
@@ -314,14 +318,14 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 				portTwo.postMessage({action: 'colorPickerSet'});
 				break;
 
-			// Export Element
-			case 'getStylesheet':
-				getStylesheet(request.styleSheetUrl);
-				break;
-
 			// Color Picker
 			case 'getColorAt':
 				getColorAt(request.data);
+				break;
+
+			// Export Element
+			case 'getStylesheet':
+				getStylesheet(request.styleSheetUrl);
 				break;
 
 			// Clear All Cache
@@ -448,18 +452,6 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 		return inBoundaries(x, y) ? data[y * width + x] : -1;
 	}
 
-	// Export Element
-	function getStylesheet(styleSheetUrl) {
-		fetch(styleSheetUrl)
-			.then(function (response) {
-				if (response.status >= 200 && response.status < 300) return response.text();
-				else return false;
-			})
-			.then(function (styleSheet) {
-				portTwo.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
-			});
-	}
-
 	// Color Picker
 	function inBoundaries(x, y) {
 		if (x >= 0 && x < width && y >= 0 && y < height) return true;
@@ -496,6 +488,18 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 	function componentToHex(c) {
 		let hex = c.toString(16);
 		return hex.length == 1 ? '0' + hex : hex;
+	}
+
+	// Export Element
+	function getStylesheet(styleSheetUrl) {
+		fetch(styleSheetUrl)
+			.then(function (response) {
+				if (response.status >= 200 && response.status < 300) return response.text();
+				else return false;
+			})
+			.then(function (styleSheet) {
+				portTwo.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
+			});
 	}
 
 	// Clear All Cache

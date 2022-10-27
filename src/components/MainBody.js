@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
+import ActDeactFeature from './functions/ActDeactFeature';
 
 export default function MainBody() {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
@@ -31,7 +31,7 @@ export default function MainBody() {
 								key={index}
 								id={value.id}
 								onClick={function () {
-									ActivateDeactivateFeature(allFeatures, value.id);
+									ActDeactFeature(allFeatures, value.id);
 								}}
 								className={
 									value.id +

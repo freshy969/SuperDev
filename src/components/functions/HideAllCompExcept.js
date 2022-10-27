@@ -1,5 +1,5 @@
-export default function HideAllComponentExcept(componentId) {
-	let hideArray = ['mainBody', 'toggleInfo', 'toggleSettings'];
+export default function HideAllCompExcept(componentId) {
+	let hideArray = ['mainBody', 'toggleInfo', 'toggleSettings', 'colorPickerPage'];
 	hideArray.map(function (value, index) {
 		if (value !== componentId) {
 			document.querySelector('#' + value).classList.add('hidden');

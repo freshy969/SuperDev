@@ -1,10 +1,10 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import HideAllComponentExcept from './functions/HideAllComponentExcept';
+import HideAllCompExcept from './functions/HideAllCompExcept';
 import PopupHeight from './functions/PopupHeight';
 import ChangeHeight from './functions/ChangeHeight';
 import JustChangeHeight from './functions/JustChangeHeight';
-import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
+import ActDeactFeature from './functions/ActDeactFeature';
 
 export default function NavBar() {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
@@ -34,13 +34,16 @@ export default function NavBar() {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('mainBody');
+							HideAllCompExcept('mainBody');
 						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('toggleInfo');
+							HideAllCompExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('toggleSettings');
+							HideAllCompExcept('toggleSettings');
+						} else if (!document.querySelector('#colorPickerPage').classList.contains('hidden')) {
+							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							HideAllCompExcept('colorPickerPage');
 						}
 					});
 				}
@@ -54,7 +57,7 @@ export default function NavBar() {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
 							JustChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllComponentExcept('mainBody');
+							HideAllCompExcept('mainBody');
 						});
 					}
 				}
@@ -66,7 +69,7 @@ export default function NavBar() {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
-						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
+						ActDeactFeature(JSON.parse(result.allFeatures), null);
 						chrome.storage.local.set({setActiveFeatureDisabled: false});
 					});
 				}
@@ -103,9 +106,9 @@ export default function NavBar() {
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
-			ActivateDeactivateFeature(allFeatures, null);
+			ActDeactFeature(allFeatures, null);
 			ChangeHeight(PopupHeight(allFeatures));
-			HideAllComponentExcept('toggleInfo');
+			HideAllCompExcept('toggleInfo');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${bodyHeight}px`;
@@ -113,16 +116,16 @@ export default function NavBar() {
 			chrome.storage.local.set({setMinimised: false});
 		} else {
 			ChangeHeight(PopupHeight(allFeatures));
-			HideAllComponentExcept('mainBody');
+			HideAllCompExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
 		}
 	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			ActivateDeactivateFeature(allFeatures, null);
+			ActDeactFeature(allFeatures, null);
 			ChangeHeight(PopupHeight(allFeatures));
-			HideAllComponentExcept('toggleSettings');
+			HideAllCompExcept('toggleSettings');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
@@ -130,13 +133,13 @@ export default function NavBar() {
 			chrome.storage.local.set({setMinimised: false});
 		} else {
 			ChangeHeight(PopupHeight(allFeatures));
-			HideAllComponentExcept('mainBody');
+			HideAllCompExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
 		}
 	}
 
 	function pauseExtension() {
-		ActivateDeactivateFeature(allFeatures, null);
+		ActDeactFeature(allFeatures, null);
 		chrome.storage.local.set({isPopupPaused: true});
 	}
 

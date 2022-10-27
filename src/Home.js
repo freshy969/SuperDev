@@ -4,6 +4,7 @@ import NavBar from './components/NavBar';
 import MainBody from './components/MainBody';
 import ToggleInfo from './components/ToggleInfo';
 import ToggleSettings from './components/ToggleSettings';
+import ColorPicker from './components/ColorPicker';
 import PopupHeight from './components/functions/PopupHeight';
 import ChangeHeight from './components/functions/ChangeHeight';
 
@@ -64,6 +65,7 @@ export default function Home() {
 				<MainBody />
 				<ToggleInfo />
 				<ToggleSettings />
+				<ColorPicker />
 			</>
 		);
 	}

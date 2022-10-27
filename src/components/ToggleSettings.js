@@ -25,6 +25,10 @@ export default function ToggleSettings() {
 					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
 					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
 					document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
+				} else if (value.id === 'colorPalette') {
+					document.querySelector('#checkboxColorPalette1').checked = value.settings.checkboxColorPalette1;
+					document.querySelector('#checkboxColorPalette2').checked = value.settings.checkboxColorPalette2;
+					document.querySelector('#checkboxColorPalette3').checked = value.settings.checkboxColorPalette3;
 				} else if (value.id === 'clearAllCache') {
 					document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
 					document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
@@ -305,6 +309,60 @@ export default function ToggleSettings() {
 		}
 	}
 
+	function ColorPaletteSettings(checkbox) {
+		switch (checkbox) {
+			case 'checkboxColorPalette1':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette1').checked === true) {
+							value.settings.checkboxColorPalette1 = true;
+							value.settings.checkboxColorPalette2 = false;
+							document.querySelector('#checkboxColorPalette1').checked = true;
+							document.querySelector('#checkboxColorPalette2').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPalette1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxColorPalette2':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette2').checked === true) {
+							value.settings.checkboxColorPalette1 = false;
+							value.settings.checkboxColorPalette2 = true;
+							document.querySelector('#checkboxColorPalette1').checked = false;
+							document.querySelector('#checkboxColorPalette2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPalette2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxColorPalette3':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette3').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxColorPalette1 = true;
+								value.settings.checkboxColorPalette2 = false;
+								value.settings.checkboxColorPalette3 = false;
+								document.querySelector('#checkboxColorPalette1').checked = true;
+								document.querySelector('#checkboxColorPalette2').checked = false;
+								document.querySelector('#checkboxColorPalette3').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 500);
+						}
+					}
+				});
+				break;
+		}
+	}
+
 	function ClearAllCacheSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxClearAllCache1':
@@ -483,6 +541,33 @@ export default function ToggleSettings() {
 										<label
 											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
 											htmlFor={'checkboxColorPicker' + (index + 1)}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+							<i className='fa-regular fa-swatchbook px-[5px] text-allText dark:text-allTextD'></i>Color Palette Settings
+						</div>
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
+							{['Copy Color Code in Hex', 'Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={function () {
+												ColorPaletteSettings('checkboxColorPalette' + (index + 1));
+											}}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={'checkboxColorPalette' + (index + 1)}
+										/>
+										<label
+											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
+											htmlFor={'checkboxColorPalette' + (index + 1)}>
 											{value}
 										</label>
 									</div>

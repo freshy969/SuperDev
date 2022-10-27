@@ -10,6 +10,30 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'justChangeHeight':
 				justChangeHeight(port, request);
 				break;
+			case 'activateTextEditor':
+				activateTextEditor(port, request);
+				break;
+			case 'deactivateTextEditor':
+				deactivateTextEditor(port, request);
+				break;
+			case 'activatePageRuler':
+				activatePageRuler(port, request);
+				break;
+			case 'deactivatePageRuler':
+				deactivatePageRuler(port, request);
+				break;
+			case 'activateColorPicker':
+				activateColorPicker(port, request);
+				break;
+			case 'deactivateColorPicker':
+				deactivateColorPicker(port, request);
+				break;
+			case 'activateColorPalette':
+				activateColorPalette(port, request);
+				break;
+			case 'deactivateColorPalette':
+				deactivateColorPalette(port, request);
+				break;
 			case 'activatePageGuideline':
 				activatePageGuideline(port, request);
 				break;
@@ -22,23 +46,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivatePageHighlight':
 				deactivatePageHighlight(port, request);
 				break;
-			case 'activatePageRuler':
-				activatePageRuler(port, request);
-				break;
-			case 'deactivatePageRuler':
-				deactivatePageRuler(port, request);
-				break;
 			case 'activateMoveElement':
 				activateMoveElement(port, request);
 				break;
 			case 'deactivateMoveElement':
 				deactivateMoveElement(port, request);
-				break;
-			case 'activateDeleteElement':
-				activateDeleteElement(port, request);
-				break;
-			case 'deactivateDeleteElement':
-				deactivateDeleteElement(port, request);
 				break;
 			case 'activateExportElement':
 				activateExportElement(port, request);
@@ -46,17 +58,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'deactivateExportElement':
 				deactivateExportElement(port, request);
 				break;
-			case 'activateTextEditor':
-				activateTextEditor(port, request);
+			case 'activateDeleteElement':
+				activateDeleteElement(port, request);
 				break;
-			case 'deactivateTextEditor':
-				deactivateTextEditor(port, request);
-				break;
-			case 'activateColorPicker':
-				activateColorPicker(port, request);
-				break;
-			case 'deactivateColorPicker':
-				deactivateColorPicker(port, request);
+			case 'deactivateDeleteElement':
+				deactivateDeleteElement(port, request);
 				break;
 			case 'activateClearAllCache':
 				activateClearAllCache(port, request);
@@ -169,6 +175,616 @@ function changeHeight(port, request) {
 function justChangeHeight(port, request) {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	port.postMessage({action: 'Just Height Changed'});
+}
+
+function activateTextEditor(port, request) {
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+
+	let pageGuidelineWrapper = document.createElement('div');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyTextEditor(true);
+			} else if (event.isTrusted === false) {
+				destroyTextEditor(false);
+			}
+		}
+	}
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.innerText !== '') {
+				event.target.setAttribute('contenteditable', true);
+				event.target.setAttribute('spellcheck', false);
+				event.target.classList.add('pageGuidelineOutline');
+				renderPageGuideline(true);
+				event.target.focus({preventScroll: true});
+			}
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.target.classList.contains('pageGuidelineOutline')) {
+				event.target.removeAttribute('contenteditable', true);
+				event.target.removeAttribute('spellcheck', false);
+				event.target.classList.remove('pageGuidelineOutline');
+				renderPageGuideline(false);
+			}
+		}
+	}
+
+	function destroyTextEditor(isManualEscape) {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+
+		if (isManualEscape === true) {
+			if (document.querySelector('.pageGuidelineOutline')) {
+				document.querySelector('.pageGuidelineOutline').blur();
+				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
+				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
+				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+			}
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		document.querySelector('.pageGuidelineWrapper').remove();
+	}
+
+	function renderPageGuideline(toShow) {
+		if (toShow === true) {
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let scrollWidth = document.body.scrollWidth;
+			let scrollHeight = document.body.scrollHeight;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+
+			pageGuidelineWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelineWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Text Editor Activated'});
+	chrome.storage.local.set({setMinimised: true});
+}
+
+function deactivateTextEditor(port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Text Editor Deactivated'});
+}
+
+function activatePageRuler(port, request) {
+	let image = new Image();
+	let canvas = document.createElement('canvas');
+	let ctx = canvas.getContext('2d', {willReadFrequently: true});
+	let body = document.querySelector('body');
+	let portTwo = chrome.runtime.connect({name: 'portTwo'});
+	let pageScrollDelay = 600;
+	let windowResizeDelay = 1200;
+
+	let changeTimeout;
+	let paused = true;
+	let inputX, inputY;
+	let connectionClosed = false;
+	let overlay = document.createElement('div');
+	overlay.className = 'pageRulerOverlay';
+
+	portTwo.onMessage.addListener(function (request) {
+		if (connectionClosed) return;
+
+		switch (request.action) {
+			case 'parseScreenshot':
+				parseScreenshot(request.dataUrl);
+				break;
+			case 'showDimensions':
+				showDimensions(request.data);
+				break;
+			case 'screenshotProcessed':
+				resume();
+				break;
+		}
+	});
+
+	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		document.querySelector('#superDev').style.visibility = 'hidden';
+		port.postMessage({action: 'Popup Hidden'});
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
+				initiate();
+				port.postMessage({action: 'Page Ruler Activated'});
+			});
+		});
+	}
+
+	function initiate() {
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('touchmove', onMouseMove);
+		document.addEventListener('keyup', onEscape);
+		document.addEventListener('scroll', onPageScroll);
+		window.addEventListener('resize', onWindowResize);
+		window.focus({preventScroll: true});
+
+		disableCursor();
+		requestNewScreenshot();
+	}
+
+	function parseScreenshot(dataUrl) {
+		image.src = dataUrl;
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
+				loadImage();
+			});
+		});
+	}
+
+	function loadImage() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+		// Show Minimised Popup
+		chrome.storage.local.set({setMinimised: true});
+
+		portTwo.postMessage({
+			action: 'toGrayscale',
+			imageData: Array.from(imageData),
+			width: canvas.width,
+			height: canvas.height,
+		});
+	}
+
+	function destroyPageRuler(isManualEscape) {
+		connectionClosed = true;
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('scroll', onPageScroll);
+		window.removeEventListener('resize', onWindowResize);
+
+		if (isManualEscape === true) {
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		removeDimensions();
+		enableCursor();
+	}
+
+	function removeDimensions() {
+		let dimensions = body.querySelector('.pageRulerDiv');
+		if (dimensions) body.removeChild(dimensions);
+	}
+
+	function onPageScroll() {
+		if (!paused) pause();
+		if (changeTimeout) clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
+	}
+
+	function onWindowResize() {
+		if (!paused) pause();
+		if (changeTimeout) clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
+	}
+
+	function requestNewScreenshot() {
+		// In Case od Scroll or Resize
+		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+			document.querySelector('#superDev').style.visibility = 'hidden';
+			chrome.storage.local.set({setMinimised: null});
+			port.postMessage({action: 'Popup Hidden'});
+
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
+					portTwo.postMessage({action: 'takeScreenshot'});
+				});
+			});
+		}
+
+		// First Screenshot
+		else portTwo.postMessage({action: 'takeScreenshot'});
+	}
+
+	function pause() {
+		paused = true;
+		removeDimensions();
+		enableCursor();
+	}
+
+	function resume() {
+		paused = false;
+		disableCursor();
+	}
+
+	function disableCursor() {
+		body.appendChild(overlay);
+	}
+
+	function enableCursor() {
+		body.removeChild(overlay);
+	}
+
+	function onMouseMove(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.touches) {
+				inputX = event.touches[0].clientX;
+				inputY = event.touches[0].clientY;
+			} else {
+				inputX = event.clientX;
+				inputY = event.clientY;
+			}
+			sendToWorker(event);
+		} else {
+			removeDimensions();
+		}
+	}
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyPageRuler(true);
+			} else if (event.isTrusted === false) {
+				destroyPageRuler(false);
+			}
+		}
+	}
+
+	function sendToWorker(event) {
+		if (paused) return;
+
+		portTwo.postMessage({
+			action: 'measureDistances',
+			data: {x: inputX, y: inputY},
+		});
+	}
+
+	function showDimensions(dimensions) {
+		if (paused) return;
+
+		removeDimensions();
+		if (!dimensions) return;
+
+		let newPageRulerDiv = document.createElement('div');
+		newPageRulerDiv.className = 'pageRulerDiv';
+		newPageRulerDiv.style.left = dimensions.x + 'px';
+		newPageRulerDiv.style.top = dimensions.y + 'px';
+
+		let measureWidth = dimensions.left + dimensions.right;
+		let measureHeight = dimensions.top + dimensions.bottom;
+
+		let xAxis = document.createElement('div');
+		xAxis.className = 'x pageRulerAxis';
+		xAxis.style.left = -dimensions.left + 'px';
+		xAxis.style.width = measureWidth + 'px';
+
+		let yAxis = document.createElement('div');
+		yAxis.className = 'y pageRulerAxis';
+		yAxis.style.top = -dimensions.top + 'px';
+		yAxis.style.height = measureHeight + 'px';
+
+		let pageRulerTooltip = document.createElement('div');
+		pageRulerTooltip.className = 'pageRulerTooltip';
+
+		pageRulerTooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
+
+		if (dimensions.y < 40) pageRulerTooltip.classList.add('bottom');
+
+		if (dimensions.x > window.innerWidth - 120) pageRulerTooltip.classList.add('left');
+
+		newPageRulerDiv.appendChild(xAxis);
+		newPageRulerDiv.appendChild(yAxis);
+		newPageRulerDiv.appendChild(pageRulerTooltip);
+
+		body.appendChild(newPageRulerDiv);
+	}
+}
+
+function deactivatePageRuler(port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Page Ruler Deactivated'});
+}
+
+function activateColorPicker(port, request) {
+	let image = new Image();
+	let canvas = document.createElement('canvas');
+	let ctx = canvas.getContext('2d', {willReadFrequently: true});
+	let body = document.querySelector('body');
+	let portTwo = chrome.runtime.connect({name: 'portTwo'});
+	let pageScrollDelay = 600;
+	let windowResizeDelay = 1200;
+
+	let changeTimeout;
+	let paused = true;
+	let inputX, inputY;
+	let connectionClosed = false;
+	let overlay = document.createElement('div');
+	overlay.className = 'colorPickerOverlay';
+
+	portTwo.onMessage.addListener(function (request) {
+		if (connectionClosed) return;
+
+		switch (request.action) {
+			case 'parseScreenshot':
+				parseScreenshot(request.dataUrl);
+				break;
+			case 'showColorPicker':
+				showColorPicker(request.data);
+				break;
+			case 'colorPickerSet':
+				resume();
+				break;
+		}
+	});
+
+	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+		document.querySelector('#superDev').style.visibility = 'hidden';
+		port.postMessage({action: 'Popup Hidden'});
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
+				initiate();
+				port.postMessage({action: 'Color Picker Activated'});
+			});
+		});
+	}
+
+	function initiate() {
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('touchmove', onMouseMove);
+		document.addEventListener('keyup', onEscape);
+		document.addEventListener('scroll', onPageScroll);
+		document.addEventListener('click', onMouseClick);
+		window.addEventListener('resize', onWindowResize);
+		window.focus({preventScroll: true});
+
+		disableCursor();
+		requestNewScreenshot();
+	}
+
+	function parseScreenshot(dataUrl) {
+		image.src = dataUrl;
+		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
+				loadImage();
+			});
+		});
+	}
+
+	function loadImage() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+		// Show Minimised Popup
+		chrome.storage.local.set({setMinimised: true});
+
+		portTwo.postMessage({
+			action: 'setColorPicker',
+			imageData: Array.from(imageData),
+			width: canvas.width,
+			height: canvas.height,
+		});
+	}
+
+	function destroyColorPicker(isManualEscape) {
+		connectionClosed = true;
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('scroll', onPageScroll);
+		document.removeEventListener('click', onMouseClick);
+		window.removeEventListener('resize', onWindowResize);
+
+		if (isManualEscape === true) {
+			chrome.storage.local.set({setActiveFeatureDisabled: true});
+		}
+
+		chrome.storage.local.get(['isPopupPaused'], function (result) {
+			if (result.isPopupPaused === true || isManualEscape === true) {
+				chrome.storage.local.set({setMinimised: false});
+				chrome.storage.local.set({isPopupPaused: false});
+			}
+		});
+
+		removeColorPicker();
+		enableCursor();
+	}
+
+	function removeColorPicker() {
+		let colorPickerDiv = body.querySelector('.colorPickerDiv');
+		if (colorPickerDiv) body.removeChild(colorPickerDiv);
+	}
+
+	function onPageScroll() {
+		if (!paused) pause();
+		if (changeTimeout) clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
+	}
+
+	function onWindowResize() {
+		if (!paused) pause();
+		if (changeTimeout) clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
+	}
+
+	function requestNewScreenshot() {
+		// In Case od Scroll or Resize
+		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+			document.querySelector('#superDev').style.visibility = 'hidden';
+			chrome.storage.local.set({setMinimised: null});
+			port.postMessage({action: 'Popup Hidden'});
+
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
+					portTwo.postMessage({action: 'takeScreenshot'});
+				});
+			});
+		}
+
+		// First Screenshot
+		else portTwo.postMessage({action: 'takeScreenshot'});
+	}
+
+	function pause() {
+		paused = true;
+		removeColorPicker();
+		enableCursor();
+	}
+
+	function resume() {
+		paused = false;
+		disableCursor();
+	}
+
+	function disableCursor() {
+		body.appendChild(overlay);
+	}
+
+	function enableCursor() {
+		body.removeChild(overlay);
+	}
+
+	function onMouseMove(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			if (event.touches) {
+				inputX = event.touches[0].clientX;
+				inputY = event.touches[0].clientY;
+			} else {
+				inputX = event.clientX;
+				inputY = event.clientY;
+			}
+			sendToWorker(event);
+		} else {
+			removeColorPicker();
+		}
+	}
+
+	function onMouseClick(event) {
+		if (document.querySelector('.colorPickerTooltipColorCode')) {
+			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
+			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
+		}
+	}
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyColorPicker(true);
+			} else if (event.isTrusted === false) {
+				destroyColorPicker(false);
+			}
+		}
+	}
+
+	function sendToWorker(event) {
+		if (paused) return;
+
+		portTwo.postMessage({
+			action: 'getColorAt',
+			data: {x: inputX, y: inputY},
+		});
+	}
+
+	function showColorPicker(spotColor) {
+		if (paused) return;
+
+		removeColorPicker();
+		if (!spotColor) return;
+
+		let newColorPickerDiv = document.createElement('div');
+		newColorPickerDiv.className = 'colorPickerDiv';
+		newColorPickerDiv.style.left = spotColor.x + 'px';
+		newColorPickerDiv.style.top = spotColor.y + 'px';
+
+		let colorPickerTooltip = document.createElement('div');
+		colorPickerTooltip.className = 'colorPickerTooltip';
+
+		let colorPickerTooltipBackground = document.createElement('div');
+		colorPickerTooltipBackground.className = 'colorPickerTooltipBackground';
+
+		let colorPickerTooltipColorCode = document.createElement('div');
+		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
+
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map(function (value, index) {
+				if (value.id === 'colorPicker') {
+					if (value.settings.checkboxColorPicker1 === true) {
+						colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
+						colorPickerTooltipColorCode.textContent = spotColor.hex;
+						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
+					} else if (value.settings.checkboxColorPicker2 === true) {
+						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
+						colorPickerTooltipColorCode.textContent = spotColor.rgb;
+						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
+						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
+					}
+				}
+			});
+		});
+
+		colorPickerTooltip.appendChild(colorPickerTooltipBackground);
+		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
+		newColorPickerDiv.appendChild(colorPickerTooltip);
+		body.appendChild(newColorPickerDiv);
+	}
+}
+
+function deactivateColorPicker(port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Color Picker Deactivated'});
+}
+
+function activateColorPalette(port, request) {
+	port.postMessage({action: 'Color Palette Activated'});
+}
+
+function deactivateColorPalette(port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Color Palette Deactivated'});
 }
 
 function activatePageGuideline(port, request) {
@@ -710,248 +1326,6 @@ function deactivatePageHighlight(port, request) {
 	port.postMessage({action: 'Page Highlight Deactivated'});
 }
 
-function activatePageRuler(port, request) {
-	let image = new Image();
-	let canvas = document.createElement('canvas');
-	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.querySelector('body');
-	let portTwo = chrome.runtime.connect({name: 'portTwo'});
-	let pageScrollDelay = 600;
-	let windowResizeDelay = 1200;
-
-	let changeTimeout;
-	let paused = true;
-	let inputX, inputY;
-	let connectionClosed = false;
-	let overlay = document.createElement('div');
-	overlay.className = 'pageRulerOverlay';
-
-	portTwo.onMessage.addListener(function (request) {
-		if (connectionClosed) return;
-
-		switch (request.action) {
-			case 'parseScreenshot':
-				parseScreenshot(request.dataUrl);
-				break;
-			case 'showDimensions':
-				showDimensions(request.data);
-				break;
-			case 'screenshotProcessed':
-				resume();
-				break;
-		}
-	});
-
-	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		document.querySelector('#superDev').style.visibility = 'hidden';
-		port.postMessage({action: 'Popup Hidden'});
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				initiate();
-				port.postMessage({action: 'Page Ruler Activated'});
-			});
-		});
-	}
-
-	function initiate() {
-		document.addEventListener('mousemove', onMouseMove);
-		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('keyup', onEscape);
-		document.addEventListener('scroll', onPageScroll);
-		window.addEventListener('resize', onWindowResize);
-		window.focus({preventScroll: true});
-
-		disableCursor();
-		requestNewScreenshot();
-	}
-
-	function parseScreenshot(dataUrl) {
-		image.src = dataUrl;
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				loadImage();
-			});
-		});
-	}
-
-	function loadImage() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-		// Show Minimised Popup
-		chrome.storage.local.set({setMinimised: true});
-
-		portTwo.postMessage({
-			action: 'toGrayscale',
-			imageData: Array.from(imageData),
-			width: canvas.width,
-			height: canvas.height,
-		});
-	}
-
-	function destroyPageRuler(isManualEscape) {
-		connectionClosed = true;
-		document.removeEventListener('mousemove', onMouseMove);
-		document.removeEventListener('touchmove', onMouseMove);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('scroll', onPageScroll);
-		window.removeEventListener('resize', onWindowResize);
-
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
-		}
-
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
-			}
-		});
-
-		removeDimensions();
-		enableCursor();
-	}
-
-	function removeDimensions() {
-		let dimensions = body.querySelector('.pageRulerDiv');
-		if (dimensions) body.removeChild(dimensions);
-	}
-
-	function onPageScroll() {
-		if (!paused) pause();
-		if (changeTimeout) clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	}
-
-	function onWindowResize() {
-		if (!paused) pause();
-		if (changeTimeout) clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	}
-
-	function requestNewScreenshot() {
-		// In Case od Scroll or Resize
-		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-			document.querySelector('#superDev').style.visibility = 'hidden';
-			chrome.storage.local.set({setMinimised: null});
-			port.postMessage({action: 'Popup Hidden'});
-
-			requestAnimationFrame(function () {
-				requestAnimationFrame(function () {
-					portTwo.postMessage({action: 'takeScreenshot'});
-				});
-			});
-		}
-
-		// First Screenshot
-		else portTwo.postMessage({action: 'takeScreenshot'});
-	}
-
-	function pause() {
-		paused = true;
-		removeDimensions();
-		enableCursor();
-	}
-
-	function resume() {
-		paused = false;
-		disableCursor();
-	}
-
-	function disableCursor() {
-		body.appendChild(overlay);
-	}
-
-	function enableCursor() {
-		body.removeChild(overlay);
-	}
-
-	function onMouseMove(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.touches) {
-				inputX = event.touches[0].clientX;
-				inputY = event.touches[0].clientY;
-			} else {
-				inputX = event.clientX;
-				inputY = event.clientY;
-			}
-			sendToWorker(event);
-		} else {
-			removeDimensions();
-		}
-	}
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyPageRuler(true);
-			} else if (event.isTrusted === false) {
-				destroyPageRuler(false);
-			}
-		}
-	}
-
-	function sendToWorker(event) {
-		if (paused) return;
-
-		portTwo.postMessage({
-			action: 'measureDistances',
-			data: {x: inputX, y: inputY},
-		});
-	}
-
-	function showDimensions(dimensions) {
-		if (paused) return;
-
-		removeDimensions();
-		if (!dimensions) return;
-
-		let newPageRulerDiv = document.createElement('div');
-		newPageRulerDiv.className = 'pageRulerDiv';
-		newPageRulerDiv.style.left = dimensions.x + 'px';
-		newPageRulerDiv.style.top = dimensions.y + 'px';
-
-		let measureWidth = dimensions.left + dimensions.right;
-		let measureHeight = dimensions.top + dimensions.bottom;
-
-		let xAxis = document.createElement('div');
-		xAxis.className = 'x pageRulerAxis';
-		xAxis.style.left = -dimensions.left + 'px';
-		xAxis.style.width = measureWidth + 'px';
-
-		let yAxis = document.createElement('div');
-		yAxis.className = 'y pageRulerAxis';
-		yAxis.style.top = -dimensions.top + 'px';
-		yAxis.style.height = measureHeight + 'px';
-
-		let pageRulerTooltip = document.createElement('div');
-		pageRulerTooltip.className = 'pageRulerTooltip';
-
-		pageRulerTooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
-
-		if (dimensions.y < 40) pageRulerTooltip.classList.add('bottom');
-
-		if (dimensions.x > window.innerWidth - 120) pageRulerTooltip.classList.add('left');
-
-		newPageRulerDiv.appendChild(xAxis);
-		newPageRulerDiv.appendChild(yAxis);
-		newPageRulerDiv.appendChild(pageRulerTooltip);
-
-		body.appendChild(newPageRulerDiv);
-	}
-}
-
-function deactivatePageRuler(port, request) {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Page Ruler Deactivated'});
-}
-
 function activateMoveElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
@@ -1078,110 +1452,6 @@ function activateMoveElement(port, request) {
 function deactivateMoveElement(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
-}
-
-function activateDeleteElement(port, request) {
-	document.addEventListener('keyup', onEscape);
-	document.addEventListener('mouseover', onMouseOver);
-	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
-	window.focus({preventScroll: true});
-
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyDeleteElement(true);
-			} else if (event.isTrusted === false) {
-				destroyDeleteElement(false);
-			}
-		}
-	}
-
-	function onMouseOver(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
-			renderPageGuideline(true);
-		}
-	}
-
-	function onMouseOut(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
-		}
-	}
-
-	function onMouseClick(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('deleteElementWrapper');
-			document.querySelector('.deleteElementWrapper').remove();
-		}
-	}
-
-	function destroyDeleteElement(isManualEscape) {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('click', onMouseClick);
-
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
-		}
-
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
-			}
-		});
-
-		document.querySelector('.pageGuidelineWrapper').remove();
-	}
-
-	function renderPageGuideline(toShow) {
-		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
-			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
-
-			pageGuidelineWrapper.innerHTML = `
-			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
-			xmlns="http://www.w3.org/2000/svg">
-				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
-				</rect>
-					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
-					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
-					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
-					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
-			</svg>`;
-		} else {
-			pageGuidelineWrapper.innerHTML = ``;
-		}
-	}
-
-	port.postMessage({action: 'Delete Element Activated'});
-	chrome.storage.local.set({setMinimised: true});
-}
-
-function deactivateDeleteElement(port, request) {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
 function activateExportElement(port, request) {
@@ -1431,10 +1701,12 @@ function deactivateExportElement(port, request) {
 	port.postMessage({action: 'Export Element Deactivated'});
 }
 
-function activateTextEditor(port, request) {
+function activateDeleteElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
+	window.focus({preventScroll: true});
 
 	let pageGuidelineWrapper = document.createElement('div');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
@@ -1444,9 +1716,9 @@ function activateTextEditor(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyTextEditor(true);
+				destroyDeleteElement(true);
 			} else if (event.isTrusted === false) {
-				destroyTextEditor(false);
+				destroyDeleteElement(false);
 			}
 		}
 	}
@@ -1454,38 +1726,36 @@ function activateTextEditor(port, request) {
 	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.innerText !== '') {
-				event.target.setAttribute('contenteditable', true);
-				event.target.setAttribute('spellcheck', false);
-				event.target.classList.add('pageGuidelineOutline');
-				renderPageGuideline(true);
-				event.target.focus({preventScroll: true});
-			}
+			event.target.classList.add('pageGuidelineOutline');
+			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('pageGuidelineOutline')) {
-				event.target.removeAttribute('contenteditable', true);
-				event.target.removeAttribute('spellcheck', false);
-				event.target.classList.remove('pageGuidelineOutline');
-				renderPageGuideline(false);
-			}
+			renderPageGuideline(false);
+			event.target.classList.remove('pageGuidelineOutline');
 		}
 	}
 
-	function destroyTextEditor(isManualEscape) {
+	function onMouseClick(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('deleteElementWrapper');
+			document.querySelector('.deleteElementWrapper').remove();
+		}
+	}
+
+	function destroyDeleteElement(isManualEscape) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('click', onMouseClick);
 
 		if (isManualEscape === true) {
 			if (document.querySelector('.pageGuidelineOutline')) {
 				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
-				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
 			chrome.storage.local.set({setActiveFeatureDisabled: true});
@@ -1526,268 +1796,13 @@ function activateTextEditor(port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Text Editor Activated'});
+	port.postMessage({action: 'Delete Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
 }
 
-function deactivateTextEditor(port, request) {
+function deactivateDeleteElement(port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Text Editor Deactivated'});
-}
-
-function activateColorPicker(port, request) {
-	let image = new Image();
-	let canvas = document.createElement('canvas');
-	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.querySelector('body');
-	let portTwo = chrome.runtime.connect({name: 'portTwo'});
-	let pageScrollDelay = 600;
-	let windowResizeDelay = 1200;
-
-	let changeTimeout;
-	let paused = true;
-	let inputX, inputY;
-	let connectionClosed = false;
-	let overlay = document.createElement('div');
-	overlay.className = 'colorPickerOverlay';
-
-	portTwo.onMessage.addListener(function (request) {
-		if (connectionClosed) return;
-
-		switch (request.action) {
-			case 'parseScreenshot':
-				parseScreenshot(request.dataUrl);
-				break;
-			case 'showColorPicker':
-				showColorPicker(request.data);
-				break;
-			case 'colorPickerSet':
-				resume();
-				break;
-		}
-	});
-
-	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		document.querySelector('#superDev').style.visibility = 'hidden';
-		port.postMessage({action: 'Popup Hidden'});
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				initiate();
-				port.postMessage({action: 'Color Picker Activated'});
-			});
-		});
-	}
-
-	function initiate() {
-		document.addEventListener('mousemove', onMouseMove);
-		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('keyup', onEscape);
-		document.addEventListener('scroll', onPageScroll);
-		document.addEventListener('click', onMouseClick);
-		window.addEventListener('resize', onWindowResize);
-		window.focus({preventScroll: true});
-
-		disableCursor();
-		requestNewScreenshot();
-	}
-
-	function parseScreenshot(dataUrl) {
-		image.src = dataUrl;
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				loadImage();
-			});
-		});
-	}
-
-	function loadImage() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-		// Show Minimised Popup
-		chrome.storage.local.set({setMinimised: true});
-
-		portTwo.postMessage({
-			action: 'setColorPicker',
-			imageData: Array.from(imageData),
-			width: canvas.width,
-			height: canvas.height,
-		});
-	}
-
-	function destroyColorPicker(isManualEscape) {
-		connectionClosed = true;
-		document.removeEventListener('mousemove', onMouseMove);
-		document.removeEventListener('touchmove', onMouseMove);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('scroll', onPageScroll);
-		document.removeEventListener('click', onMouseClick);
-		window.removeEventListener('resize', onWindowResize);
-
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
-		}
-
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
-			}
-		});
-
-		removeColorPicker();
-		enableCursor();
-	}
-
-	function removeColorPicker() {
-		let colorPickerDiv = body.querySelector('.colorPickerDiv');
-		if (colorPickerDiv) body.removeChild(colorPickerDiv);
-	}
-
-	function onPageScroll() {
-		if (!paused) pause();
-		if (changeTimeout) clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
-	}
-
-	function onWindowResize() {
-		if (!paused) pause();
-		if (changeTimeout) clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
-	}
-
-	function requestNewScreenshot() {
-		// In Case od Scroll or Resize
-		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-			document.querySelector('#superDev').style.visibility = 'hidden';
-			chrome.storage.local.set({setMinimised: null});
-			port.postMessage({action: 'Popup Hidden'});
-
-			requestAnimationFrame(function () {
-				requestAnimationFrame(function () {
-					portTwo.postMessage({action: 'takeScreenshot'});
-				});
-			});
-		}
-
-		// First Screenshot
-		else portTwo.postMessage({action: 'takeScreenshot'});
-	}
-
-	function pause() {
-		paused = true;
-		removeColorPicker();
-		enableCursor();
-	}
-
-	function resume() {
-		paused = false;
-		disableCursor();
-	}
-
-	function disableCursor() {
-		body.appendChild(overlay);
-	}
-
-	function enableCursor() {
-		body.removeChild(overlay);
-	}
-
-	function onMouseMove(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			if (event.touches) {
-				inputX = event.touches[0].clientX;
-				inputY = event.touches[0].clientY;
-			} else {
-				inputX = event.clientX;
-				inputY = event.clientY;
-			}
-			sendToWorker(event);
-		} else {
-			removeColorPicker();
-		}
-	}
-
-	function onMouseClick(event) {
-		if (document.querySelector('.colorPickerTooltipColorCode')) {
-			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
-			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
-		}
-	}
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyColorPicker(true);
-			} else if (event.isTrusted === false) {
-				destroyColorPicker(false);
-			}
-		}
-	}
-
-	function sendToWorker(event) {
-		if (paused) return;
-
-		portTwo.postMessage({
-			action: 'getColorAt',
-			data: {x: inputX, y: inputY},
-		});
-	}
-
-	function showColorPicker(spotColor) {
-		if (paused) return;
-
-		removeColorPicker();
-		if (!spotColor) return;
-
-		let newColorPickerDiv = document.createElement('div');
-		newColorPickerDiv.className = 'colorPickerDiv';
-		newColorPickerDiv.style.left = spotColor.x + 'px';
-		newColorPickerDiv.style.top = spotColor.y + 'px';
-
-		let colorPickerTooltip = document.createElement('div');
-		colorPickerTooltip.className = 'colorPickerTooltip';
-
-		let colorPickerTooltipBackground = document.createElement('div');
-		colorPickerTooltipBackground.className = 'colorPickerTooltipBackground';
-
-		let colorPickerTooltipColorCode = document.createElement('div');
-		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
-
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result.allFeatures).map(function (value, index) {
-				if (value.id === 'colorPicker') {
-					if (value.settings.checkboxColorPicker1 === true) {
-						colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
-						colorPickerTooltipColorCode.textContent = spotColor.hex;
-						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
-						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
-					} else if (value.settings.checkboxColorPicker2 === true) {
-						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
-						colorPickerTooltipColorCode.textContent = spotColor.rgb;
-						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
-						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
-					}
-				}
-			});
-		});
-
-		colorPickerTooltip.appendChild(colorPickerTooltipBackground);
-		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
-		newColorPickerDiv.appendChild(colorPickerTooltip);
-		body.appendChild(newColorPickerDiv);
-	}
-}
-
-function deactivateColorPicker(port, request) {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Color Picker Deactivated'});
+	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
 function activateClearAllCache(port, request) {
