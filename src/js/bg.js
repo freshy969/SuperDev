@@ -1,4 +1,284 @@
-import features from '../data/features';
+// Features Array
+const features = [
+	{
+		title: 'Page Guideline',
+		icon: 'fa-ruler',
+		id: 'pageGuideline',
+		settings: {},
+	},
+	{
+		title: 'Page Highlight',
+		icon: 'fa-paintbrush',
+		id: 'pageHighlight',
+		settings: {
+			checkboxPageHighlight1: false,
+			checkboxPageHighlight2: true,
+			checkboxPageHighlight3: false,
+			checkboxPageHighlight4: false,
+			checkboxPageHighlight5: false,
+			checkboxPageHighlight6: false,
+			checkboxPageHighlight7: false,
+		},
+	},
+	{
+		title: 'Page Ruler',
+		icon: 'fa-ruler-combined',
+		id: 'pageRuler',
+		settings: {},
+	},
+	{
+		title: 'Move Element',
+		icon: 'fa-arrows-up-down-left-right',
+		id: 'moveElement',
+		settings: {},
+	},
+	{
+		title: 'Delete Element',
+		icon: 'fa-trash-can',
+		id: 'deleteElement',
+		settings: {},
+	},
+	{
+		title: 'Export Element',
+		icon: 'fa-up-right-from-square',
+		id: 'exportElement',
+		settings: {
+			checkboxExportElement1: true,
+			checkboxExportElement2: false,
+			checkboxExportElement3: false,
+		},
+	},
+	{
+		title: 'Text Editor',
+		icon: 'fa-pencil',
+		id: 'textEditor',
+		settings: {},
+	},
+	{
+		title: 'Color Picker',
+		icon: 'fa-eye-dropper',
+		id: 'colorPicker',
+		settings: {
+			checkboxColorPicker1: true,
+			checkboxColorPicker2: false,
+			checkboxColorPicker3: false,
+		},
+	},
+	// {
+	// 	title: 'Color Palette',
+	// 	icon: 'fa-swatchbook',
+	// 	id: 'colorPalette',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'CSS Inspector',
+	// 	icon: 'fa-search',
+	// 	id: 'cssInspector',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Custom CSS',
+	// 	icon: 'fa-code',
+	// 	id: 'customCSS',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Custom JS',
+	// 	icon: 'fa-brackets-curly',
+	// 	id: 'customJS',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'All Fonts List',
+	// 	icon: 'fa-font',
+	// 	id: 'allFontsList',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Font Inspector',
+	// 	icon: 'fa-text-size',
+	// 	id: 'fontInspector',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Font Changer',
+	// 	icon: 'fa-font-case',
+	// 	id: 'fontChanger',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Extract Media',
+	// 	icon: 'fa-image',
+	// 	id: 'extractMedia',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Take Screenshot',
+	// 	icon: 'fa-aperture',
+	// 	id: 'takeScreenshot',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'View Responsive',
+	// 	icon: 'fa-laptop-mobile',
+	// 	id: 'viewResponsive',
+	// 	settings: {},
+	// },
+	{
+		title: 'Clear All Cache',
+		icon: 'fa-recycle',
+		id: 'clearAllCache',
+		settings: {
+			checkboxClearAllCache1: false,
+			checkboxClearAllCache2: true,
+			checkboxClearAllCache3: false,
+			checkboxClearAllCache4: false,
+			checkboxClearAllCache5: false,
+			checkboxClearAllCache6: false,
+		},
+	},
+	// {
+	// 	title: 'Built With',
+	// 	icon: 'fa-server',
+	// 	id: 'builtWith',
+	// 	settings: {},
+	// },
+];
+
+// Content Scripts Reinjection on Extension Install/Update
+chrome.runtime.onInstalled.addListener(async function () {
+	// ContentJs Reinjection
+	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+			if (
+				!tab.url.includes('chrome://') &&
+				!tab.url.includes('chrome-extension://') &&
+				!tab.url.includes('file://') &&
+				!tab.url.includes('https://chrome.google.com/webstore')
+			) {
+				chrome.scripting.executeScript({
+					target: {tabId: tab.id},
+					files: [
+						'libs/js/jquery.min.js',
+						'libs/js/jquery-ui.min.js',
+						'libs/js/beautify.min.js',
+						'libs/js/beautify-css.min.js',
+						'libs/js/beautify-html.min.js',
+						'js/cs.js',
+					],
+				});
+				chrome.scripting.insertCSS({
+					target: {tabId: tab.id},
+					files: ['css/tabs.css'],
+				});
+			}
+		}
+	}
+	// Creating Chrome Context Menu
+	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
+
+	// All Features Initialisation
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		if (result.allFeatures === undefined) {
+			chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+		}
+	});
+});
+
+// Content Scripts Reinjection on Extension Enable
+chrome.management.onEnabled.addListener(async function (extension) {
+	if (extension.name === chrome.runtime.getManifest().name) {
+		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
+			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+				if (
+					!tab.url.includes('chrome://') &&
+					!tab.url.includes('chrome-extension://') &&
+					!tab.url.includes('file://') &&
+					!tab.url.includes('https://chrome.google.com/webstore')
+				) {
+					chrome.scripting.executeScript({
+						target: {tabId: tab.id},
+						files: [
+							'libs/js/jquery.min.js',
+							'libs/js/jquery-ui.min.js',
+							'libs/js/beautify.min.js',
+							'libs/js/beautify-css.min.js',
+							'libs/js/beautify-html.min.js',
+							'js/cs.js',
+						],
+					});
+					chrome.scripting.insertCSS({
+						target: {tabId: tab.id},
+						files: ['css/tabs.css'],
+					});
+				}
+			}
+		}
+	}
+});
+
+// Open Extension on Extension Icon Click
+chrome.action.onClicked.addListener(function (tab) {
+	if (
+		!tab.url.includes('chrome://') &&
+		!tab.url.includes('chrome-extension://') &&
+		!tab.url.includes('file://') &&
+		!tab.url.includes('https://chrome.google.com/webstore')
+	) {
+		// All Features Initialisation
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+			}
+		});
+
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension'});
+		});
+	}
+});
+
+// Open Extension on Context Menu Click
+chrome.contextMenus.onClicked.addListener(function (tab) {
+	if (
+		!tab.pageUrl.includes('chrome://') &&
+		!tab.pageUrl.includes('chrome-extension://') &&
+		!tab.pageUrl.includes('file://') &&
+		!tab.pageUrl.includes('https://chrome.google.com/webstore')
+	) {
+		// All Features Initialisation
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+			}
+		});
+
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension'});
+		});
+	}
+});
+
+// Extension Shortcuts
+chrome.commands.onCommand.addListener((command) => {
+	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		if (
+			!tabs[0].url.includes('chrome://') &&
+			!tabs[0].url.includes('chrome-extension://') &&
+			!tabs[0].url.includes('file://') &&
+			!tabs[0].url.includes('https://chrome.google.com/webstore')
+		) {
+			if (command === 'clearAllCache') {
+				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+					let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
+					portOne.postMessage({action: 'activateClearAllCache'});
+				});
+			}
+		}
+	});
+});
 
 // Page Ruler + Export Element + Color Picker + Clear All Cache
 chrome.runtime.onConnect.addListener(function (portTwo) {
@@ -246,139 +526,4 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 			);
 		});
 	}
-});
-
-// Open Extension on Extension Icon Click
-chrome.action.onClicked.addListener(function (tab) {
-	if (
-		!tab.url.includes('chrome://') &&
-		!tab.url.includes('chrome-extension://') &&
-		!tab.url.includes('file://') &&
-		!tab.url.includes('https://chrome.google.com/webstore')
-	) {
-		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
-			}
-		});
-
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension'});
-		});
-	}
-});
-
-// Open Extension on Context Menu Click
-chrome.contextMenus.onClicked.addListener(function (tab) {
-	if (
-		!tab.pageUrl.includes('chrome://') &&
-		!tab.pageUrl.includes('chrome-extension://') &&
-		!tab.pageUrl.includes('file://') &&
-		!tab.pageUrl.includes('https://chrome.google.com/webstore')
-	) {
-		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
-			}
-		});
-
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension'});
-		});
-	}
-});
-
-// Content Scripts Reinjection on Extension Install/Update
-chrome.runtime.onInstalled.addListener(async function () {
-	// ContentJs Reinjection
-	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-			if (
-				!tab.url.includes('chrome://') &&
-				!tab.url.includes('chrome-extension://') &&
-				!tab.url.includes('file://') &&
-				!tab.url.includes('https://chrome.google.com/webstore')
-			) {
-				chrome.scripting.executeScript({
-					target: {tabId: tab.id},
-					files: [
-						'libs/js/jquery.min.js',
-						'libs/js/jquery-ui.min.js',
-						'libs/js/beautify.min.js',
-						'libs/js/beautify-css.min.js',
-						'libs/js/beautify-html.min.js',
-						'js/cs.js',
-					],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: tab.id},
-					files: ['css/tabs.css'],
-				});
-			}
-		}
-	}
-	// Creating Chrome Context Menu
-	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
-
-	// All Features Initialisation
-	chrome.storage.local.get(['allFeatures'], function (result) {
-		if (result.allFeatures === undefined) {
-			chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
-		}
-	});
-});
-
-// Content Scripts Reinjection on Extension Enable
-chrome.management.onEnabled.addListener(async function (extension) {
-	if (extension.name === chrome.runtime.getManifest().name) {
-		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-				if (
-					!tab.url.includes('chrome://') &&
-					!tab.url.includes('chrome-extension://') &&
-					!tab.url.includes('file://') &&
-					!tab.url.includes('https://chrome.google.com/webstore')
-				) {
-					chrome.scripting.executeScript({
-						target: {tabId: tab.id},
-						files: [
-							'libs/js/jquery.min.js',
-							'libs/js/jquery-ui.min.js',
-							'libs/js/beautify.min.js',
-							'libs/js/beautify-css.min.js',
-							'libs/js/beautify-html.min.js',
-							'js/cs.js',
-						],
-					});
-					chrome.scripting.insertCSS({
-						target: {tabId: tab.id},
-						files: ['css/tabs.css'],
-					});
-				}
-			}
-		}
-	}
-});
-
-// Extension Shortcuts
-chrome.commands.onCommand.addListener((command) => {
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-		if (
-			!tabs[0].url.includes('chrome://') &&
-			!tabs[0].url.includes('chrome-extension://') &&
-			!tabs[0].url.includes('file://') &&
-			!tabs[0].url.includes('https://chrome.google.com/webstore')
-		) {
-			if (command === 'clearAllCache') {
-				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-					portOne.postMessage({action: 'activateClearAllCache'});
-				});
-			}
-		}
-	});
 });

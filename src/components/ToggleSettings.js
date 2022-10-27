@@ -377,13 +377,13 @@ export default function ToggleSettings() {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache6').checked === true) {
 							setTimeout(function () {
-								value.settings.checkboxClearAllCache1 = true;
+								value.settings.checkboxClearAllCache1 = false;
 								value.settings.checkboxClearAllCache2 = true;
 								value.settings.checkboxClearAllCache3 = false;
 								value.settings.checkboxClearAllCache4 = false;
 								value.settings.checkboxClearAllCache5 = false;
 								value.settings.checkboxClearAllCache6 = false;
-								document.querySelector('#checkboxClearAllCache1').checked = true;
+								document.querySelector('#checkboxClearAllCache1').checked = false;
 								document.querySelector('#checkboxClearAllCache2').checked = true;
 								document.querySelector('#checkboxClearAllCache3').checked = false;
 								document.querySelector('#checkboxClearAllCache4').checked = false;
