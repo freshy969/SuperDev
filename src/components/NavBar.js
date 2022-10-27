@@ -69,8 +69,12 @@ export default function NavBar() {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
-						ActDeactFeature(JSON.parse(result.allFeatures), null);
-						chrome.storage.local.set({setActiveFeatureDisabled: false});
+						chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
+							if (outcome.whichFeatureActive !== null) {
+								ActDeactFeature(JSON.parse(result.allFeatures), outcome.whichFeatureActive);
+								chrome.storage.local.set({setActiveFeatureDisabled: false});
+							}
+						});
 					});
 				}
 			}
@@ -106,7 +110,9 @@ export default function NavBar() {
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
-			ActDeactFeature(allFeatures, null);
+			chrome.storage.local.get(['whichFeatureActive'], function (result) {
+				if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+			});
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllCompExcept('toggleInfo');
 
@@ -123,7 +129,9 @@ export default function NavBar() {
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			ActDeactFeature(allFeatures, null);
+			chrome.storage.local.get(['whichFeatureActive'], function (result) {
+				if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+			});
 			ChangeHeight(PopupHeight(allFeatures));
 			HideAllCompExcept('toggleSettings');
 
@@ -139,7 +147,9 @@ export default function NavBar() {
 	}
 
 	function pauseExtension() {
-		ActDeactFeature(allFeatures, null);
+		chrome.storage.local.get(['whichFeatureActive'], function (result) {
+			if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+		});
 		chrome.storage.local.set({isPopupPaused: true});
 	}
 

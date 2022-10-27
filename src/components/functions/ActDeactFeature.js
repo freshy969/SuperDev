@@ -3,13 +3,8 @@ export default function ActDeactFeature(allFeatures, featureId) {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
 			allFeatures.map(function (value, index) {
-				// If Null, Hide All Active Feature With Nothing Active (For Pause Functionality)
-				if (featureId === null) {
-					document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
-					JustHideMe(portThree, value.id);
-				}
 				// Disable All
-				else if (featureId !== value.id) {
+				if (featureId !== value.id) {
 					JustHideMe(portThree, value.id);
 				}
 				// Except The One Clicked
@@ -25,7 +20,6 @@ function HideMeShowMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Not Active
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
-			// If Not Exception
 			if (featureId !== 'clearAllCache' && featureId !== 'colorPalette') {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
