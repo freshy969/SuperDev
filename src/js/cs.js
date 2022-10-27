@@ -1213,7 +1213,7 @@ function activateExportElement(port, request) {
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
-			for (var i = 0; i < allStyleSheets.length; i++) {
+			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i] === null) {
 					style.textContent = request.styleSheet;
 					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet) {
