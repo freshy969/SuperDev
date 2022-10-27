@@ -1,5 +1,5 @@
-// Features Array
-const features = [
+// All Features Array
+const allFeatures = [
 	{
 		title: 'Page Guideline',
 		icon: 'fa-ruler',
@@ -180,7 +180,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 	// All Features Initialisation
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		if (result.allFeatures === undefined) {
-			chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+			chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
 		}
 	});
 });
@@ -228,7 +228,7 @@ chrome.action.onClicked.addListener(function (tab) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
 			}
 		});
 
@@ -250,7 +250,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
 			}
 		});
 
