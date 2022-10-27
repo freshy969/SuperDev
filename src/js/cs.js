@@ -1778,4 +1778,5 @@ function activateClearAllCache(port, request) {
 			}
 		});
 	});
+	port.postMessage({action: 'Clear All Cache Activated'});
 }
