@@ -48,7 +48,7 @@ export default function Home() {
 			setIsLoadingTwo(false);
 		});
 
-		// Update AllFeatures
+		// OnUpdate AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));

@@ -17,14 +17,14 @@ export default function NavBar() {
 			setIsLoadingOne(false);
 		});
 
-		// Update AllFeatures
+		// OnUpdate AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 
-		// Update SetMinimised
+		// OnUpdate SetMinimised
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
@@ -47,7 +47,7 @@ export default function NavBar() {
 			}
 		});
 
-		// Update IsPopupHidden
+		// OnUpdate IsPopupHidden
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.isPopupHidden) {
 				if (changes.isPopupHidden.newValue === true) {
@@ -61,7 +61,7 @@ export default function NavBar() {
 			}
 		});
 
-		// Update DisableActiveFeature
+		// OnUpdate DisableActiveFeature
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
@@ -69,6 +69,19 @@ export default function NavBar() {
 						ActivateDeactivateFeature(JSON.parse(result.allFeatures), null);
 						chrome.storage.local.set({setActiveFeatureDisabled: false});
 					});
+				}
+			}
+		});
+
+		// OnUpdate WhichFeatureActive
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.whichFeatureActive) {
+				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
+					document.querySelector('#clearAllCache').childNodes[2].textContent = 'Cache Cleared';
+					setTimeout(function () {
+						document.querySelector('#clearAllCache').childNodes[2].textContent = 'Clear All Cache';
+						chrome.storage.local.set({whichFeatureActive: null});
+					}, 500);
 				}
 			}
 		});

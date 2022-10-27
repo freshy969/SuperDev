@@ -36,7 +36,7 @@ export default function ToggleSettings() {
 			});
 		});
 
-		// Update AllFeatures
+		// OnUpdate AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
@@ -189,7 +189,7 @@ export default function ToggleSettings() {
 								document.querySelector('#checkboxPageHighlight6').checked = false;
 								document.querySelector('#checkboxPageHighlight7').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}, 300);
+							}, 500);
 						}
 					}
 				});
@@ -243,7 +243,7 @@ export default function ToggleSettings() {
 								document.querySelector('#checkboxExportElement2').checked = false;
 								document.querySelector('#checkboxExportElement3').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}, 300);
+							}, 500);
 						}
 					}
 				});
@@ -297,7 +297,7 @@ export default function ToggleSettings() {
 								document.querySelector('#checkboxColorPicker2').checked = false;
 								document.querySelector('#checkboxColorPicker3').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}, 300);
+							}, 500);
 						}
 					}
 				});
@@ -390,7 +390,7 @@ export default function ToggleSettings() {
 								document.querySelector('#checkboxClearAllCache5').checked = false;
 								document.querySelector('#checkboxClearAllCache6').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}, 300);
+							}, 500);
 						}
 					}
 				});
