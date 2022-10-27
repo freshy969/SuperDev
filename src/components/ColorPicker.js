@@ -3,7 +3,10 @@ import React from 'react';
 export default function ColorPicker() {
 	function CopyColorCode(value, id) {
 		navigator.clipboard.writeText(value);
-		document.querySelector('#' + id).classList.remove('before:hidden');
+		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+		setTimeout(function () {
+			document.querySelector('#' + id + '> i').classList.add('before:hidden');
+		}, 500);
 	}
 
 	let colors = [
@@ -12,19 +15,36 @@ export default function ColorPicker() {
 		'#1d3557',
 		'#a8dadc',
 		'#457b9d',
-		'#ffbe0b',
+		'#ffffff',
 		'#000000',
 		'#ef233c',
 		'#14213d',
 		'#3a86ff',
 		'#2a9d8f',
 		'#90e0ef',
-		'#ffb4a2',
+		'#f3f3f3',
 		'#e5e5e5',
 		'#00f5d4',
 		'#aec3b0',
-		'#00f5d4',
+		'#000000',
 		'#4a4e69',
+		'#e63946',
+		'#f1faee',
+		'#1d3557',
+		'#a8dadc',
+		'#457b9d',
+		'#ffffff',
+		'#000000',
+		'#ef233c',
+		'#14213d',
+		'#3a86ff',
+		'#2a9d8f',
+		'#90e0ef',
+		'#f3f3f3',
+		'#e5e5e5',
+		'#00f5d4',
+		'#aec3b0',
+		'#000000',
 	];
 	return (
 		<section id='colorPickerPage' className='hidden'>
@@ -33,20 +53,25 @@ export default function ColorPicker() {
 					<div className='flex flex-wrap'>
 						{colors.map(function (value, index) {
 							let id = 'colorPalette' + (index + 1);
+							let allClasses;
+							let baseClasses = 'flex flex-wrap justify-center items-center h-8 w-8 rounded-md box-border border border-gray-300 ';
+							if (colors.length - (index + 1) >= 7) {
+								if (((index + 1) / 7) % 1 !== 0) allClasses = baseClasses + 'mr-[12.5px] mb-[12.5px]';
+								else allClasses = baseClasses + 'mb-[12.5px]';
+							} else {
+								if (((index + 1) / 7) % 1 !== 0) allClasses = baseClasses + 'mr-[12.5px]';
+								else allClasses = baseClasses + '';
+							}
 							return (
 								<div
 									id={id}
 									onClick={function () {
 										CopyColorCode(value, id);
 									}}
-									className={
-										((index + 1) / 6) % 1 !== 0
-											? 'flex flex-wrap justify-center items-center mr-[12px] mb-[12px] h-8 w-10 rounded-md box-border border'
-											: 'flex flex-wrap justify-center items-center mr-[00px] mb-[12px] h-8 w-10 rounded-md box-border border'
-									}
+									className={allClasses}
 									style={{'background-color': value}}
 									key={index + 1}>
-									<i className='fa-solid fa-check text-base before:hidden'></i>
+									<i className='fa-solid fa-check text-base text-white before:hidden'></i>
 								</div>
 							);
 						})}

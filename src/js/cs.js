@@ -117,6 +117,7 @@ function showHideExtension(port, request) {
 		superDevIframe.src = chrome.runtime.getURL('index.html');
 		superDevIframe.id = 'superDevIframe';
 		superDevIframe.scrolling = 'no';
+		superDevIframe.allow = 'clipboard-write';
 		superDevIframe.style.cssText = `
 			display: block !important;
 			padding: 0 !important;

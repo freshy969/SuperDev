@@ -55,11 +55,11 @@ export default function ToggleInfo() {
 								<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
 							</div>
 							<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3'>
-								{["As of this version, Export Element's exported CSS is inconsistent, it will be fixed soon."].map(function (value, index) {
+								{["Export Element's CSS is Inconsistent", "It's CSS Algorithm Will Be Fixed Soon"].map(function (value, index) {
 									return (
 										<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 											<h6
-												className='inline-block text-xs text-allText dark:text-allTextD font-normal leading-relaxed select-none'
+												className='inline-block text-xs text-allText dark:text-allTextD font-normal select-none'
 												htmlFor={'checkboxExportElement' + (index + 1)}>
 												<i className='fa-regular fa-square-info pr-[5px] text-allText dark:text-allTextD'></i>
 												{value}

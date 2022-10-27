@@ -20,6 +20,7 @@ function HideMeShowMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Inactive
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
+			// If Not Exceptions
 			if (featureId !== 'clearAllCache' && featureId !== 'colorPalette') {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
