@@ -18,7 +18,7 @@ export default function ActDeactFeature(allFeatures, featureId) {
 
 function HideMeShowMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
-		// Activate On Click If Not Active
+		// Activate On Click If Inactive
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			if (featureId !== 'clearAllCache' && featureId !== 'colorPalette') {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
@@ -47,6 +47,12 @@ function HideMeShowMe(portThree, featureId) {
 				.classList.remove('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
 			document.querySelector('#' + featureId).classList.add('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
 			portThree.postMessage({action: 'deactivate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+
+			portThree.onMessage.addListener(function (response) {
+				if (response.action.includes('Deactivated')) {
+					chrome.storage.local.set({whichFeatureActive: null});
+				}
+			});
 		}
 	}
 }
