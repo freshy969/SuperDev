@@ -35,7 +35,7 @@ export default function MainBody() {
 								}}
 								className={
 									value.id +
-									' rounded-md text-left bg-gradient-to-r from-btnOne dark:from-btnOneD to-btnTwo dark:to-btnTwoD hover:from-btnThree hover:via-btnFour hover:to-btnFive shadow-lg text-xs text-btnText dark:text-btnTextD p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
+									' rounded-md text-left bg-gradient-to-r from-btnOne dark:from-btnOneD to-btnTwo dark:to-btnTwoD hover:from-btnThree hover:via-btnFour hover:to-btnFive dark:hover:from-btnThreeD dark:hover:via-btnFourD dark:hover:to-btnFiveD shadow-lg text-xs text-btnText dark:text-btnTextD p-2 mb-4 font-normal transition ease-in-out scaleButton duration-300'
 								}>
 								<i className={'fa-regular ' + value.icon + ' px-[5px] text-btnText dark:text-btnTextD'}></i> {value.title}
 							</button>
