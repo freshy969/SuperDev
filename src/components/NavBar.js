@@ -77,11 +77,13 @@ export default function NavBar() {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.whichFeatureActive) {
 				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
-					document.querySelector('#clearAllCache').childNodes[2].textContent = 'Cache Cleared';
-					setTimeout(function () {
-						document.querySelector('#clearAllCache').childNodes[2].textContent = 'Clear All Cache';
-						chrome.storage.local.set({whichFeatureActive: null});
-					}, 500);
+					if (document.querySelector('#clearAllCache')) {
+						document.querySelector('#clearAllCache').childNodes[2].textContent = 'Cache Cleared';
+						setTimeout(function () {
+							document.querySelector('#clearAllCache').childNodes[2].textContent = 'Clear All Cache';
+							chrome.storage.local.set({whichFeatureActive: null});
+						}, 500);
+					}
 				}
 			}
 		});
