@@ -462,85 +462,22 @@ export default function ToggleSettings() {
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-paintbrush px-[5px] text-allText dark:text-allTextD'></i>Page Highlight Settings
-						</div>
-						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{[
-								'Highlight All Page Elements',
-								'Highlight Block Level Elements',
-								'Highlight Inline Level Elements',
-								'Highlight Semantic + Div Elements',
-								'Highlight Headings + Paragraphs',
-								"Don't Add Border to Elements",
-								'Reset Settings to Default',
-							].map(function (value, index) {
-								return (
-									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
-										<input
-											onClick={function () {
-												PageHighlightSettings('checkboxPageHighlight' + (index + 1));
-											}}
-											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-											type='checkbox'
-											id={'checkboxPageHighlight' + (index + 1)}
-										/>
-										<label
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
-											htmlFor={'checkboxPageHighlight' + (index + 1)}>
-											{value}
-										</label>
-									</div>
-								);
-							})}
-						</div>
-					</div>
-
-					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Settings
-						</div>
-						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{['Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
-								return (
-									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
-										<input
-											onClick={function () {
-												ExportElementSettings('checkboxExportElement' + (index + 1));
-											}}
-											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
-											type='checkbox'
-											id={'checkboxExportElement' + (index + 1)}
-										/>
-										<label
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
-											htmlFor={'checkboxExportElement' + (index + 1)}>
-											{value}
-										</label>
-									</div>
-								);
-							})}
-						</div>
-					</div>
-
-					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-eye-dropper px-[5px] text-allText dark:text-allTextD'></i>Color Picker Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{['Copy Color Code in Hex', 'Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
+								let checkboxId = 'checkboxColorPicker' + (index + 1);
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ColorPickerSettings('checkboxColorPicker' + (index + 1));
+												ColorPickerSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
-											id={'checkboxColorPicker' + (index + 1)}
+											id={checkboxId}
 										/>
-										<label
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
-											htmlFor={'checkboxColorPicker' + (index + 1)}>
+										<label className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none' htmlFor={checkboxId}>
 											{value}
 										</label>
 									</div>
@@ -555,19 +492,78 @@ export default function ToggleSettings() {
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{['Copy Color Code in Hex', 'Copy Color Code in RGB', 'Reset Settings to Default'].map(function (value, index) {
+								let checkboxId = 'checkboxColorPalette' + (index + 1);
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ColorPaletteSettings('checkboxColorPalette' + (index + 1));
+												ColorPaletteSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
-											id={'checkboxColorPalette' + (index + 1)}
+											id={checkboxId}
 										/>
-										<label
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
-											htmlFor={'checkboxColorPalette' + (index + 1)}>
+										<label className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none' htmlFor={checkboxId}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+							<i className='fa-regular fa-paintbrush px-[5px] text-allText dark:text-allTextD'></i>Page Highlight Settings
+						</div>
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
+							{[
+								'Highlight All Page Elements',
+								'Highlight Block Level Elements',
+								'Highlight Inline Level Elements',
+								'Highlight Semantic + Div Elements',
+								'Highlight Headings + Paragraphs',
+								"Don't Add Border to Elements",
+								'Reset Settings to Default',
+							].map(function (value, index) {
+								let checkboxId = 'checkboxPageHighlight' + (index + 1);
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={function () {
+												PageHighlightSettings(checkboxId);
+											}}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={checkboxId}
+										/>
+										<label className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none' htmlFor={checkboxId}>
+											{value}
+										</label>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Settings
+						</div>
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
+							{['Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
+								let checkboxId = 'checkboxExportElement' + (index + 1);
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<input
+											onClick={function () {
+												ExportElementSettings(checkboxId);
+											}}
+											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
+											type='checkbox'
+											id={checkboxId}
+										/>
+										<label className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none' htmlFor={checkboxId}>
 											{value}
 										</label>
 									</div>
@@ -585,19 +581,18 @@ export default function ToggleSettings() {
 								value,
 								index
 							) {
+								let checkboxId = 'checkboxClearAllCache' + (index + 1);
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ClearAllCacheSettings('checkboxClearAllCache' + (index + 1));
+												ClearAllCacheSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
-											id={'checkboxClearAllCache' + (index + 1)}
+											id={checkboxId}
 										/>
-										<label
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none'
-											htmlFor={'checkboxClearAllCache' + (index + 1)}>
+										<label className='inline-block text-xs text-allText dark:text-allTextD font-normal cursor-pointer select-none' htmlFor={checkboxId}>
 											{value}
 										</label>
 									</div>
