@@ -1186,16 +1186,20 @@ function deactivateDeleteElement(port, request) {
 
 function activateExportElement(port, request) {
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
-	let styleSheets = [];
+	let allStyleSheets = [];
 
 	// Iterating All Stylesheets
 	[...document.styleSheets].map(function (styleSheet) {
 		try {
-			[...styleSheet.cssRules].map(function (cssRule) {
-				styleSheets.push(cssRule);
-			});
+			if ([...styleSheet.cssRules].length !== 0) {
+				let singleStylesheet = [];
+				[...styleSheet.cssRules].map(function (cssRule) {
+					singleStylesheet.push(cssRule);
+				});
+				allStyleSheets.push(singleStylesheet);
+			}
 		} catch (e) {
-			styleSheets.push(null);
+			allStyleSheets.push(null);
 			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: styleSheet.href});
 		}
 	});
@@ -1209,13 +1213,17 @@ function activateExportElement(port, request) {
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
-			for (var i = 0; i < styleSheets.length; i++) {
-				if (styleSheets[i] === null) {
+			for (var i = 0; i < allStyleSheets.length; i++) {
+				if (allStyleSheets[i] === null) {
 					style.textContent = request.styleSheet;
 					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet) {
-						[...styleSheet.cssRules].map(function (cssRule) {
-							styleSheets[i] = cssRule;
-						});
+						if ([...styleSheet.cssRules].length !== 0) {
+							let singleStylesheet = [];
+							[...styleSheet.cssRules].map(function (cssRule) {
+								singleStylesheet.push(cssRule);
+							});
+							allStyleSheets[i] = singleStylesheet;
+						}
 					});
 					break;
 				}
@@ -1271,24 +1279,37 @@ function activateExportElement(port, request) {
 				if (element.id !== '') tempSelectors.push('#' + element.id);
 				if (element.className !== '') {
 					[...element.classList].map(function (value) {
-						tempSelectors.push('.' + value);
+						if (value !== 'pageGuidelineOutline') tempSelectors.push('.' + value);
 					});
 				}
 				tempSelectors.push(element.tagName.toLowerCase());
 				allSelectors.push(tempSelectors);
 
 				// All Computed Styles
-				allComputedStyles.push(window.getComputedStyle(element));
+				let tempComputedStyles = window.getComputedStyle(element);
+				let tempComputedStyle = {};
+				[...tempComputedStyles].map(function (value) {
+					tempComputedStyle[value] = tempComputedStyles.getPropertyValue(value);
+				});
+				allComputedStyles.push(tempComputedStyle);
 			});
+
+			console.log(allStyleSheets);
+			console.log(allSelectors);
+			console.log(allComputedStyles);
 
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
 						let css = css_beautify(
-							styleSheets
-								.map((cssRules) => {
-									return cssRules.cssText;
+							allStyleSheets
+								.map(function (styleSheet) {
+									return styleSheet
+										.map((cssRules) => {
+											return cssRules.cssText;
+										})
+										.join('');
 								})
 								.join(''),
 							{indent_size: 2, indent_with_tabs: true}
