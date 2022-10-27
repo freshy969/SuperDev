@@ -1,5 +1,4 @@
 import React from 'react';
-import features from './data/features';
 import {useState, useEffect} from 'react';
 import NavBar from './components/NavBar';
 import MainBody from './components/MainBody';
@@ -15,7 +14,6 @@ export default function Home() {
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
-		// SetMinimised, DisableActiveFeature, WhichFeatureActive
 		chrome.storage.local.set({isPopupPaused: false});
 		chrome.storage.local.set({isPopupHidden: false});
 		chrome.storage.local.set({setActiveFeatureDisabled: false});
@@ -44,16 +42,16 @@ export default function Home() {
 			}
 		});
 
-		// All Features Initialisation
+		// Get AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {
-					setAllFeatures(features);
-					setIsLoadingTwo(false);
-				});
-			} else {
-				setAllFeatures(JSON.parse(result.allFeatures));
-				setIsLoadingTwo(false);
+			setAllFeatures(JSON.parse(result.allFeatures));
+			setIsLoadingTwo(false);
+		});
+
+		// Update AllFeatures
+		chrome.storage.onChanged.addListener(function (changes) {
+			if (changes.allFeatures) {
+				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 	}, []);

@@ -3,12 +3,17 @@ import {useState, useEffect} from 'react';
 import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function MainBody() {
+	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(function () {
+		// Get AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
+			setIsLoadingOne(false);
 		});
+
+		// Update AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
@@ -16,7 +21,7 @@ export default function MainBody() {
 		});
 	}, []);
 
-	if (allFeatures.length !== 0) {
+	if (!isLoadingOne) {
 		return (
 			<section id='mainBody'>
 				<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>

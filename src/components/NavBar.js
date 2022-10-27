@@ -7,22 +7,24 @@ import JustChangeHeight from './functions/JustChangeHeight';
 import ActivateDeactivateFeature from './functions/ActivateDeactivateFeature';
 
 export default function NavBar() {
+	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(function () {
-		// Get All Features
+		// Get AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
+			setIsLoadingOne(false);
 		});
 
-		// On AllFeatures Change
+		// Update AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
 
-		// On SetMinimised Change
+		// Update SetMinimised
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
@@ -45,7 +47,7 @@ export default function NavBar() {
 			}
 		});
 
-		// On IsPopupHidden Change
+		// Update IsPopupHidden
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.isPopupHidden) {
 				if (changes.isPopupHidden.newValue === true) {
@@ -59,7 +61,7 @@ export default function NavBar() {
 			}
 		});
 
-		// On DisableActiveFeature Change
+		// Update DisableActiveFeature
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
@@ -138,7 +140,7 @@ export default function NavBar() {
 		});
 	}
 
-	if (allFeatures.length !== 0) {
+	if (!isLoadingOne) {
 		return (
 			<header id='navBar'>
 				<div className='flex justify-between border border-borderOne dark:border-borderOneD box-border rounded-t-lg py-[8px] px-[18px]'>

@@ -1,3 +1,5 @@
+import features from '../data/features';
+
 // Page Ruler + Export Element + Color Picker + Clear All Cache
 chrome.runtime.onConnect.addListener(function (portTwo) {
 	let dimensionsThreshold = 6;
@@ -254,6 +256,13 @@ chrome.action.onClicked.addListener(function (tab) {
 		!tab.url.includes('file://') &&
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
+		// All Features Initialisation
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+			}
+		});
+
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
@@ -269,6 +278,13 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('file://') &&
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
+		// All Features Initialisation
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+			}
+		});
+
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
 			portOne.postMessage({action: 'showHideExtension'});
@@ -307,6 +323,13 @@ chrome.runtime.onInstalled.addListener(async function () {
 	}
 	// Creating Chrome Context Menu
 	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
+
+	// All Features Initialisation
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		if (result.allFeatures === undefined) {
+			chrome.storage.local.set({allFeatures: JSON.stringify(features)}, function () {});
+		}
+	});
 });
 
 // Content Scripts Reinjection on Extension Enable

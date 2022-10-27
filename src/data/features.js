@@ -128,7 +128,7 @@ const features = [
 		icon: 'fa-recycle',
 		id: 'clearAllCache',
 		settings: {
-			checkboxClearAllCache1: false,
+			checkboxClearAllCache1: true,
 			checkboxClearAllCache2: true,
 			checkboxClearAllCache3: false,
 			checkboxClearAllCache4: false,
