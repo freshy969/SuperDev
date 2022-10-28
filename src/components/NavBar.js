@@ -85,9 +85,13 @@ export default function NavBar({portThree}) {
 			if (changes.whichFeatureActive) {
 				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
 					if (document.querySelector('#clearAllCache')) {
-						document.querySelector('#clearAllCache').childNodes[2].textContent = 'Cache Cleared';
+						console.dir(document.querySelector('#clearAllCache'));
+						document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
+						document.querySelector('#clearAllCache > i').classList.add('fa-badge-check');
 						setTimeout(function () {
-							document.querySelector('#clearAllCache').childNodes[2].textContent = 'Clear All Cache';
+							document.querySelector('#clearAllCache > i').classList.remove('fa-badge-check');
+							document.querySelector('#clearAllCache > i').classList.add('fa-recycle');
+
 							chrome.storage.local.set({whichFeatureActive: null});
 						}, 500);
 					}
@@ -101,10 +105,6 @@ export default function NavBar({portThree}) {
 								let bodyHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
 								document.querySelector('#colorPickerPageChild').style.height = `${bodyHeight}px`;
 
-								chrome.storage.local.set({setMinimised: false});
-							} else {
-								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-								HideAllCompExcept('mainBody');
 								chrome.storage.local.set({setMinimised: false});
 							}
 						}
