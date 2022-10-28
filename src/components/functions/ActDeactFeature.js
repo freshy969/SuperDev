@@ -20,24 +20,34 @@ function HideMeShowMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate On Click If Inactive
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
-			// If Not Exceptions
-			if (featureId !== 'clearAllCache' && featureId !== 'colorPalette') {
+			// Exceptions
+			if (featureId === 'clearAllCache') {
+				setTimeout(function () {
+					portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+				}, 50);
+
+				portThree.onMessage.addListener(function (response) {
+					if (response.action.includes('Activated')) {
+						chrome.storage.local.set({whichFeatureActive: featureId});
+					}
+				});
+			} else {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.remove('from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD');
 				document
 					.querySelector('#' + featureId)
 					.classList.add('from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active');
+
+				setTimeout(function () {
+					portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
+				}, 50);
+
+				portThree.onMessage.addListener(function (response) {
+					if (response.action.includes('Activated')) {
+						chrome.storage.local.set({whichFeatureActive: featureId});
+					}
+				});
 			}
-
-			setTimeout(function () {
-				portThree.postMessage({action: 'activate' + (featureId.charAt(0).toUpperCase() + featureId.slice(1))});
-			}, 50);
-
-			portThree.onMessage.addListener(function (response) {
-				if (response.action.includes('Activated')) {
-					chrome.storage.local.set({whichFeatureActive: featureId});
-				}
-			});
 		}
 
 		// Deactivate On Click If Active

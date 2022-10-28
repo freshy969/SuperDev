@@ -10,6 +10,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'justChangeHeight':
 				justChangeHeight(port, request);
 				break;
+			case 'getAllColors':
+				getAllColors(port, request);
+				break;
 			case 'activateTextEditor':
 				activateTextEditor(port, request);
 				break;
@@ -176,6 +179,52 @@ function changeHeight(port, request) {
 function justChangeHeight(port, request) {
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	port.postMessage({action: 'Just Height Changed'});
+}
+
+function getAllColors(port, request) {
+	let tempColors = [];
+	const isColor = (color) => {
+		const style = new Option().style;
+		style.color = color;
+		if (style.color !== '') tempColors.push(color);
+	};
+
+	document.querySelectorAll('*').forEach(function (element) {
+		let elementComputedStyles = window.getComputedStyle(element);
+		isColor(elementComputedStyles.getPropertyValue('background-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-block-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-block-end-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-block-start-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-bottom-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-inline-end-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-inline-start-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-left-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-right-color'));
+		isColor(elementComputedStyles.getPropertyValue('border-top-color'));
+		isColor(elementComputedStyles.getPropertyValue('caret-color'));
+		isColor(elementComputedStyles.getPropertyValue('color'));
+		isColor(elementComputedStyles.getPropertyValue('column-rule-color'));
+		isColor(elementComputedStyles.getPropertyValue('fill'));
+		isColor(elementComputedStyles.getPropertyValue('flood-color'));
+		isColor(elementComputedStyles.getPropertyValue('lighting-color'));
+		isColor(elementComputedStyles.getPropertyValue('outline-color'));
+		isColor(elementComputedStyles.getPropertyValue('stop-color'));
+		isColor(elementComputedStyles.getPropertyValue('stroke'));
+		isColor(elementComputedStyles.getPropertyValue('text-decoration-color'));
+		isColor(elementComputedStyles.getPropertyValue('text-emphasis-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-border-after-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-border-before-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-border-end-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-border-start-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-column-rule-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-tap-highlight-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-text-emphasis-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-text-fill-color'));
+		isColor(elementComputedStyles.getPropertyValue('webkit-text-stroke-color'));
+	});
+	let allColors = [...new Set(tempColors)];
+	port.postMessage({action: 'allColors', allColors: allColors});
 }
 
 function activateTextEditor(port, request) {
@@ -1564,10 +1613,6 @@ function activateExportElement(port, request) {
 				});
 				allComputedStyles.push(tempComputedStyle);
 			});
-
-			console.log(allStyleSheets);
-			console.log(allSelectors);
-			console.log(allComputedStyles);
 
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
