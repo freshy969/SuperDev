@@ -54,12 +54,12 @@ export default function ColorPalette({portThree}) {
 									// Margin Right/Bottom Calculation
 									let id = 'colorPalette' + (index + 1);
 									let allClasses;
-									let baseClasses = 'flex flex-wrap justify-center items-center h-[27.5px] w-[65.5px] rounded-md box-border border border-gray-300 ';
+									let baseClasses = 'flex flex-wrap justify-center items-center h-[25.5px] w-[64px] rounded-md box-border border border-gray-300 ';
 									if (allColors.length - (index + 1) >= 4) {
-										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[12.5px] mb-[12.5px]';
+										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px] mb-[14.5px]';
 										else allClasses = baseClasses + 'mb-[12.5px]';
 									} else {
-										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[12.5px]';
+										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px]';
 										else allClasses = baseClasses + '';
 									}
 
