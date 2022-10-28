@@ -1535,11 +1535,11 @@ function activateExportElement(port, request) {
 	let allStyleSheets = [];
 
 	// Iterating All Stylesheets
-	[...document.styleSheets].map(function (styleSheet) {
+	[...document.styleSheets].map(function (styleSheet, index) {
 		try {
 			if ([...styleSheet.cssRules].length !== 0) {
 				let singleStylesheet = [];
-				[...styleSheet.cssRules].map(function (cssRule) {
+				[...styleSheet.cssRules].map(function (cssRule, index) {
 					singleStylesheet.push(cssRule);
 				});
 				allStyleSheets.push(singleStylesheet);
@@ -1562,10 +1562,10 @@ function activateExportElement(port, request) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i] === null) {
 					style.textContent = request.styleSheet;
-					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet) {
+					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet, index) {
 						if ([...styleSheet.cssRules].length !== 0) {
 							let singleStylesheet = [];
-							[...styleSheet.cssRules].map(function (cssRule) {
+							[...styleSheet.cssRules].map(function (cssRule, index) {
 								singleStylesheet.push(cssRule);
 							});
 							allStyleSheets[i] = singleStylesheet;
@@ -1624,7 +1624,7 @@ function activateExportElement(port, request) {
 				let tempSelectors = [];
 				if (element.id !== '') tempSelectors.push('#' + element.id);
 				if (element.className !== '') {
-					[...element.classList].map(function (value) {
+					[...element.classList].map(function (value, index) {
 						if (value !== 'pageGuidelineOutline') tempSelectors.push('.' + value);
 					});
 				}
@@ -1634,7 +1634,7 @@ function activateExportElement(port, request) {
 				// All Computed Styles
 				let tempComputedStyles = window.getComputedStyle(element);
 				let tempComputedStyle = {};
-				[...tempComputedStyles].map(function (value) {
+				[...tempComputedStyles].map(function (value, index) {
 					tempComputedStyle[value] = tempComputedStyles.getPropertyValue(value);
 				});
 				allComputedStyles.push(tempComputedStyle);
@@ -1646,9 +1646,9 @@ function activateExportElement(port, request) {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
 						let css = css_beautify(
 							allStyleSheets
-								.map(function (styleSheet) {
+								.map(function (styleSheet, index) {
 									return styleSheet
-										.map((cssRules) => {
+										.map((cssRules, index) => {
 											return cssRules.cssText;
 										})
 										.join('');

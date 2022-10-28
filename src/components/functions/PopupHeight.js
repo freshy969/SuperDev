@@ -1,7 +1,7 @@
 export default function PopupHeight(allFeatures) {
 	if (allFeatures.length !== 0) {
 		let [count, height] = [0, 0];
-		allFeatures.map(function () {
+		allFeatures.map(function (value, index) {
 			count = count + 1;
 		});
 		if (count === 0) height = 40.5;

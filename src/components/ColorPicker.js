@@ -14,12 +14,35 @@ export default function ColorPicker({portThree}) {
 		});
 	}, []);
 
-	function CopyColorCode(value, id) {
-		navigator.clipboard.writeText(value);
-		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
-		setTimeout(function () {
-			document.querySelector('#' + id + '> i').classList.add('before:hidden');
-		}, 500);
+	function CopyColorCode(rgbColor, id) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result.allFeatures).map(function (value, index) {
+				if (value.id === 'colorPalette') {
+					if (value.settings.checkboxColorPalette1 === true) {
+						navigator.clipboard.writeText(rgbaToHex(rgbColor));
+						document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+						setTimeout(function () {
+							document.querySelector('#' + id + '> i').classList.add('before:hidden');
+						}, 500);
+					} else if (value.settings.checkboxColorPalette2 === true) {
+						navigator.clipboard.writeText(rgbColor);
+						document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+						setTimeout(function () {
+							document.querySelector('#' + id + '> i').classList.add('before:hidden');
+						}, 500);
+					}
+				}
+			});
+		});
+
+		function rgbaToHex(rgba) {
+			let hex = rgba.split('(')[1].split(')')[0];
+			hex = hex.split(',');
+			hex.length === 3
+				? (hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1))
+				: (hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1) + ((+hex[3] * 255) | (1 << 8)).toString(16).slice(1));
+			return hex;
+		}
 	}
 
 	return (
