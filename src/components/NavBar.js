@@ -6,7 +6,7 @@ import ChangeHeight from './functions/ChangeHeight';
 import JustChangeHeight from './functions/JustChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function NavBar() {
+export default function NavBar({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -29,20 +29,20 @@ export default function NavBar() {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(40.5); // 40.5 = Header Height
+					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
-							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleSettings');
 						} else if (!document.querySelector('#colorPickerPage').classList.contains('hidden')) {
-							ChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('colorPickerPage');
 						}
 					});
@@ -56,7 +56,7 @@ export default function NavBar() {
 				if (changes.isPopupHidden.newValue === true) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
-							JustChangeHeight(PopupHeight(JSON.parse(result.allFeatures)));
+							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						});
 					}
@@ -64,14 +64,14 @@ export default function NavBar() {
 			}
 		});
 
-		// OnUpdate DisableActiveFeature
+		// OnUpdate SetActiveFeatureDisabled, For ESC
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActiveFeatureDisabled) {
 				if (changes.setActiveFeatureDisabled.newValue === true) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
 							if (outcome.whichFeatureActive !== null) {
-								ActDeactFeature(JSON.parse(result.allFeatures), outcome.whichFeatureActive);
+								ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
 								chrome.storage.local.set({setActiveFeatureDisabled: false});
 							}
 						});
@@ -91,6 +91,24 @@ export default function NavBar() {
 							chrome.storage.local.set({whichFeatureActive: null});
 						}, 500);
 					}
+				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
+					chrome.storage.local.get(['allFeatures'], function (result) {
+						if (document.querySelector('#colorPickerPage')) {
+							if (document.querySelector('#colorPickerPage').classList.contains('hidden')) {
+								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
+								HideAllCompExcept('colorPickerPage');
+
+								let bodyHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
+								document.querySelector('#colorPickerPageChild').style.height = `${bodyHeight}px`;
+
+								chrome.storage.local.set({setMinimised: false});
+							} else {
+								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
+								HideAllCompExcept('mainBody');
+								chrome.storage.local.set({setMinimised: false});
+							}
+						}
+					});
 				}
 			}
 		});
@@ -111,9 +129,9 @@ export default function NavBar() {
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+				if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 			});
-			ChangeHeight(PopupHeight(allFeatures));
+			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleInfo');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
@@ -121,7 +139,7 @@ export default function NavBar() {
 
 			chrome.storage.local.set({setMinimised: false});
 		} else {
-			ChangeHeight(PopupHeight(allFeatures));
+			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
 		}
@@ -130,9 +148,9 @@ export default function NavBar() {
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+				if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 			});
-			ChangeHeight(PopupHeight(allFeatures));
+			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleSettings');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
@@ -140,7 +158,7 @@ export default function NavBar() {
 
 			chrome.storage.local.set({setMinimised: false});
 		} else {
-			ChangeHeight(PopupHeight(allFeatures));
+			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.set({setMinimised: false});
 		}
@@ -148,7 +166,7 @@ export default function NavBar() {
 
 	function pauseExtension() {
 		chrome.storage.local.get(['whichFeatureActive'], function (result) {
-			if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
+			if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 		});
 		chrome.storage.local.set({isPopupPaused: true});
 	}
@@ -162,10 +180,7 @@ export default function NavBar() {
 	}
 
 	function showHideExtension() {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
-			portThree.postMessage({action: 'showHideExtension'});
-		});
+		portThree.postMessage({action: 'showHideExtension'});
 	}
 
 	if (!isLoadingOne) {

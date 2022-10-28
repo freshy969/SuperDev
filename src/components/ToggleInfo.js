@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ToggleInfo() {
+export default function ToggleInfo({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 

@@ -1,11 +1,8 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import HideAllCompExcept from './functions/HideAllCompExcept';
-import PopupHeight from './functions/PopupHeight';
-import ChangeHeight from './functions/ChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function MainBody() {
+export default function MainBody({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -24,29 +21,6 @@ export default function MainBody() {
 		});
 	}, []);
 
-	function ActDeactFeaturee(featureId) {
-		if (featureId === 'colorPalette') {
-			if (document.querySelector('#colorPickerPage').classList.contains('hidden')) {
-				chrome.storage.local.get(['whichFeatureActive'], function (result) {
-					if (result.whichFeatureActive !== null) ActDeactFeature(allFeatures, result.whichFeatureActive);
-				});
-				ChangeHeight(PopupHeight(allFeatures));
-				HideAllCompExcept('colorPickerPage');
-
-				let bodyHeight = PopupHeight(allFeatures) - 41.5;
-				document.querySelector('#colorPickerPageChild').style.height = `${bodyHeight}px`;
-
-				chrome.storage.local.set({setMinimised: false});
-			} else {
-				ChangeHeight(PopupHeight(allFeatures));
-				HideAllCompExcept('mainBody');
-				chrome.storage.local.set({setMinimised: false});
-			}
-		} else {
-			ActDeactFeature(allFeatures, featureId);
-		}
-	}
-
 	if (!isLoadingOne) {
 		return (
 			<section id='mainBody'>
@@ -57,7 +31,7 @@ export default function MainBody() {
 								key={index}
 								id={value.id}
 								onClick={function () {
-									ActDeactFeaturee(value.id);
+									ActDeactFeature(portThree, allFeatures, value.id);
 								}}
 								className={
 									value.id +

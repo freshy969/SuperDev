@@ -34,7 +34,7 @@ const allFeatures = [
 	},
 	{
 		title: 'Page Guideline',
-		icon: 'fa-ruler',
+		icon: 'fa-hashtag',
 		id: 'pageGuideline',
 		settings: {},
 	},

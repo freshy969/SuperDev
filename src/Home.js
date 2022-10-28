@@ -11,7 +11,10 @@ import ChangeHeight from './components/functions/ChangeHeight';
 export default function Home() {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [isLoadingTwo, setIsLoadingTwo] = useState(true);
+	const [isLoadingThree, setIsLoadingThree] = useState(true);
+
 	const [allFeatures, setAllFeatures] = useState([]);
+	const [tabId, setTabId] = useState();
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
@@ -55,17 +58,24 @@ export default function Home() {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 			}
 		});
+
+		// Set Port Three
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			setTabId(tabs[0].id);
+			setIsLoadingThree(false);
+		});
 	}, []);
 
-	if (!isLoadingOne && !isLoadingTwo) {
-		ChangeHeight(PopupHeight(allFeatures));
+	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree) {
+		let portThree = chrome.tabs.connect(tabId, {name: 'portThree'});
+		ChangeHeight(portThree, PopupHeight(allFeatures));
 		return (
 			<>
-				<NavBar />
-				<MainBody />
-				<ToggleInfo />
-				<ToggleSettings />
-				<ColorPicker />
+				<NavBar portThree={portThree} />
+				<MainBody portThree={portThree} />
+				<ToggleInfo portThree={portThree} />
+				<ToggleSettings portThree={portThree} />
+				<ColorPicker portThree={portThree} />
 			</>
 		);
 	}
