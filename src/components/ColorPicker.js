@@ -44,7 +44,6 @@ export default function ColorPicker({portThree}) {
 			return hex;
 		}
 	}
-
 	return (
 		<section id='colorPickerPage' className='hidden'>
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
@@ -52,6 +51,7 @@ export default function ColorPicker({portThree}) {
 					<div className='flex flex-wrap'>
 						{!isLoadingOne
 							? allColors.map(function (value, index) {
+									// Margin Right/Bottom Calculation
 									let id = 'colorPalette' + (index + 1);
 									let allClasses;
 									let baseClasses = 'flex flex-wrap justify-center items-center h-8 w-8 rounded-md box-border border border-gray-300 ';
@@ -62,6 +62,14 @@ export default function ColorPicker({portThree}) {
 										if (((index + 1) / 7) % 1 !== 0) allClasses = baseClasses + 'mr-[12.5px]';
 										else allClasses = baseClasses + '';
 									}
+
+									// TickIcon Color Calculation
+									let tickColor;
+									let checker = value.split('(')[1].split(')')[0];
+									checker = checker.split(',');
+									if (checker[0] * 0.299 + checker[1] * 0.587 + checker[2] * 0.114 > 186) tickColor = 'black';
+									else tickColor = 'white';
+
 									return (
 										<div
 											id={id}
@@ -71,7 +79,7 @@ export default function ColorPicker({portThree}) {
 											className={allClasses}
 											style={{'background-color': value}}
 											key={index + 1}>
-											<i className='fa-solid fa-badge-check text-base text-white before:hidden'></i>
+											<i className='fa-solid fa-badge-check text-base before:hidden' style={{color: tickColor}}></i>
 										</div>
 									);
 							  })
