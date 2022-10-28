@@ -143,8 +143,8 @@ function showHideExtension(port, request) {
 
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		chrome.storage.local.set({isPopupHidden: true});
-		chrome.storage.local.set({setActiveFeatureDisabled: true});
+		chrome.storage.local.set({setHomePageActive: true});
+		chrome.storage.local.set({setActFeatDisabled: true});
 		document.querySelector('#superDev').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -152,28 +152,35 @@ function showHideExtension(port, request) {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({isPopupPaused: false});
-		chrome.storage.local.set({isPopupHidden: false});
-		chrome.storage.local.set({setActiveFeatureDisabled: false});
+		chrome.storage.local.set({isStopBtnPressed: false});
+		chrome.storage.local.set({setHomePageActive: false});
+		chrome.storage.local.set({setActFeatDisabled: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
+		chrome.storage.local.set({howLongPopupIs: null});
 
 		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
-		chrome.storage.local.set({setMinimised: false});
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
 
 		port.postMessage({action: 'Popup Visible'});
 	}
 }
 
 function changeHeight(port, request) {
+	chrome.storage.local.set({howLongPopupIs: request.height});
+
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
 }
 
 function justChangeHeight(port, request) {
+	chrome.storage.local.set({howLongPopupIs: request.height});
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	port.postMessage({action: 'Just Height Changed'});
 }
@@ -235,13 +242,15 @@ function activateTextEditor(port, request) {
 				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -374,13 +383,15 @@ function activatePageRuler(port, request) {
 		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -618,13 +629,15 @@ function activateColorPicker(port, request) {
 		window.removeEventListener('resize', onWindowResize);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -827,10 +840,6 @@ function activateColorPalette(port, request) {
 		if (style.color !== '') tempColors.push(color);
 	}
 
-	// Remove Duplicates
-	let allColors = [...new Set(tempColors)];
-	port.postMessage({action: 'Color Palette Activated', allColors: allColors});
-
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -846,16 +855,20 @@ function activateColorPalette(port, request) {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.set({setHomePageActive: true});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 	}
+
+	// Remove Duplicates
+	let allColors = [...new Set(tempColors)];
+	port.postMessage({action: 'Color Palette Activated', allColors: allColors});
 }
 
 function deactivateColorPalette(port, request) {
@@ -910,13 +923,15 @@ function activatePageGuideline(port, request) {
 				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -1185,13 +1200,15 @@ function activatePageHighlight(port, request) {
 		document.removeEventListener('keyup', onEscape);
 
 		if (isManualEscape === true) {
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -1475,13 +1492,15 @@ function activateMoveElement(port, request) {
 				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -1726,13 +1745,15 @@ function activateExportElement(port, request) {
 				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 
@@ -1830,13 +1851,15 @@ function activateDeleteElement(port, request) {
 				document.querySelector('.pageGuidelineOutline').blur();
 				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 			}
-			chrome.storage.local.set({setActiveFeatureDisabled: true});
+			chrome.storage.local.set({setActFeatDisabled: true});
 		}
 
-		chrome.storage.local.get(['isPopupPaused'], function (result) {
-			if (result.isPopupPaused === true || isManualEscape === true) {
-				chrome.storage.local.set({setMinimised: false});
-				chrome.storage.local.set({isPopupPaused: false});
+		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
+			if (result.isStopBtnPressed === true || isManualEscape === true) {
+				chrome.storage.local.get(['howLongPopupIs'], function (result) {
+					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+				});
+				chrome.storage.local.set({isStopBtnPressed: false});
 			}
 		});
 

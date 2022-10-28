@@ -1,5 +1,4 @@
 export default function HideAllCompExcept(componentId) {
-	console.log(componentId);
 	let hideArray = ['mainBody', 'toggleInfo', 'toggleSettings', 'colorPickerPage'];
 	hideArray.map(function (value, index) {
 		if (value !== componentId) {

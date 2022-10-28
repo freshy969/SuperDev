@@ -18,11 +18,12 @@ export default function Home() {
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
-		chrome.storage.local.set({isPopupPaused: false});
-		chrome.storage.local.set({isPopupHidden: false});
-		chrome.storage.local.set({setActiveFeatureDisabled: false});
+		chrome.storage.local.set({isStopBtnPressed: false});
+		chrome.storage.local.set({setHomePageActive: false});
+		chrome.storage.local.set({setActFeatDisabled: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
+		chrome.storage.local.set({howLongPopupIs: null});
 
 		// Dark Mode Initialisation
 		chrome.storage.local.get(['colorTheme'], function (result) {
