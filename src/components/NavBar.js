@@ -41,9 +41,9 @@ export default function NavBar({portThree}) {
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleSettings');
-						} else if (!document.querySelector('#colorPickerPage').classList.contains('hidden')) {
+						} else if (!document.querySelector('#colorPalettePage').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('colorPickerPage');
+							HideAllCompExcept('colorPalettePage');
 						}
 					});
 				}
@@ -97,13 +97,13 @@ export default function NavBar({portThree}) {
 					}
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
 					chrome.storage.local.get(['allFeatures'], function (result) {
-						if (document.querySelector('#colorPickerPage')) {
-							if (document.querySelector('#colorPickerPage').classList.contains('hidden')) {
+						if (document.querySelector('#colorPalettePage')) {
+							if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
 								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-								HideAllCompExcept('colorPickerPage');
+								HideAllCompExcept('colorPalettePage');
 
 								let bodyHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
-								document.querySelector('#colorPickerPageChild').style.height = `${bodyHeight}px`;
+								document.querySelector('#colorPalettePageChild').style.height = `${bodyHeight}px`;
 							}
 						}
 					});

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ColorPicker({portThree}) {
+export default function ColorPalette({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allColors, setAllColors] = useState([]);
 
@@ -45,9 +45,9 @@ export default function ColorPicker({portThree}) {
 		}
 	}
 	return (
-		<section id='colorPickerPage' className='hidden'>
+		<section id='colorPalettePage' className='hidden'>
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
-				<div id='colorPickerPageChild' className='rounded-md p-4'>
+				<div id='colorPalettePageChild' className='rounded-md p-4'>
 					<div className='flex flex-wrap'>
 						{!isLoadingOne
 							? allColors.map(function (value, index) {
