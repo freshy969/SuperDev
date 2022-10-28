@@ -70,7 +70,7 @@ export default function NavBar({portThree}) {
 			}
 		});
 
-		// OnUpdate SetActiveFeatureDisabled, For ESC
+		// OnUpdate SetActFeatDisabled
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
@@ -97,7 +97,6 @@ export default function NavBar({portThree}) {
 						setTimeout(function () {
 							document.querySelector('#clearAllCache > i').classList.remove('fa-badge-check');
 							document.querySelector('#clearAllCache > i').classList.add('fa-recycle');
-
 							chrome.storage.local.set({whichFeatureActive: null});
 						}, 500);
 					}

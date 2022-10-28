@@ -23,6 +23,8 @@ export default function ActDeactFeature(portThree, allFeatures, featureId) {
 
 function HideMeShowMeExcep(portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
+	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
+
 	// Exceptions
 	if (document.querySelector('#' + featureId)) {
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
@@ -34,7 +36,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 				}, 50);
 
 				portThree.onMessage.addListener(function (response) {
-					if (response.action.includes('Activated')) {
+					if (response.action.includes(featRespMessage + ' Activated')) {
 						chrome.storage.local.set({whichFeatureActive: featureId});
 					}
 				});
@@ -49,7 +51,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 				}, 50);
 
 				portThree.onMessage.addListener(function (response) {
-					if (response.action.includes('Activated')) {
+					if (response.action.includes(featRespMessage + ' Activated')) {
 						chrome.storage.local.set({whichFeatureActive: featureId});
 					}
 				});
@@ -66,7 +68,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 				}, 50);
 
 				portThree.onMessage.addListener(function (response) {
-					if (response.action.includes('Deactivated')) {
+					if (response.action.includes(featRespMessage + ' Deactivated')) {
 						chrome.storage.local.set({whichFeatureActive: null});
 					}
 				});
@@ -77,6 +79,8 @@ function HideMeShowMeExcep(portThree, featureId) {
 
 function HideMeShowMe(portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
+	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
+
 	let arrDef = ['from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD'];
 	let arrAct = ['from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active'];
 
@@ -94,7 +98,7 @@ function HideMeShowMe(portThree, featureId) {
 			}, 50);
 
 			portThree.onMessage.addListener(function (response) {
-				if (response.action.includes('Activated')) {
+				if (response.action.includes(featRespMessage + ' Activated')) {
 					chrome.storage.local.set({whichFeatureActive: featureId});
 				}
 			});
@@ -110,7 +114,7 @@ function HideMeShowMe(portThree, featureId) {
 			}, 50);
 
 			portThree.onMessage.addListener(function (response) {
-				if (response.action.includes('Deactivated')) {
+				if (response.action.includes(featRespMessage + ' Deactivated')) {
 					chrome.storage.local.set({whichFeatureActive: null});
 				}
 			});
@@ -120,28 +124,34 @@ function HideMeShowMe(portThree, featureId) {
 
 function JustHideMeExcep(portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
+	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
+
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
-			// if (featureId === 'colorPalette') {
-			// 	document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
-			// 	document.querySelector('#' + featureId).classList.remove('active');
-			// 	setTimeout(function () {
-			// 		portThree.postMessage({
-			// 			action: 'deactivate' + featureIdUC,
-			// 		});
-			// 	}, 50);
-			// 	portThree.onMessage.addListener(function (response) {
-			// 		if (response.action.includes('Deactivated')) {
-			// 			chrome.storage.local.set({whichFeatureActive: null});
-			// 		}
-			// 	});
-			// }
+			if (featureId === 'colorPalette') {
+				document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
+				document.querySelector('#' + featureId).classList.remove('active');
+
+				setTimeout(function () {
+					portThree.postMessage({
+						action: 'deactivate' + featureIdUC,
+					});
+				}, 50);
+
+				portThree.onMessage.addListener(function (response) {
+					if (response.action.includes(featRespMessage + ' Deactivated')) {
+						chrome.storage.local.set({whichFeatureActive: null});
+					}
+				});
+			}
 		}
 	}
 }
 
 function JustHideMe(portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
+	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
+
 	let arrDef = ['from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD'];
 	let arrAct = ['from-btnThree', 'dark:from-btnThreeD', 'via-btnFour', 'dark:via-btnFourD', 'to-btnFive', 'dark:to-btnFiveD', 'active'];
 
@@ -157,7 +167,7 @@ function JustHideMe(portThree, featureId) {
 			}, 50);
 
 			portThree.onMessage.addListener(function (response) {
-				if (response.action.includes('Deactivated')) {
+				if (response.action.includes(featRespMessage + ' Deactivated')) {
 					chrome.storage.local.set({whichFeatureActive: null});
 				}
 			});
