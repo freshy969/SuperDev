@@ -183,9 +183,8 @@ chrome.runtime.onInstalled.addListener(async function () {
 
 	// All Features Initialisation
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		if (result.allFeatures === undefined) {
-			chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
-		}
+		if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+		else chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 	});
 });
 
@@ -231,9 +230,7 @@ chrome.action.onClicked.addListener(function (tab) {
 	) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
-			}
+			if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 		});
 
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -253,9 +250,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 	) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)}, function () {});
-			}
+			if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 		});
 
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
