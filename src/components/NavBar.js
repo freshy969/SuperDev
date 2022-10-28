@@ -34,19 +34,15 @@ export default function NavBar({portThree}) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							console.log(0, 'mainBody');
 							HideAllCompExcept('mainBody');
 						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							console.log(1, 'toggleInfo');
 							HideAllCompExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							console.log(2, 'toggleSettings');
 							HideAllCompExcept('toggleSettings');
 						} else if (!document.querySelector('#colorPickerPage').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							console.log(3, 'colorPickerPage');
 							HideAllCompExcept('colorPickerPage');
 						}
 					});
@@ -61,7 +57,6 @@ export default function NavBar({portThree}) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
 							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							console.log(4, 'mainBody');
 							HideAllCompExcept('mainBody');
 						});
 					}
@@ -105,7 +100,6 @@ export default function NavBar({portThree}) {
 						if (document.querySelector('#colorPickerPage')) {
 							if (document.querySelector('#colorPickerPage').classList.contains('hidden')) {
 								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-								console.log(5, 'colorPickerPage');
 								HideAllCompExcept('colorPickerPage');
 
 								let bodyHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
@@ -136,7 +130,6 @@ export default function NavBar({portThree}) {
 				if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 			});
 			ChangeHeight(portThree, PopupHeight(allFeatures));
-			console.log(6, 'toggleInfo');
 			HideAllCompExcept('toggleInfo');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
@@ -147,7 +140,6 @@ export default function NavBar({portThree}) {
 			});
 		} else {
 			ChangeHeight(portThree, PopupHeight(allFeatures));
-			console.log(7, 'mainBody');
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
@@ -161,7 +153,6 @@ export default function NavBar({portThree}) {
 				if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 			});
 			ChangeHeight(portThree, PopupHeight(allFeatures));
-			console.log(8, 'toggleSettings');
 			HideAllCompExcept('toggleSettings');
 
 			let bodyHeight = PopupHeight(allFeatures) - 41.5;
@@ -172,7 +163,6 @@ export default function NavBar({portThree}) {
 			});
 		} else {
 			ChangeHeight(portThree, PopupHeight(allFeatures));
-			console.log(9, 'mainBody');
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
