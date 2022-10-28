@@ -189,12 +189,6 @@ export default function NavBar({portThree}) {
 	}
 
 	function minimiseExtension() {
-		chrome.storage.local.get(['setMinimised'], function (result) {
-			if (result.setMinimised === true) chrome.storage.local.set({setMinimised: false});
-			else if (result.setMinimised === false) chrome.storage.local.set({setMinimised: true});
-			else if (result.setMinimised === null) chrome.storage.local.set({setMinimised: true});
-		});
-
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			else chrome.storage.local.set({setMinimised: true});
