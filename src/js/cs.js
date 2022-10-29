@@ -260,7 +260,7 @@ function activateTextEditor(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
+			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -954,7 +954,7 @@ function activatePageGuideline(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
+			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1531,7 +1531,7 @@ function activateMoveElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
+			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1776,7 +1776,7 @@ function activateExportElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
+			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1882,7 +1882,7 @@ function activateDeleteElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth;
+			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
