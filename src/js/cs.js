@@ -837,7 +837,16 @@ function activateColorPalette(port, request) {
 	function isColor(color) {
 		let style = new Option().style;
 		style.color = color;
-		if (style.color !== '') tempColors.push(color);
+		if (style.color !== '') {
+			if (!color.includes(') ')) {
+				tempColors.push(color);
+			} else {
+				let tempColor = color.replaceAll(') ', ');').split(';');
+				tempColor.map(function (value, index) {
+					tempColors.push(value);
+				});
+			}
+		}
 	}
 
 	function onEscape(event) {

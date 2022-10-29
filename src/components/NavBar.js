@@ -93,7 +93,7 @@ export default function NavBar({portThree}) {
 							document.querySelector('#clearAllCache > i').classList.remove('fa-badge-check');
 							document.querySelector('#clearAllCache > i').classList.add('fa-recycle');
 							chrome.storage.local.set({whichFeatureActive: null});
-						}, 500);
+						}, 1000);
 					}
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
 					chrome.storage.local.get(['allFeatures'], function (result) {
