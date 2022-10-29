@@ -839,11 +839,15 @@ function activateColorPalette(port, request) {
 		style.color = color;
 		if (style.color !== '') {
 			if (!color.includes(') ')) {
-				tempColors.push(color);
+				if (!color.includes(', 0)')) {
+					tempColors.push(color);
+				}
 			} else {
 				let tempColor = color.replaceAll(') ', ');').split(';');
 				tempColor.map(function (value, index) {
-					tempColors.push(value);
+					if (!value.includes(', 0)')) {
+						tempColors.push(value);
+					}
 				});
 			}
 		}
