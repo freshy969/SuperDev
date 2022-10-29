@@ -86,9 +86,15 @@ p {
 	background: #00000000;
 }
 
-#toggleInfoChild::-webkit-scrollbar-thumb,
-#toggleSettingsChild::-webkit-scrollbar-thumb,
-#colorPalettePageChild::-webkit-scrollbar-thumb {
-	background: #3a3f41ff;
+html:not(.dark) #toggleInfoChild::-webkit-scrollbar-thumb,
+html:not(.dark) #toggleSettingsChild::-webkit-scrollbar-thumb,
+html:not(.dark) #colorPalettePageChild::-webkit-scrollbar-thumb {
+	background: #6c757dff;
+}
+
+html.dark #toggleInfoChild::-webkit-scrollbar-thumb,
+html.dark #toggleSettingsChild::-webkit-scrollbar-thumb,
+html.dark #colorPalettePageChild::-webkit-scrollbar-thumb {
+	background: #6c757dff;
 }
 /**  Custom Scrollbar **/
