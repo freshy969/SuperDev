@@ -54,7 +54,8 @@ export default function ColorPalette({portThree}) {
 									// Margin Right/Bottom Calculation
 									let id = 'colorPalette' + (index + 1);
 									let allClasses;
-									let baseClasses = 'flex flex-wrap justify-center items-center h-[25.5px] w-[63.5px] rounded-md box-border border border-gray-300 ';
+									let baseClasses =
+										'flex flex-wrap justify-center items-center h-[25.5px] w-[63.5px] rounded-md box-border border border-gray-300 cursor-pointer ';
 									if (allColors.length - (index + 1) >= 4) {
 										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px] mb-[14.5px]';
 										else allClasses = baseClasses + 'mb-[12.5px]';
