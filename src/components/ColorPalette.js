@@ -24,7 +24,7 @@ export default function ColorPalette({portThree}) {
 	}
 
 	function CopyColorCode(rgbColor, id) {
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPalette') {
 					if (value.settings.checkboxColorPalette1 === true) {

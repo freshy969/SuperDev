@@ -168,7 +168,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 		if (result.extVersion !== undefined) {
 			// Is Really Next Version?
 			if (result.extVersion !== chrome.runtime.getManifest().version) {
-				chrome.storage.local.get(['allFeatures'], function (result) {
+				chrome.storage.sync.get(['allFeatures'], function (result) {
 					if (result.allFeatures !== undefined) {
 						if (
 							!(
@@ -206,7 +206,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 								result.allFeatures.includes('checkboxClearAllCache6')
 							)
 						) {
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -286,10 +286,10 @@ chrome.action.onClicked.addListener(function (tab) {
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 
@@ -309,10 +309,10 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 

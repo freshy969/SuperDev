@@ -72,7 +72,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 function showHideExtension(port, request) {
-	// If Popup Doesn't Exists
+	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDev') === null) {
 		let superDev = document.createElement('section');
 		superDev.id = 'superDev';
@@ -162,6 +162,7 @@ function showHideExtension(port, request) {
 		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
 		document.querySelector('#superDev').style.left = '';
+		document.querySelector('#superDev').style.visibility = 'visible';
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
@@ -173,7 +174,6 @@ function showHideExtension(port, request) {
 
 function changeHeight(port, request) {
 	chrome.storage.local.set({howLongPopupIs: request.height});
-
 	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
 	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 	port.postMessage({action: 'Height Changed'});
@@ -767,7 +767,7 @@ function activateColorPicker(port, request) {
 		let colorPickerTooltipColorCode = document.createElement('div');
 		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
 
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
@@ -966,7 +966,6 @@ function activatePageGuideline(port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', '').replace('px', ''))));
 
-			console.log(scrollWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1008,7 +1007,7 @@ function activatePageHighlight(port, request) {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
-	chrome.storage.local.get(['allFeatures'], function (result) {
+	chrome.storage.sync.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
@@ -1237,7 +1236,7 @@ function activatePageHighlight(port, request) {
 			}
 		});
 
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
@@ -1689,7 +1688,7 @@ function activateExportElement(port, request) {
 				allComputedStyles.push(tempComputedStyle);
 			});
 
-			chrome.storage.local.get(['allFeatures'], function (result) {
+			chrome.storage.sync.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
@@ -1941,7 +1940,7 @@ function deactivateDeleteElement(port, request) {
 }
 
 function activateClearAllCache(port, request) {
-	chrome.storage.local.get(['allFeatures'], function (result) {
+	chrome.storage.sync.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'clearAllCache') {
 				let portTwo = chrome.runtime.connect({name: 'portTwo'});

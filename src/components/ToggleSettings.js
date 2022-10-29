@@ -6,7 +6,7 @@ export default function ToggleSettings({portThree}) {
 
 	useEffect(function () {
 		// Get AllFeatures
-		chrome.storage.local.get(['allFeatures'], function (result) {
+		chrome.storage.sync.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
@@ -64,10 +64,10 @@ export default function ToggleSettings({portThree}) {
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -86,10 +86,10 @@ export default function ToggleSettings({portThree}) {
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -108,10 +108,10 @@ export default function ToggleSettings({portThree}) {
 							document.querySelector('#checkboxPageHighlight3').checked = true;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight3 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -130,10 +130,10 @@ export default function ToggleSettings({portThree}) {
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = true;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight4 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -152,10 +152,10 @@ export default function ToggleSettings({portThree}) {
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight5 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -165,10 +165,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
 							value.settings.checkboxPageHighlight6 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight6 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -192,7 +192,7 @@ export default function ToggleSettings({portThree}) {
 								document.querySelector('#checkboxPageHighlight5').checked = false;
 								document.querySelector('#checkboxPageHighlight6').checked = false;
 								document.querySelector('#checkboxPageHighlight7').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+								chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 500);
 						}
 					}
@@ -211,10 +211,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxExportElement2 = false;
 							document.querySelector('#checkboxExportElement1').checked = true;
 							document.querySelector('#checkboxExportElement2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -227,10 +227,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxExportElement2 = true;
 							document.querySelector('#checkboxExportElement1').checked = false;
 							document.querySelector('#checkboxExportElement2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -246,7 +246,7 @@ export default function ToggleSettings({portThree}) {
 								document.querySelector('#checkboxExportElement1').checked = true;
 								document.querySelector('#checkboxExportElement2').checked = false;
 								document.querySelector('#checkboxExportElement3').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+								chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 500);
 						}
 					}
@@ -265,10 +265,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxColorPicker2 = false;
 							document.querySelector('#checkboxColorPicker1').checked = true;
 							document.querySelector('#checkboxColorPicker2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPicker1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -281,10 +281,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxColorPicker2 = true;
 							document.querySelector('#checkboxColorPicker1').checked = false;
 							document.querySelector('#checkboxColorPicker2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPicker2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -300,7 +300,7 @@ export default function ToggleSettings({portThree}) {
 								document.querySelector('#checkboxColorPicker1').checked = true;
 								document.querySelector('#checkboxColorPicker2').checked = false;
 								document.querySelector('#checkboxColorPicker3').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+								chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 500);
 						}
 					}
@@ -319,10 +319,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxColorPalette2 = false;
 							document.querySelector('#checkboxColorPalette1').checked = true;
 							document.querySelector('#checkboxColorPalette2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPalette1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -335,10 +335,10 @@ export default function ToggleSettings({portThree}) {
 							value.settings.checkboxColorPalette2 = true;
 							document.querySelector('#checkboxColorPalette1').checked = false;
 							document.querySelector('#checkboxColorPalette2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPalette2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -354,7 +354,7 @@ export default function ToggleSettings({portThree}) {
 								document.querySelector('#checkboxColorPalette1').checked = true;
 								document.querySelector('#checkboxColorPalette2').checked = false;
 								document.querySelector('#checkboxColorPalette3').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+								chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 500);
 						}
 					}
@@ -370,10 +370,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache1').checked === true) {
 							value.settings.checkboxClearAllCache1 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -383,10 +383,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache2').checked === true) {
 							value.settings.checkboxClearAllCache2 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -396,10 +396,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache3').checked === true) {
 							value.settings.checkboxClearAllCache3 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache3 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -409,10 +409,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache4').checked === true) {
 							value.settings.checkboxClearAllCache4 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache4 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -422,10 +422,10 @@ export default function ToggleSettings({portThree}) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache5').checked === true) {
 							value.settings.checkboxClearAllCache5 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache5 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -447,7 +447,7 @@ export default function ToggleSettings({portThree}) {
 								document.querySelector('#checkboxClearAllCache4').checked = false;
 								document.querySelector('#checkboxClearAllCache5').checked = false;
 								document.querySelector('#checkboxClearAllCache6').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+								chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
 							}, 500);
 						}
 					}
