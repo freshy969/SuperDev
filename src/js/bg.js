@@ -160,8 +160,17 @@ const allFeatures = [
 	// 	settings: {},
 	// },
 ];
-// Content Scripts Reinjection on Extension Install/Update
+
+// On Extension Install/Update
 chrome.runtime.onInstalled.addListener(async function () {
+	// All Features Initialisation
+	chrome.storage.sync.get(['allFeatures'], function (result) {
+		if (result.allFeatures === undefined) {
+			chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+			chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+		}
+	});
+
 	// Update Old AllFeatures Data
 	chrome.storage.local.get(['extVersion'], function (result) {
 		// Means Updated, Not Installed
@@ -214,7 +223,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 		}
 	});
 
-	// ContentJs Reinjection
+	// Content Scripts Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			if (
@@ -241,6 +250,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 			}
 		}
 	}
+
 	// Creating Chrome Context Menu
 	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
 });

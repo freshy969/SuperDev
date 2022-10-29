@@ -31,11 +31,11 @@
 	line-height: 25px;
 	direction: ltr;
 	border-radius: 4px;
-	background: hsla(231.429, 32%, 9%, 0.95);
+	background: rgba(16, 18, 30, 0.95);
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em !important;
+	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em !important;
 	font-family: system-ui, -apple-system, sans-serif;
 }
 
@@ -47,16 +47,17 @@
 	bottom: 6px;
 	padding: 1px 10px;
 	border-radius: 4px;
-	background: hsla(231.429, 32%, 9%, 0.95);
+	background: rgba(16, 18, 30, 0.95);
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	box-shadow: hsla(0, 0%, 0%, 0.15) 0.15em 0.15em 0.2em;
+	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em;
 }
 
 .colorPickerTooltipBackground {
 	height: 24px;
 	width: 24px;
+	border: 1px solid rgba(209 213 219, 0.3);
 	border-radius: 4px;
 	margin: 8px 10px 8px 0px;
 }
@@ -85,7 +86,7 @@
 
 .pageRulerAxis {
 	position: absolute;
-	background: hsla(0, 100%, 50%, 1);
+	background: rgb(255, 0, 0);
 }
 
 .pageRulerAxis:before,
