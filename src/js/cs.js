@@ -260,7 +260,12 @@ function activateTextEditor(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -295,7 +300,7 @@ function activatePageRuler(port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.querySelector('body');
+	let body = document.body;
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
@@ -539,7 +544,7 @@ function activateColorPicker(port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.querySelector('body');
+	let body = document.body;
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
@@ -954,7 +959,14 @@ function activatePageGuideline(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', '').replace('px', ''))));
+
+			console.log(scrollWidth);
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1531,7 +1543,12 @@ function activateMoveElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1776,7 +1793,12 @@ function activateExportElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1882,7 +1904,12 @@ function activateDeleteElement(port, request) {
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth = document.body.scrollWidth - (document.body.scrollWidth - document.body.offsetWidth);
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
