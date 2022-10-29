@@ -160,10 +160,23 @@ const allFeatures = [
 	// 	settings: {},
 	// },
 ];
-
 // Content Scripts Reinjection on Extension Install/Update
 chrome.runtime.onInstalled.addListener(async function () {
 	// ContentJs Reinjection
+
+	chrome.storage.local.get(['extVersion'], function (result) {
+		if (result.extVersion !== undefined) {
+			if (result.extVersion !== chrome.runtime.getManifest().version) {
+				chrome.storage.sync.get(['allFeatures'], function (result) {
+					if (result.allFeatures !== undefined) {
+						// Checks Here
+						chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+					}
+				});
+			}
+		}
+	});
+
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			if (
@@ -192,12 +205,6 @@ chrome.runtime.onInstalled.addListener(async function () {
 	}
 	// Creating Chrome Context Menu
 	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
-
-	// All Features Initialisation
-	chrome.storage.local.get(['allFeatures'], function (result) {
-		if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-		else chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-	});
 });
 
 // Content Scripts Reinjection on Extension Enable
@@ -241,8 +248,11 @@ chrome.action.onClicked.addListener(function (tab) {
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+		chrome.storage.sync.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+			}
 		});
 
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -261,8 +271,11 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures === undefined) chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+		chrome.storage.sync.get(['allFeatures'], function (result) {
+			if (result.allFeatures === undefined) {
+				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+			}
 		});
 
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
