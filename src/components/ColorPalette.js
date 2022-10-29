@@ -64,10 +64,8 @@ export default function ColorPalette({portThree}) {
 									}
 
 									// TickIcon Color Calculation
-									let tickColor;
-									let checker = value.split('(')[1].split(')')[0];
-									checker = checker.split(',');
-									if (checker[0] * 0.299 + checker[1] * 0.587 + checker[2] * 0.114 > 186) tickColor = 'black';
+									let tickColor = value.split('(')[1].split(')')[0].split(',');
+									if (tickColor[0] * 0.299 + tickColor[1] * 0.587 + tickColor[2] * 0.114 > 150) tickColor = 'black';
 									else tickColor = 'white';
 
 									return (
