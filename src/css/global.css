@@ -89,7 +89,7 @@ p {
 html:not(.dark) #toggleInfoChild::-webkit-scrollbar-thumb,
 html:not(.dark) #toggleSettingsChild::-webkit-scrollbar-thumb,
 html:not(.dark) #colorPalettePageChild::-webkit-scrollbar-thumb {
-	background: #6c757dff;
+	background: #6c757ddd;
 }
 
 html.dark #toggleInfoChild::-webkit-scrollbar-thumb,
