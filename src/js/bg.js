@@ -162,12 +162,13 @@ const allFeatures = [
 ];
 // Content Scripts Reinjection on Extension Install/Update
 chrome.runtime.onInstalled.addListener(async function () {
-	// ContentJs Reinjection
-
+	// Update Old AllFeatures Data
 	chrome.storage.local.get(['extVersion'], function (result) {
+		// Means Updated, Not Installed
 		if (result.extVersion !== undefined) {
+			// Is Really Next Version?
 			if (result.extVersion !== chrome.runtime.getManifest().version) {
-				chrome.storage.sync.get(['allFeatures'], function (result) {
+				chrome.storage.local.get(['allFeatures'], function (result) {
 					if (result.allFeatures !== undefined) {
 						if (
 							!(
@@ -205,7 +206,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 								result.allFeatures.includes('checkboxClearAllCache6')
 							)
 						) {
-							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -213,6 +214,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 		}
 	});
 
+	// ContentJs Reinjection
 	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
 		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
 			if (
@@ -284,10 +286,10 @@ chrome.action.onClicked.addListener(function (tab) {
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 
@@ -307,10 +309,10 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 

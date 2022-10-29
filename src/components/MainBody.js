@@ -8,7 +8,7 @@ export default function MainBody({portThree}) {
 
 	useEffect(function () {
 		// Get AllFeatures
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			setIsLoadingOne(false);
 		});
