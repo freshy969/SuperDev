@@ -169,8 +169,44 @@ chrome.runtime.onInstalled.addListener(async function () {
 			if (result.extVersion !== chrome.runtime.getManifest().version) {
 				chrome.storage.sync.get(['allFeatures'], function (result) {
 					if (result.allFeatures !== undefined) {
-						// Checks Here
-						chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+						if (
+							!(
+								result.allFeatures.includes('textEditor') &&
+								result.allFeatures.includes('pageRuler') &&
+								result.allFeatures.includes('colorPicker') &&
+								result.allFeatures.includes('checkboxColorPicker1') &&
+								result.allFeatures.includes('checkboxColorPicker2') &&
+								result.allFeatures.includes('checkboxColorPicker3') &&
+								result.allFeatures.includes('colorPalette') &&
+								result.allFeatures.includes('checkboxColorPalette1') &&
+								result.allFeatures.includes('checkboxColorPalette2') &&
+								result.allFeatures.includes('checkboxColorPalette3') &&
+								result.allFeatures.includes('pageGuideline') &&
+								result.allFeatures.includes('pageHighlight') &&
+								result.allFeatures.includes('checkboxPageHighlight1') &&
+								result.allFeatures.includes('checkboxPageHighlight2') &&
+								result.allFeatures.includes('checkboxPageHighlight3') &&
+								result.allFeatures.includes('checkboxPageHighlight4') &&
+								result.allFeatures.includes('checkboxPageHighlight5') &&
+								result.allFeatures.includes('checkboxPageHighlight6') &&
+								result.allFeatures.includes('checkboxPageHighlight7') &&
+								result.allFeatures.includes('moveElement') &&
+								result.allFeatures.includes('deleteElement') &&
+								result.allFeatures.includes('exportElement') &&
+								result.allFeatures.includes('checkboxExportElement1') &&
+								result.allFeatures.includes('checkboxExportElement2') &&
+								result.allFeatures.includes('checkboxExportElement3') &&
+								result.allFeatures.includes('clearAllCache') &&
+								result.allFeatures.includes('checkboxClearAllCache1') &&
+								result.allFeatures.includes('checkboxClearAllCache2') &&
+								result.allFeatures.includes('checkboxClearAllCache3') &&
+								result.allFeatures.includes('checkboxClearAllCache4') &&
+								result.allFeatures.includes('checkboxClearAllCache5') &&
+								result.allFeatures.includes('checkboxClearAllCache6')
+							)
+						) {
+							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+						}
 					}
 				});
 			}
@@ -286,7 +322,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 });
 
 // Extension Shortcuts
-chrome.commands.onCommand.addListener((command) => {
+chrome.commands.onCommand.addListener(function (command) {
 	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 		if (
 			!tabs[0].url.includes('chrome://') &&

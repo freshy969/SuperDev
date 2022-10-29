@@ -1584,18 +1584,18 @@ function activateExportElement(port, request) {
 	let allStyleSheets = [];
 
 	// Iterating All Stylesheets
-	[...document.styleSheets].map(function (styleSheet, index) {
+	[...document.styleSheets].map(function (valueOne, indexOne) {
 		try {
-			if ([...styleSheet.cssRules].length !== 0) {
+			if ([...valueOne.cssRules].length !== 0) {
 				let singleStylesheet = [];
-				[...styleSheet.cssRules].map(function (cssRule, index) {
-					singleStylesheet.push(cssRule);
+				[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
+					singleStylesheet.push(valueTwo);
 				});
 				allStyleSheets.push(singleStylesheet);
 			}
 		} catch (e) {
 			allStyleSheets.push(null);
-			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: styleSheet.href});
+			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
 		}
 	});
 
@@ -1611,11 +1611,11 @@ function activateExportElement(port, request) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i] === null) {
 					style.textContent = request.styleSheet;
-					[...iframe.contentWindow.document.styleSheets].map(function (styleSheet, index) {
-						if ([...styleSheet.cssRules].length !== 0) {
+					[...iframe.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
+						if ([...valueOne.cssRules].length !== 0) {
 							let singleStylesheet = [];
-							[...styleSheet.cssRules].map(function (cssRule, index) {
-								singleStylesheet.push(cssRule);
+							[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
+								singleStylesheet.push(valueTwo);
 							});
 							allStyleSheets[i] = singleStylesheet;
 						}
@@ -1695,10 +1695,10 @@ function activateExportElement(port, request) {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
 						let css = css_beautify(
 							allStyleSheets
-								.map(function (styleSheet, index) {
-									return styleSheet
-										.map((cssRules, index) => {
-											return cssRules.cssText;
+								.map(function (valueOne, indexOne) {
+									return valueOne
+										.map(function (valueTwo, indexTwo) {
+											return valueTwo.cssText;
 										})
 										.join('');
 								})
