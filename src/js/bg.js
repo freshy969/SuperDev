@@ -81,6 +81,18 @@ const allFeatures = [
 	// 	settings: {},
 	// },
 	// {
+	// 	title: 'Visualise Padding',
+	// 	icon: 'fa-distribute-spacing-vertical',
+	// 	id: 'visualisePadding',
+	// 	settings: {},
+	// },
+	// {
+	// 	title: 'Visualise Margin',
+	// 	icon: 'fa-distribute-spacing-horizontal',
+	// 	id: 'visualiseMargin',
+	// 	settings: {},
+	// },
+	// {
 	// 	title: 'Custom CSS',
 	// 	icon: 'fa-code',
 	// 	id: 'customCSS',
@@ -93,9 +105,9 @@ const allFeatures = [
 	// 	settings: {},
 	// },
 	// {
-	// 	title: 'All Fonts List',
+	// 	title: 'Site Fonts List',
 	// 	icon: 'fa-font',
-	// 	id: 'allFontsList',
+	// 	id: 'siteFontsList',
 	// 	settings: {},
 	// },
 	// {
