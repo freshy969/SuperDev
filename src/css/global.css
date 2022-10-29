@@ -77,7 +77,7 @@ p {
 #toggleInfoChild::-webkit-scrollbar,
 #toggleSettingsChild::-webkit-scrollbar,
 #colorPalettePageChild::-webkit-scrollbar {
-	width: 0px;
+	width: 2px;
 }
 
 #toggleInfoChild::-webkit-scrollbar-track,
@@ -89,6 +89,6 @@ p {
 #toggleInfoChild::-webkit-scrollbar-thumb,
 #toggleSettingsChild::-webkit-scrollbar-thumb,
 #colorPalettePageChild::-webkit-scrollbar-thumb {
-	background: #00000000;
+	background: #3a3f41ff;
 }
 /**  Custom Scrollbar **/
