@@ -74,7 +74,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 function showHideExtension(port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDev') === null) {
-		let superDev = document.createElement('custom-section');
+		let superDev = document.createElement('super-dev');
 		superDev.id = 'superDev';
 		superDev.style.cssText = `
 			display: block !important;
@@ -93,7 +93,7 @@ function showHideExtension(port, request) {
 			z-index: 2147483646 !important;`;
 		document.body.appendChild(superDev);
 
-		let superDevHandler = document.createElement('custom-div');
+		let superDevHandler = document.createElement('super-dev-handler');
 		superDevHandler.id = 'superDevHandler';
 		superDevHandler.style.cssText = `
 			display: block !important;
