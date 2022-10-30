@@ -1579,8 +1579,46 @@ function deactivateMoveElement(port, request) {
 }
 
 function activateExportElement(port, request) {
+	document.addEventListener('keyup', onEscape);
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
+	window.focus({preventScroll: true});
+
+	let pageGuidelineWrapper = document.createElement('div');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				destroyExportElement(true);
+			} else if (event.isTrusted === false) {
+				destroyExportElement(false);
+			}
+		}
+	}
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			event.target.classList.add('pageGuidelineOutline');
+			renderPageGuideline(true);
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			renderPageGuideline(false);
+			event.target.classList.remove('pageGuidelineOutline');
+		}
+	}
+
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
+	let usedStyles = [];
 
 	// Iterating All Stylesheets
 	[...document.styleSheets].map(function (valueOne, indexOne) {
@@ -1625,48 +1663,10 @@ function activateExportElement(port, request) {
 		}
 	});
 
-	document.addEventListener('keyup', onEscape);
-	document.addEventListener('mouseover', onMouseOver);
-	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
-	window.focus({preventScroll: true});
-
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				destroyExportElement(true);
-			} else if (event.isTrusted === false) {
-				destroyExportElement(false);
-			}
-		}
-	}
-
-	function onMouseOver(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
-			renderPageGuideline(true);
-		}
-	}
-
-	function onMouseOut(event) {
-		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
-			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
-		}
-	}
-
 	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			let allSelectors = [];
-			let allComputedStyles = [];
 			[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
 				// All Selectors
 				let tempSelectors = [];
@@ -1678,36 +1678,33 @@ function activateExportElement(port, request) {
 				}
 				tempSelectors.push(valueOne.tagName.toLowerCase());
 				allSelectors.push(tempSelectors);
-
-				// All Computed Styles
-				let tempComputedStyles = window.getComputedStyle(valueOne);
-				let tempComputedStyle = {};
-				[...tempComputedStyles].map(function (valueTwo, indexTwo) {
-					tempComputedStyle[valueTwo] = tempComputedStyles.getPropertyValue(valueTwo);
-				});
-				allComputedStyles.push(tempComputedStyle);
 			});
 
-			console.log(allStyleSheets);
-			console.log(allSelectors);
-			console.log(allComputedStyles);
+			console.log(allSelectors.flat());
+			console.log(allStyleSheets.flat());
+
+			// Remove Unused CSS
+			allSelectors.flat().map(function (valueOne, indexOne) {
+				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
+					if (valueTwo.selectorText !== undefined) {
+						if (
+							valueTwo.selectorText.includes('*') ||
+							valueTwo.selectorText.includes(':root') ||
+							valueTwo.selectorText.includes('body') ||
+							valueTwo.selectorText.includes(valueOne)
+						) {
+							usedStyles.push(valueTwo.cssText);
+						}
+					}
+				});
+			});
+			usedStyles = [...new Set(usedStyles)];
 
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css = css_beautify(
-							allStyleSheets
-								.map(function (valueOne, indexOne) {
-									return valueOne
-										.map(function (valueTwo, indexTwo) {
-											return valueTwo.cssText;
-										})
-										.join('');
-								})
-								.join(''),
-							{indent_size: 2, indent_with_tabs: true}
-						);
+						let css = css_beautify(usedStyles.join(' '), {indent_size: 2, indent_with_tabs: true});
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
