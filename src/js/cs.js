@@ -1667,23 +1667,23 @@ function activateExportElement(port, request) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			let allSelectors = [];
 			let allComputedStyles = [];
-			[event.target, ...event.target.querySelectorAll('*')].map(function (value, index) {
+			[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
 				// All Selectors
 				let tempSelectors = [];
-				if (value.id !== '') tempSelectors.push('#' + value.id);
-				if (value.className !== '') {
-					[...value.classList].map(function (value, index) {
-						if (value !== 'pageGuidelineOutline') tempSelectors.push('.' + value);
+				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
+				if (valueOne.className !== '') {
+					[...valueOne.classList].map(function (valueTwo, indexTwo) {
+						if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
 					});
 				}
-				tempSelectors.push(value.tagName.toLowerCase());
+				tempSelectors.push(valueOne.tagName.toLowerCase());
 				allSelectors.push(tempSelectors);
 
 				// All Computed Styles
-				let tempComputedStyles = window.getComputedStyle(value);
+				let tempComputedStyles = window.getComputedStyle(valueOne);
 				let tempComputedStyle = {};
-				[...tempComputedStyles].map(function (value, index) {
-					tempComputedStyle[value] = tempComputedStyles.getPropertyValue(value);
+				[...tempComputedStyles].map(function (valueTwo, indexTwo) {
+					tempComputedStyle[valueTwo] = tempComputedStyles.getPropertyValue(valueTwo);
 				});
 				allComputedStyles.push(tempComputedStyle);
 			});
