@@ -767,7 +767,7 @@ function activateColorPicker(port, request) {
 		let colorPickerTooltipColorCode = document.createElement('div');
 		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
 
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
@@ -1007,7 +1007,7 @@ function activatePageHighlight(port, request) {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
-	chrome.storage.sync.get(['allFeatures'], function (result) {
+	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
@@ -1236,7 +1236,7 @@ function activatePageHighlight(port, request) {
 			}
 		});
 
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
@@ -1688,7 +1688,7 @@ function activateExportElement(port, request) {
 				allComputedStyles.push(tempComputedStyle);
 			});
 
-			chrome.storage.sync.get(['allFeatures'], function (result) {
+			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
@@ -1940,7 +1940,7 @@ function deactivateDeleteElement(port, request) {
 }
 
 function activateClearAllCache(port, request) {
-	chrome.storage.sync.get(['allFeatures'], function (result) {
+	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'clearAllCache') {
 				let portTwo = chrome.runtime.connect({name: 'portTwo'});

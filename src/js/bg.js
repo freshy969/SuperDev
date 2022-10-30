@@ -164,60 +164,92 @@ const allFeatures = [
 // On Extension Install/Update
 chrome.runtime.onInstalled.addListener(async function () {
 	// All Features Initialisation
-	chrome.storage.sync.get(['allFeatures'], function (result) {
+	chrome.storage.local.get(['allFeatures'], function (result) {
 		if (result.allFeatures === undefined) {
 			chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-			chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+			chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 		}
 	});
 
 	// Update Old AllFeatures Data
 	chrome.storage.local.get(['extVersion'], function (result) {
-		// Means Updated, Not Installed
 		if (result.extVersion !== undefined) {
-			// Is Really Next Version?
+			// Means Updated, Not Installed
 			if (result.extVersion !== chrome.runtime.getManifest().version) {
-				chrome.storage.sync.get(['allFeatures'], function (result) {
-					if (result.allFeatures !== undefined) {
-						if (
-							!(
-								result.allFeatures.includes('textEditor') &&
-								result.allFeatures.includes('pageRuler') &&
-								result.allFeatures.includes('colorPicker') &&
-								result.allFeatures.includes('checkboxColorPicker1') &&
-								result.allFeatures.includes('checkboxColorPicker2') &&
-								result.allFeatures.includes('checkboxColorPicker3') &&
-								result.allFeatures.includes('colorPalette') &&
-								result.allFeatures.includes('checkboxColorPalette1') &&
-								result.allFeatures.includes('checkboxColorPalette2') &&
-								result.allFeatures.includes('checkboxColorPalette3') &&
-								result.allFeatures.includes('pageGuideline') &&
-								result.allFeatures.includes('pageHighlight') &&
-								result.allFeatures.includes('checkboxPageHighlight1') &&
-								result.allFeatures.includes('checkboxPageHighlight2') &&
-								result.allFeatures.includes('checkboxPageHighlight3') &&
-								result.allFeatures.includes('checkboxPageHighlight4') &&
-								result.allFeatures.includes('checkboxPageHighlight5') &&
-								result.allFeatures.includes('checkboxPageHighlight6') &&
-								result.allFeatures.includes('checkboxPageHighlight7') &&
-								result.allFeatures.includes('moveElement') &&
-								result.allFeatures.includes('deleteElement') &&
-								result.allFeatures.includes('exportElement') &&
-								result.allFeatures.includes('checkboxExportElement1') &&
-								result.allFeatures.includes('checkboxExportElement2') &&
-								result.allFeatures.includes('checkboxExportElement3') &&
-								result.allFeatures.includes('clearAllCache') &&
-								result.allFeatures.includes('checkboxClearAllCache1') &&
-								result.allFeatures.includes('checkboxClearAllCache2') &&
-								result.allFeatures.includes('checkboxClearAllCache3') &&
-								result.allFeatures.includes('checkboxClearAllCache4') &&
-								result.allFeatures.includes('checkboxClearAllCache5') &&
-								result.allFeatures.includes('checkboxClearAllCache6')
-							)
-						) {
-							chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.local.get(['allFeatures'], function (result) {
+					// Update Old AllFeatures Data
+					let localAllFeatures = allFeatures;
+					let storedAllFeatures = JSON.parse(result.allFeatures);
+
+					// Add Any Feature From Local To Stored Storage
+					// That's Missing From Stored Storage
+					localAllFeatures.map(function (value, index) {
+						if (storedAllFeatures.indexOf(value) === -1) {
+							storedAllFeatures.splice(index, 0, value);
 						}
-					}
+					});
+
+					// Delete (Null + Filter) Any Feature From Stored
+					// Storage That's Missing From Local Storage
+					storedAllFeatures = storedAllFeatures.filter(function (value, index) {
+						if (localAllFeatures.indexOf(value) === -1) value = null;
+						return value !== null;
+					});
+
+					// If Feature Exists in Stored Data
+					// Sync That Feature Data + Settings
+					localAllFeatures.map(function (valueOne, indexOne) {
+						storedAllFeatures.map(function (valueTwo, indexTwo) {
+							if (valueOne.id === valueTwo.id) {
+								// Update Icon If Mismatch
+								if (valueOne.icon !== valueTwo.icon) valueTwo.icon = valueOne.icon;
+
+								// If Local Settings is Empty and
+								// Stored Settings Exists, Empty Stored Settings
+								if (Object.keys(valueOne.settings).length === 0) {
+									if (Object.keys(valueTwo.settings).length !== 0) {
+										valueTwo.settings = valueOne.settings;
+									}
+								}
+
+								// If Local Settings Exists and
+								// Stored Settings Is Empty, Set Stored Settings
+								if (Object.keys(valueOne.settings).length !== 0) {
+									if (Object.keys(valueTwo.settings).length === 0) {
+										valueTwo.settings = valueOne.settings;
+									}
+								}
+
+								// If Both Local and Stored Settings Exists
+								if (Object.keys(valueOne.settings).length !== 0) {
+									if (Object.keys(valueTwo.settings).length !== 0) {
+										// Iterating Local Settings Keys
+										Object.keys(valueOne.settings).map(function (valueThree, indexThree) {
+											// Put Local Settings Key to Stored Settings
+											// Undefined Means That Key Doesn't Exists in Stored
+											// Add That Key-Value to Stored Settings
+											if (valueTwo.settings[valueThree] === undefined) {
+												valueTwo.settings[valueThree] = valueOne.settings[valueThree];
+											}
+										});
+
+										// Iterating Stored Settings Keys
+										Object.keys(valueTwo.settings).map(function (valueThree, indexThree) {
+											// Put Stored Settings Key to Local Settings
+											// Undefined Means That Key Doesn't Exists in Local
+											// Delete That Key from Stored Settings
+											if (valueOne.settings[valueThree] === undefined) {
+												delete valueTwo.settings[valueThree];
+											}
+										});
+									}
+								}
+							}
+						});
+					});
+
+					chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+					chrome.storage.local.set({allFeatures: JSON.stringify(storedAllFeatures)});
 				});
 			}
 		}
@@ -296,10 +328,10 @@ chrome.action.onClicked.addListener(function (tab) {
 		!tab.url.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 
@@ -319,10 +351,10 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		!tab.pageUrl.includes('https://chrome.google.com/webstore')
 	) {
 		// All Features Initialisation
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
 				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
-				chrome.storage.sync.set({allFeatures: JSON.stringify(allFeatures)});
+				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 			}
 		});
 

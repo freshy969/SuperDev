@@ -12,7 +12,7 @@ export default function NavBar({portThree}) {
 
 	useEffect(function () {
 		// Get AllFeatures
-		chrome.storage.sync.get(['allFeatures'], function (result) {
+		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			setIsLoadingOne(false);
 		});
@@ -31,7 +31,7 @@ export default function NavBar({portThree}) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
 				} else if (changes.setMinimised.newValue === false) {
-					chrome.storage.sync.get(['allFeatures'], function (result) {
+					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
@@ -55,7 +55,7 @@ export default function NavBar({portThree}) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
-						chrome.storage.sync.get(['allFeatures'], function (result) {
+						chrome.storage.local.get(['allFeatures'], function (result) {
 							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						});
@@ -69,7 +69,7 @@ export default function NavBar({portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
-					chrome.storage.sync.get(['allFeatures'], function (result) {
+					chrome.storage.local.get(['allFeatures'], function (result) {
 						chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
 							if (outcome.whichFeatureActive !== null) {
 								ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
@@ -96,7 +96,7 @@ export default function NavBar({portThree}) {
 						}, 1000);
 					}
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					chrome.storage.sync.get(['allFeatures'], function (result) {
+					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (document.querySelector('#colorPalettePage')) {
 							if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
 								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
