@@ -20,14 +20,27 @@ export default function ToggleInfo({portThree}) {
 		});
 	}, []);
 
+	function openShortcutPage() {
+		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+			console.log(tabs);
+			chrome.tabs.create({
+				index: tabs[0].index + 1,
+				url: 'chrome://extensions/shortcuts',
+			});
+		});
+	}
+
 	if (!isLoadingOne) {
 		return (
 			<section id='toggleInfo' className='hidden'>
 				<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 					<div id='toggleInfoChild' className='rounded-md p-4'>
 						<div>
-							<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-								<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>Extension Shortcuts
+							<div
+								className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none cursor-pointer'
+								onClick={openShortcutPage}>
+								<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
+								Extension Shortcuts
 							</div>
 							<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 								{[
@@ -76,19 +89,16 @@ export default function ToggleInfo({portThree}) {
 							</div>
 							<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3'>
 								{[
-									`Everything Free +`,
-									`CSS Inspector`,
-									`Visualise Padding`,
-									`Visualise Margin`,
-									`Custom CSS`,
-									`Custom JS`,
-									`Site Fonts List`,
-									`Font Inspector`,
-									`Font Changer`,
-									`Extract Media`,
-									`Take Screenshot`,
-									`View Responsive`,
-									`Built With Lookup`,
+									`Everything In Free +`,
+									`CSS Inspector/Viewer`,
+									`Visualise Padding/Margin`,
+									`Custom CSS/JavaScript`,
+									`Website Fonts List`,
+									`Font Inspector/Changer`,
+									`Extract Images/SVGs`,
+									`Take Site Screenshot`,
+									`Site Responsive Viewer`,
+									`Site Technology Lookup`,
 								].map(function (value, index) {
 									return (
 										<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
