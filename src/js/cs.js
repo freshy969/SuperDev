@@ -1688,6 +1688,10 @@ function activateExportElement(port, request) {
 				allComputedStyles.push(tempComputedStyle);
 			});
 
+			console.log(allStyleSheets);
+			console.log(allSelectors);
+			console.log(allComputedStyles);
+
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
@@ -1724,6 +1728,7 @@ function activateExportElement(port, request) {
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
+								title: 'SuperDev - Exported Element',
 								description: 'Copied with SuperDev',
 								html: html,
 								css: css,
