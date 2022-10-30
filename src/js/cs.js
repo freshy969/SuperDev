@@ -1667,20 +1667,20 @@ function activateExportElement(port, request) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			let allSelectors = [];
 			let allComputedStyles = [];
-			event.target.querySelectorAll('*').forEach(function (element) {
+			[event.target, ...event.target.querySelectorAll('*')].map(function (value, index) {
 				// All Selectors
 				let tempSelectors = [];
-				if (element.id !== '') tempSelectors.push('#' + element.id);
-				if (element.className !== '') {
-					[...element.classList].map(function (value, index) {
+				if (value.id !== '') tempSelectors.push('#' + value.id);
+				if (value.className !== '') {
+					[...value.classList].map(function (value, index) {
 						if (value !== 'pageGuidelineOutline') tempSelectors.push('.' + value);
 					});
 				}
-				tempSelectors.push(element.tagName.toLowerCase());
+				tempSelectors.push(value.tagName.toLowerCase());
 				allSelectors.push(tempSelectors);
 
 				// All Computed Styles
-				let tempComputedStyles = window.getComputedStyle(element);
+				let tempComputedStyles = window.getComputedStyle(value);
 				let tempComputedStyle = {};
 				[...tempComputedStyles].map(function (value, index) {
 					tempComputedStyle[value] = tempComputedStyles.getPropertyValue(value);
