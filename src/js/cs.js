@@ -1680,7 +1680,6 @@ function activateExportElement(port, request) {
 				allSelectors.push(tempSelectors);
 			});
 
-			console.log(allSelectors.flat());
 			console.log(allStyleSheets.flat());
 
 			// Remove Unused CSS
