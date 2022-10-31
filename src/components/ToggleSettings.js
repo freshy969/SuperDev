@@ -42,9 +42,7 @@ export default function ToggleSettings({portThree}) {
 
 		// OnUpdate AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) {
-				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
-			}
+			if (changes.allFeatures) setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 		});
 	}, []);
 

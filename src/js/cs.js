@@ -1620,7 +1620,7 @@ function activateExportElement(port, request) {
 	let allStyleSheets = [];
 	let usedStyles = [];
 
-	// Iterating All Stylesheets
+	// Saving All CSSRules to AllStyleSheets 2D Array
 	[...document.styleSheets].map(function (valueOne, indexOne) {
 		try {
 			if ([...valueOne.cssRules].length !== 0) {
@@ -1636,7 +1636,8 @@ function activateExportElement(port, request) {
 		}
 	});
 
-	// Will Add Styles to Iframe
+	// Saving External Stylesheets' CSSRules
+	// to AllStyleSheets 2D Array
 	let iframe = document.createElement('iframe');
 	iframe.setAttribute('style', 'display: none');
 	document.body.appendChild(iframe);
@@ -1666,9 +1667,10 @@ function activateExportElement(port, request) {
 	function onMouseClick(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+			// Saving OutHTML Selectors
+			// IDs, Classes, Tags
 			let allSelectors = [];
 			[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
-				// All Selectors
 				let tempSelectors = [];
 				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
 				if (valueOne.className !== '') {
@@ -1680,25 +1682,84 @@ function activateExportElement(port, request) {
 				allSelectors.push(tempSelectors);
 			});
 
-			console.log(allStyleSheets.flat());
-
-			// Remove Unused CSS
+			// Removing Unused CSS
 			allSelectors.flat().map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
-					if (valueTwo.selectorText !== undefined) {
-						if (
-							valueTwo.selectorText.includes('*') ||
-							valueTwo.selectorText.includes(':root') ||
-							valueTwo.selectorText.includes('body') ||
-							valueTwo.selectorText.includes(valueOne)
-						) {
-							usedStyles.push(valueTwo.cssText);
+					if (valueTwo instanceof CSSMediaRule) {
+						let mediaStyles = [];
+						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+							if (valueThree.selectorText !== undefined) {
+								if (
+									valueThree.selectorText.includes('*') ||
+									valueThree.selectorText.includes(':root') ||
+									valueThree.selectorText.includes('html') ||
+									valueThree.selectorText.includes('body') ||
+									valueThree.selectorText.includes(`${valueOne}`)
+								) {
+									mediaStyles.push(valueThree.cssText);
+								}
+							} else console.log(1, valueThree.selectorText);
+						});
+						if (mediaStyles.length !== 0) {
+							usedStyles.push(`@media ${valueTwo.conditionText} { ${mediaStyles.join('\n')} }`);
 						}
+					} else if (valueTwo instanceof CSSKeyframesRule) {
+						let cssKeyframes = [];
+						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+							cssKeyframes.push(valueThree.cssText);
+						});
+						if (cssKeyframes.length !== 0) {
+							usedStyles.push(`@keyframes ${valueTwo.name} { ${cssKeyframes.join('\n')} }`);
+						}
+					} else if (valueTwo instanceof CSSFontFaceRule) {
+						usedStyles.push(valueTwo.cssText);
+					} else if (valueTwo instanceof CSSSupportsRule) {
+						let cssSupports = [];
+						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+							if (valueThree.selectorText !== undefined) {
+								if (
+									valueThree.selectorText.includes('*') ||
+									valueThree.selectorText.includes(':root') ||
+									valueThree.selectorText.includes('html') ||
+									valueThree.selectorText.includes('body') ||
+									valueThree.selectorText.includes(`${valueOne}`)
+								) {
+									cssSupports.push(valueThree.cssText);
+								}
+							} else console.log(2, valueTwo);
+						});
+						if (cssSupports.length !== 0) {
+							usedStyles.push(`@supports ${valueTwo.conditionText} { ${cssSupports.join('\n')} }`);
+						}
+					} else if (valueTwo instanceof CSSStyleRule) {
+						if (valueTwo.selectorText !== undefined) {
+							if (valueOne.startsWith('#') || valueOne.startsWith('.')) {
+								if (
+									valueTwo.selectorText.includes('*') ||
+									valueTwo.selectorText.includes(':root') ||
+									valueTwo.selectorText.includes('html') ||
+									valueTwo.selectorText.includes('body') ||
+									valueTwo.selectorText.includes(`${valueOne}`) ||
+									valueTwo.selectorText.includes(`${valueOne}, `) ||
+									valueTwo.selectorText.includes(`${valueOne}[`) ||
+									valueTwo.selectorText.includes(`${valueOne}:`) ||
+									valueTwo.selectorText.includes(`${valueOne} :`) ||
+									valueTwo.selectorText.includes(`${valueOne} >`) ||
+									valueTwo.selectorText.includes(`${valueOne} ~`) ||
+									valueTwo.selectorText.includes(`${valueOne} +`)
+								) {
+									usedStyles.push(valueTwo.cssText);
+								}
+							}
+						} else console.log(3, valueTwo);
+					} else {
+						//console.log(valueTwo);
 					}
 				});
 			});
 			usedStyles = [...new Set(usedStyles)];
 
+			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
