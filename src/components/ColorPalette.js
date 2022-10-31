@@ -16,10 +16,20 @@ export default function ColorPalette({portThree}) {
 
 	function CopyColorCode(color, id) {
 		navigator.clipboard.writeText(color);
+		document.querySelector('#' + id + '> span').innerText = '';
 		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
 		setTimeout(function () {
 			document.querySelector('#' + id + '> i').classList.add('before:hidden');
+			document.querySelector('#' + id + '> span').innerText = color;
 		}, 1000);
+	}
+
+	function ShowColorCode(color, id) {
+		document.querySelector('#' + id + '> span').innerText = color;
+	}
+
+	function HideColorCode(color, id) {
+		document.querySelector('#' + id + '> span').innerText = '';
 	}
 
 	function hexToRgb(hex) {
@@ -40,19 +50,21 @@ export default function ColorPalette({portThree}) {
 									let id = 'colorPalette' + (index + 1);
 									let allClasses;
 									let baseClasses =
-										'flex flex-wrap justify-center items-center h-[25.5px] w-[63.5px] rounded-md box-border border border-gray-300 cursor-pointer ';
-									if (allColors.length - (index + 1) >= 4) {
-										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px] mb-[14.5px]';
-										else allClasses = baseClasses + 'mb-[12.5px]';
+										'flex flex-wrap justify-center items-center h-[25.5px] w-[90px] rounded-md box-border border border-gray-300 cursor-pointer ';
+									if (allColors.length - (index + 1) >= 3) {
+										if (((index + 1) / 3) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px] mb-[14.5px]';
+										else allClasses = baseClasses + 'mb-[14.5px]';
 									} else {
-										if (((index + 1) / 4) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px]';
+										if (((index + 1) / 3) % 1 !== 0) allClasses = baseClasses + 'mr-[14.5px]';
 										else allClasses = baseClasses + '';
 									}
 
 									// TickIcon Color Calculation
-									let tickColor = value.startsWith('#') ? hexToRgb(value).split('(')[1].split(')')[0].split(',') : value.split('(')[1].split(')')[0].split(',');
-									if (tickColor[0] * 0.299 + tickColor[1] * 0.587 + tickColor[2] * 0.114 > 150) tickColor = 'black';
-									else tickColor = 'white';
+									let intelColor = value.startsWith('#')
+										? hexToRgb(value).split('(')[1].split(')')[0].split(',')
+										: value.split('(')[1].split(')')[0].split(',');
+									if (intelColor[0] * 0.299 + intelColor[1] * 0.587 + intelColor[2] * 0.114 > 150) intelColor = 'black';
+									else intelColor = 'white';
 
 									return (
 										<div
@@ -60,10 +72,17 @@ export default function ColorPalette({portThree}) {
 											onClick={function () {
 												CopyColorCode(value, id);
 											}}
+											onMouseEnter={function () {
+												ShowColorCode(value, id);
+											}}
+											onMouseLeave={function () {
+												HideColorCode(value, id);
+											}}
 											className={allClasses}
 											style={{'background-color': value}}
 											key={index + 1}>
-											<i className='fa-solid fa-badge-check text-base before:hidden' style={{color: tickColor}}></i>
+											<i className='fa-solid fa-badge-check text-sm before:hidden' style={{color: intelColor}}></i>
+											<span className='text-[10px]' style={{color: intelColor}}></span>
 										</div>
 									);
 							  })

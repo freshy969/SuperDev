@@ -849,6 +849,7 @@ function activateColorPalette(port, request) {
 	});
 	allColors = [...new Set(allColors.flat())];
 
+	// RGB or Hex?
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
 			if (value.id === 'colorPalette') {
