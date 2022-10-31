@@ -1682,12 +1682,6 @@ function activateExportElement(port, request) {
 				allSelectors.push(tempSelectors);
 			});
 
-			allStyleSheets.flat().map(function (value, index) {
-				if (value instanceof CSSStyleRule) {
-					console.log(value.selectorText);
-				}
-			});
-
 			// Removing Unused CSS
 			allSelectors.flat().map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
@@ -1749,19 +1743,53 @@ function activateExportElement(port, request) {
 						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
 							if (valueThree instanceof CSSStyleRule) {
-								if (
-									valueThree.selectorText.includes('*') ||
-									valueThree.selectorText.includes(':root') ||
-									valueThree.selectorText.includes('html') ||
-									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(`${valueOne}[`) ||
-									valueThree.selectorText.includes(`${valueOne},`) ||
-									valueThree.selectorText.includes(`${valueOne}:`) ||
-									valueThree.selectorText.includes(`${valueOne} `) ||
-									valueThree.selectorText.includes(`${valueOne}.`) ||
-									valueThree.selectorText.includes(`${valueOne}#`)
-								) {
-									mediaStyles.push(valueThree.cssText);
+								// IDs
+								if (valueOne.startsWith('#')) {
+									if (
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										mediaStyles.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										mediaStyles.push(valueThree.cssText);
+									}
+								}
+
+								// Classes
+								else if (valueOne.startsWith('.')) {
+									if (
+										valueThree.selectorText.includes('*') ||
+										valueThree.selectorText.includes(':root') ||
+										valueThree.selectorText.includes('html') ||
+										valueThree.selectorText.includes('body') ||
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										mediaStyles.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										mediaStyles.push(valueThree.cssText);
+									}
+								}
+
+								// Tags
+								else {
+									if (
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										mediaStyles.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										mediaStyles.push(valueThree.cssText);
+									}
 								}
 							}
 
@@ -1771,19 +1799,53 @@ function activateExportElement(port, request) {
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									// If CSSStyles
 									if (valueFour instanceof CSSStyleRule) {
-										if (
-											valueFour.selectorText.includes('*') ||
-											valueFour.selectorText.includes(':root') ||
-											valueFour.selectorText.includes('html') ||
-											valueFour.selectorText.includes('body') ||
-											valueFour.selectorText.includes(`${valueOne}[`) ||
-											valueFour.selectorText.includes(`${valueOne},`) ||
-											valueFour.selectorText.includes(`${valueOne}:`) ||
-											valueFour.selectorText.includes(`${valueOne} `) ||
-											valueFour.selectorText.includes(`${valueOne}.`) ||
-											valueFour.selectorText.includes(`${valueOne}#`)
-										) {
-											cssSupports.push(valueFour.cssText);
+										// IDs
+										if (valueOne.startsWith('#')) {
+											if (
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												cssSupports.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												cssSupports.push(valueFour.cssText);
+											}
+										}
+
+										// Classes
+										else if (valueOne.startsWith('.')) {
+											if (
+												valueFour.selectorText.includes('*') ||
+												valueFour.selectorText.includes(':root') ||
+												valueFour.selectorText.includes('html') ||
+												valueFour.selectorText.includes('body') ||
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												cssSupports.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												cssSupports.push(valueFour.cssText);
+											}
+										}
+
+										// Tags
+										else {
+											if (
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												cssSupports.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												cssSupports.push(valueFour.cssText);
+											}
 										}
 									}
 
@@ -1825,19 +1887,53 @@ function activateExportElement(port, request) {
 						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
 							if (valueThree instanceof CSSStyleRule) {
-								if (
-									valueThree.selectorText.includes('*') ||
-									valueThree.selectorText.includes(':root') ||
-									valueThree.selectorText.includes('html') ||
-									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(`${valueOne}[`) ||
-									valueThree.selectorText.includes(`${valueOne},`) ||
-									valueThree.selectorText.includes(`${valueOne}:`) ||
-									valueThree.selectorText.includes(`${valueOne} `) ||
-									valueThree.selectorText.includes(`${valueOne}.`) ||
-									valueThree.selectorText.includes(`${valueOne}#`)
-								) {
-									cssSupports.push(valueThree.cssText);
+								// IDs
+								if (valueOne.startsWith('#')) {
+									if (
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										cssSupports.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										cssSupports.push(valueThree.cssText);
+									}
+								}
+
+								// Classes
+								else if (valueOne.startsWith('.')) {
+									if (
+										valueThree.selectorText.includes('*') ||
+										valueThree.selectorText.includes(':root') ||
+										valueThree.selectorText.includes('html') ||
+										valueThree.selectorText.includes('body') ||
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										cssSupports.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										cssSupports.push(valueThree.cssText);
+									}
+								}
+
+								// Tags
+								else {
+									if (
+										valueThree.selectorText.includes(`${valueOne}[`) ||
+										valueThree.selectorText.includes(`${valueOne},`) ||
+										valueThree.selectorText.includes(`${valueOne}:`) ||
+										valueThree.selectorText.includes(`${valueOne} `) ||
+										valueThree.selectorText.includes(`${valueOne}.`)
+									) {
+										cssSupports.push(valueThree.cssText);
+									} else if (valueThree.selectorText === valueOne) {
+										cssSupports.push(valueThree.cssText);
+									}
 								}
 							}
 
@@ -1847,19 +1943,53 @@ function activateExportElement(port, request) {
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									// If CSSStyles
 									if (valueFour instanceof CSSStyleRule) {
-										if (
-											valueFour.selectorText.includes('*') ||
-											valueFour.selectorText.includes(':root') ||
-											valueFour.selectorText.includes('html') ||
-											valueFour.selectorText.includes('body') ||
-											valueFour.selectorText.includes(`${valueOne}[`) ||
-											valueFour.selectorText.includes(`${valueOne},`) ||
-											valueFour.selectorText.includes(`${valueOne}:`) ||
-											valueFour.selectorText.includes(`${valueOne} `) ||
-											valueFour.selectorText.includes(`${valueOne}.`) ||
-											valueFour.selectorText.includes(`${valueOne}#`)
-										) {
-											mediaStyles.push(valueFour.cssText);
+										// IDs
+										if (valueOne.startsWith('#')) {
+											if (
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												mediaStyles.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												mediaStyles.push(valueFour.cssText);
+											}
+										}
+
+										// Classes
+										else if (valueOne.startsWith('.')) {
+											if (
+												valueFour.selectorText.includes('*') ||
+												valueFour.selectorText.includes(':root') ||
+												valueFour.selectorText.includes('html') ||
+												valueFour.selectorText.includes('body') ||
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												mediaStyles.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												mediaStyles.push(valueFour.cssText);
+											}
+										}
+
+										// Tags
+										else {
+											if (
+												valueFour.selectorText.includes(`${valueOne}[`) ||
+												valueFour.selectorText.includes(`${valueOne},`) ||
+												valueFour.selectorText.includes(`${valueOne}:`) ||
+												valueFour.selectorText.includes(`${valueOne} `) ||
+												valueFour.selectorText.includes(`${valueOne}.`)
+											) {
+												mediaStyles.push(valueFour.cssText);
+											} else if (valueFour.selectorText === valueOne) {
+												mediaStyles.push(valueFour.cssText);
+											}
 										}
 									}
 
