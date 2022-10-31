@@ -1682,27 +1682,183 @@ function activateExportElement(port, request) {
 				allSelectors.push(tempSelectors);
 			});
 
+			console.log(allStyleSheets);
+
 			// Removing Unused CSS
 			allSelectors.flat().map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
+					// If CSSFontFace
+					if (valueTwo instanceof CSSFontFaceRule) {
+						usedStyles.push(valueTwo.cssText);
+					}
+
+					// If CSSImport
+					else if (valueTwo instanceof CSSImportRule) {
+						usedStyles.push(valueTwo.cssText);
+					}
+
+					// If CSSStyles
+					else if (valueTwo instanceof CSSStyleRule) {
+						if (
+							valueTwo.selectorText.includes('*') ||
+							valueTwo.selectorText.includes(':root') ||
+							valueTwo.selectorText.includes('html') ||
+							valueTwo.selectorText.includes('body') ||
+							valueTwo.selectorText.includes(valueOne)
+						) {
+							usedStyles.push(valueTwo.cssText);
+						}
+					}
+
 					// If MediaQuery
-					if (valueTwo instanceof CSSMediaRule) {
+					else if (valueTwo instanceof CSSMediaRule) {
 						let mediaStyles = [];
 						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
-							if (valueThree.selectorText !== undefined) {
+							// If CSSFontFace
+							if (valueThree instanceof CSSFontFaceRule) {
+								mediaStyles.push(valueThree.cssText);
+							}
+
+							// If CSSStyles
+							else if (valueThree instanceof CSSStyleRule) {
 								if (
 									valueThree.selectorText.includes('*') ||
 									valueThree.selectorText.includes(':root') ||
 									valueThree.selectorText.includes('html') ||
 									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(`${valueOne}`)
+									valueThree.selectorText.includes(valueOne)
 								) {
 									mediaStyles.push(valueThree.cssText);
 								}
-							} else console.log(1, valueThree.selectorText);
+							}
+
+							// If CSSSupports
+							else if (valueThree instanceof CSSSupportsRule) {
+								let cssSupports = [];
+								[...valueThree.cssRules].map(function (valueFour, indexFour) {
+									// If CSSFontFace
+									if (valueFour instanceof CSSFontFaceRule) {
+										cssSupports.push(valueFour.cssText);
+									}
+
+									// If CSSStyles
+									else if (valueFour instanceof CSSStyleRule) {
+										if (
+											valueFour.selectorText.includes('*') ||
+											valueFour.selectorText.includes(':root') ||
+											valueFour.selectorText.includes('html') ||
+											valueFour.selectorText.includes('body') ||
+											valueFour.selectorText.includes(valueOne)
+										) {
+											cssSupports.push(valueFour.cssText);
+										}
+									}
+
+									// If CSSKeyframes
+									else if (valueFour instanceof CSSKeyframesRule) {
+										let cssKeyframes = [];
+										[...valueFour.cssRules].map(function (valueFive, indexFive) {
+											cssKeyframes.push(valueFive.cssText);
+										});
+										if (cssKeyframes.length !== 0) {
+											cssSupports.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+										}
+									}
+								});
+								if (cssSupports.length !== 0) {
+									mediaStyles.push(`@supports ${valueThree.conditionText} { ${cssSupports.join('\n')} }`);
+								}
+							}
+
+							// If CSSKeyframes
+							else if (valueThree instanceof CSSKeyframesRule) {
+								let cssKeyframes = [];
+								[...valueThree.cssRules].map(function (valueFour, indexFour) {
+									cssKeyframes.push(valueFour.cssText);
+								});
+								if (cssKeyframes.length !== 0) {
+									mediaStyles.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+								}
+							}
 						});
 						if (mediaStyles.length !== 0) {
 							usedStyles.push(`@media ${valueTwo.conditionText} { ${mediaStyles.join('\n')} }`);
+						}
+					}
+
+					// If CSSSupports
+					else if (valueTwo instanceof CSSSupportsRule) {
+						let cssSupports = [];
+						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+							// If CSSFontFace
+							if (valueThree instanceof CSSFontFaceRule) {
+								cssSupports.push(valueThree.cssText);
+							}
+
+							// If CSSStyles
+							else if (valueThree instanceof CSSStyleRule) {
+								if (
+									valueThree.selectorText.includes('*') ||
+									valueThree.selectorText.includes(':root') ||
+									valueThree.selectorText.includes('html') ||
+									valueThree.selectorText.includes('body') ||
+									valueThree.selectorText.includes(valueOne)
+								) {
+									cssSupports.push(valueThree.cssText);
+								}
+							}
+
+							// If MediaQuery
+							else if (valueThree instanceof CSSMediaRule) {
+								let mediaStyles = [];
+								[...valueThree.cssRules].map(function (valueFour, indexFour) {
+									// If CSSFontFace
+									if (valueFour instanceof CSSFontFaceRule) {
+										mediaStyles.push(valueFour.cssText);
+									}
+
+									// If CSSStyles
+									else if (valueFour instanceof CSSStyleRule) {
+										if (
+											valueFour.selectorText.includes('*') ||
+											valueFour.selectorText.includes(':root') ||
+											valueFour.selectorText.includes('html') ||
+											valueFour.selectorText.includes('body') ||
+											valueFour.selectorText.includes(valueOne)
+										) {
+											mediaStyles.push(valueFour.cssText);
+										}
+									}
+
+									// If CSSKeyframes
+									else if (valueFour instanceof CSSKeyframesRule) {
+										let cssKeyframes = [];
+										[...valueFour.cssRules].map(function (valueFive, indexFive) {
+											cssKeyframes.push(valueFive.cssText);
+										});
+										if (cssKeyframes.length !== 0) {
+											mediaStyles.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+										}
+									}
+								});
+								if (mediaStyles.length !== 0) {
+									cssSupports.push(`@media ${valueThree.conditionText} { ${mediaStyles.join('\n')} }`);
+								}
+							}
+
+							// If CSSKeyframes
+							else if (valueThree instanceof CSSKeyframesRule) {
+								let cssKeyframes = [];
+								[...valueThree.cssRules].map(function (valueFour, indexFour) {
+									cssKeyframes.push(valueFour.cssText);
+								});
+								if (cssKeyframes.length !== 0) {
+									cssSupports.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+								}
+							}
+						});
+						if (cssSupports.length !== 0) {
+							usedStyles.push(`@supports ${valueTwo.conditionText} { ${cssSupports.join('\n')} }`);
 						}
 					}
 
@@ -1717,59 +1873,9 @@ function activateExportElement(port, request) {
 						}
 					}
 
-					// If CSSFontFace
-					else if (valueTwo instanceof CSSFontFaceRule) {
-						usedStyles.push(valueTwo.cssText);
-					}
-
-					// If CSSSupports
-					else if (valueTwo instanceof CSSSupportsRule) {
-						let cssSupports = [];
-						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
-							if (valueThree.selectorText !== undefined) {
-								if (
-									valueThree.selectorText.includes('*') ||
-									valueThree.selectorText.includes(':root') ||
-									valueThree.selectorText.includes('html') ||
-									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(`${valueOne}`)
-								) {
-									cssSupports.push(valueThree.cssText);
-								}
-							} else console.log(2, valueTwo);
-						});
-						if (cssSupports.length !== 0) {
-							usedStyles.push(`@supports ${valueTwo.conditionText} { ${cssSupports.join('\n')} }`);
-						}
-					}
-
-					// If CSSStyles
-					else if (valueTwo instanceof CSSStyleRule) {
-						if (valueTwo.selectorText !== undefined) {
-							if (valueOne.startsWith('#') || valueOne.startsWith('.')) {
-								if (
-									valueTwo.selectorText.includes('*') ||
-									valueTwo.selectorText.includes(':root') ||
-									valueTwo.selectorText.includes('html') ||
-									valueTwo.selectorText.includes('body') ||
-									valueTwo.selectorText.includes(`${valueOne}`) ||
-									valueTwo.selectorText.includes(`${valueOne}, `) ||
-									valueTwo.selectorText.includes(`${valueOne}[`) ||
-									valueTwo.selectorText.includes(`${valueOne}:`) ||
-									valueTwo.selectorText.includes(`${valueOne} :`) ||
-									valueTwo.selectorText.includes(`${valueOne} >`) ||
-									valueTwo.selectorText.includes(`${valueOne} ~`) ||
-									valueTwo.selectorText.includes(`${valueOne} +`)
-								) {
-									usedStyles.push(valueTwo.cssText);
-								}
-							}
-						} else console.log(3, valueTwo);
-					}
-
 					// IS There Any More?
 					else {
-						console.log('I Am The One You Were Expectin.', valueTwo);
+						console.warn(6, valueTwo);
 					}
 				});
 			});

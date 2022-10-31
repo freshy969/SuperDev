@@ -54,7 +54,7 @@
 	"web_accessible_resources": [
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"resources": ["index.html", "css/*", "icons/*", "js/*", "libs/*", "next/*"]
+			"resources": ["index.html", "css/*", "icons/*", "js/*", "libs/*", "media/*"]
 		}
 	]
 }
