@@ -7,42 +7,26 @@ export default function ColorPalette({portThree}) {
 
 	useEffect(function () {
 		portThree.onMessage.addListener(function (response) {
-			if (response.action === 'Color Palette Activated') {
+			if (response.action === 'allColors') {
 				setAllColors(response.allColors);
 				setIsLoadingOne(false);
 			}
 		});
 	}, []);
 
-	function rgbaToHex(rgba) {
-		let hex = rgba.split('(')[1].split(')')[0];
-		hex = hex.split(',');
-		hex.length === 3
-			? (hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1))
-			: (hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1) + ((+hex[3] * 255) | (1 << 8)).toString(16).slice(1));
-		return hex;
+	function CopyColorCode(color, id) {
+		navigator.clipboard.writeText(color);
+		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+		setTimeout(function () {
+			document.querySelector('#' + id + '> i').classList.add('before:hidden');
+		}, 1000);
 	}
 
-	function CopyColorCode(rgbColor, id) {
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result.allFeatures).map(function (value, index) {
-				if (value.id === 'colorPalette') {
-					if (value.settings.checkboxColorPalette1 === true) {
-						navigator.clipboard.writeText(rgbaToHex(rgbColor));
-						document.querySelector('#' + id + '> i').classList.remove('before:hidden');
-						setTimeout(function () {
-							document.querySelector('#' + id + '> i').classList.add('before:hidden');
-						}, 1000);
-					} else if (value.settings.checkboxColorPalette2 === true) {
-						navigator.clipboard.writeText(rgbColor);
-						document.querySelector('#' + id + '> i').classList.remove('before:hidden');
-						setTimeout(function () {
-							document.querySelector('#' + id + '> i').classList.add('before:hidden');
-						}, 1000);
-					}
-				}
-			});
-		});
+	function hexToRgb(hex) {
+		let r = parseInt(hex.slice(1, 3), 16);
+		let g = parseInt(hex.slice(3, 5), 16);
+		let b = parseInt(hex.slice(5, 7), 16);
+		return `rgb(${r}, ${g}, ${b})`;
 	}
 
 	return (
@@ -66,7 +50,7 @@ export default function ColorPalette({portThree}) {
 									}
 
 									// TickIcon Color Calculation
-									let tickColor = value.split('(')[1].split(')')[0].split(',');
+									let tickColor = value.startsWith('#') ? hexToRgb(value).split('(')[1].split(')')[0].split(',') : value.split('(')[1].split(')')[0].split(',');
 									if (tickColor[0] * 0.299 + tickColor[1] * 0.587 + tickColor[2] * 0.114 > 150) tickColor = 'black';
 									else tickColor = 'white';
 

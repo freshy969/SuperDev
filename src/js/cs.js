@@ -802,60 +802,73 @@ function activateColorPalette(port, request) {
 	window.focus({preventScroll: true});
 
 	// Get All Colors
-	let tempColors = [];
+	let allColors = [];
 	document.querySelectorAll('*').forEach(function (element) {
 		let elementComputedStyles = window.getComputedStyle(element);
-		isColor(elementComputedStyles.getPropertyValue('background-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-block-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-block-end-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-block-start-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-bottom-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-inline-end-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-inline-start-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-left-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-right-color'));
-		isColor(elementComputedStyles.getPropertyValue('border-top-color'));
-		isColor(elementComputedStyles.getPropertyValue('caret-color'));
-		isColor(elementComputedStyles.getPropertyValue('color'));
-		isColor(elementComputedStyles.getPropertyValue('column-rule-color'));
-		isColor(elementComputedStyles.getPropertyValue('fill'));
-		isColor(elementComputedStyles.getPropertyValue('flood-color'));
-		isColor(elementComputedStyles.getPropertyValue('lighting-color'));
-		isColor(elementComputedStyles.getPropertyValue('outline-color'));
-		isColor(elementComputedStyles.getPropertyValue('stop-color'));
-		isColor(elementComputedStyles.getPropertyValue('stroke'));
-		isColor(elementComputedStyles.getPropertyValue('text-decoration-color'));
-		isColor(elementComputedStyles.getPropertyValue('text-emphasis-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-border-after-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-border-before-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-border-end-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-border-start-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-column-rule-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-tap-highlight-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-text-emphasis-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-text-fill-color'));
-		isColor(elementComputedStyles.getPropertyValue('webkit-text-stroke-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('background-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-block-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-block-end-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-block-start-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-bottom-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-inline-end-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-inline-start-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-left-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-right-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('border-top-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('caret-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('color'));
+		allColors.push(elementComputedStyles.getPropertyValue('column-rule-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('fill'));
+		allColors.push(elementComputedStyles.getPropertyValue('flood-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('lighting-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('outline-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('stop-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('stroke'));
+		allColors.push(elementComputedStyles.getPropertyValue('text-decoration-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('text-emphasis-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-border-after-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-border-before-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-border-end-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-border-start-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-column-rule-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-tap-highlight-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-text-emphasis-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-text-fill-color'));
+		allColors.push(elementComputedStyles.getPropertyValue('webkit-text-stroke-color'));
 	});
 
-	// Is Color?
-	function isColor(color) {
-		let style = new Option().style;
-		style.color = color;
-		if (style.color !== '') {
-			if (!color.includes(') ')) {
-				if (!color.includes(', 0)')) {
-					tempColors.push(color);
+	// Color Processing/Filtering
+	allColors = [...new Set(allColors)];
+	allColors = allColors.filter(function (value, index) {
+		return value.startsWith('rgb(');
+	});
+	allColors = allColors.map(function (valueOne, indexOne) {
+		if (valueOne.includes(') ')) return valueOne.replaceAll(') ', ');').split(';');
+		else return valueOne;
+	});
+	allColors = [...new Set(allColors.flat())];
+
+	chrome.storage.local.get(['allFeatures'], function (result) {
+		JSON.parse(result.allFeatures).map(function (value, index) {
+			if (value.id === 'colorPalette') {
+				if (value.settings.checkboxColorPalette1 === true) {
+					allColors = allColors.map(function (value, index) {
+						return rgbToHex(value);
+					});
+					port.postMessage({action: 'allColors', allColors: allColors});
+				} else if (value.settings.checkboxColorPalette2 === true) {
+					port.postMessage({action: 'allColors', allColors: allColors});
 				}
-			} else {
-				let tempColor = color.replaceAll(') ', ');').split(';');
-				tempColor.map(function (value, index) {
-					if (!value.includes(', 0)')) {
-						tempColors.push(value);
-					}
-				});
 			}
-		}
+		});
+	});
+
+	function rgbToHex(rgb) {
+		let hex = rgb.split('(')[1].split(')')[0];
+		hex = hex.split(',');
+		hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1);
+		return hex;
 	}
 
 	function onEscape(event) {
@@ -884,9 +897,7 @@ function activateColorPalette(port, request) {
 		});
 	}
 
-	// Remove Duplicates
-	let allColors = [...new Set(tempColors)];
-	port.postMessage({action: 'Color Palette Activated', allColors: allColors});
+	port.postMessage({action: 'Color Palette Activated'});
 }
 
 function deactivateColorPalette(port, request) {
@@ -999,13 +1010,6 @@ function deactivatePageGuideline(port, request) {
 function activatePageHighlight(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
-
-	function rgba() {
-		let o = Math.round,
-			r = Math.random,
-			s = 255;
-		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
-	}
 
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result.allFeatures).map(function (value, index) {
@@ -1208,6 +1212,13 @@ function activatePageHighlight(port, request) {
 			}
 		});
 	});
+
+	function rgba() {
+		let o = Math.round,
+			r = Math.random,
+			s = 255;
+		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
+	}
 
 	function onEscape(event) {
 		event.preventDefault();
