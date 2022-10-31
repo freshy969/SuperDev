@@ -1682,31 +1682,64 @@ function activateExportElement(port, request) {
 				allSelectors.push(tempSelectors);
 			});
 
-			console.log(allStyleSheets);
+			allStyleSheets.flat().map(function (value, index) {
+				if (value instanceof CSSStyleRule) {
+					console.log(value.selectorText);
+				}
+			});
 
 			// Removing Unused CSS
 			allSelectors.flat().map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
-					// If CSSFontFace
-					if (valueTwo instanceof CSSFontFaceRule) {
-						usedStyles.push(valueTwo.cssText);
-					}
-
-					// If CSSImport
-					else if (valueTwo instanceof CSSImportRule) {
-						usedStyles.push(valueTwo.cssText);
-					}
-
 					// If CSSStyles
-					else if (valueTwo instanceof CSSStyleRule) {
-						if (
-							valueTwo.selectorText.includes('*') ||
-							valueTwo.selectorText.includes(':root') ||
-							valueTwo.selectorText.includes('html') ||
-							valueTwo.selectorText.includes('body') ||
-							valueTwo.selectorText.includes(valueOne)
-						) {
-							usedStyles.push(valueTwo.cssText);
+					if (valueTwo instanceof CSSStyleRule) {
+						// IDs
+						if (valueOne.startsWith('#')) {
+							if (
+								valueTwo.selectorText.includes(`${valueOne}[`) ||
+								valueTwo.selectorText.includes(`${valueOne},`) ||
+								valueTwo.selectorText.includes(`${valueOne}:`) ||
+								valueTwo.selectorText.includes(`${valueOne} `) ||
+								valueTwo.selectorText.includes(`${valueOne}.`)
+							) {
+								usedStyles.push(valueTwo.cssText);
+							} else if (valueTwo.selectorText === valueOne) {
+								usedStyles.push(valueTwo.cssText);
+							}
+						}
+
+						// Classes
+						else if (valueOne.startsWith('.')) {
+							if (
+								valueTwo.selectorText.includes('*') ||
+								valueTwo.selectorText.includes(':root') ||
+								valueTwo.selectorText.includes('html') ||
+								valueTwo.selectorText.includes('body') ||
+								valueTwo.selectorText.includes(`${valueOne}[`) ||
+								valueTwo.selectorText.includes(`${valueOne},`) ||
+								valueTwo.selectorText.includes(`${valueOne}:`) ||
+								valueTwo.selectorText.includes(`${valueOne} `) ||
+								valueTwo.selectorText.includes(`${valueOne}.`)
+							) {
+								usedStyles.push(valueTwo.cssText);
+							} else if (valueTwo.selectorText === valueOne) {
+								usedStyles.push(valueTwo.cssText);
+							}
+						}
+
+						// Tags
+						else {
+							if (
+								valueTwo.selectorText.includes(`${valueOne}[`) ||
+								valueTwo.selectorText.includes(`${valueOne},`) ||
+								valueTwo.selectorText.includes(`${valueOne}:`) ||
+								valueTwo.selectorText.includes(`${valueOne} `) ||
+								valueTwo.selectorText.includes(`${valueOne}.`)
+							) {
+								usedStyles.push(valueTwo.cssText);
+							} else if (valueTwo.selectorText === valueOne) {
+								usedStyles.push(valueTwo.cssText);
+							}
 						}
 					}
 
@@ -1714,19 +1747,19 @@ function activateExportElement(port, request) {
 					else if (valueTwo instanceof CSSMediaRule) {
 						let mediaStyles = [];
 						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
-							// If CSSFontFace
-							if (valueThree instanceof CSSFontFaceRule) {
-								mediaStyles.push(valueThree.cssText);
-							}
-
 							// If CSSStyles
-							else if (valueThree instanceof CSSStyleRule) {
+							if (valueThree instanceof CSSStyleRule) {
 								if (
 									valueThree.selectorText.includes('*') ||
 									valueThree.selectorText.includes(':root') ||
 									valueThree.selectorText.includes('html') ||
 									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(valueOne)
+									valueThree.selectorText.includes(`${valueOne}[`) ||
+									valueThree.selectorText.includes(`${valueOne},`) ||
+									valueThree.selectorText.includes(`${valueOne}:`) ||
+									valueThree.selectorText.includes(`${valueOne} `) ||
+									valueThree.selectorText.includes(`${valueOne}.`) ||
+									valueThree.selectorText.includes(`${valueOne}#`)
 								) {
 									mediaStyles.push(valueThree.cssText);
 								}
@@ -1736,19 +1769,19 @@ function activateExportElement(port, request) {
 							else if (valueThree instanceof CSSSupportsRule) {
 								let cssSupports = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									// If CSSFontFace
-									if (valueFour instanceof CSSFontFaceRule) {
-										cssSupports.push(valueFour.cssText);
-									}
-
 									// If CSSStyles
-									else if (valueFour instanceof CSSStyleRule) {
+									if (valueFour instanceof CSSStyleRule) {
 										if (
 											valueFour.selectorText.includes('*') ||
 											valueFour.selectorText.includes(':root') ||
 											valueFour.selectorText.includes('html') ||
 											valueFour.selectorText.includes('body') ||
-											valueFour.selectorText.includes(valueOne)
+											valueFour.selectorText.includes(`${valueOne}[`) ||
+											valueFour.selectorText.includes(`${valueOne},`) ||
+											valueFour.selectorText.includes(`${valueOne}:`) ||
+											valueFour.selectorText.includes(`${valueOne} `) ||
+											valueFour.selectorText.includes(`${valueOne}.`) ||
+											valueFour.selectorText.includes(`${valueOne}#`)
 										) {
 											cssSupports.push(valueFour.cssText);
 										}
@@ -1790,19 +1823,19 @@ function activateExportElement(port, request) {
 					else if (valueTwo instanceof CSSSupportsRule) {
 						let cssSupports = [];
 						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
-							// If CSSFontFace
-							if (valueThree instanceof CSSFontFaceRule) {
-								cssSupports.push(valueThree.cssText);
-							}
-
 							// If CSSStyles
-							else if (valueThree instanceof CSSStyleRule) {
+							if (valueThree instanceof CSSStyleRule) {
 								if (
 									valueThree.selectorText.includes('*') ||
 									valueThree.selectorText.includes(':root') ||
 									valueThree.selectorText.includes('html') ||
 									valueThree.selectorText.includes('body') ||
-									valueThree.selectorText.includes(valueOne)
+									valueThree.selectorText.includes(`${valueOne}[`) ||
+									valueThree.selectorText.includes(`${valueOne},`) ||
+									valueThree.selectorText.includes(`${valueOne}:`) ||
+									valueThree.selectorText.includes(`${valueOne} `) ||
+									valueThree.selectorText.includes(`${valueOne}.`) ||
+									valueThree.selectorText.includes(`${valueOne}#`)
 								) {
 									cssSupports.push(valueThree.cssText);
 								}
@@ -1812,19 +1845,19 @@ function activateExportElement(port, request) {
 							else if (valueThree instanceof CSSMediaRule) {
 								let mediaStyles = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									// If CSSFontFace
-									if (valueFour instanceof CSSFontFaceRule) {
-										mediaStyles.push(valueFour.cssText);
-									}
-
 									// If CSSStyles
-									else if (valueFour instanceof CSSStyleRule) {
+									if (valueFour instanceof CSSStyleRule) {
 										if (
 											valueFour.selectorText.includes('*') ||
 											valueFour.selectorText.includes(':root') ||
 											valueFour.selectorText.includes('html') ||
 											valueFour.selectorText.includes('body') ||
-											valueFour.selectorText.includes(valueOne)
+											valueFour.selectorText.includes(`${valueOne}[`) ||
+											valueFour.selectorText.includes(`${valueOne},`) ||
+											valueFour.selectorText.includes(`${valueOne}:`) ||
+											valueFour.selectorText.includes(`${valueOne} `) ||
+											valueFour.selectorText.includes(`${valueOne}.`) ||
+											valueFour.selectorText.includes(`${valueOne}#`)
 										) {
 											mediaStyles.push(valueFour.cssText);
 										}
@@ -1875,7 +1908,7 @@ function activateExportElement(port, request) {
 
 					// IS There Any More?
 					else {
-						console.warn(6, valueTwo);
+						console.log('Missed @', valueTwo);
 					}
 				});
 			});
