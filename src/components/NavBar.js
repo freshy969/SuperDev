@@ -138,7 +138,7 @@ export default function NavBar({logConsole, portThree}) {
 		});
 	}, []);
 
-	function darkMode() {
+	function DarkMode() {
 		chrome.storage.local.get(['colorTheme'], function (result) {
 			if (result.colorTheme === 'light') {
 				document.documentElement.classList.add('dark');
@@ -150,7 +150,7 @@ export default function NavBar({logConsole, portThree}) {
 		});
 	}
 
-	function toggleInfo() {
+	function ToggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
 			chrome.storage.local.set({setActFeatDisabled: true});
 
@@ -174,7 +174,7 @@ export default function NavBar({logConsole, portThree}) {
 		}
 	}
 
-	function toggleSettings() {
+	function ToggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			chrome.storage.local.set({setActFeatDisabled: true});
 
@@ -199,12 +199,12 @@ export default function NavBar({logConsole, portThree}) {
 		}
 	}
 
-	function pauseExtension() {
+	function PauseExtension() {
 		chrome.storage.local.set({setActFeatDisabled: true});
 		chrome.storage.local.set({isStopBtnPressed: true});
 	}
 
-	function minimiseExtension() {
+	function MinimiseExtension() {
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) {
 				chrome.storage.local.set({setMinimised: false});
@@ -214,7 +214,7 @@ export default function NavBar({logConsole, portThree}) {
 		});
 	}
 
-	function showHideExtension() {
+	function ShowHideExtension() {
 		if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, SHE, Send MSG to CJS');
 		portThree.postMessage({action: 'showHideExtension'});
 	}
@@ -231,7 +231,7 @@ export default function NavBar({logConsole, portThree}) {
 							id='pauseExtensionButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 py-[5px] border-0 outline-0 invisible'
-							onClick={pauseExtension}></button>
+							onClick={PauseExtension}></button>
 						<button
 							id='movePopupButton'
 							tabIndex='-1'
@@ -240,27 +240,27 @@ export default function NavBar({logConsole, portThree}) {
 							id='toggleInfoButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={toggleInfo}></button>
+							onClick={ToggleInfo}></button>
 						<button
 							id='darkModeButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={darkMode}></button>
+							onClick={DarkMode}></button>
 						<button
 							id='toggleSettingsButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={toggleSettings}></button>
+							onClick={ToggleSettings}></button>
 						<button
 							id='minimiseExtensionButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={minimiseExtension}></button>
+							onClick={MinimiseExtension}></button>
 						<button
 							id='showHideExtensionButton'
 							tabIndex='-1'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 py-[5px] pr-0 border-0 outline-0'
-							onClick={showHideExtension}></button>
+							onClick={ShowHideExtension}></button>
 					</nav>
 				</div>
 			</header>
