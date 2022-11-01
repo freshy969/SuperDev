@@ -160,7 +160,7 @@ export default function NavBar({portThree}) {
 		}
 	}
 
-	function pauseExtension() {
+	function stopActFeatButton() {
 		chrome.storage.local.get(['whichFeatureActive'], function (result) {
 			if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 		});
@@ -191,9 +191,9 @@ export default function NavBar({portThree}) {
 					<nav className='relative bottom-[0.5px]'>
 						<button
 							tabIndex='-1'
-							id='pauseExtensionButton'
+							id='stopActFeatButton'
 							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 py-[5px] border-0 outline-0 invisible'
-							onClick={pauseExtension}></button>
+							onClick={stopActFeatButton}></button>
 						<button
 							tabIndex='-1'
 							id='movePopupButton'

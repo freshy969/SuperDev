@@ -42,7 +42,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 					}
 				});
 			} else if (featureId === 'colorPalette') {
-				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
+				document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.add('active');
 
 				portThree.postMessage({
@@ -57,7 +57,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 			}
 		} else {
 			if (featureId === 'colorPalette') {
-				document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
+				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
 
 				portThree.postMessage({
@@ -84,7 +84,7 @@ function HideMeShowMe(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate/Deactivate On Click If Active (Respectively)
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
-			document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
+			document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 			document.querySelector('#' + featureId).classList.remove(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			document.querySelector('#' + featureId).classList.add(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 
@@ -98,7 +98,7 @@ function HideMeShowMe(portThree, featureId) {
 				}
 			});
 		} else {
-			document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
+			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 
@@ -122,7 +122,7 @@ function JustHideMeExcep(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			if (featureId === 'colorPalette') {
-				document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
+				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
 
 				portThree.postMessage({
