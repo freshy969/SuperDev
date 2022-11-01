@@ -66,15 +66,16 @@ export default function Home() {
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree) {
+		let logConsole = process.env.REACT_APP_LOG_CONSOLE;
 		let portThree = chrome.tabs.connect(tabId, {name: 'portThree'});
 		ChangeHeight(portThree, PopupHeight(allFeatures));
 		return (
 			<>
-				<NavBar portThree={portThree} />
-				<MainBody portThree={portThree} />
-				<ToggleInfo portThree={portThree} />
-				<ToggleSettings portThree={portThree} />
-				<ColorPalette portThree={portThree} />
+				<NavBar logConsole={logConsole} portThree={portThree} />
+				<MainBody logConsole={logConsole} portThree={portThree} />
+				<ToggleInfo logConsole={logConsole} portThree={portThree} />
+				<ToggleSettings logConsole={logConsole} portThree={portThree} />
+				<ColorPalette logConsole={logConsole} portThree={portThree} />
 			</>
 		);
 	}

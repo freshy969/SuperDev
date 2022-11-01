@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ToggleInfo({portThree}) {
+export default function ToggleInfo({portThree, logConsole}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -20,7 +20,6 @@ export default function ToggleInfo({portThree}) {
 
 	function openShortcutPage() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			console.log(tabs);
 			chrome.tabs.create({
 				index: tabs[0].index + 1,
 				url: 'chrome://extensions/shortcuts',

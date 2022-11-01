@@ -2,7 +2,7 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function MainBody({portThree}) {
+export default function MainBody({portThree, logConsole}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 

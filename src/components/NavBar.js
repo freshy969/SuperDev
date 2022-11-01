@@ -6,7 +6,7 @@ import ChangeHeight from './functions/ChangeHeight';
 import JustChangeHeight from './functions/JustChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function NavBar({portThree}) {
+export default function NavBar({portThree, logConsole}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -84,7 +84,6 @@ export default function NavBar({portThree}) {
 			if (changes.whichFeatureActive) {
 				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
 					if (document.querySelector('#clearAllCache')) {
-						console.dir(document.querySelector('#clearAllCache'));
 						document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
 						document.querySelector('#clearAllCache > i').classList.add('fa-badge-check');
 						setTimeout(function () {
