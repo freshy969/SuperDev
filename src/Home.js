@@ -14,7 +14,7 @@ export default function Home() {
 	const [isLoadingThree, setIsLoadingThree] = useState(true);
 
 	const [allFeatures, setAllFeatures] = useState([]);
-	const [tabId, setTabId] = useState();
+	const [portThree, setPortThree] = useState();
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
@@ -47,7 +47,7 @@ export default function Home() {
 			}
 		});
 
-		// Get AllFeatures
+		// Set AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			setIsLoadingTwo(false);
@@ -58,18 +58,16 @@ export default function Home() {
 			if (changes.allFeatures) setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 		});
 
-		// PortThree TabId
+		// Set PortThree
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			setTabId(tabs[0].id);
+			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
+			setPortThree(portThree);
 			setIsLoadingThree(false);
 		});
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree) {
-		// Passing Props to Components
-		let portThree = chrome.tabs.connect(tabId, {name: 'portThree'});
 		ChangeHeight(portThree, PopupHeight(allFeatures));
-
 		return (
 			<>
 				<NavBar portThree={portThree} />

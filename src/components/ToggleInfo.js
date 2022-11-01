@@ -6,7 +6,7 @@ export default function ToggleInfo({portThree}) {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(function () {
-		// Get AllFeatures
+		// Set AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
 			setIsLoadingOne(false);
