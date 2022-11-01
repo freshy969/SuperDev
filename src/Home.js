@@ -66,9 +66,11 @@ export default function Home() {
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree) {
+		// Passing Props to Components
 		let logConsole = process.env.REACT_APP_LOG_CONSOLE;
 		let portThree = chrome.tabs.connect(tabId, {name: 'portThree'});
 		ChangeHeight(portThree, PopupHeight(allFeatures));
+
 		return (
 			<>
 				<NavBar logConsole={logConsole} portThree={portThree} />
