@@ -868,7 +868,7 @@ function activateColorPalette(port, request) {
 		let hex = rgb.split('(')[1].split(')')[0];
 		hex = hex.split(',');
 		hex = '#' + ((1 << 24) + (+hex[0] << 16) + (+hex[1] << 8) + +hex[2]).toString(16).slice(1);
-		return hex;
+		return hex.toLocaleUpperCase();
 	}
 
 	function onEscape(event) {
