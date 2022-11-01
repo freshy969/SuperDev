@@ -2,7 +2,7 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function MainBody({logConsole, portThree}) {
+export default function MainBody({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -30,7 +30,7 @@ export default function MainBody({logConsole, portThree}) {
 								tabIndex='-1'
 								id={value.id}
 								onClick={function () {
-									ActDeactFeature(logConsole, portThree, allFeatures, value.id);
+									ActDeactFeature(portThree, allFeatures, value.id);
 								}}
 								className={
 									value.id +

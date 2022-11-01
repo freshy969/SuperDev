@@ -6,7 +6,7 @@ import ChangeHeight from './functions/ChangeHeight';
 import JustChangeHeight from './functions/JustChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function NavBar({logConsole, portThree}) {
+export default function NavBar({portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allFeatures, setAllFeatures] = useState([]);
 
@@ -14,7 +14,6 @@ export default function NavBar({logConsole, portThree}) {
 		// Get AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			setAllFeatures(JSON.parse(result.allFeatures));
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE - Set AllFeatures');
 			setIsLoadingOne(false);
 		});
 
@@ -22,7 +21,6 @@ export default function NavBar({logConsole, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.allFeatures) {
 				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
-				if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU - Set AllFeatures');
 			}
 		});
 
@@ -30,26 +28,20 @@ export default function NavBar({logConsole, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU - If SetMinimised True, Minimise');
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
 				} else if (changes.setMinimised.newValue === false) {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1 - If SetMinimised False');
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE MainBody');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
-							if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Info');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Settings');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleSettings');
 						} else if (!document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-							if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Palette');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('colorPalettePage');
 						}
@@ -62,10 +54,8 @@ export default function NavBar({logConsole, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P2 - If SetHomeActive');
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
-							if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P2C - CH, HAE MainBody');
 							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						});
@@ -79,13 +69,10 @@ export default function NavBar({logConsole, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P3 - If SetActFeatDisable');
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
 							if (outcome.whichFeatureActive !== null) {
-								if (logConsole === 'true')
-									console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, UE, OU, P3C, ADF - ${outcome.whichFeatureActive}`);
-								ActDeactFeature(logConsole, portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
+								ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
 								chrome.storage.local.set({setActFeatDisabled: false});
 							}
 						});
@@ -98,7 +85,6 @@ export default function NavBar({logConsole, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.whichFeatureActive) {
 				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, WFA - ClearAllCache');
 					if (document.querySelector('#clearAllCache')) {
 						document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
 						document.querySelector('#clearAllCache > i').classList.add('fa-badge-check');
@@ -109,16 +95,14 @@ export default function NavBar({logConsole, portThree}) {
 						}, 1000);
 					}
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P5, WFA - Palette');
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (document.querySelector('#colorPalettePage')) {
 							if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-								if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P5C - CH, HAE Palette');
 								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 								HideAllCompExcept('colorPalettePage');
 
-								let bodyHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
-								document.querySelector('#colorPalettePageChild').style.height = `${bodyHeight}px`;
+								let childHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
+								document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
 							}
 						}
 					});
@@ -141,28 +125,31 @@ export default function NavBar({logConsole, portThree}) {
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
+			// Disable Active Feature on Opeing ToggleInfo
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
-					if (logConsole === 'true')
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, TI, P6, If WFA, ADF - ${result.whichFeatureActive}`);
-					ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
+					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 				}
 			});
 
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - CH, HAE ToggleInfo');
+			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleInfo');
 
-			let bodyHeight = PopupHeight(allFeatures) - 41.5;
-			document.querySelector('#toggleInfoChild').style.height = `${bodyHeight}px`;
+			// Set Child Height, Only Needed For Scrollbar
+			let childHeight = PopupHeight(allFeatures) - 41.5;
+			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
 
+			// Resetting So That onChange Detect Any Change to It in Future
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
 		} else {
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - CH, HAE MainBody');
+			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
+
+			// Resetting So That onChange Detect Any Change to It in Future
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
@@ -171,28 +158,31 @@ export default function NavBar({logConsole, portThree}) {
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
+			// Disable Active Feature on Opeing ToggleSettings
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
-					if (logConsole === 'true')
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, TS, P7, If WFA, ADF - ${result.whichFeatureActive}`);
-					ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
+					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 				}
 			});
 
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE ToggleSettings');
+			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleSettings');
 
-			let bodyHeight = PopupHeight(allFeatures) - 41.5;
-			document.querySelector('#toggleSettingsChild').style.height = `${bodyHeight}px`;
+			// Set Child Height, Only Needed For Scrollbar
+			let childHeight = PopupHeight(allFeatures) - 41.5;
+			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
 
+			// Resetting So That onChange Detect Any Change to It in Future
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
 		} else {
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE MainBody');
+			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
+
+			// Resetting So That onChange Detect Any Change to It in Future
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
@@ -201,8 +191,7 @@ export default function NavBar({logConsole, portThree}) {
 
 	function pauseExtension() {
 		chrome.storage.local.get(['whichFeatureActive'], function (result) {
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, PE, If WFA, ADF - ${result.whichFeatureActive}`);
-			if (result.whichFeatureActive !== null) ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
+			if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 		});
 		chrome.storage.local.set({isStopBtnPressed: true});
 	}
@@ -210,17 +199,14 @@ export default function NavBar({logConsole, portThree}) {
 	function minimiseExtension() {
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) {
-				if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, ME, If Minimised, SetMinimised False');
 				chrome.storage.local.set({setMinimised: false});
 			} else {
-				if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, ME, If Maximised, SetMinimised True');
 				chrome.storage.local.set({setMinimised: true});
 			}
 		});
 	}
 
 	function showHideExtension() {
-		if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, SHE, Send MSG to CJS');
 		portThree.postMessage({action: 'showHideExtension'});
 	}
 
