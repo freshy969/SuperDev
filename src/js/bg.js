@@ -581,7 +581,8 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 
 	// Color Picker
 	function rgbToHex(r, g, b) {
-		return '#' + ((1 << 24) + (+r << 16) + (+g << 8) + +b).toString(16).slice(1);
+		let hex = '#' + ((1 << 24) + (+r << 16) + (+g << 8) + +b).toString(16).slice(1);
+		return hex.toUpperCase();
 	}
 
 	// Export Element
