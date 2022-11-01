@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ToggleSettings({portThree, logConsole}) {
+export default function ToggleSettings({logConsole, portThree}) {
 	const [allFeatures, setAllFeatures] = useState([]);
 
 	useEffect(function () {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ColorPalette({portThree, logConsole}) {
+export default function ColorPalette({logConsole, portThree}) {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [allColors, setAllColors] = useState([]);
 

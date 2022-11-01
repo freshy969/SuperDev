@@ -1,4 +1,4 @@
-export default function ActDeactFeature(portThree, allFeatures, featureId) {
+export default function ActDeactFeature(logConsole, portThree, allFeatures, featureId) {
 	if (allFeatures.length !== 0) {
 		allFeatures.map(function (value, index) {
 			// Disable All
