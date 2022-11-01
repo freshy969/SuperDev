@@ -1,19 +1,24 @@
 export default function ActDeactFeature(logConsole, portThree, allFeatures, featureId) {
+	if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), `ADFJs, P8 - ${featureId}`);
 	if (allFeatures.length !== 0) {
 		allFeatures.map(function (value, index) {
 			// Disable All
 			if (featureId !== value.id) {
 				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
+					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P81 - JustHideMeExcep');
 					JustHideMeExcep(portThree, value.id);
 				} else {
+					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P82 - JustHideMe');
 					JustHideMe(portThree, value.id);
 				}
 			}
 			// Except The One Clicked
 			else if (featureId === value.id) {
 				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
+					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P83 - HideMeShowMeExcep');
 					HideMeShowMeExcep(portThree, value.id);
 				} else {
+					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P84 - HideMeShowMe');
 					HideMeShowMe(portThree, value.id);
 				}
 			}

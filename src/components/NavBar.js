@@ -37,19 +37,19 @@ export default function NavBar({logConsole, portThree}) {
 					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1 - If SetMinimised False');
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - ChangeHeight, HAE MainBody');
+							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE MainBody');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
-							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - ChangeHeight, HAE Info');
+							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Info');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleInfo');
 						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - ChangeHeight, HAE Settings');
+							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Settings');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('toggleSettings');
 						} else if (!document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - ChangeHeight, HAE Palette');
+							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1C - CH, HAE Palette');
 							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('colorPalettePage');
 						}
@@ -65,7 +65,7 @@ export default function NavBar({logConsole, portThree}) {
 					if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P2 - If SetHomeActive');
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
 						chrome.storage.local.get(['allFeatures'], function (result) {
-							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P2C - ChangeHeight, HAE MainBody');
+							if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P2C - CH, HAE MainBody');
 							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 							HideAllCompExcept('mainBody');
 						});
@@ -112,7 +112,7 @@ export default function NavBar({logConsole, portThree}) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (document.querySelector('#colorPalettePage')) {
 							if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-								if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P5C - ChangeHeight, HAE Palette');
+								if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P5C - CH, HAE Palette');
 								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
 								HideAllCompExcept('colorPalettePage');
 
@@ -147,7 +147,7 @@ export default function NavBar({logConsole, portThree}) {
 				}
 			});
 
-			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - ChangeHeight, HAE ToggleInfo');
+			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - CH, HAE ToggleInfo');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleInfo');
 
@@ -158,7 +158,7 @@ export default function NavBar({logConsole, portThree}) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
 		} else {
-			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - ChangeHeight, HAE MainBody');
+			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - CH, HAE MainBody');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
@@ -176,7 +176,7 @@ export default function NavBar({logConsole, portThree}) {
 				}
 			});
 
-			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - ChangeHeight, HAE ToggleSettings');
+			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE ToggleSettings');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleSettings');
 
@@ -187,7 +187,7 @@ export default function NavBar({logConsole, portThree}) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
 		} else {
-			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - ChangeHeight, HAE MainBody');
+			if (logConsole) console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE MainBody');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
