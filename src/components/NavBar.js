@@ -30,21 +30,12 @@ export default function NavBar({portThree}) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
+					chrome.storage.local.set({setMinimised: null});
 				} else if (changes.setMinimised.newValue === false) {
 					chrome.storage.local.get(['allFeatures'], function (result) {
-						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
-							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('mainBody');
-						} else if (!document.querySelector('#toggleInfo').classList.contains('hidden')) {
-							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('toggleInfo');
-						} else if (!document.querySelector('#toggleSettings').classList.contains('hidden')) {
-							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('toggleSettings');
-						} else if (!document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('colorPalettePage');
-						}
+						ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
+						document.querySelector('#navBar').firstChild.style.borderRadius = '';
+						chrome.storage.local.set({setMinimised: null});
 					});
 				}
 			}
@@ -139,20 +130,10 @@ export default function NavBar({portThree}) {
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
-
-			// Resetting So That onChange Detect Any Change to It in Future
-			chrome.storage.local.get(['howLongPopupIs'], function (result) {
-				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-			});
 		} else {
 			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
-
-			// Resetting So That onChange Detect Any Change to It in Future
-			chrome.storage.local.get(['howLongPopupIs'], function (result) {
-				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-			});
 		}
 	}
 
@@ -172,20 +153,10 @@ export default function NavBar({portThree}) {
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
-
-			// Resetting So That onChange Detect Any Change to It in Future
-			chrome.storage.local.get(['howLongPopupIs'], function (result) {
-				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-			});
 		} else {
 			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
-
-			// Resetting So That onChange Detect Any Change to It in Future
-			chrome.storage.local.get(['howLongPopupIs'], function (result) {
-				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-			});
 		}
 	}
 
