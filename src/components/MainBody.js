@@ -28,6 +28,7 @@ export default function MainBody({logConsole, portThree}) {
 							<button
 								key={index}
 								id={value.id}
+								tabIndex='-1'
 								onClick={function () {
 									ActDeactFeature(logConsole, portThree, allFeatures, value.id);
 								}}

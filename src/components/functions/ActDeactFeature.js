@@ -1,14 +1,15 @@
 export default function ActDeactFeature(logConsole, portThree, allFeatures, featureId) {
-	if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), `ADFJs, P8 - ${featureId}`);
+	if (logConsole === 'true')
+		console.log(new Date().getSeconds(), new Date().getMilliseconds(), `ADFJs - ${featureId.charAt(0).toUpperCase() + featureId.slice(1)}`);
 	if (allFeatures.length !== 0) {
 		// Disable All
 		allFeatures.map(function (value, index) {
 			if (value.id !== featureId) {
 				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P81 - JustHideMeExcep');
+					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - JustHideMeExcep');
 					JustHideMeExcep(portThree, value.id);
 				} else {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P82 - JustHideMe');
+					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - JustHideMe');
 					JustHideMe(portThree, value.id);
 				}
 			}
@@ -18,10 +19,10 @@ export default function ActDeactFeature(logConsole, portThree, allFeatures, feat
 		allFeatures.map(function (value, index) {
 			if (value.id === featureId) {
 				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P83 - HideMeShowMeExcep');
+					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - HideMeShowMeExcep');
 					HideMeShowMeExcep(portThree, value.id);
 				} else {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P84 - HideMeShowMe');
+					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - HideMeShowMe');
 					HideMeShowMe(portThree, value.id);
 				}
 			}
