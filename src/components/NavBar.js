@@ -60,13 +60,13 @@ export default function NavBar({portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
-					chrome.storage.local.get(['allFeatures'], function (result) {
-						chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
-							if (outcome.whichFeatureActive !== null) {
+					chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
+						if (outcome.whichFeatureActive !== null) {
+							chrome.storage.local.get(['allFeatures'], function (result) {
 								ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
 								chrome.storage.local.set({setActFeatDisabled: false});
-							}
-						});
+							});
+						}
 					});
 				}
 			}
@@ -98,6 +98,22 @@ export default function NavBar({portThree}) {
 						}
 					});
 				}
+			}
+		});
+
+		// Disable ActFeature on Escape With Focus on Iframe
+		document.addEventListener('keyup', function (event) {
+			event.preventDefault();
+			if (event.key === 'Escape' && event.isTrusted === true) {
+				chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
+					if (outcome.whichFeatureActive !== null) {
+						chrome.storage.local.get(['allFeatures'], function (result) {
+							ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
+							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
+							HideAllCompExcept('mainBody');
+						});
+					}
+				});
 			}
 		});
 	}, []);
