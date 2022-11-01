@@ -18,7 +18,7 @@ export default function ToggleInfo({logConsole, portThree}) {
 		});
 	}, []);
 
-	function OpenShortcutPage() {
+	function openShortcutPage() {
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			chrome.tabs.create({
 				index: tabs[0].index + 1,
@@ -35,7 +35,7 @@ export default function ToggleInfo({logConsole, portThree}) {
 						<div>
 							<div
 								className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none cursor-pointer'
-								onClick={OpenShortcutPage}>
+								onClick={openShortcutPage}>
 								<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
 								Extension Shortcuts
 							</div>
