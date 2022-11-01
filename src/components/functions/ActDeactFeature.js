@@ -3,8 +3,8 @@ export default function ActDeactFeature(logConsole, portThree, allFeatures, feat
 	if (allFeatures.length !== 0) {
 		// Disable All
 		allFeatures.map(function (value, index) {
-			if (featureId !== value.id) {
-				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
+			if (value.id !== featureId) {
+				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P81 - JustHideMeExcep');
 					JustHideMeExcep(portThree, value.id);
 				} else {
@@ -16,8 +16,8 @@ export default function ActDeactFeature(logConsole, portThree, allFeatures, feat
 
 		// Except The One Clicked
 		allFeatures.map(function (value, index) {
-			if (featureId === value.id) {
-				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
+			if (value.id === featureId) {
+				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P83 - HideMeShowMeExcep');
 					HideMeShowMeExcep(portThree, value.id);
 				} else {
