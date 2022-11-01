@@ -20,7 +20,6 @@ export default function ColorPalette({logConsole, portThree}) {
 		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
 		setTimeout(function () {
 			document.querySelector('#' + id + '> i').classList.add('before:hidden');
-			document.querySelector('#' + id + '> span').innerText = color;
 		}, 1000);
 	}
 
