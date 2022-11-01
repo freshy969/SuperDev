@@ -26,14 +26,20 @@ export default function NavBar({logConsole, portThree}) {
 			}
 		});
 
-		// OnUpdate SetMinimised
+		// OnUpdate SetMinimised, CH + HAE
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU - If SetMinimised True, Minimise');
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
-				} else if (changes.setMinimised.newValue === false) {
+				}
+
+				// What Will Happen On Closing Minimised Popup
+				// It Will Become Minimised + Invisible
+				// HAE is For Making It Visible While
+				// ChangeHeight Will Make Its Height Appropriate
+				else if (changes.setMinimised.newValue === false) {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, UE, OU, P1 - If SetMinimised False');
 					chrome.storage.local.get(['allFeatures'], function (result) {
 						if (!document.querySelector('#mainBody').classList.contains('hidden')) {
@@ -58,7 +64,7 @@ export default function NavBar({logConsole, portThree}) {
 			}
 		});
 
-		// OnUpdate setHomePageActive
+		// OnUpdate SetHomePageActive, JCH + HAE
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
@@ -75,7 +81,7 @@ export default function NavBar({logConsole, portThree}) {
 			}
 		});
 
-		// OnUpdate SetActFeatDisabled
+		// OnUpdate SetActFeatDisabled, ADF
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
@@ -94,7 +100,7 @@ export default function NavBar({logConsole, portThree}) {
 			}
 		});
 
-		// OnUpdate WhichFeatureActive
+		// OnUpdate WhichFeatureActive, CH + HAE
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.whichFeatureActive) {
 				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
@@ -141,13 +147,7 @@ export default function NavBar({logConsole, portThree}) {
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
-			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) {
-					if (logConsole === 'true')
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, TI, P6, If WFA, ADF - ${result.whichFeatureActive}`);
-					ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
-				}
-			});
+			chrome.storage.local.set({setActFeatDisabled: true});
 
 			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TI, P6C - CH, HAE ToggleInfo');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
@@ -171,13 +171,7 @@ export default function NavBar({logConsole, portThree}) {
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) {
-					if (logConsole === 'true')
-						console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, TS, P7, If WFA, ADF - ${result.whichFeatureActive}`);
-					ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
-				}
-			});
+			chrome.storage.local.set({setActFeatDisabled: true});
 
 			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE ToggleSettings');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
@@ -193,6 +187,7 @@ export default function NavBar({logConsole, portThree}) {
 			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'NavJs, TS, P7C - CH, HAE MainBody');
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
+
 			chrome.storage.local.get(['howLongPopupIs'], function (result) {
 				if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 			});
@@ -200,10 +195,7 @@ export default function NavBar({logConsole, portThree}) {
 	}
 
 	function pauseExtension() {
-		chrome.storage.local.get(['whichFeatureActive'], function (result) {
-			if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), `NavJs, PE, If WFA, ADF - ${result.whichFeatureActive}`);
-			if (result.whichFeatureActive !== null) ActDeactFeature(logConsole, portThree, allFeatures, result.whichFeatureActive);
-		});
+		chrome.storage.local.set({setActFeatDisabled: true});
 		chrome.storage.local.set({isStopBtnPressed: true});
 	}
 

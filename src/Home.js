@@ -58,7 +58,7 @@ export default function Home() {
 			if (changes.allFeatures) setAllFeatures(JSON.parse(changes.allFeatures.newValue));
 		});
 
-		// Set Port Three
+		// Tab ID for PortThree
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 			setTabId(tabs[0].id);
 			setIsLoadingThree(false);
