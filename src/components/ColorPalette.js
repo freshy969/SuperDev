@@ -9,7 +9,6 @@ export default function ColorPalette({logConsole, portThree}) {
 		// Set AllColors
 		portThree.onMessage.addListener(function (response) {
 			if (response.action === 'allColors') {
-				console.log(0);
 				setAllColors(response.allColors);
 				setIsLoadingOne(false);
 			}

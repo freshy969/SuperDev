@@ -1,33 +1,28 @@
 export default function ActDeactFeature(logConsole, portThree, allFeatures, featureId) {
 	if (logConsole === 'true')
-		console.log(new Date().getSeconds(), new Date().getMilliseconds(), `ADFJs - ${featureId.charAt(0).toUpperCase() + featureId.slice(1)}`);
-	if (allFeatures.length !== 0) {
-		// Disable All
-		allFeatures.map(function (value, index) {
-			if (value.id !== featureId) {
-				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - JustHideMeExcep');
-					JustHideMeExcep(portThree, value.id);
-				} else {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - JustHideMe');
-					JustHideMe(portThree, value.id);
+		if (allFeatures.length !== 0) {
+			// Disable All
+			allFeatures.map(function (value, index) {
+				if (value.id !== featureId) {
+					if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
+						JustHideMeExcep(portThree, value.id);
+					} else {
+						JustHideMe(portThree, value.id);
+					}
 				}
-			}
-		});
+			});
 
-		// Except The One Clicked
-		allFeatures.map(function (value, index) {
-			if (value.id === featureId) {
-				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - HideMeShowMeExcep');
-					HideMeShowMeExcep(portThree, value.id);
-				} else {
-					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs - HideMeShowMe');
-					HideMeShowMe(portThree, value.id);
+			// Except The One Clicked
+			allFeatures.map(function (value, index) {
+				if (value.id === featureId) {
+					if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
+						HideMeShowMeExcep(portThree, value.id);
+					} else {
+						HideMeShowMe(portThree, value.id);
+					}
 				}
-			}
-		});
-	}
+			});
+		}
 }
 
 function HideMeShowMeExcep(portThree, featureId) {

@@ -157,7 +157,6 @@ function showHideExtension(port, request) {
 		chrome.storage.local.set({setActFeatDisabled: false});
 		chrome.storage.local.set({setMinimised: null});
 		chrome.storage.local.set({whichFeatureActive: null});
-		//chrome.storage.local.set({howLongPopupIs: null});
 
 		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
