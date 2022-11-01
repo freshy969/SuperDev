@@ -1,8 +1,8 @@
 export default function ActDeactFeature(logConsole, portThree, allFeatures, featureId) {
 	if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), `ADFJs, P8 - ${featureId}`);
 	if (allFeatures.length !== 0) {
+		// Disable All
 		allFeatures.map(function (value, index) {
-			// Disable All
 			if (featureId !== value.id) {
 				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P81 - JustHideMeExcep');
@@ -12,8 +12,11 @@ export default function ActDeactFeature(logConsole, portThree, allFeatures, feat
 					JustHideMe(portThree, value.id);
 				}
 			}
-			// Except The One Clicked
-			else if (featureId === value.id) {
+		});
+
+		// Except The One Clicked
+		allFeatures.map(function (value, index) {
+			if (featureId === value.id) {
 				if (featureId === 'clearAllCache' || featureId === 'colorPalette') {
 					if (logConsole === 'true') console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'ADFJs, P83 - HideMeShowMeExcep');
 					HideMeShowMeExcep(portThree, value.id);
@@ -34,11 +37,9 @@ function HideMeShowMeExcep(portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			if (featureId === 'clearAllCache') {
-				setTimeout(function () {
-					portThree.postMessage({
-						action: 'activate' + featureIdUC,
-					});
-				}, 50);
+				portThree.postMessage({
+					action: 'activate' + featureIdUC,
+				});
 
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
@@ -49,11 +50,9 @@ function HideMeShowMeExcep(portThree, featureId) {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.add('active');
 
-				setTimeout(function () {
-					portThree.postMessage({
-						action: 'activate' + featureIdUC,
-					});
-				}, 50);
+				portThree.postMessage({
+					action: 'activate' + featureIdUC,
+				});
 
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
@@ -66,11 +65,9 @@ function HideMeShowMeExcep(portThree, featureId) {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
 
-				setTimeout(function () {
-					portThree.postMessage({
-						action: 'deactivate' + featureIdUC,
-					});
-				}, 50);
+				portThree.postMessage({
+					action: 'deactivate' + featureIdUC,
+				});
 
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
@@ -96,11 +93,9 @@ function HideMeShowMe(portThree, featureId) {
 			document.querySelector('#' + featureId).classList.remove(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			document.querySelector('#' + featureId).classList.add(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 
-			setTimeout(function () {
-				portThree.postMessage({
-					action: 'activate' + featureIdUC,
-				});
-			}, 50);
+			portThree.postMessage({
+				action: 'activate' + featureIdUC,
+			});
 
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Activated')) {
@@ -112,11 +107,9 @@ function HideMeShowMe(portThree, featureId) {
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 
-			setTimeout(function () {
-				portThree.postMessage({
-					action: 'deactivate' + featureIdUC,
-				});
-			}, 50);
+			portThree.postMessage({
+				action: 'deactivate' + featureIdUC,
+			});
 
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
@@ -137,11 +130,9 @@ function JustHideMeExcep(portThree, featureId) {
 				document.querySelector('#pauseExtensionButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
 
-				setTimeout(function () {
-					portThree.postMessage({
-						action: 'deactivate' + featureIdUC,
-					});
-				}, 50);
+				portThree.postMessage({
+					action: 'deactivate' + featureIdUC,
+				});
 
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
@@ -165,11 +156,9 @@ function JustHideMe(portThree, featureId) {
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 
-			setTimeout(function () {
-				portThree.postMessage({
-					action: 'deactivate' + featureIdUC,
-				});
-			}, 50);
+			portThree.postMessage({
+				action: 'deactivate' + featureIdUC,
+			});
 
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
