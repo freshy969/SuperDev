@@ -46,7 +46,7 @@ export default function ToggleSettings({portThree}) {
 		});
 	}, []);
 
-	function PageHighlightSettings(checkbox) {
+	function pageHighlightSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxPageHighlight1':
 				allFeatures.map(function (value, index) {
@@ -199,7 +199,7 @@ export default function ToggleSettings({portThree}) {
 		}
 	}
 
-	function ExportElementSettings(checkbox) {
+	function exportElementSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxExportElement1':
 				allFeatures.map(function (value, index) {
@@ -253,7 +253,7 @@ export default function ToggleSettings({portThree}) {
 		}
 	}
 
-	function ColorPickerSettings(checkbox) {
+	function colorPickerSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
 				allFeatures.map(function (value, index) {
@@ -307,7 +307,7 @@ export default function ToggleSettings({portThree}) {
 		}
 	}
 
-	function ColorPaletteSettings(checkbox) {
+	function colorPaletteSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPalette1':
 				allFeatures.map(function (value, index) {
@@ -361,7 +361,7 @@ export default function ToggleSettings({portThree}) {
 		}
 	}
 
-	function ClearAllCacheSettings(checkbox) {
+	function clearAllCacheSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxClearAllCache1':
 				allFeatures.map(function (value, index) {
@@ -469,7 +469,7 @@ export default function ToggleSettings({portThree}) {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ColorPickerSettings(checkboxId);
+												colorPickerSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
@@ -495,7 +495,7 @@ export default function ToggleSettings({portThree}) {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ColorPaletteSettings(checkboxId);
+												colorPaletteSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
@@ -529,7 +529,7 @@ export default function ToggleSettings({portThree}) {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												PageHighlightSettings(checkboxId);
+												pageHighlightSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
@@ -555,7 +555,7 @@ export default function ToggleSettings({portThree}) {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ExportElementSettings(checkboxId);
+												exportElementSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'
@@ -584,7 +584,7 @@ export default function ToggleSettings({portThree}) {
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<input
 											onClick={function () {
-												ClearAllCacheSettings(checkboxId);
+												clearAllCacheSettings(checkboxId);
 											}}
 											className='rounded-sm float-left bg-white checked:bg-blue-600 border checked:border-0 border-gray-300 checkBox appearance-none h-3 w-3 mt-[3px] align-top mr-2 bg-no-repeat focus:outline-none bg-center bg-contain cursor-pointer transition duration-300'
 											type='checkbox'

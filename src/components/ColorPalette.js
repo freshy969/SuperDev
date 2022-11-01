@@ -15,7 +15,7 @@ export default function ColorPalette({portThree}) {
 		});
 	}, []);
 
-	function CopyColorCode(color, id) {
+	function copyColorCode(color, id) {
 		navigator.clipboard.writeText(color);
 		document.querySelector('#' + id + '> span').innerText = '';
 		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
@@ -24,11 +24,11 @@ export default function ColorPalette({portThree}) {
 		}, 1000);
 	}
 
-	function ShowColorCode(color, id) {
+	function showColorCode(color, id) {
 		document.querySelector('#' + id + '> span').innerText = color;
 	}
 
-	function HideColorCode(color, id) {
+	function hideColorCode(color, id) {
 		document.querySelector('#' + id + '> span').innerText = '';
 	}
 
@@ -70,13 +70,13 @@ export default function ColorPalette({portThree}) {
 										<div
 											id={id}
 											onClick={function () {
-												CopyColorCode(value, id);
+												copyColorCode(value, id);
 											}}
 											onMouseEnter={function () {
-												ShowColorCode(value, id);
+												showColorCode(value, id);
 											}}
 											onMouseLeave={function () {
-												HideColorCode(value, id);
+												hideColorCode(value, id);
 											}}
 											className={allClasses}
 											style={{'background-color': value}}
