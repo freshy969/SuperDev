@@ -1642,31 +1642,33 @@ function activateExportElement(port, request) {
 				allStyleSheets.push(singleStylesheet);
 			}
 		} catch (e) {
-			allStyleSheets.push(null);
+			allStyleSheets.push([]);
 			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
 		}
 	});
 
 	// Saving External Stylesheets' CSSRules
 	// to AllStyleSheets 2D Array
-	let iframe = document.createElement('iframe');
-	iframe.setAttribute('style', 'display: none');
-	document.body.appendChild(iframe);
-	let style = document.createElement('style');
-	iframe.contentDocument.head.appendChild(style);
+	let exportEleIframe = document.createElement('iframe');
+	exportEleIframe.setAttribute('style', 'display: none');
+	exportEleIframe.id = 'exportEleIframe';
+	document.body.appendChild(exportEleIframe);
+	let exportEleStyle = document.createElement('style');
+	exportEleIframe.contentDocument.head.appendChild(exportEleStyle);
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
-				if (allStyleSheets[i] === null) {
-					style.textContent = request.styleSheet;
-					[...iframe.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
+				if (allStyleSheets[i].length === 0) {
+					exportEleStyle.textContent = request.styleSheet;
+					[...exportEleIframe.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
 						if ([...valueOne.cssRules].length !== 0) {
 							let singleStylesheet = [];
 							[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
 								singleStylesheet.push(valueTwo);
 							});
-							allStyleSheets[i] = singleStylesheet;
+							allStyleSheets[i].push(singleStylesheet);
+							allStyleSheets[i] = allStyleSheets[i].flat();
 						}
 					});
 					break;
@@ -1677,7 +1679,6 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Element Selected For Export');
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			// Saving OutHTML Selectors
 			// IDs, Classes, Tags
@@ -2015,7 +2016,7 @@ function activateExportElement(port, request) {
 					}
 
 					// IS There Any More?
-					else if (!(valueTwo instanceof CSSFontFaceRule)) {
+					else if (!(valueTwo instanceof CSSFontFaceRule) && !(valueTwo instanceof CSSImportRule)) {
 						console.log('Missed @', valueTwo);
 					}
 				});
