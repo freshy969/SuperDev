@@ -1700,7 +1700,7 @@ function activateExportElement(port, request) {
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
 					// If CSSStyles
-					if (valueOne instanceof CSSStyleRule) {
+					if (!valueOne.cssText.startsWith('@')) {
 						// IDs
 						if (valueTwo.startsWith('#')) {
 							if (
@@ -1713,7 +1713,6 @@ function activateExportElement(port, request) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
-
 						// Classes
 						else if (valueTwo.startsWith('.')) {
 							if (
@@ -1729,7 +1728,6 @@ function activateExportElement(port, request) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
-
 						// Tags
 						else {
 							if (
@@ -1743,13 +1741,12 @@ function activateExportElement(port, request) {
 							}
 						}
 					}
-
 					// If MediaQuery
-					else if (valueOne instanceof CSSMediaRule) {
+					else if (valueOne.cssText.startsWith('@media')) {
 						let mediaStyles = [];
 						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
-							if (valueThree instanceof CSSStyleRule) {
+							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
 									if (
@@ -1762,7 +1759,6 @@ function activateExportElement(port, request) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
-
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
@@ -1778,7 +1774,6 @@ function activateExportElement(port, request) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
-
 								// Tags
 								else {
 									if (
@@ -1792,13 +1787,12 @@ function activateExportElement(port, request) {
 									}
 								}
 							}
-
 							// If CSSSupports
-							else if (valueThree instanceof CSSSupportsRule) {
+							else if (valueThree.cssText.startsWith('@supports')) {
 								let cssSupports = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									// If CSSStyles
-									if (valueFour instanceof CSSStyleRule) {
+									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
 											if (
@@ -1811,7 +1805,6 @@ function activateExportElement(port, request) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
-
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
@@ -1827,7 +1820,6 @@ function activateExportElement(port, request) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
-
 										// Tags
 										else {
 											if (
@@ -1841,9 +1833,8 @@ function activateExportElement(port, request) {
 											}
 										}
 									}
-
 									// If CSSKeyframes
-									else if (valueFour instanceof CSSKeyframesRule) {
+									else if (valueFour.cssText.startsWith('@keyframes')) {
 										let cssKeyframes = [];
 										[...valueFour.cssRules].map(function (valueFive, indexFive) {
 											cssKeyframes.push(valueFive.cssText);
@@ -1857,9 +1848,8 @@ function activateExportElement(port, request) {
 									mediaStyles.push(`@supports ${valueThree.conditionText} { ${cssSupports.join('\n')} }`);
 								}
 							}
-
 							// If CSSKeyframes
-							else if (valueThree instanceof CSSKeyframesRule) {
+							else if (valueThree.cssText.startsWith('@keyframes')) {
 								let cssKeyframes = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									cssKeyframes.push(valueFour.cssText);
@@ -1873,13 +1863,12 @@ function activateExportElement(port, request) {
 							usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStyles.join('\n')} }`);
 						}
 					}
-
 					// If CSSSupports
-					else if (valueOne instanceof CSSSupportsRule) {
+					else if (valueOne.cssText.startsWith('@supports')) {
 						let cssSupports = [];
 						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
-							if (valueThree instanceof CSSStyleRule) {
+							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
 									if (
@@ -1892,7 +1881,6 @@ function activateExportElement(port, request) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
-
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
@@ -1908,7 +1896,6 @@ function activateExportElement(port, request) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
-
 								// Tags
 								else {
 									if (
@@ -1922,13 +1909,12 @@ function activateExportElement(port, request) {
 									}
 								}
 							}
-
 							// If MediaQuery
-							else if (valueThree instanceof CSSMediaRule) {
+							else if (valueThree.cssText.startsWith('@media')) {
 								let mediaStyles = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									// If CSSStyles
-									if (valueFour instanceof CSSStyleRule) {
+									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
 											if (
@@ -1941,7 +1927,6 @@ function activateExportElement(port, request) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
-
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
@@ -1957,7 +1942,6 @@ function activateExportElement(port, request) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
-
 										// Tags
 										else {
 											if (
@@ -1971,9 +1955,8 @@ function activateExportElement(port, request) {
 											}
 										}
 									}
-
 									// If CSSKeyframes
-									else if (valueFour instanceof CSSKeyframesRule) {
+									else if (valueFour.cssText.startsWith('@keyframes')) {
 										let cssKeyframes = [];
 										[...valueFour.cssRules].map(function (valueFive, indexFive) {
 											cssKeyframes.push(valueFive.cssText);
@@ -1987,9 +1970,8 @@ function activateExportElement(port, request) {
 									cssSupports.push(`@media ${valueThree.conditionText} { ${mediaStyles.join('\n')} }`);
 								}
 							}
-
 							// If CSSKeyframes
-							else if (valueThree instanceof CSSKeyframesRule) {
+							else if (valueThree.cssText.startsWith('@keyframes')) {
 								let cssKeyframes = [];
 								[...valueThree.cssRules].map(function (valueFour, indexFour) {
 									cssKeyframes.push(valueFour.cssText);
@@ -2003,9 +1985,8 @@ function activateExportElement(port, request) {
 							usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupports.join('\n')} }`);
 						}
 					}
-
 					// If CSSKeyframes
-					else if (valueOne instanceof CSSKeyframesRule) {
+					else if (valueOne.cssText.startsWith('@keyframes')) {
 						let cssKeyframes = [];
 						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							cssKeyframes.push(valueThree.cssText);
@@ -2014,13 +1995,9 @@ function activateExportElement(port, request) {
 							usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`);
 						}
 					}
-
-					// IS There Any More?
-					else if (!(valueOne instanceof CSSFontFaceRule) && !(valueOne instanceof CSSImportRule)) {
-						console.log('Missed @', valueOne);
-					}
 				});
 			});
+
 			usedStyles = [...new Set(usedStyles)];
 			usedStyles = usedStyles.join(' ');
 
