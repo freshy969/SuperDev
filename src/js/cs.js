@@ -1865,12 +1865,14 @@ function activateExportElement(port, request) {
 
 									// If CSSKeyframes
 									else if (valueFour instanceof CSSKeyframesRule) {
-										let cssKeyframes = [];
-										[...valueFour.cssRules].map(function (valueFive, indexFive) {
-											cssKeyframes.push(valueFive.cssText);
-										});
-										if (cssKeyframes.length !== 0) {
-											cssSupports.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+										if (event.target.outerHTML.includes(valueFour.name)) {
+											let cssKeyframes = [];
+											[...valueFour.cssRules].map(function (valueFive, indexFive) {
+												cssKeyframes.push(valueFive.cssText);
+											});
+											if (cssKeyframes.length !== 0) {
+												cssSupports.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+											}
 										}
 									}
 								});
@@ -1881,12 +1883,14 @@ function activateExportElement(port, request) {
 
 							// If CSSKeyframes
 							else if (valueThree instanceof CSSKeyframesRule) {
-								let cssKeyframes = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									cssKeyframes.push(valueFour.cssText);
-								});
-								if (cssKeyframes.length !== 0) {
-									mediaStyles.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+								if (event.target.outerHTML.includes(valueThree.name)) {
+									let cssKeyframes = [];
+									[...valueThree.cssRules].map(function (valueFour, indexFour) {
+										cssKeyframes.push(valueFour.cssText);
+									});
+									if (cssKeyframes.length !== 0) {
+										mediaStyles.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+									}
 								}
 							}
 						});
@@ -2009,12 +2013,14 @@ function activateExportElement(port, request) {
 
 									// If CSSKeyframes
 									else if (valueFour instanceof CSSKeyframesRule) {
-										let cssKeyframes = [];
-										[...valueFour.cssRules].map(function (valueFive, indexFive) {
-											cssKeyframes.push(valueFive.cssText);
-										});
-										if (cssKeyframes.length !== 0) {
-											mediaStyles.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+										if (event.target.outerHTML.includes(valueFour.name)) {
+											let cssKeyframes = [];
+											[...valueFour.cssRules].map(function (valueFive, indexFive) {
+												cssKeyframes.push(valueFive.cssText);
+											});
+											if (cssKeyframes.length !== 0) {
+												mediaStyles.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
+											}
 										}
 									}
 								});
@@ -2025,12 +2031,14 @@ function activateExportElement(port, request) {
 
 							// If CSSKeyframes
 							else if (valueThree instanceof CSSKeyframesRule) {
-								let cssKeyframes = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									cssKeyframes.push(valueFour.cssText);
-								});
-								if (cssKeyframes.length !== 0) {
-									cssSupports.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+								if (event.target.outerHTML.includes(valueThree.name)) {
+									let cssKeyframes = [];
+									[...valueThree.cssRules].map(function (valueFour, indexFour) {
+										cssKeyframes.push(valueFour.cssText);
+									});
+									if (cssKeyframes.length !== 0) {
+										cssSupports.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
+									}
 								}
 							}
 						});
@@ -2041,12 +2049,14 @@ function activateExportElement(port, request) {
 
 					// If CSSKeyframes
 					else if (valueTwo instanceof CSSKeyframesRule) {
-						let cssKeyframes = [];
-						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
-							cssKeyframes.push(valueThree.cssText);
-						});
-						if (cssKeyframes.length !== 0) {
-							usedStyles.push(`@keyframes ${valueTwo.name} { ${cssKeyframes.join('\n')} }`);
+						if (event.target.outerHTML.includes(valueTwo.name)) {
+							let cssKeyframes = [];
+							[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+								cssKeyframes.push(valueThree.cssText);
+							});
+							if (cssKeyframes.length !== 0) {
+								usedStyles.push(`@keyframes ${valueTwo.name} { ${cssKeyframes.join('\n')} }`);
+							}
 						}
 					}
 
