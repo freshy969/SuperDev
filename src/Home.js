@@ -70,11 +70,11 @@ export default function Home() {
 		ChangeHeight(portThree, PopupHeight(allFeatures));
 		return (
 			<>
-				<NavBar portThree={portThree} />
-				<MainBody portThree={portThree} />
-				<ToggleInfo portThree={portThree} />
-				<ToggleSettings portThree={portThree} />
-				<ColorPalette portThree={portThree} />
+				<NavBar allFeatures={allFeatures} portThree={portThree} />
+				<MainBody allFeatures={allFeatures} portThree={portThree} />
+				<ToggleInfo allFeatures={allFeatures} portThree={portThree} />
+				<ToggleSettings allFeatures={allFeatures} portThree={portThree} />
+				<ColorPalette allFeatures={allFeatures} portThree={portThree} />
 			</>
 		);
 	}

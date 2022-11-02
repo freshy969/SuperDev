@@ -1,48 +1,38 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 
-export default function ToggleSettings({portThree}) {
-	const [allFeatures, setAllFeatures] = useState([]);
-
+export default function ToggleSettings({allFeatures, portThree}) {
 	useEffect(function () {
 		// Set AllFeatures
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			setAllFeatures(JSON.parse(result.allFeatures));
-			JSON.parse(result.allFeatures).map(function (value, index) {
-				if (value.id === 'pageHighlight') {
-					document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
-					document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
-					document.querySelector('#checkboxPageHighlight3').checked = value.settings.checkboxPageHighlight3;
-					document.querySelector('#checkboxPageHighlight4').checked = value.settings.checkboxPageHighlight4;
-					document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
-					document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
-					document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
-				} else if (value.id === 'exportElement') {
-					document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
-					document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
-					document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
-				} else if (value.id === 'colorPicker') {
-					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
-					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
-					document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
-				} else if (value.id === 'colorPalette') {
-					document.querySelector('#checkboxColorPalette1').checked = value.settings.checkboxColorPalette1;
-					document.querySelector('#checkboxColorPalette2').checked = value.settings.checkboxColorPalette2;
-					document.querySelector('#checkboxColorPalette3').checked = value.settings.checkboxColorPalette3;
-				} else if (value.id === 'clearAllCache') {
-					document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
-					document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
-					document.querySelector('#checkboxClearAllCache3').checked = value.settings.checkboxClearAllCache3;
-					document.querySelector('#checkboxClearAllCache4').checked = value.settings.checkboxClearAllCache4;
-					document.querySelector('#checkboxClearAllCache5').checked = value.settings.checkboxClearAllCache5;
-					document.querySelector('#checkboxClearAllCache6').checked = value.settings.checkboxClearAllCache6;
-				}
-			});
-		});
-
-		// OnUpdate AllFeatures
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) setAllFeatures(JSON.parse(changes.allFeatures.newValue));
+		allFeatures.map(function (value, index) {
+			if (value.id === 'pageHighlight') {
+				document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
+				document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
+				document.querySelector('#checkboxPageHighlight3').checked = value.settings.checkboxPageHighlight3;
+				document.querySelector('#checkboxPageHighlight4').checked = value.settings.checkboxPageHighlight4;
+				document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
+				document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
+				document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
+			} else if (value.id === 'exportElement') {
+				document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
+				document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
+				document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
+			} else if (value.id === 'colorPicker') {
+				document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
+				document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
+				document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
+			} else if (value.id === 'colorPalette') {
+				document.querySelector('#checkboxColorPalette1').checked = value.settings.checkboxColorPalette1;
+				document.querySelector('#checkboxColorPalette2').checked = value.settings.checkboxColorPalette2;
+				document.querySelector('#checkboxColorPalette3').checked = value.settings.checkboxColorPalette3;
+			} else if (value.id === 'clearAllCache') {
+				document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
+				document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
+				document.querySelector('#checkboxClearAllCache3').checked = value.settings.checkboxClearAllCache3;
+				document.querySelector('#checkboxClearAllCache4').checked = value.settings.checkboxClearAllCache4;
+				document.querySelector('#checkboxClearAllCache5').checked = value.settings.checkboxClearAllCache5;
+				document.querySelector('#checkboxClearAllCache6').checked = value.settings.checkboxClearAllCache6;
+			}
 		});
 	}, []);
 

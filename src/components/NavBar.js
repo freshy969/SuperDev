@@ -6,24 +6,8 @@ import ChangeHeight from './functions/ChangeHeight';
 import JustChangeHeight from './functions/JustChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function NavBar({portThree}) {
-	const [isLoadingOne, setIsLoadingOne] = useState(true);
-	const [allFeatures, setAllFeatures] = useState([]);
-
+export default function NavBar({allFeatures, portThree}) {
 	useEffect(function () {
-		// Set AllFeatures
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			setAllFeatures(JSON.parse(result.allFeatures));
-			setIsLoadingOne(false);
-		});
-
-		// OnUpdate AllFeatures
-		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) {
-				setAllFeatures(JSON.parse(changes.allFeatures.newValue));
-			}
-		});
-
 		// OnUpdate SetMinimised
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
@@ -32,11 +16,9 @@ export default function NavBar({portThree}) {
 					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
 					chrome.storage.local.set({setMinimised: null});
 				} else if (changes.setMinimised.newValue === false) {
-					chrome.storage.local.get(['allFeatures'], function (result) {
-						ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-						document.querySelector('#navBar').firstChild.style.borderRadius = '';
-						chrome.storage.local.set({setMinimised: null});
-					});
+					ChangeHeight(portThree, PopupHeight(allFeatures));
+					document.querySelector('#navBar').firstChild.style.borderRadius = '';
+					chrome.storage.local.set({setMinimised: null});
 				}
 			}
 		});
@@ -46,10 +28,8 @@ export default function NavBar({portThree}) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
 					if (document.querySelector('#mainBody').classList.contains('hidden')) {
-						chrome.storage.local.get(['allFeatures'], function (result) {
-							JustChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('mainBody');
-						});
+						JustChangeHeight(portThree, PopupHeight(allFeatures));
+						HideAllCompExcept('mainBody');
 					}
 					chrome.storage.local.set({setHomePageActive: false});
 				}
@@ -60,12 +40,10 @@ export default function NavBar({portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setActFeatDisabled) {
 				if (changes.setActFeatDisabled.newValue === true) {
-					chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
-						if (outcome.whichFeatureActive !== null) {
-							chrome.storage.local.get(['allFeatures'], function (result) {
-								ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
-								chrome.storage.local.set({setActFeatDisabled: false});
-							});
+					chrome.storage.local.get(['whichFeatureActive'], function (result) {
+						if (result.whichFeatureActive !== null) {
+							ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+							chrome.storage.local.set({setActFeatDisabled: false});
 						}
 					});
 				}
@@ -86,17 +64,15 @@ export default function NavBar({portThree}) {
 						}, 1000);
 					}
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					chrome.storage.local.get(['allFeatures'], function (result) {
-						if (document.querySelector('#colorPalettePage')) {
-							if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-								ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-								HideAllCompExcept('colorPalettePage');
+					if (document.querySelector('#colorPalettePage')) {
+						if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
+							ChangeHeight(portThree, PopupHeight(allFeatures));
+							HideAllCompExcept('colorPalettePage');
 
-								let childHeight = PopupHeight(JSON.parse(result.allFeatures)) - 41.5;
-								document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
-							}
+							let childHeight = PopupHeight(allFeatures) - 41.5;
+							document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
 						}
-					});
+					}
 				}
 			}
 		});
@@ -105,13 +81,11 @@ export default function NavBar({portThree}) {
 		document.addEventListener('keyup', function (event) {
 			event.preventDefault();
 			if (event.key === 'Escape' && event.isTrusted === true) {
-				chrome.storage.local.get(['whichFeatureActive'], function (outcome) {
-					if (outcome.whichFeatureActive !== null) {
-						chrome.storage.local.get(['allFeatures'], function (result) {
-							ActDeactFeature(portThree, JSON.parse(result.allFeatures), outcome.whichFeatureActive);
-							ChangeHeight(portThree, PopupHeight(JSON.parse(result.allFeatures)));
-							HideAllCompExcept('mainBody');
-						});
+				chrome.storage.local.get(['whichFeatureActive'], function (result) {
+					if (result.whichFeatureActive !== null) {
+						ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+						ChangeHeight(portThree, PopupHeight(allFeatures));
+						HideAllCompExcept('mainBody');
 					}
 				});
 			}
@@ -197,51 +171,49 @@ export default function NavBar({portThree}) {
 		portThree.postMessage({action: 'showHideExtension'});
 	}
 
-	if (!isLoadingOne) {
-		return (
-			<header id='navBar'>
-				<div className='flex justify-between border border-borderOne dark:border-borderOneD box-border rounded-t-lg py-[8px] px-[18px]'>
-					<h1 className='text-[13px] text-titleText dark:text-titleTextD font-medium cursor-default select-none relative top-[0.5px]'>
-						SuperDev<img className='inline ml-[6px] relative bottom-[1.5px]' src='../icons/icon128.png' alt='logo' width='14'></img>
-					</h1>
-					<nav className='relative bottom-[0.5px]'>
-						<button
-							tabIndex='-1'
-							id='stopActFeatButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 py-[5px] border-0 outline-0 invisible'
-							onClick={stopActFeatButton}></button>
-						<button
-							tabIndex='-1'
-							id='movePopupButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-up-down-left-right text-xs ml-[6px] p-1 py-[5px] border-0 outline-0'></button>
-						<button
-							tabIndex='-1'
-							id='toggleInfoButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={toggleInfo}></button>
-						<button
-							tabIndex='-1'
-							id='darkModeButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={darkMode}></button>
-						<button
-							tabIndex='-1'
-							id='toggleSettingsButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={toggleSettings}></button>
-						<button
-							tabIndex='-1'
-							id='minimiseExtensionButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
-							onClick={minimiseExtension}></button>
-						<button
-							tabIndex='-1'
-							id='showHideExtensionButton'
-							className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 py-[5px] pr-0 border-0 outline-0'
-							onClick={showHideExtension}></button>
-					</nav>
-				</div>
-			</header>
-		);
-	}
+	return (
+		<header id='navBar'>
+			<div className='flex justify-between border border-borderOne dark:border-borderOneD box-border rounded-t-lg py-[8px] px-[18px]'>
+				<h1 className='text-[13px] text-titleText dark:text-titleTextD font-medium cursor-default select-none relative top-[0.5px]'>
+					SuperDev<img className='inline ml-[6px] relative bottom-[1.5px]' src='../icons/icon128.png' alt='logo' width='14'></img>
+				</h1>
+				<nav className='relative bottom-[0.5px]'>
+					<button
+						tabIndex='-1'
+						id='stopActFeatButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-circle-stop text-xs ml-[6px] p-1 py-[5px] border-0 outline-0 invisible'
+						onClick={stopActFeatButton}></button>
+					<button
+						tabIndex='-1'
+						id='movePopupButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-up-down-left-right text-xs ml-[6px] p-1 py-[5px] border-0 outline-0'></button>
+					<button
+						tabIndex='-1'
+						id='toggleInfoButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-circle-info text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
+						onClick={toggleInfo}></button>
+					<button
+						tabIndex='-1'
+						id='darkModeButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-circle-half-stroke text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
+						onClick={darkMode}></button>
+					<button
+						tabIndex='-1'
+						id='toggleSettingsButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-gear text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
+						onClick={toggleSettings}></button>
+					<button
+						tabIndex='-1'
+						id='minimiseExtensionButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-circle-minus text-[12.5px] ml-[6px] p-1 py-[5px] border-0 outline-0'
+						onClick={minimiseExtension}></button>
+					<button
+						tabIndex='-1'
+						id='showHideExtensionButton'
+						className='text-faText dark:text-faTextD text-right fa-solid fa-circle-xmark text-[12.5px] ml-[6px] p-1 py-[5px] pr-0 border-0 outline-0'
+						onClick={showHideExtension}></button>
+				</nav>
+			</div>
+		</header>
+	);
 }
