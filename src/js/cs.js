@@ -1697,83 +1697,83 @@ function activateExportElement(port, request) {
 			allSelectors = [...new Set(allSelectors.flat())];
 
 			// Removing Unused CSS
-			allSelectors.map(function (valueOne, indexOne) {
-				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
+			allStyleSheets.flat().map(function (valueOne, indexOne) {
+				allSelectors.map(function (valueTwo, indexTwo) {
 					// If CSSStyles
-					if (valueTwo instanceof CSSStyleRule) {
+					if (valueOne instanceof CSSStyleRule) {
 						// IDs
-						if (valueOne.startsWith('#')) {
+						if (valueTwo.startsWith('#')) {
 							if (
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}[`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne},`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}:`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne} `) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}.`)
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
 							) {
-								usedStyles.push(valueTwo.cssText);
+								usedStyles.push(valueOne.cssText);
 							}
 						}
 
 						// Classes
-						else if (valueOne.startsWith('.')) {
+						else if (valueTwo.startsWith('.')) {
 							if (
-								(' ' + valueTwo.selectorText + ' ').includes('*') ||
-								(' ' + valueTwo.selectorText + ' ').includes('html') ||
-								(' ' + valueTwo.selectorText + ' ').includes('body') ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}[`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne},`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}:`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne} `) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}.`)
+								(' ' + valueOne.selectorText + ' ').includes('*') ||
+								(' ' + valueOne.selectorText + ' ').includes('html') ||
+								(' ' + valueOne.selectorText + ' ').includes('body') ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
 							) {
-								usedStyles.push(valueTwo.cssText);
+								usedStyles.push(valueOne.cssText);
 							}
 						}
 
 						// Tags
 						else {
 							if (
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}[`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne},`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}:`) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne} `) ||
-								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}.`)
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
 							) {
-								usedStyles.push(valueTwo.cssText);
+								usedStyles.push(valueOne.cssText);
 							}
 						}
 					}
 
 					// If MediaQuery
-					else if (valueTwo instanceof CSSMediaRule) {
+					else if (valueOne instanceof CSSMediaRule) {
 						let mediaStyles = [];
-						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
 							if (valueThree instanceof CSSStyleRule) {
 								// IDs
-								if (valueOne.startsWith('#')) {
+								if (valueTwo.startsWith('#')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 
 								// Classes
-								else if (valueOne.startsWith('.')) {
+								else if (valueTwo.startsWith('.')) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
@@ -1782,11 +1782,11 @@ function activateExportElement(port, request) {
 								// Tags
 								else {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
@@ -1800,29 +1800,29 @@ function activateExportElement(port, request) {
 									// If CSSStyles
 									if (valueFour instanceof CSSStyleRule) {
 										// IDs
-										if (valueOne.startsWith('#')) {
+										if (valueTwo.startsWith('#')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 
 										// Classes
-										else if (valueOne.startsWith('.')) {
+										else if (valueTwo.startsWith('.')) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
@@ -1831,11 +1831,11 @@ function activateExportElement(port, request) {
 										// Tags
 										else {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
@@ -1870,40 +1870,40 @@ function activateExportElement(port, request) {
 							}
 						});
 						if (mediaStyles.length !== 0) {
-							usedStyles.push(`@media ${valueTwo.conditionText} { ${mediaStyles.join('\n')} }`);
+							usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStyles.join('\n')} }`);
 						}
 					}
 
 					// If CSSSupports
-					else if (valueTwo instanceof CSSSupportsRule) {
+					else if (valueOne instanceof CSSSupportsRule) {
 						let cssSupports = [];
-						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
 							if (valueThree instanceof CSSStyleRule) {
 								// IDs
-								if (valueOne.startsWith('#')) {
+								if (valueTwo.startsWith('#')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 
 								// Classes
-								else if (valueOne.startsWith('.')) {
+								else if (valueTwo.startsWith('.')) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
@@ -1912,11 +1912,11 @@ function activateExportElement(port, request) {
 								// Tags
 								else {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}.`)
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
@@ -1930,29 +1930,29 @@ function activateExportElement(port, request) {
 									// If CSSStyles
 									if (valueFour instanceof CSSStyleRule) {
 										// IDs
-										if (valueOne.startsWith('#')) {
+										if (valueTwo.startsWith('#')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 
 										// Classes
-										else if (valueOne.startsWith('.')) {
+										else if (valueTwo.startsWith('.')) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
@@ -1961,11 +1961,11 @@ function activateExportElement(port, request) {
 										// Tags
 										else {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}.`)
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
@@ -2000,24 +2000,24 @@ function activateExportElement(port, request) {
 							}
 						});
 						if (cssSupports.length !== 0) {
-							usedStyles.push(`@supports ${valueTwo.conditionText} { ${cssSupports.join('\n')} }`);
+							usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupports.join('\n')} }`);
 						}
 					}
 
 					// If CSSKeyframes
-					else if (valueTwo instanceof CSSKeyframesRule) {
+					else if (valueOne instanceof CSSKeyframesRule) {
 						let cssKeyframes = [];
-						[...valueTwo.cssRules].map(function (valueThree, indexThree) {
+						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							cssKeyframes.push(valueThree.cssText);
 						});
 						if (cssKeyframes.length !== 0) {
-							usedStyles.push(`@keyframes ${valueTwo.name} { ${cssKeyframes.join('\n')} }`);
+							usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`);
 						}
 					}
 
 					// IS There Any More?
-					else if (!(valueTwo instanceof CSSFontFaceRule) && !(valueTwo instanceof CSSImportRule)) {
-						console.log('Missed @', valueTwo);
+					else if (!(valueOne instanceof CSSFontFaceRule) && !(valueOne instanceof CSSImportRule)) {
+						console.log('Missed @', valueOne);
 					}
 				});
 			});
@@ -2044,7 +2044,7 @@ function activateExportElement(port, request) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css = css_beautify('body { background: #eee; margin: 20px !important; /* Helper CSS, Remove This */ }' + usedStyles, {
+						let css = css_beautify('body { background: #eee; /* Helper CSS, Remove This */ }' + usedStyles, {
 							indent_size: 2,
 							indent_with_tabs: true,
 						});
