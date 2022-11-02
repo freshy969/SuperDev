@@ -1,9 +1,9 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 
 export default function ToggleSettings({allFeatures, portThree}) {
 	useEffect(function () {
-		// Set AllFeatures
+		// Set Visible Settings
 		allFeatures.map(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;

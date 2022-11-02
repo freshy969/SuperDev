@@ -106,14 +106,11 @@ export default function NavBar({allFeatures, portThree}) {
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
-			// Disable Active Feature on Opeing ToggleInfo
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
 					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 				}
 			});
-
-			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleInfo');
 
@@ -121,7 +118,6 @@ export default function NavBar({allFeatures, portThree}) {
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
 		} else {
-			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 		}
@@ -129,14 +125,11 @@ export default function NavBar({allFeatures, portThree}) {
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			// Disable Active Feature on Opeing ToggleSettings
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
 					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 				}
 			});
-
-			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('toggleSettings');
 
@@ -144,7 +137,6 @@ export default function NavBar({allFeatures, portThree}) {
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
 		} else {
-			// Main Function
 			ChangeHeight(portThree, PopupHeight(allFeatures));
 			HideAllCompExcept('mainBody');
 		}
@@ -152,7 +144,9 @@ export default function NavBar({allFeatures, portThree}) {
 
 	function stopActFeatButton() {
 		chrome.storage.local.get(['whichFeatureActive'], function (result) {
-			if (result.whichFeatureActive !== null) ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+			if (result.whichFeatureActive !== null) {
+				ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+			}
 		});
 		chrome.storage.local.set({isStopBtnPressed: true});
 	}
