@@ -1677,6 +1677,7 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
+		console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Element Selected For Export');
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			// Saving OutHTML Selectors
 			// IDs, Classes, Tags
@@ -1692,9 +1693,11 @@ function activateExportElement(port, request) {
 				tempSelectors.push(valueOne.tagName.toLowerCase());
 				allSelectors.push(tempSelectors);
 			});
+			allSelectors = [...new Set(allSelectors.flat())];
 
 			// Removing Unused CSS
-			allSelectors.flat().map(function (valueOne, indexOne) {
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Removing Unused CSS');
+			allSelectors.map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
 					// If CSSStyles
 					if (valueTwo instanceof CSSStyleRule) {
@@ -2048,12 +2051,13 @@ function activateExportElement(port, request) {
 					}
 
 					// IS There Any More?
-					else {
+					else if (!(valueTwo instanceof CSSFontFaceRule)) {
 						console.log('Missed @', valueTwo);
 					}
 				});
 			});
 			usedStyles = [...new Set(usedStyles)];
+			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Removed Unused CSS');
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
