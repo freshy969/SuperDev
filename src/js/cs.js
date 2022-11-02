@@ -1696,7 +1696,6 @@ function activateExportElement(port, request) {
 			allSelectors = [...new Set(allSelectors.flat())];
 
 			// Removing Unused CSS
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Removing Unused CSS');
 			allSelectors.map(function (valueOne, indexOne) {
 				allStyleSheets.flat().map(function (valueTwo, indexTwo) {
 					// If CSSStyles
@@ -1718,7 +1717,6 @@ function activateExportElement(port, request) {
 						else if (valueOne.startsWith('.')) {
 							if (
 								(' ' + valueTwo.selectorText + ' ').includes('*') ||
-								(' ' + valueTwo.selectorText + ' ').includes(':root') ||
 								(' ' + valueTwo.selectorText + ' ').includes('html') ||
 								(' ' + valueTwo.selectorText + ' ').includes('body') ||
 								(' ' + valueTwo.selectorText + ' ').includes(`${valueOne}[`) ||
@@ -1768,7 +1766,6 @@ function activateExportElement(port, request) {
 								else if (valueOne.startsWith('.')) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
-										(' ' + valueThree.selectorText + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
@@ -1818,7 +1815,6 @@ function activateExportElement(port, request) {
 										else if (valueOne.startsWith('.')) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
-												(' ' + valueFour.selectorText + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
@@ -1900,7 +1896,6 @@ function activateExportElement(port, request) {
 								else if (valueOne.startsWith('.')) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
-										(' ' + valueThree.selectorText + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueOne}[`) ||
@@ -1950,7 +1945,6 @@ function activateExportElement(port, request) {
 										else if (valueOne.startsWith('.')) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
-												(' ' + valueFour.selectorText + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueOne}[`) ||
@@ -2027,14 +2021,33 @@ function activateExportElement(port, request) {
 				});
 			});
 			usedStyles = [...new Set(usedStyles)];
-			console.log(new Date().getSeconds(), new Date().getMilliseconds(), 'Removed Unused CSS');
+			usedStyles = usedStyles.join(' ');
+
+			// CSS Variables Replace
+			let bodyStyle = window.getComputedStyle(document.body);
+			let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
+			if (usedVars !== null) {
+				usedVars = [...new Set(usedVars?.flat())];
+
+				usedVars.map(function (valueOne, indexOne) {
+					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+						if (valueTwo !== null) {
+							usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
+						}
+					});
+				});
+			}
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css = css_beautify(usedStyles.join(' '), {indent_size: 2, indent_with_tabs: true});
+						let css = css_beautify('body { background: #eee; margin: 20px !important; /* Helper CSS, Remove This */ }' + usedStyles, {
+							indent_size: 2,
+							indent_with_tabs: true,
+						});
+						usedStyles = []; // Reset
 
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
@@ -2051,6 +2064,9 @@ function activateExportElement(port, request) {
 						} else if (html.includes(' cursor: default !important;')) {
 							html = html.replace(' cursor: default !important;', '');
 						}
+
+						// Remove SuperDev Html from Body
+						html = html.replaceAll(/<super-dev(.+)<\/super-dev>/gm, '');
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
