@@ -197,9 +197,9 @@ function activateTextEditor(port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	let guidelineWrapper = document.createElement('guideline-wrapper');
+	guidelineWrapper.classList.add('guidelineWrapper');
+	document.body.appendChild(guidelineWrapper);
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -218,7 +218,7 @@ function activateTextEditor(port, request) {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
-				event.target.classList.add('pageGuidelineOutline');
+				event.target.classList.add('guidelineOutline');
 				renderPageGuideline(true);
 				event.target.focus({preventScroll: true});
 			}
@@ -228,10 +228,10 @@ function activateTextEditor(port, request) {
 	function onMouseOut(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('pageGuidelineOutline')) {
+			if (event.target.classList.contains('guidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
-				event.target.classList.remove('pageGuidelineOutline');
+				event.target.classList.remove('guidelineOutline');
 				renderPageGuideline(false);
 			}
 		}
@@ -242,23 +242,23 @@ function activateTextEditor(port, request) {
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
-			document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').removeAttribute('contenteditable', true);
+			document.querySelector('.guidelineOutline').removeAttribute('spellcheck', false);
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.pageGuidelineWrapper').remove();
+		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -266,12 +266,12 @@ function activateTextEditor(port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			pageGuidelineWrapper.innerHTML = `
+			guidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -282,7 +282,7 @@ function activateTextEditor(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			pageGuidelineWrapper.innerHTML = ``;
+			guidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -395,7 +395,7 @@ function activatePageRuler(port, request) {
 	}
 
 	function removeDimensions() {
-		let dimensions = body.querySelector('.pageRulerDiv');
+		let dimensions = body.querySelector('.pageRulerEle');
 		if (dimensions) body.removeChild(dimensions);
 	}
 
@@ -490,10 +490,10 @@ function activatePageRuler(port, request) {
 		removeDimensions();
 		if (!dimensions) return;
 
-		let newPageRulerDiv = document.createElement('div');
-		newPageRulerDiv.className = 'pageRulerDiv';
-		newPageRulerDiv.style.left = dimensions.x + 'px';
-		newPageRulerDiv.style.top = dimensions.y + 'px';
+		let newPageRulerEle = document.createElement('div');
+		newPageRulerEle.className = 'pageRulerEle';
+		newPageRulerEle.style.left = dimensions.x + 'px';
+		newPageRulerEle.style.top = dimensions.y + 'px';
 
 		let measureWidth = dimensions.left + dimensions.right;
 		let measureHeight = dimensions.top + dimensions.bottom;
@@ -517,11 +517,11 @@ function activatePageRuler(port, request) {
 
 		if (dimensions.x > window.innerWidth - 120) pageRulerTooltip.classList.add('left');
 
-		newPageRulerDiv.appendChild(xAxis);
-		newPageRulerDiv.appendChild(yAxis);
-		newPageRulerDiv.appendChild(pageRulerTooltip);
+		newPageRulerEle.appendChild(xAxis);
+		newPageRulerEle.appendChild(yAxis);
+		newPageRulerEle.appendChild(pageRulerTooltip);
 
-		body.appendChild(newPageRulerDiv);
+		body.appendChild(newPageRulerEle);
 	}
 }
 
@@ -632,8 +632,8 @@ function activateColorPicker(port, request) {
 	}
 
 	function removeColorPicker() {
-		let colorPickerDiv = body.querySelector('.colorPickerDiv');
-		if (colorPickerDiv) body.removeChild(colorPickerDiv);
+		let colorPickerEle = body.querySelector('.colorPickerEle');
+		if (colorPickerEle) body.removeChild(colorPickerEle);
 	}
 
 	function onPageScroll() {
@@ -702,9 +702,9 @@ function activateColorPicker(port, request) {
 	}
 
 	function onMouseClick(event) {
-		if (document.querySelector('.colorPickerTooltipColorCode')) {
-			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipColorCode').innerText);
-			document.querySelector('.colorPickerTooltipColorCode').innerText = 'Copied';
+		if (document.querySelector('.colorPickerTooltipChild')) {
+			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipChild').innerText);
+			document.querySelector('.colorPickerTooltipChild').innerText = 'Copied';
 		}
 	}
 
@@ -734,31 +734,31 @@ function activateColorPicker(port, request) {
 		removeColorPicker();
 		if (!spotColor) return;
 
-		let newColorPickerDiv = document.createElement('div');
-		newColorPickerDiv.className = 'colorPickerDiv';
-		newColorPickerDiv.style.left = spotColor.x + 'px';
-		newColorPickerDiv.style.top = spotColor.y + 'px';
+		let newColorPickerEle = document.createElement('div');
+		newColorPickerEle.className = 'colorPickerEle';
+		newColorPickerEle.style.left = spotColor.x + 'px';
+		newColorPickerEle.style.top = spotColor.y + 'px';
 
 		let colorPickerTooltip = document.createElement('div');
 		colorPickerTooltip.className = 'colorPickerTooltip';
 
-		let colorPickerTooltipBackground = document.createElement('div');
-		colorPickerTooltipBackground.className = 'colorPickerTooltipBackground';
+		let colorPickerTooltipBG = document.createElement('div');
+		colorPickerTooltipBG.className = 'colorPickerTooltipBG';
 
-		let colorPickerTooltipColorCode = document.createElement('div');
-		colorPickerTooltipColorCode.className = 'colorPickerTooltipColorCode';
+		let colorPickerTooltipChild = document.createElement('div');
+		colorPickerTooltipChild.className = 'colorPickerTooltipChild';
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			JSON.parse(result.allFeatures).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
-						colorPickerTooltipBackground.style.backgroundColor = spotColor.hex;
-						colorPickerTooltipColorCode.textContent = spotColor.hex;
+						colorPickerTooltipBG.style.backgroundColor = spotColor.hex;
+						colorPickerTooltipChild.textContent = spotColor.hex;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
 						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
 					} else if (value.settings.checkboxColorPicker2 === true) {
-						colorPickerTooltipBackground.style.backgroundColor = spotColor.rgb;
-						colorPickerTooltipColorCode.textContent = spotColor.rgb;
+						colorPickerTooltipBG.style.backgroundColor = spotColor.rgb;
+						colorPickerTooltipChild.textContent = spotColor.rgb;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
 						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
 					}
@@ -766,10 +766,10 @@ function activateColorPicker(port, request) {
 			});
 		});
 
-		colorPickerTooltip.appendChild(colorPickerTooltipBackground);
-		colorPickerTooltip.appendChild(colorPickerTooltipColorCode);
-		newColorPickerDiv.appendChild(colorPickerTooltip);
-		body.appendChild(newColorPickerDiv);
+		colorPickerTooltip.appendChild(colorPickerTooltipBG);
+		colorPickerTooltip.appendChild(colorPickerTooltipChild);
+		newColorPickerEle.appendChild(colorPickerTooltip);
+		body.appendChild(newColorPickerEle);
 	}
 }
 
@@ -883,9 +883,9 @@ function activatePageGuideline(port, request) {
 	document.addEventListener('mouseout', onMouseOut);
 	window.focus({preventScroll: true});
 
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	let guidelineWrapper = document.createElement('guideline-wrapper');
+	guidelineWrapper.classList.add('guidelineWrapper');
+	document.body.appendChild(guidelineWrapper);
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -901,7 +901,7 @@ function activatePageGuideline(port, request) {
 	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
+			event.target.classList.add('guidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
@@ -910,7 +910,7 @@ function activatePageGuideline(port, request) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
+			event.target.classList.remove('guidelineOutline');
 		}
 	}
 
@@ -919,21 +919,21 @@ function activatePageGuideline(port, request) {
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.pageGuidelineWrapper').remove();
+		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -942,12 +942,12 @@ function activatePageGuideline(port, request) {
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', '').replace('px', ''))));
 
 			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			pageGuidelineWrapper.innerHTML = `
+			guidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -958,7 +958,7 @@ function activatePageGuideline(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			pageGuidelineWrapper.innerHTML = ``;
+			guidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -1416,9 +1416,9 @@ function activateMoveElement(port, request) {
 	document.addEventListener('click', onMouseClick);
 	window.focus({preventScroll: true});
 
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	let guidelineWrapper = document.createElement('guideline-wrapper');
+	guidelineWrapper.classList.add('guidelineWrapper');
+	document.body.appendChild(guidelineWrapper);
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -1434,7 +1434,7 @@ function activateMoveElement(port, request) {
 	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
+			event.target.classList.add('guidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
@@ -1443,7 +1443,7 @@ function activateMoveElement(port, request) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
+			event.target.classList.remove('guidelineOutline');
 		}
 	}
 
@@ -1477,9 +1477,9 @@ function activateMoveElement(port, request) {
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
@@ -1494,12 +1494,12 @@ function activateMoveElement(port, request) {
 			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		}
 
-		document.querySelector('.pageGuidelineWrapper').remove();
+		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -1507,12 +1507,12 @@ function activateMoveElement(port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			pageGuidelineWrapper.innerHTML = `
+			guidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -1523,7 +1523,7 @@ function activateMoveElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			pageGuidelineWrapper.innerHTML = ``;
+			guidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -1543,9 +1543,9 @@ function activateExportElement(port, request) {
 	document.addEventListener('click', onMouseClick);
 	window.focus({preventScroll: true});
 
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	let guidelineWrapper = document.createElement('guideline-wrapper');
+	guidelineWrapper.classList.add('guidelineWrapper');
+	document.body.appendChild(guidelineWrapper);
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -1561,7 +1561,7 @@ function activateExportElement(port, request) {
 	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
+			event.target.classList.add('guidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
@@ -1570,7 +1570,7 @@ function activateExportElement(port, request) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
+			event.target.classList.remove('guidelineOutline');
 		}
 	}
 
@@ -1638,7 +1638,7 @@ function activateExportElement(port, request) {
 				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
 				if (valueOne.className !== '') {
 					[...valueOne.classList].map(function (valueTwo, indexTwo) {
-						if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
+						if (valueTwo !== 'guidelineOutline') tempSelectors.push('.' + valueTwo);
 					});
 				}
 				tempSelectors.push(valueOne.tagName.toLowerCase());
@@ -1914,12 +1914,12 @@ function activateExportElement(port, request) {
 						usedStyles = []; // Reset
 
 						// Remove PageGuidelineOutline Class From OuterHTML
-						if (html.includes('class="pageGuidelineOutline"')) {
-							html = html.replace('class="pageGuidelineOutline"', '');
-						} else if (html.includes(' pageGuidelineOutline')) {
-							html = html.replace(' pageGuidelineOutline', '');
-						} else if (html.includes('pageGuidelineOutline ')) {
-							html = html.replace('pageGuidelineOutline ', '');
+						if (html.includes('class="guidelineOutline"')) {
+							html = html.replace('class="guidelineOutline"', '');
+						} else if (html.includes(' guidelineOutline')) {
+							html = html.replace(' guidelineOutline', '');
+						} else if (html.includes('guidelineOutline ')) {
+							html = html.replace('guidelineOutline ', '');
 						}
 
 						// Remove MoveElement Cursor From OuterHTML
@@ -1981,21 +1981,21 @@ function activateExportElement(port, request) {
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.pageGuidelineWrapper').remove();
+		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -2003,12 +2003,12 @@ function activateExportElement(port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			pageGuidelineWrapper.innerHTML = `
+			guidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -2019,7 +2019,7 @@ function activateExportElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			pageGuidelineWrapper.innerHTML = ``;
+			guidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -2039,9 +2039,9 @@ function activateDeleteElement(port, request) {
 	document.addEventListener('click', onMouseClick);
 	window.focus({preventScroll: true});
 
-	let pageGuidelineWrapper = document.createElement('div');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	let guidelineWrapper = document.createElement('guideline-wrapper');
+	guidelineWrapper.classList.add('guidelineWrapper');
+	document.body.appendChild(guidelineWrapper);
 
 	function onEscape(event) {
 		event.preventDefault();
@@ -2057,7 +2057,7 @@ function activateDeleteElement(port, request) {
 	function onMouseOver(event) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('pageGuidelineOutline');
+			event.target.classList.add('guidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
@@ -2066,7 +2066,7 @@ function activateDeleteElement(port, request) {
 		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
+			event.target.classList.remove('guidelineOutline');
 		}
 	}
 
@@ -2084,21 +2084,21 @@ function activateDeleteElement(port, request) {
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.pageGuidelineWrapper').remove();
+		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -2106,12 +2106,12 @@ function activateDeleteElement(port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
-			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			pageGuidelineWrapper.innerHTML = `
+			guidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -2122,7 +2122,7 @@ function activateDeleteElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			pageGuidelineWrapper.innerHTML = ``;
+			guidelineWrapper.innerHTML = ``;
 		}
 	}
 
