@@ -1699,8 +1699,9 @@ function activateExportElement(port, request) {
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
-					let regexOne = new RegExp('(html|body|:root|[*])[ [,:.>+~#]', 'gm');
-					let regexTwo = new RegExp(valueTwo + '[ [,:.>+~#]', 'gm');
+					let regexOne = new RegExp('[ ,]([*]|:root|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
+					let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
+					let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
 
 					// If CSSStyles
 					if (!valueOne.cssText.startsWith('@')) {
@@ -1721,7 +1722,7 @@ function activateExportElement(port, request) {
 						}
 						// Tags
 						else {
-							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
@@ -1750,7 +1751,7 @@ function activateExportElement(port, request) {
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
@@ -1778,7 +1779,7 @@ function activateExportElement(port, request) {
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
@@ -1837,7 +1838,7 @@ function activateExportElement(port, request) {
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
@@ -1865,7 +1866,7 @@ function activateExportElement(port, request) {
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
