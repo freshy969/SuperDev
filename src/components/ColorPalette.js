@@ -17,25 +17,19 @@ export default function ColorPalette({allFeatures, portThree}) {
 
 	function copyColorCode(color, id) {
 		navigator.clipboard.writeText(color);
-		if (document.querySelector('#' + id + '> span') && document.querySelector('#' + id + '> i')) {
-			document.querySelector('#' + id + '> span').innerText = '';
-			document.querySelector('#' + id + '> i').classList.remove('before:hidden');
-			setTimeout(function () {
-				document.querySelector('#' + id + '> i').classList.add('before:hidden');
-			}, 1000);
-		}
+		document.querySelector('#' + id + '> span').innerText = '';
+		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+		setTimeout(function () {
+			document.querySelector('#' + id + '> i').classList.add('before:hidden');
+		}, 1000);
 	}
 
 	function showColorCode(color, id) {
-		if (document.querySelector('#' + id + '> span')) {
-			document.querySelector('#' + id + '> span').innerText = color;
-		}
+		document.querySelector('#' + id + '> span').innerText = color;
 	}
 
 	function hideColorCode(color, id) {
-		if (document.querySelector('#' + id + '> span')) {
-			document.querySelector('#' + id + '> span').innerText = '';
-		}
+		document.querySelector('#' + id + '> span').innerText = '';
 	}
 
 	function hexToRgb(hex) {
