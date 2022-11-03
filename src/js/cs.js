@@ -1698,7 +1698,6 @@ function activateExportElement(port, request) {
 
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
-				if (valueOne.selectorText && valueOne.selectorText.includes('w-11')) console.log(valueOne.selectorText);
 				allSelectors.map(function (valueTwo, indexTwo) {
 					// If CSSStyles
 					if (!valueOne.cssText.startsWith('@')) {
