@@ -139,7 +139,6 @@ export default function NavBar({allFeatures, portThree}) {
 				ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
 			}
 		});
-		chrome.storage.local.set({isStopBtnPressed: true});
 	}
 
 	function minimiseExtension() {
