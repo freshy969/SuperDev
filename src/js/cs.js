@@ -1942,13 +1942,18 @@ function activateExportElement(port, request) {
 
 			// CSS Keyframe Replace
 			allAnimations = usedStyles.match(/animation:(.+);|animation-name(.+);/gm);
-			allAnimations.map(function (valueOne, indexOne) {
-				allKeyframes.map(function (valueTwo, indexTwo) {
-					if (!valueOne.includes(valueTwo.name + ';') && !valueOne.includes(valueTwo.name + ' ')) {
-						usedStyles = usedStyles.replaceAll(valueTwo.value, '');
+			allAnimations = [...new Set(allAnimations)];
+			if (allAnimations !== null) {
+				allAnimations.map(function (valueOne, indexOne) {
+					if (allKeyframes !== null) {
+						allKeyframes.map(function (valueTwo, indexTwo) {
+							if (!valueOne.includes(valueTwo.name + ';') && !valueOne.includes(valueTwo.name + ' ')) {
+								usedStyles = usedStyles.replaceAll(valueTwo.value, '');
+							}
+						});
 					}
 				});
-			});
+			}
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
