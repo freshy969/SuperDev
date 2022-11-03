@@ -1,27 +1,25 @@
 export default function ActDeactFeature(portThree, allFeatures, featureId) {
-	if (allFeatures.length !== 0) {
-		// Disable All
-		allFeatures.map(function (value, index) {
-			if (value.id !== featureId) {
-				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					JustHideMeExcep(portThree, value.id);
-				} else {
-					JustHideMe(portThree, value.id);
-				}
+	// Disable All
+	allFeatures.map(function (value, index) {
+		if (value.id !== featureId) {
+			if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
+				JustHideMeExcep(portThree, value.id);
+			} else {
+				JustHideMe(portThree, value.id);
 			}
-		});
+		}
+	});
 
-		// Except The One Clicked
-		allFeatures.map(function (value, index) {
-			if (value.id === featureId) {
-				if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
-					HideMeShowMeExcep(portThree, value.id);
-				} else {
-					HideMeShowMe(portThree, value.id);
-				}
+	// Except The One Clicked
+	allFeatures.map(function (value, index) {
+		if (value.id === featureId) {
+			if (value.id === 'clearAllCache' || value.id === 'colorPalette') {
+				HideMeShowMeExcep(portThree, value.id);
+			} else {
+				HideMeShowMe(portThree, value.id);
 			}
-		});
-	}
+		}
+	});
 }
 
 function HideMeShowMeExcep(portThree, featureId) {

@@ -4,195 +4,188 @@ import {useEffect} from 'react';
 export default function ToggleSettings({allFeatures, portThree}) {
 	useEffect(function () {
 		// Set Visible Settings
-		allFeatures.length !== 0 &&
-			allFeatures.map(function (value, index) {
-				if (value.id === 'pageHighlight') {
-					document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
-					document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
-					document.querySelector('#checkboxPageHighlight3').checked = value.settings.checkboxPageHighlight3;
-					document.querySelector('#checkboxPageHighlight4').checked = value.settings.checkboxPageHighlight4;
-					document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
-					document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
-					document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
-				} else if (value.id === 'exportElement') {
-					document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
-					document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
-					document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
-				} else if (value.id === 'colorPicker') {
-					document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
-					document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
-					document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
-				} else if (value.id === 'colorPalette') {
-					document.querySelector('#checkboxColorPalette1').checked = value.settings.checkboxColorPalette1;
-					document.querySelector('#checkboxColorPalette2').checked = value.settings.checkboxColorPalette2;
-					document.querySelector('#checkboxColorPalette3').checked = value.settings.checkboxColorPalette3;
-				} else if (value.id === 'clearAllCache') {
-					document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
-					document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
-					document.querySelector('#checkboxClearAllCache3').checked = value.settings.checkboxClearAllCache3;
-					document.querySelector('#checkboxClearAllCache4').checked = value.settings.checkboxClearAllCache4;
-					document.querySelector('#checkboxClearAllCache5').checked = value.settings.checkboxClearAllCache5;
-					document.querySelector('#checkboxClearAllCache6').checked = value.settings.checkboxClearAllCache6;
-				}
-			});
+
+		allFeatures.map(function (value, index) {
+			if (value.id === 'pageHighlight') {
+				document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
+				document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
+				document.querySelector('#checkboxPageHighlight3').checked = value.settings.checkboxPageHighlight3;
+				document.querySelector('#checkboxPageHighlight4').checked = value.settings.checkboxPageHighlight4;
+				document.querySelector('#checkboxPageHighlight5').checked = value.settings.checkboxPageHighlight5;
+				document.querySelector('#checkboxPageHighlight6').checked = value.settings.checkboxPageHighlight6;
+				document.querySelector('#checkboxPageHighlight7').checked = value.settings.checkboxPageHighlight7;
+			} else if (value.id === 'exportElement') {
+				document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
+				document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
+				document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
+			} else if (value.id === 'colorPicker') {
+				document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
+				document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
+				document.querySelector('#checkboxColorPicker3').checked = value.settings.checkboxColorPicker3;
+			} else if (value.id === 'colorPalette') {
+				document.querySelector('#checkboxColorPalette1').checked = value.settings.checkboxColorPalette1;
+				document.querySelector('#checkboxColorPalette2').checked = value.settings.checkboxColorPalette2;
+				document.querySelector('#checkboxColorPalette3').checked = value.settings.checkboxColorPalette3;
+			} else if (value.id === 'clearAllCache') {
+				document.querySelector('#checkboxClearAllCache1').checked = value.settings.checkboxClearAllCache1;
+				document.querySelector('#checkboxClearAllCache2').checked = value.settings.checkboxClearAllCache2;
+				document.querySelector('#checkboxClearAllCache3').checked = value.settings.checkboxClearAllCache3;
+				document.querySelector('#checkboxClearAllCache4').checked = value.settings.checkboxClearAllCache4;
+				document.querySelector('#checkboxClearAllCache5').checked = value.settings.checkboxClearAllCache5;
+				document.querySelector('#checkboxClearAllCache6').checked = value.settings.checkboxClearAllCache6;
+			}
+		});
 	}, []);
 
 	function pageHighlightSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxPageHighlight1':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight1').checked === true) {
-								value.settings.checkboxPageHighlight1 = true;
-								value.settings.checkboxPageHighlight2 = false;
-								value.settings.checkboxPageHighlight3 = false;
-								value.settings.checkboxPageHighlight4 = false;
-								value.settings.checkboxPageHighlight5 = false;
-								document.querySelector('#checkboxPageHighlight1').checked = true;
-								document.querySelector('#checkboxPageHighlight2').checked = false;
-								document.querySelector('#checkboxPageHighlight3').checked = false;
-								document.querySelector('#checkboxPageHighlight4').checked = false;
-								document.querySelector('#checkboxPageHighlight5').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight1 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight1').checked === true) {
+							value.settings.checkboxPageHighlight1 = true;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = true;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxPageHighlight2':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight2').checked === true) {
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight2').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = true;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = true;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlight3':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight3').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = true;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = true;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight3 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlight4':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight4').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = true;
+							value.settings.checkboxPageHighlight5 = false;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = true;
+							document.querySelector('#checkboxPageHighlight5').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight4 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlight5':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight5').checked === true) {
+							value.settings.checkboxPageHighlight1 = false;
+							value.settings.checkboxPageHighlight2 = false;
+							value.settings.checkboxPageHighlight3 = false;
+							value.settings.checkboxPageHighlight4 = false;
+							value.settings.checkboxPageHighlight5 = true;
+							document.querySelector('#checkboxPageHighlight1').checked = false;
+							document.querySelector('#checkboxPageHighlight2').checked = false;
+							document.querySelector('#checkboxPageHighlight3').checked = false;
+							document.querySelector('#checkboxPageHighlight4').checked = false;
+							document.querySelector('#checkboxPageHighlight5').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight5 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlight6':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
+							value.settings.checkboxPageHighlight6 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxPageHighlight6 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxPageHighlight7':
+				allFeatures.map(function (value, index) {
+					if (value.id === 'pageHighlight') {
+						if (document.querySelector('#checkboxPageHighlight7').checked === true) {
+							setTimeout(function () {
 								value.settings.checkboxPageHighlight1 = false;
 								value.settings.checkboxPageHighlight2 = true;
 								value.settings.checkboxPageHighlight3 = false;
 								value.settings.checkboxPageHighlight4 = false;
 								value.settings.checkboxPageHighlight5 = false;
+								value.settings.checkboxPageHighlight6 = false;
+								value.settings.checkboxPageHighlight7 = false;
 								document.querySelector('#checkboxPageHighlight1').checked = false;
 								document.querySelector('#checkboxPageHighlight2').checked = true;
 								document.querySelector('#checkboxPageHighlight3').checked = false;
 								document.querySelector('#checkboxPageHighlight4').checked = false;
 								document.querySelector('#checkboxPageHighlight5').checked = false;
+								document.querySelector('#checkboxPageHighlight6').checked = false;
+								document.querySelector('#checkboxPageHighlight7').checked = false;
 								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight2 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+							}, 500);
 						}
-					});
-				break;
-			case 'checkboxPageHighlight3':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight3').checked === true) {
-								value.settings.checkboxPageHighlight1 = false;
-								value.settings.checkboxPageHighlight2 = false;
-								value.settings.checkboxPageHighlight3 = true;
-								value.settings.checkboxPageHighlight4 = false;
-								value.settings.checkboxPageHighlight5 = false;
-								document.querySelector('#checkboxPageHighlight1').checked = false;
-								document.querySelector('#checkboxPageHighlight2').checked = false;
-								document.querySelector('#checkboxPageHighlight3').checked = true;
-								document.querySelector('#checkboxPageHighlight4').checked = false;
-								document.querySelector('#checkboxPageHighlight5').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight3 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
-						}
-					});
-				break;
-			case 'checkboxPageHighlight4':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight4').checked === true) {
-								value.settings.checkboxPageHighlight1 = false;
-								value.settings.checkboxPageHighlight2 = false;
-								value.settings.checkboxPageHighlight3 = false;
-								value.settings.checkboxPageHighlight4 = true;
-								value.settings.checkboxPageHighlight5 = false;
-								document.querySelector('#checkboxPageHighlight1').checked = false;
-								document.querySelector('#checkboxPageHighlight2').checked = false;
-								document.querySelector('#checkboxPageHighlight3').checked = false;
-								document.querySelector('#checkboxPageHighlight4').checked = true;
-								document.querySelector('#checkboxPageHighlight5').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight4 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
-						}
-					});
-				break;
-			case 'checkboxPageHighlight5':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight5').checked === true) {
-								value.settings.checkboxPageHighlight1 = false;
-								value.settings.checkboxPageHighlight2 = false;
-								value.settings.checkboxPageHighlight3 = false;
-								value.settings.checkboxPageHighlight4 = false;
-								value.settings.checkboxPageHighlight5 = true;
-								document.querySelector('#checkboxPageHighlight1').checked = false;
-								document.querySelector('#checkboxPageHighlight2').checked = false;
-								document.querySelector('#checkboxPageHighlight3').checked = false;
-								document.querySelector('#checkboxPageHighlight4').checked = false;
-								document.querySelector('#checkboxPageHighlight5').checked = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight5 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
-						}
-					});
-				break;
-			case 'checkboxPageHighlight6':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight6').checked === true) {
-								value.settings.checkboxPageHighlight6 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxPageHighlight6 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
-						}
-					});
-				break;
-			case 'checkboxPageHighlight7':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'pageHighlight') {
-							if (document.querySelector('#checkboxPageHighlight7').checked === true) {
-								setTimeout(function () {
-									value.settings.checkboxPageHighlight1 = false;
-									value.settings.checkboxPageHighlight2 = true;
-									value.settings.checkboxPageHighlight3 = false;
-									value.settings.checkboxPageHighlight4 = false;
-									value.settings.checkboxPageHighlight5 = false;
-									value.settings.checkboxPageHighlight6 = false;
-									value.settings.checkboxPageHighlight7 = false;
-									document.querySelector('#checkboxPageHighlight1').checked = false;
-									document.querySelector('#checkboxPageHighlight2').checked = true;
-									document.querySelector('#checkboxPageHighlight3').checked = false;
-									document.querySelector('#checkboxPageHighlight4').checked = false;
-									document.querySelector('#checkboxPageHighlight5').checked = false;
-									document.querySelector('#checkboxPageHighlight6').checked = false;
-									document.querySelector('#checkboxPageHighlight7').checked = false;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-								}, 500);
-							}
-						}
-					});
+					}
+				});
 				break;
 		}
 	}
@@ -200,56 +193,53 @@ export default function ToggleSettings({allFeatures, portThree}) {
 	function exportElementSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxExportElement1':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'exportElement') {
-							if (document.querySelector('#checkboxExportElement1').checked === true) {
-								value.settings.checkboxExportElement1 = true;
-								value.settings.checkboxExportElement2 = false;
-								document.querySelector('#checkboxExportElement1').checked = true;
-								document.querySelector('#checkboxExportElement2').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxExportElement1 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement1').checked === true) {
+							value.settings.checkboxExportElement1 = true;
+							value.settings.checkboxExportElement2 = false;
+							document.querySelector('#checkboxExportElement1').checked = true;
+							document.querySelector('#checkboxExportElement2').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxExportElement1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxExportElement2':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'exportElement') {
-							if (document.querySelector('#checkboxExportElement2').checked === true) {
-								value.settings.checkboxExportElement1 = false;
-								value.settings.checkboxExportElement2 = true;
-								document.querySelector('#checkboxExportElement1').checked = false;
-								document.querySelector('#checkboxExportElement2').checked = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxExportElement2 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement2').checked === true) {
+							value.settings.checkboxExportElement1 = false;
+							value.settings.checkboxExportElement2 = true;
+							document.querySelector('#checkboxExportElement1').checked = false;
+							document.querySelector('#checkboxExportElement2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxExportElement2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxExportElement3':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'exportElement') {
-							if (document.querySelector('#checkboxExportElement3').checked === true) {
-								setTimeout(function () {
-									value.settings.checkboxExportElement1 = true;
-									value.settings.checkboxExportElement2 = false;
-									value.settings.checkboxExportElement3 = false;
-									document.querySelector('#checkboxExportElement1').checked = true;
-									document.querySelector('#checkboxExportElement2').checked = false;
-									document.querySelector('#checkboxExportElement3').checked = false;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-								}, 500);
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement3').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxExportElement1 = true;
+								value.settings.checkboxExportElement2 = false;
+								value.settings.checkboxExportElement3 = false;
+								document.querySelector('#checkboxExportElement1').checked = true;
+								document.querySelector('#checkboxExportElement2').checked = false;
+								document.querySelector('#checkboxExportElement3').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 500);
 						}
-					});
+					}
+				});
 				break;
 		}
 	}
@@ -257,56 +247,53 @@ export default function ToggleSettings({allFeatures, portThree}) {
 	function colorPickerSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPicker') {
-							if (document.querySelector('#checkboxColorPicker1').checked === true) {
-								value.settings.checkboxColorPicker1 = true;
-								value.settings.checkboxColorPicker2 = false;
-								document.querySelector('#checkboxColorPicker1').checked = true;
-								document.querySelector('#checkboxColorPicker2').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxColorPicker1 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPicker') {
+						if (document.querySelector('#checkboxColorPicker1').checked === true) {
+							value.settings.checkboxColorPicker1 = true;
+							value.settings.checkboxColorPicker2 = false;
+							document.querySelector('#checkboxColorPicker1').checked = true;
+							document.querySelector('#checkboxColorPicker2').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPicker1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxColorPicker2':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPicker') {
-							if (document.querySelector('#checkboxColorPicker2').checked === true) {
-								value.settings.checkboxColorPicker1 = false;
-								value.settings.checkboxColorPicker2 = true;
-								document.querySelector('#checkboxColorPicker1').checked = false;
-								document.querySelector('#checkboxColorPicker2').checked = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxColorPicker2 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPicker') {
+						if (document.querySelector('#checkboxColorPicker2').checked === true) {
+							value.settings.checkboxColorPicker1 = false;
+							value.settings.checkboxColorPicker2 = true;
+							document.querySelector('#checkboxColorPicker1').checked = false;
+							document.querySelector('#checkboxColorPicker2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPicker2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxColorPicker3':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPicker') {
-							if (document.querySelector('#checkboxColorPicker3').checked === true) {
-								setTimeout(function () {
-									value.settings.checkboxColorPicker1 = true;
-									value.settings.checkboxColorPicker2 = false;
-									value.settings.checkboxColorPicker3 = false;
-									document.querySelector('#checkboxColorPicker1').checked = true;
-									document.querySelector('#checkboxColorPicker2').checked = false;
-									document.querySelector('#checkboxColorPicker3').checked = false;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-								}, 500);
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPicker') {
+						if (document.querySelector('#checkboxColorPicker3').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxColorPicker1 = true;
+								value.settings.checkboxColorPicker2 = false;
+								value.settings.checkboxColorPicker3 = false;
+								document.querySelector('#checkboxColorPicker1').checked = true;
+								document.querySelector('#checkboxColorPicker2').checked = false;
+								document.querySelector('#checkboxColorPicker3').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 500);
 						}
-					});
+					}
+				});
 				break;
 		}
 	}
@@ -314,56 +301,53 @@ export default function ToggleSettings({allFeatures, portThree}) {
 	function colorPaletteSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPalette1':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPalette') {
-							if (document.querySelector('#checkboxColorPalette1').checked === true) {
-								value.settings.checkboxColorPalette1 = true;
-								value.settings.checkboxColorPalette2 = false;
-								document.querySelector('#checkboxColorPalette1').checked = true;
-								document.querySelector('#checkboxColorPalette2').checked = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxColorPalette1 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette1').checked === true) {
+							value.settings.checkboxColorPalette1 = true;
+							value.settings.checkboxColorPalette2 = false;
+							document.querySelector('#checkboxColorPalette1').checked = true;
+							document.querySelector('#checkboxColorPalette2').checked = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPalette1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxColorPalette2':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPalette') {
-							if (document.querySelector('#checkboxColorPalette2').checked === true) {
-								value.settings.checkboxColorPalette1 = false;
-								value.settings.checkboxColorPalette2 = true;
-								document.querySelector('#checkboxColorPalette1').checked = false;
-								document.querySelector('#checkboxColorPalette2').checked = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxColorPalette2 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette2').checked === true) {
+							value.settings.checkboxColorPalette1 = false;
+							value.settings.checkboxColorPalette2 = true;
+							document.querySelector('#checkboxColorPalette1').checked = false;
+							document.querySelector('#checkboxColorPalette2').checked = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxColorPalette2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxColorPalette3':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'colorPalette') {
-							if (document.querySelector('#checkboxColorPalette3').checked === true) {
-								setTimeout(function () {
-									value.settings.checkboxColorPalette1 = true;
-									value.settings.checkboxColorPalette2 = false;
-									value.settings.checkboxColorPalette3 = false;
-									document.querySelector('#checkboxColorPalette1').checked = true;
-									document.querySelector('#checkboxColorPalette2').checked = false;
-									document.querySelector('#checkboxColorPalette3').checked = false;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-								}, 500);
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (document.querySelector('#checkboxColorPalette3').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxColorPalette1 = true;
+								value.settings.checkboxColorPalette2 = false;
+								value.settings.checkboxColorPalette3 = false;
+								document.querySelector('#checkboxColorPalette1').checked = true;
+								document.querySelector('#checkboxColorPalette2').checked = false;
+								document.querySelector('#checkboxColorPalette3').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 500);
 						}
-					});
+					}
+				});
 				break;
 		}
 	}
@@ -371,98 +355,92 @@ export default function ToggleSettings({allFeatures, portThree}) {
 	function clearAllCacheSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxClearAllCache1':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache1').checked === true) {
-								value.settings.checkboxClearAllCache1 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxClearAllCache1 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache1').checked === true) {
+							value.settings.checkboxClearAllCache1 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearAllCache1 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxClearAllCache2':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache2').checked === true) {
-								value.settings.checkboxClearAllCache2 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxClearAllCache2 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache2').checked === true) {
+							value.settings.checkboxClearAllCache2 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearAllCache2 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxClearAllCache3':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache3').checked === true) {
-								value.settings.checkboxClearAllCache3 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxClearAllCache3 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache3').checked === true) {
+							value.settings.checkboxClearAllCache3 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearAllCache3 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxClearAllCache4':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache4').checked === true) {
-								value.settings.checkboxClearAllCache4 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxClearAllCache4 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache4').checked === true) {
+							value.settings.checkboxClearAllCache4 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearAllCache4 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxClearAllCache5':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache5').checked === true) {
-								value.settings.checkboxClearAllCache5 = true;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							} else {
-								value.settings.checkboxClearAllCache5 = false;
-								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache5').checked === true) {
+							value.settings.checkboxClearAllCache5 = true;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxClearAllCache5 = false;
+							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
 						}
-					});
+					}
+				});
 				break;
 			case 'checkboxClearAllCache6':
-				allFeatures.length !== 0 &&
-					allFeatures.map(function (value, index) {
-						if (value.id === 'clearAllCache') {
-							if (document.querySelector('#checkboxClearAllCache6').checked === true) {
-								setTimeout(function () {
-									value.settings.checkboxClearAllCache1 = false;
-									value.settings.checkboxClearAllCache2 = true;
-									value.settings.checkboxClearAllCache3 = false;
-									value.settings.checkboxClearAllCache4 = false;
-									value.settings.checkboxClearAllCache5 = false;
-									value.settings.checkboxClearAllCache6 = false;
-									document.querySelector('#checkboxClearAllCache1').checked = false;
-									document.querySelector('#checkboxClearAllCache2').checked = true;
-									document.querySelector('#checkboxClearAllCache3').checked = false;
-									document.querySelector('#checkboxClearAllCache4').checked = false;
-									document.querySelector('#checkboxClearAllCache5').checked = false;
-									document.querySelector('#checkboxClearAllCache6').checked = false;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
-								}, 500);
-							}
+				allFeatures.map(function (value, index) {
+					if (value.id === 'clearAllCache') {
+						if (document.querySelector('#checkboxClearAllCache6').checked === true) {
+							setTimeout(function () {
+								value.settings.checkboxClearAllCache1 = false;
+								value.settings.checkboxClearAllCache2 = true;
+								value.settings.checkboxClearAllCache3 = false;
+								value.settings.checkboxClearAllCache4 = false;
+								value.settings.checkboxClearAllCache5 = false;
+								value.settings.checkboxClearAllCache6 = false;
+								document.querySelector('#checkboxClearAllCache1').checked = false;
+								document.querySelector('#checkboxClearAllCache2').checked = true;
+								document.querySelector('#checkboxClearAllCache3').checked = false;
+								document.querySelector('#checkboxClearAllCache4').checked = false;
+								document.querySelector('#checkboxClearAllCache5').checked = false;
+								document.querySelector('#checkboxClearAllCache6').checked = false;
+								chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							}, 500);
 						}
-					});
+					}
+				});
 				break;
 		}
 	}

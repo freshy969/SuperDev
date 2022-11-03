@@ -27,7 +27,7 @@ export default function Home() {
 
 		// Dark Mode Initialisation
 		chrome.storage.local.get(['colorTheme'], function (result) {
-			if (!result.colorTheme) {
+			if (result.colorTheme === undefined) {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
 					chrome.storage.local.set({colorTheme: 'dark'});
@@ -48,10 +48,8 @@ export default function Home() {
 
 		// Set AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result.allFeatures) {
-				setAllFeatures(JSON.parse(result.allFeatures));
-				setIsLoadingTwo(false);
-			}
+			setAllFeatures(JSON.parse(result.allFeatures));
+			setIsLoadingTwo(false);
 		});
 
 		// OnUpdate AllFeatures
@@ -61,9 +59,16 @@ export default function Home() {
 
 		// Set PortThree
 		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
-			setPortThree(portThree);
-			setIsLoadingThree(false);
+			if (
+				!tabs[0].url.includes('chrome://') &&
+				!tabs[0].url.includes('chrome-extension://') &&
+				!tabs[0].url.includes('file://') &&
+				!tabs[0].url.includes('https://chrome.google.com/webstore')
+			) {
+				let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
+				setPortThree(portThree);
+				setIsLoadingThree(false);
+			}
 		});
 	}, []);
 

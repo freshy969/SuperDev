@@ -166,8 +166,21 @@ chrome.runtime.onInstalled.addListener(async function () {
 	// All Features Initialisation
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		if (result.allFeatures === undefined) {
-			chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
 			chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+		}
+	});
+
+	// Extension Version Initialisation
+	chrome.storage.local.get(['extVersion'], function (result) {
+		if (result.extVersion === undefined) {
+			chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+		}
+	});
+
+	// All Features Read Only Initialisation
+	chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
+		if (result.allFeaturesReadOnly === undefined) {
+			chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
 		}
 	});
 
@@ -330,8 +343,21 @@ chrome.action.onClicked.addListener(function (tab) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
 				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+			}
+		});
+
+		// Extension Version Initialisation
+		chrome.storage.local.get(['extVersion'], function (result) {
+			if (result.extVersion === undefined) {
+				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+			}
+		});
+
+		// All Features Read Only Initialisation
+		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
+			if (result.allFeaturesReadOnly === undefined) {
+				chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
 			}
 		});
 
@@ -353,8 +379,21 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 		// All Features Initialisation
 		chrome.storage.local.get(['allFeatures'], function (result) {
 			if (result.allFeatures === undefined) {
-				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
 				chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+			}
+		});
+
+		// Extension Version Initialisation
+		chrome.storage.local.get(['extVersion'], function (result) {
+			if (result.extVersion === undefined) {
+				chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+			}
+		});
+
+		// All Features Read Only Initialisation
+		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
+			if (result.allFeaturesReadOnly === undefined) {
+				chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
 			}
 		});
 
