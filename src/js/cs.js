@@ -1699,21 +1699,13 @@ function activateExportElement(port, request) {
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
+					let regex = new RegExp(valueTwo + '[ [,:.>+~#]', 'gm');
+
 					// If CSSStyles
 					if (!valueOne.cssText.startsWith('@')) {
 						// IDs
 						if (valueTwo.startsWith('#')) {
-							if (
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-							) {
+							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
@@ -1724,36 +1716,19 @@ function activateExportElement(port, request) {
 								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
 								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
 								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 						// Tags
 						else {
-							if (
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-							) {
+							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 					}
+
 					// If MediaQuery
 					else if (valueOne.cssText.startsWith('@media')) {
 						let mediaStyles = [];
@@ -1762,17 +1737,7 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-									) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
@@ -1783,32 +1748,14 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-									) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
@@ -1821,17 +1768,7 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-											) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
@@ -1842,32 +1779,14 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-											) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
@@ -1902,6 +1821,7 @@ function activateExportElement(port, request) {
 							usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStyles.join('\n')} }`);
 						}
 					}
+
 					// If CSSSupports
 					else if (valueOne.cssText.startsWith('@supports')) {
 						let cssSupports = [];
@@ -1910,17 +1830,7 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-									) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
@@ -1931,32 +1841,14 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-									) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
@@ -1969,17 +1861,7 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-											) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
@@ -1990,32 +1872,14 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
-											) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
@@ -2050,6 +1914,7 @@ function activateExportElement(port, request) {
 							usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupports.join('\n')} }`);
 						}
 					}
+
 					// If CSSKeyframes
 					else if (valueOne.cssText.startsWith('@keyframes')) {
 						let cssKeyframes = [];
