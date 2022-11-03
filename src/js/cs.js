@@ -111,14 +111,14 @@ function showHideExtension(port, request) {
 			margin-left: 168px !important;
 			margin-bottom: -38.5px !important;
 			z-index: 2147483647 !important;`;
-		document.querySelector('#superDev').appendChild(superDevHandler);
+		superDev.appendChild(superDevHandler);
 
-		let superDevIframe = document.createElement('iframe');
-		superDevIframe.src = chrome.runtime.getURL('index.html');
-		superDevIframe.id = 'superDevIframe';
-		superDevIframe.scrolling = 'no';
-		superDevIframe.allow = 'clipboard-write';
-		superDevIframe.style.cssText = `
+		let superDevPopup = document.createElement('iframe');
+		superDevPopup.src = chrome.runtime.getURL('index.html');
+		superDevPopup.id = 'superDevPopup';
+		superDevPopup.scrolling = 'no';
+		superDevPopup.allow = 'clipboard-write';
+		superDevPopup.style.cssText = `
 			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
@@ -131,7 +131,7 @@ function showHideExtension(port, request) {
 			border-radius: 8px !important;
 			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px !important;
 			z-index: 2147483646 !important;`;
-		document.querySelector('#superDev').appendChild(superDevIframe);
+		superDev.appendChild(superDevPopup);
 
 		$('#superDev').draggable({
 			handle: '#superDevHandler',
@@ -175,7 +175,7 @@ function changeHeight(port, request) {
 	chrome.storage.local.get(['howLongPopupIs'], function (result) {
 		if (result.howLongPopupIs !== request.height) {
 			chrome.storage.local.set({howLongPopupIs: request.height});
-			document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
 			port.postMessage({action: 'Height Changed'});
 		}
@@ -186,7 +186,7 @@ function justChangeHeight(port, request) {
 	chrome.storage.local.get(['howLongPopupIs'], function (result) {
 		if (result.howLongPopupIs !== request.height) {
 			chrome.storage.local.set({howLongPopupIs: request.height});
-			document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			port.postMessage({action: 'Just Height Changed'});
 		}
 	});
@@ -214,7 +214,7 @@ function activateTextEditor(port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
@@ -227,7 +227,7 @@ function activateTextEditor(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
@@ -450,7 +450,7 @@ function activatePageRuler(port, request) {
 
 	function onMouseMove(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -687,7 +687,7 @@ function activateColorPicker(port, request) {
 
 	function onMouseMove(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -900,7 +900,7 @@ function activatePageGuideline(port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -908,7 +908,7 @@ function activatePageGuideline(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -985,7 +985,7 @@ function activatePageHighlight(port, request) {
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
-							element.id !== 'superDevIframe' &&
+							element.id !== 'superDevPopup' &&
 							element.id !== 'superDev'
 						) {
 							let color = rgba();
@@ -1004,7 +1004,7 @@ function activatePageHighlight(port, request) {
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
-							element.id !== 'superDevIframe' &&
+							element.id !== 'superDevPopup' &&
 							element.id !== 'superDev'
 						) {
 							if (
@@ -1060,7 +1060,7 @@ function activatePageHighlight(port, request) {
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
-							element.id !== 'superDevIframe' &&
+							element.id !== 'superDevPopup' &&
 							element.id !== 'superDev'
 						) {
 							if (
@@ -1115,7 +1115,7 @@ function activatePageHighlight(port, request) {
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
-							element.id !== 'superDevIframe' &&
+							element.id !== 'superDevPopup' &&
 							element.id !== 'superDev'
 						) {
 							if (
@@ -1150,7 +1150,7 @@ function activatePageHighlight(port, request) {
 							element.offsetHeight !== 0 &&
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
-							element.id !== 'superDevIframe' &&
+							element.id !== 'superDevPopup' &&
 							element.id !== 'superDev'
 						) {
 							if (
@@ -1212,7 +1212,7 @@ function activatePageHighlight(port, request) {
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
-								element.id !== 'superDevIframe' &&
+								element.id !== 'superDevPopup' &&
 								element.id !== 'superDev'
 							) {
 								if (value.settings.checkboxPageHighlight6 !== true) {
@@ -1230,7 +1230,7 @@ function activatePageHighlight(port, request) {
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
-								element.id !== 'superDevIframe' &&
+								element.id !== 'superDevPopup' &&
 								element.id !== 'superDev'
 							) {
 								if (
@@ -1285,7 +1285,7 @@ function activatePageHighlight(port, request) {
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
-								element.id !== 'superDevIframe' &&
+								element.id !== 'superDevPopup' &&
 								element.id !== 'superDev'
 							) {
 								if (
@@ -1339,7 +1339,7 @@ function activatePageHighlight(port, request) {
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
-								element.id !== 'superDevIframe' &&
+								element.id !== 'superDevPopup' &&
 								element.id !== 'superDev'
 							) {
 								if (
@@ -1373,7 +1373,7 @@ function activatePageHighlight(port, request) {
 								element.offsetHeight !== 0 &&
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
-								element.id !== 'superDevIframe' &&
+								element.id !== 'superDevPopup' &&
 								element.id !== 'superDev'
 							) {
 								if (
@@ -1433,7 +1433,7 @@ function activateMoveElement(port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -1441,7 +1441,7 @@ function activateMoveElement(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1449,7 +1449,7 @@ function activateMoveElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.style.setProperty('cursor', 'move', 'important');
 			event.target.classList.add('moveElementDraggable');
 			$('.moveElementDraggable').draggable({
@@ -1560,7 +1560,7 @@ function activateExportElement(port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -1568,7 +1568,7 @@ function activateExportElement(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1625,7 +1625,7 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			// Saving OutHTML Selectors
 			// IDs, Classes, Tags
 			let usedStyles = [];
@@ -2056,7 +2056,7 @@ function activateDeleteElement(port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -2064,7 +2064,7 @@ function activateDeleteElement(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -2072,7 +2072,7 @@ function activateDeleteElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
