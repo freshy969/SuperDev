@@ -1629,7 +1629,6 @@ function activateExportElement(port, request) {
 
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
-	let usedStyles = [];
 
 	// Saving All CSSRules to AllStyleSheets 2D Array
 	[...document.styleSheets].map(function (valueOne, indexOne) {
@@ -1682,7 +1681,11 @@ function activateExportElement(port, request) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevIframe' && event.target.id !== 'superDev') {
 			// Saving OutHTML Selectors
 			// IDs, Classes, Tags
+			let usedStyles = [];
 			let allSelectors = [];
+			let allKeyframes = [];
+			let allAnimations = [];
+
 			[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
 				let tempSelectors = [];
 				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
@@ -1791,6 +1794,7 @@ function activateExportElement(port, request) {
 											cssKeyframes.push(valueFive.cssText);
 										});
 										if (cssKeyframes.length !== 0) {
+											allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`});
 											cssSupports.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
 										}
 									}
@@ -1806,6 +1810,7 @@ function activateExportElement(port, request) {
 									cssKeyframes.push(valueFour.cssText);
 								});
 								if (cssKeyframes.length !== 0) {
+									allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`});
 									mediaStyles.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
 								}
 							}
@@ -1878,6 +1883,7 @@ function activateExportElement(port, request) {
 											cssKeyframes.push(valueFive.cssText);
 										});
 										if (cssKeyframes.length !== 0) {
+											allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`});
 											mediaStyles.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
 										}
 									}
@@ -1893,6 +1899,7 @@ function activateExportElement(port, request) {
 									cssKeyframes.push(valueFour.cssText);
 								});
 								if (cssKeyframes.length !== 0) {
+									allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`});
 									cssSupports.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
 								}
 							}
@@ -1909,6 +1916,7 @@ function activateExportElement(port, request) {
 							cssKeyframes.push(valueThree.cssText);
 						});
 						if (cssKeyframes.length !== 0) {
+							allKeyframes.push({name: valueOne.name, value: `@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`});
 							usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`);
 						}
 					}
@@ -1931,6 +1939,16 @@ function activateExportElement(port, request) {
 					});
 				});
 			}
+
+			// CSS Keyframe Replace
+			allAnimations = usedStyles.match(/animation:(.+);|animation-name(.+);/gm);
+			allAnimations.map(function (valueOne, indexOne) {
+				allKeyframes.map(function (valueTwo, indexTwo) {
+					if (!valueOne.includes(valueTwo.name + ';') && !valueOne.includes(valueTwo.name + ' ')) {
+						usedStyles = usedStyles.replaceAll(valueTwo.value, '');
+					}
+				});
+			});
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
