@@ -27,10 +27,8 @@ export default function NavBar({allFeatures, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
-					if (document.querySelector('#mainBody').classList.contains('hidden')) {
-						JustChangeHeight(portThree, PopupHeight(allFeatures));
-						HideAllCompExcept('mainBody');
-					}
+					JustChangeHeight(portThree, PopupHeight(allFeatures));
+					HideAllCompExcept('mainBody');
 					chrome.storage.local.set({setHomePageActive: false});
 				}
 			}
@@ -62,13 +60,10 @@ export default function NavBar({allFeatures, portThree}) {
 						chrome.storage.local.set({whichFeatureActive: null});
 					}, 1000);
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					if (document.querySelector('#colorPalettePage').classList.contains('hidden')) {
-						ChangeHeight(portThree, PopupHeight(allFeatures));
-						HideAllCompExcept('colorPalettePage');
-
-						let childHeight = PopupHeight(allFeatures) - 41.5;
-						document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
-					}
+					ChangeHeight(portThree, PopupHeight(allFeatures));
+					HideAllCompExcept('colorPalettePage');
+					let childHeight = PopupHeight(allFeatures) - 41.5;
+					document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
 				}
 			}
 		});
