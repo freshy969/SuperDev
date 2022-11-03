@@ -172,16 +172,24 @@ function showHideExtension(port, request) {
 }
 
 function changeHeight(port, request) {
-	chrome.storage.local.set({howLongPopupIs: request.height});
-	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
-	if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
-	port.postMessage({action: 'Height Changed'});
+	chrome.storage.local.get(['howLongPopupIs'], function (result) {
+		if (result.howLongPopupIs !== request.height) {
+			chrome.storage.local.set({howLongPopupIs: request.height});
+			document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+			if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
+			port.postMessage({action: 'Height Changed'});
+		}
+	});
 }
 
 function justChangeHeight(port, request) {
-	chrome.storage.local.set({howLongPopupIs: request.height});
-	document.querySelector('#superDevIframe').style.height = `${request.height}px`;
-	port.postMessage({action: 'Just Height Changed'});
+	chrome.storage.local.get(['howLongPopupIs'], function (result) {
+		if (result.howLongPopupIs !== request.height) {
+			chrome.storage.local.set({howLongPopupIs: request.height});
+			document.querySelector('#superDevIframe').style.height = `${request.height}px`;
+			port.postMessage({action: 'Just Height Changed'});
+		}
+	});
 }
 
 function activateTextEditor(port, request) {
