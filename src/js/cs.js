@@ -1698,21 +1698,22 @@ function activateExportElement(port, request) {
 
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
+				if (valueOne.selectorText && valueOne.selectorText.includes('w-11')) console.log(valueOne.selectorText);
 				allSelectors.map(function (valueTwo, indexTwo) {
 					// If CSSStyles
 					if (!valueOne.cssText.startsWith('@')) {
 						// IDs
 						if (valueTwo.startsWith('#')) {
 							if (
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1720,19 +1721,19 @@ function activateExportElement(port, request) {
 						// Classes
 						else if (valueTwo.startsWith('.')) {
 							if (
-								(' ' + valueOne.selectorText + ' ').includes('*') ||
-								(' ' + valueOne.selectorText + ' ').includes('html') ||
-								(' ' + valueOne.selectorText + ' ').includes(':root') ||
-								(' ' + valueOne.selectorText + ' ').includes('body') ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1740,15 +1741,15 @@ function activateExportElement(port, request) {
 						// Tags
 						else {
 							if (
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1763,15 +1764,15 @@ function activateExportElement(port, request) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
@@ -1779,19 +1780,19 @@ function activateExportElement(port, request) {
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes('*') ||
-										(' ' + valueThree.selectorText + ' ').includes('html') ||
-										(' ' + valueThree.selectorText + ' ').includes(':root') ||
-										(' ' + valueThree.selectorText + ' ').includes('body') ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
@@ -1799,15 +1800,15 @@ function activateExportElement(port, request) {
 								// Tags
 								else {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
@@ -1822,15 +1823,15 @@ function activateExportElement(port, request) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
@@ -1838,19 +1839,19 @@ function activateExportElement(port, request) {
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes('*') ||
-												(' ' + valueFour.selectorText + ' ').includes('html') ||
-												(' ' + valueFour.selectorText + ' ').includes(':root') ||
-												(' ' + valueFour.selectorText + ' ').includes('body') ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
@@ -1858,15 +1859,15 @@ function activateExportElement(port, request) {
 										// Tags
 										else {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
@@ -1911,15 +1912,15 @@ function activateExportElement(port, request) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
@@ -1927,19 +1928,19 @@ function activateExportElement(port, request) {
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes('*') ||
-										(' ' + valueThree.selectorText + ' ').includes('html') ||
-										(' ' + valueThree.selectorText + ' ').includes(':root') ||
-										(' ' + valueThree.selectorText + ' ').includes('body') ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
@@ -1947,15 +1948,15 @@ function activateExportElement(port, request) {
 								// Tags
 								else {
 									if (
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}~`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}#`)
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
@@ -1970,15 +1971,15 @@ function activateExportElement(port, request) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
@@ -1986,19 +1987,19 @@ function activateExportElement(port, request) {
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes('*') ||
-												(' ' + valueFour.selectorText + ' ').includes('html') ||
-												(' ' + valueFour.selectorText + ' ').includes(':root') ||
-												(' ' + valueFour.selectorText + ' ').includes('body') ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
@@ -2006,15 +2007,15 @@ function activateExportElement(port, request) {
 										// Tags
 										else {
 											if (
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}~`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}#`)
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}[`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo},`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}:`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo} `) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}.`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}>`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}+`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}~`) ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(`${valueTwo}#`)
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
