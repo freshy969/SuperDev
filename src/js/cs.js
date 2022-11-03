@@ -1595,19 +1595,19 @@ function activateExportElement(port, request) {
 
 	// Saving External Stylesheets' CSSRules
 	// to AllStyleSheets 2D Array
-	let exportEleIframe = document.createElement('iframe');
-	exportEleIframe.setAttribute('style', 'display: none');
-	exportEleIframe.id = 'exportEleIframe';
-	document.body.appendChild(exportEleIframe);
-	let exportEleStyle = document.createElement('style');
-	exportEleIframe.contentDocument.head.appendChild(exportEleStyle);
+	let superDev = document.querySelector('#superDev');
+	let styleWrapper = document.createElement('style-wrapper');
+	let styleShaRoot = styleWrapper.attachShadow({mode: 'closed'});
+	let styleExport = document.createElement('style');
+	styleShaRoot.appendChild(styleExport);
+	superDev.appendChild(styleWrapper);
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i].length === 0) {
-					exportEleStyle.textContent = request.styleSheet;
-					[...exportEleIframe.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
+					styleExport.textContent = request.styleSheet;
+					[...styleWrapper.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
 						if ([...valueOne.cssRules].length !== 0) {
 							let singleStylesheet = [];
 							[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
