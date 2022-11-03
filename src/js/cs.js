@@ -1708,7 +1708,11 @@ function activateExportElement(port, request) {
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1718,12 +1722,17 @@ function activateExportElement(port, request) {
 							if (
 								(' ' + valueOne.selectorText + ' ').includes('*') ||
 								(' ' + valueOne.selectorText + ' ').includes('html') ||
+								(' ' + valueOne.selectorText + ' ').includes(':root') ||
 								(' ' + valueOne.selectorText + ' ').includes('body') ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}[`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1735,7 +1744,11 @@ function activateExportElement(port, request) {
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo},`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}:`) ||
 								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo} `) ||
-								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`)
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}.`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}>`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}+`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}~`) ||
+								(' ' + valueOne.selectorText + ' ').includes(`${valueTwo}#`)
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
@@ -1753,7 +1766,7 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1768,11 +1781,12 @@ function activateExportElement(port, request) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
+										(' ' + valueThree.selectorText + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1788,7 +1802,7 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1811,7 +1825,7 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1826,11 +1840,12 @@ function activateExportElement(port, request) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
+												(' ' + valueFour.selectorText + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1846,7 +1861,7 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1899,7 +1914,7 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1914,11 +1929,12 @@ function activateExportElement(port, request) {
 									if (
 										(' ' + valueThree.selectorText + ' ').includes('*') ||
 										(' ' + valueThree.selectorText + ' ').includes('html') ||
+										(' ' + valueThree.selectorText + ' ').includes(':root') ||
 										(' ' + valueThree.selectorText + ' ').includes('body') ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1934,7 +1950,7 @@ function activateExportElement(port, request) {
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}[`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo},`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}:`) ||
-										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} :`) ||
+										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo} `) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}.`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}>`) ||
 										(' ' + valueThree.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1957,7 +1973,7 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1972,11 +1988,12 @@ function activateExportElement(port, request) {
 											if (
 												(' ' + valueFour.selectorText + ' ').includes('*') ||
 												(' ' + valueFour.selectorText + ' ').includes('html') ||
+												(' ' + valueFour.selectorText + ' ').includes(':root') ||
 												(' ' + valueFour.selectorText + ' ').includes('body') ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -1992,7 +2009,7 @@ function activateExportElement(port, request) {
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}[`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo},`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}:`) ||
-												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} :`) ||
+												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo} `) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}.`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}>`) ||
 												(' ' + valueFour.selectorText + ' ').includes(`${valueTwo}+`) ||
@@ -2049,20 +2066,20 @@ function activateExportElement(port, request) {
 			usedStyles = [...new Set(usedStyles)];
 			usedStyles = usedStyles.join(' ');
 
-			// CSS Variables Replace
-			let bodyStyle = window.getComputedStyle(document.body);
-			let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
-			if (usedVars !== null) {
-				usedVars = [...new Set(usedVars?.flat())];
+			// // CSS Variables Replace
+			// let bodyStyle = window.getComputedStyle(document.body);
+			// let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
+			// if (usedVars !== null) {
+			// 	usedVars = [...new Set(usedVars?.flat())];
 
-				usedVars.map(function (valueOne, indexOne) {
-					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
-						if (valueTwo !== null) {
-							usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
-						}
-					});
-				});
-			}
+			// 	usedVars.map(function (valueOne, indexOne) {
+			// 		valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+			// 			if (valueTwo !== null) {
+			// 				usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
+			// 			}
+			// 		});
+			// 	});
+			// }
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
