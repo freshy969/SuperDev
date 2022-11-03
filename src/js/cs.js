@@ -1699,31 +1699,29 @@ function activateExportElement(port, request) {
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
-					let regex = new RegExp(valueTwo + '[ [,:.>+~#]', 'gm');
+					let regexOne = new RegExp('(html|body|:root|[*])[ [,:.>+~#]', 'gm');
+					let regexTwo = new RegExp(valueTwo + '[ [,:.>+~#]', 'gm');
 
 					// If CSSStyles
 					if (!valueOne.cssText.startsWith('@')) {
 						// IDs
 						if (valueTwo.startsWith('#')) {
-							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 						// Classes
 						else if (valueTwo.startsWith('.')) {
 							if (
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
+								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 						// Tags
 						else {
-							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
@@ -1737,25 +1735,22 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
@@ -1768,25 +1763,22 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
@@ -1830,25 +1822,22 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
+										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
@@ -1861,25 +1850,22 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('*') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('html') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes(':root') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').includes('body') ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
+												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regex) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
