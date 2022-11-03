@@ -18,7 +18,6 @@ export default function Home() {
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
-		chrome.storage.local.set({isStopBtnPressed: false}); // True, False
 		chrome.storage.local.set({setHomePageActive: false}); // True, False
 		chrome.storage.local.set({setActFeatDisabled: false}); // True, False
 		chrome.storage.local.set({setMinimised: null}); // True, False, Null

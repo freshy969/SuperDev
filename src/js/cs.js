@@ -152,11 +152,11 @@ function showHideExtension(port, request) {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({isStopBtnPressed: false});
-		chrome.storage.local.set({setHomePageActive: false});
-		chrome.storage.local.set({setActFeatDisabled: false});
-		chrome.storage.local.set({setMinimised: null});
-		chrome.storage.local.set({whichFeatureActive: null});
+		chrome.storage.local.set({setHomePageActive: false}); // True, False
+		chrome.storage.local.set({setActFeatDisabled: false}); // True, False
+		chrome.storage.local.set({setMinimised: null}); // True, False, Null
+		chrome.storage.local.set({whichFeatureActive: null}); // String, Null
+		//chrome.storage.local.set({howLongPopupIs: null}); // Number, Null
 
 		document.querySelector('#superDev').style.top = '18px';
 		document.querySelector('#superDev').style.right = '18px';
@@ -205,9 +205,9 @@ function activateTextEditor(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyTextEditor(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyTextEditor(false);
+				destroyTextEditor();
 			}
 		}
 	}
@@ -237,28 +237,20 @@ function activateTextEditor(port, request) {
 		}
 	}
 
-	function destroyTextEditor(isManualEscape) {
+	function destroyTextEditor() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
-				document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActFeatDisabled: true});
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
+			document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
@@ -386,7 +378,7 @@ function activatePageRuler(port, request) {
 		});
 	}
 
-	function destroyPageRuler(isManualEscape) {
+	function destroyPageRuler() {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -394,17 +386,8 @@ function activatePageRuler(port, request) {
 		document.removeEventListener('scroll', onPageScroll);
 		window.removeEventListener('resize', onWindowResize);
 
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActFeatDisabled: true});
-		}
-
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		removeDimensions();
@@ -485,9 +468,9 @@ function activatePageRuler(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageRuler(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyPageRuler(false);
+				destroyPageRuler();
 			}
 		}
 	}
@@ -631,7 +614,7 @@ function activateColorPicker(port, request) {
 		});
 	}
 
-	function destroyColorPicker(isManualEscape) {
+	function destroyColorPicker() {
 		connectionClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
@@ -640,17 +623,8 @@ function activateColorPicker(port, request) {
 		document.removeEventListener('click', onMouseClick);
 		window.removeEventListener('resize', onWindowResize);
 
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActFeatDisabled: true});
-		}
-
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		removeColorPicker();
@@ -738,9 +712,9 @@ function activateColorPicker(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyColorPicker(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyColorPicker(false);
+				destroyColorPicker();
 			}
 		}
 	}
@@ -883,26 +857,16 @@ function activateColorPalette(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyColorPalette(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyColorPalette(false);
+				destroyColorPalette();
 			}
 		}
 	}
 
-	function destroyColorPalette(isManualEscape) {
+	function destroyColorPalette() {
 		document.removeEventListener('keyup', onEscape);
-
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActFeatDisabled: true});
-		}
-
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.set({setHomePageActive: true});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
-		});
+		chrome.storage.local.set({setHomePageActive: true});
 	}
 
 	port.postMessage({action: 'Color Palette Activated'});
@@ -927,9 +891,9 @@ function activatePageGuideline(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageGuideline(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyPageGuideline(false);
+				destroyPageGuideline();
 			}
 		}
 	}
@@ -950,26 +914,18 @@ function activatePageGuideline(port, request) {
 		}
 	}
 
-	function destroyPageGuideline(isManualEscape) {
+	function destroyPageGuideline() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActFeatDisabled: true});
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
@@ -1232,27 +1188,18 @@ function activatePageHighlight(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyPageHighlight(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyPageHighlight(false);
+				destroyPageHighlight();
 			}
 		}
 	}
 
-	function destroyPageHighlight(isManualEscape) {
+	function destroyPageHighlight() {
 		document.removeEventListener('keyup', onEscape);
 
-		if (isManualEscape === true) {
-			chrome.storage.local.set({setActFeatDisabled: true});
-		}
-
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
@@ -1477,9 +1424,9 @@ function activateMoveElement(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyMoveElement(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyMoveElement(false);
+				destroyMoveElement();
 			}
 		}
 	}
@@ -1524,27 +1471,19 @@ function activateMoveElement(port, request) {
 		}
 	}
 
-	function destroyMoveElement(isManualEscape) {
+	function destroyMoveElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActFeatDisabled: true});
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		if (document.querySelector('.moveElementDraggable')) {
@@ -1612,9 +1551,9 @@ function activateExportElement(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyExportElement(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyExportElement(false);
+				destroyExportElement();
 			}
 		}
 	}
@@ -2036,27 +1975,19 @@ function activateExportElement(port, request) {
 		}
 	}
 
-	function destroyExportElement(isManualEscape) {
+	function destroyExportElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActFeatDisabled: true});
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
@@ -2116,9 +2047,9 @@ function activateDeleteElement(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				destroyDeleteElement(true);
+				chrome.storage.local.set({setActFeatDisabled: true});
 			} else if (event.isTrusted === false) {
-				destroyDeleteElement(false);
+				destroyDeleteElement();
 			}
 		}
 	}
@@ -2147,27 +2078,19 @@ function activateDeleteElement(port, request) {
 		}
 	}
 
-	function destroyDeleteElement(isManualEscape) {
+	function destroyDeleteElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 		document.removeEventListener('click', onMouseClick);
 
-		if (isManualEscape === true) {
-			if (document.querySelector('.pageGuidelineOutline')) {
-				document.querySelector('.pageGuidelineOutline').blur();
-				document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-			}
-			chrome.storage.local.set({setActFeatDisabled: true});
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['isStopBtnPressed'], function (result) {
-			if (result.isStopBtnPressed === true || isManualEscape === true) {
-				chrome.storage.local.get(['howLongPopupIs'], function (result) {
-					if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-				});
-				chrome.storage.local.set({isStopBtnPressed: false});
-			}
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
