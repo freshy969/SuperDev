@@ -17,19 +17,25 @@ export default function ColorPalette({allFeatures, portThree}) {
 
 	function copyColorCode(color, id) {
 		navigator.clipboard.writeText(color);
-		document.querySelector('#' + id + '> span').innerText = '';
-		document.querySelector('#' + id + '> i').classList.remove('before:hidden');
-		setTimeout(function () {
-			document.querySelector('#' + id + '> i').classList.add('before:hidden');
-		}, 1000);
+		if (document.querySelector('#' + id + '> span') && document.querySelector('#' + id + '> i')) {
+			document.querySelector('#' + id + '> span').innerText = '';
+			document.querySelector('#' + id + '> i').classList.remove('before:hidden');
+			setTimeout(function () {
+				document.querySelector('#' + id + '> i').classList.add('before:hidden');
+			}, 1000);
+		}
 	}
 
 	function showColorCode(color, id) {
-		document.querySelector('#' + id + '> span').innerText = color;
+		if (document.querySelector('#' + id + '> span')) {
+			document.querySelector('#' + id + '> span').innerText = color;
+		}
 	}
 
 	function hideColorCode(color, id) {
-		document.querySelector('#' + id + '> span').innerText = '';
+		if (document.querySelector('#' + id + '> span')) {
+			document.querySelector('#' + id + '> span').innerText = '';
+		}
 	}
 
 	function hexToRgb(hex) {
@@ -44,7 +50,7 @@ export default function ColorPalette({allFeatures, portThree}) {
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 				<div id='colorPalettePageChild' className='rounded-md p-4'>
 					<div className='flex flex-wrap'>
-						{!isLoadingOne
+						{!isLoadingOne && allColors.length !== 0
 							? allColors.map(function (value, index) {
 									// Margin Right/Bottom Calculation
 									let id = 'colorPalette' + (index + 1);
