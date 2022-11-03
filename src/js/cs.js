@@ -1699,7 +1699,7 @@ function activateExportElement(port, request) {
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
-					let regexOne = new RegExp('[ ,]([*]|:root|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
+					let regexOne = new RegExp('[ ,]([*]|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
 					let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
 					let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
 
@@ -1918,20 +1918,19 @@ function activateExportElement(port, request) {
 			usedStyles = [...new Set(usedStyles)];
 			usedStyles = usedStyles.join(' ');
 
-			// // CSS Variables Replace
-			// let bodyStyle = window.getComputedStyle(document.body);
-			// let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
-			// if (usedVars !== null) {
-			// 	usedVars = [...new Set(usedVars?.flat())];
-
-			// 	usedVars.map(function (valueOne, indexOne) {
-			// 		valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
-			// 			if (valueTwo !== null) {
-			// 				usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
-			// 			}
-			// 		});
-			// 	});
-			// }
+			// CSS Variables Replace
+			let bodyStyle = window.getComputedStyle(document.body);
+			let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
+			if (usedVars !== null) {
+				usedVars = [...new Set(usedVars?.flat())];
+				usedVars.map(function (valueOne, indexOne) {
+					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+						if (valueTwo !== null && bodyStyle.getPropertyValue(valueTwo) !== '') {
+							usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
+						}
+					});
+				});
+			}
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
