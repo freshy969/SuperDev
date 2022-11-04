@@ -1637,6 +1637,7 @@ function activateExportElement(port, request) {
 			// Removing Unused CSS
 			allStyleSheets.flat().map(function (valueOne, indexOne) {
 				allSelectors.map(function (valueTwo, indexTwo) {
+					let regexZero = new RegExp(/\\/gm);
 					let regexOne = new RegExp('[ ,]([*]|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
 					let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
 					let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
@@ -1645,22 +1646,22 @@ function activateExportElement(port, request) {
 					if (!valueOne.cssText.startsWith('@')) {
 						// IDs
 						if (valueTwo.startsWith('#')) {
-							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+							if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 						// Classes
 						else if (valueTwo.startsWith('.')) {
 							if (
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
-								(' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
+								(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+								(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 							) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
 						// Tags
 						else {
-							if ((' ' + valueOne.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
+							if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
 								usedStyles.push(valueOne.cssText);
 							}
 						}
@@ -1674,22 +1675,22 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
+										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 									) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
 										mediaStyles.push(valueThree.cssText);
 									}
 								}
@@ -1702,22 +1703,22 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
+												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 											) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
 												cssSupports.push(valueFour.cssText);
 											}
 										}
@@ -1763,22 +1764,22 @@ function activateExportElement(port, request) {
 							if (!valueThree.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
-										(' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
+										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 									) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
+									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
 										cssSupports.push(valueThree.cssText);
 									}
 								}
@@ -1791,22 +1792,22 @@ function activateExportElement(port, request) {
 									if (!valueFour.cssText.startsWith('@')) {
 										// IDs
 										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 										// Classes
 										else if (valueTwo.startsWith('.')) {
 											if (
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexOne) !== null ||
-												(' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexTwo) !== null
+												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 											) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
 										// Tags
 										else {
-											if ((' ' + valueFour.selectorText.replaceAll(/\\/gm, '') + ' ').match(regexThree) !== null) {
+											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
 												mediaStyles.push(valueFour.cssText);
 											}
 										}
@@ -1875,8 +1876,8 @@ function activateExportElement(port, request) {
 				});
 			}
 
-			// CSS Keyframe Replace
-			allAnimations = usedStyles.match(/animation:(.+);|animation-name(.+);/gm);
+			// CSS Keyframe Replace, Regex Will Get Chars Between Two Strings Without The Two Chars Itself
+			allAnimations = usedStyles.match(/(?<=animation:)([\S\s]*?)(?=;)|(?<=animation-name:)([\S\s]*?)(?=;)/gm);
 			allAnimations = [...new Set(allAnimations)];
 			if (allAnimations !== null) {
 				allAnimations.map(function (valueOne, indexOne) {
@@ -1917,8 +1918,11 @@ function activateExportElement(port, request) {
 							html = html.replace(' cursor: default !important;', '');
 						}
 
-						// Remove SuperDev Html from Body
-						html = html.replaceAll(/<superdev-wrapper(.+)<\/superdev-wrapper>/gm, '');
+						// Remove SuperDev && Page Guideline Wrapper from Body
+						// Regex Will Get Chars Between Two Strings + The Two Chars Itself
+						html = html.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
+						html = html.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
+						html = html.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
