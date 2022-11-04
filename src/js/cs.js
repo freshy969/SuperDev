@@ -1895,11 +1895,9 @@ function activateExportElement(port, request) {
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result.allFeatures).map(function (value, index) {
 					if (value.id === 'exportElement') {
-						let html = html_beautify(event.target.outerHTML, {indent_size: 2, indent_with_tabs: true});
-						let css = css_beautify('body { background: #eee; /* Helper CSS, Remove This */ }' + usedStyles, {
-							indent_size: 2,
-							indent_with_tabs: true,
-						});
+						let html = event.target.outerHTML;
+						let helper = 'body { background: #eee; /* Helper CSS, Remove This */ }';
+						let css = helper + usedStyles;
 						usedStyles = []; // Reset
 
 						// Remove PageGuidelineOutline Class From OuterHTML
@@ -1923,6 +1921,10 @@ function activateExportElement(port, request) {
 						html = html.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
 						html = html.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
 						html = html.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
+
+						// Format Before Codepen/Save File
+						html = html_beautify(html, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+						css = css_beautify(css, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
