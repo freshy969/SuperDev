@@ -74,7 +74,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 function showHideExtension(port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDevWrapper') === null) {
-		let superDevWrapper = document.createElement('super-dev-wrapper');
+		let superDevWrapper = document.createElement('superdev-wrapper');
 		superDevWrapper.id = 'superDevWrapper';
 		superDevWrapper.style.cssText = `
 			display: block !important;
@@ -93,7 +93,7 @@ function showHideExtension(port, request) {
 			z-index: 2147483646 !important;`;
 		document.body.appendChild(superDevWrapper);
 
-		let superDevHandler = document.createElement('super-dev-handler');
+		let superDevHandler = document.createElement('superdev-handler');
 		superDevHandler.id = 'superDevHandler';
 		superDevHandler.style.cssText = `
 			display: block !important;
@@ -1918,7 +1918,7 @@ function activateExportElement(port, request) {
 						}
 
 						// Remove SuperDev Html from Body
-						html = html.replaceAll(/<super-dev-wrapper(.+)<\/super-dev-wrapper>/gm, '');
+						html = html.replaceAll(/<superdev-wrapper(.+)<\/superdev-wrapper>/gm, '');
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
