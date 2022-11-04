@@ -193,24 +193,13 @@ function justChangeHeight(port, request) {
 }
 
 function activateTextEditor(port, request) {
-	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('keyup', onEscape);
 
 	let guidelineWrapper = document.createElement('guideline-wrapper');
 	guidelineWrapper.classList.add('guidelineWrapper');
 	document.body.appendChild(guidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyTextEditor();
-			}
-		}
-	}
 
 	function onMouseOver(event) {
 		event.preventDefault();
@@ -235,25 +224,6 @@ function activateTextEditor(port, request) {
 				renderPageGuideline(false);
 			}
 		}
-	}
-
-	function destroyTextEditor() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').removeAttribute('contenteditable', true);
-			document.querySelector('.guidelineOutline').removeAttribute('spellcheck', false);
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
@@ -288,6 +258,36 @@ function activateTextEditor(port, request) {
 
 	port.postMessage({action: 'Text Editor Activated'});
 	chrome.storage.local.set({setMinimised: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyTextEditor();
+			}
+		}
+	}
+
+	function destroyTextEditor() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').removeAttribute('contenteditable', true);
+			document.querySelector('.guidelineOutline').removeAttribute('spellcheck', false);
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		document.querySelector('.guidelineWrapper').remove();
+	}
 }
 
 function deactivateTextEditor(port, request) {
@@ -342,9 +342,9 @@ function activatePageRuler(port, request) {
 	function initiate() {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('keyup', onEscape);
 		document.addEventListener('scroll', onPageScroll);
 		window.addEventListener('resize', onWindowResize);
+		document.addEventListener('keyup', onEscape);
 		window.focus({preventScroll: true});
 
 		disableCursor();
@@ -376,22 +376,6 @@ function activatePageRuler(port, request) {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	}
-
-	function destroyPageRuler() {
-		connectionClosed = true;
-		document.removeEventListener('mousemove', onMouseMove);
-		document.removeEventListener('touchmove', onMouseMove);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('scroll', onPageScroll);
-		window.removeEventListener('resize', onWindowResize);
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		removeDimensions();
-		enableCursor();
 	}
 
 	function removeDimensions() {
@@ -464,17 +448,6 @@ function activatePageRuler(port, request) {
 		}
 	}
 
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyPageRuler();
-			}
-		}
-	}
-
 	function sendToWorker(event) {
 		if (paused) return;
 
@@ -522,6 +495,33 @@ function activatePageRuler(port, request) {
 		newPageRulerEle.appendChild(pageRulerTooltip);
 
 		body.appendChild(newPageRulerEle);
+	}
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyPageRuler();
+			}
+		}
+	}
+
+	function destroyPageRuler() {
+		connectionClosed = true;
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('scroll', onPageScroll);
+		window.removeEventListener('resize', onWindowResize);
+		document.removeEventListener('keyup', onEscape);
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		removeDimensions();
+		enableCursor();
 	}
 }
 
@@ -577,10 +577,10 @@ function activateColorPicker(port, request) {
 	function initiate() {
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('keyup', onEscape);
 		document.addEventListener('scroll', onPageScroll);
 		document.addEventListener('click', onMouseClick);
 		window.addEventListener('resize', onWindowResize);
+		document.addEventListener('keyup', onEscape);
 		window.focus({preventScroll: true});
 
 		disableCursor();
@@ -612,23 +612,6 @@ function activateColorPicker(port, request) {
 			width: canvas.width,
 			height: canvas.height,
 		});
-	}
-
-	function destroyColorPicker() {
-		connectionClosed = true;
-		document.removeEventListener('mousemove', onMouseMove);
-		document.removeEventListener('touchmove', onMouseMove);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('scroll', onPageScroll);
-		document.removeEventListener('click', onMouseClick);
-		window.removeEventListener('resize', onWindowResize);
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		removeColorPicker();
-		enableCursor();
 	}
 
 	function removeColorPicker() {
@@ -708,17 +691,6 @@ function activateColorPicker(port, request) {
 		}
 	}
 
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyColorPicker();
-			}
-		}
-	}
-
 	function sendToWorker(event) {
 		if (paused) return;
 
@@ -770,6 +742,34 @@ function activateColorPicker(port, request) {
 		colorPickerTooltip.appendChild(colorPickerTooltipChild);
 		newColorPickerEle.appendChild(colorPickerTooltip);
 		body.appendChild(newColorPickerEle);
+	}
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyColorPicker();
+			}
+		}
+	}
+
+	function destroyColorPicker() {
+		connectionClosed = true;
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('touchmove', onMouseMove);
+		document.removeEventListener('scroll', onPageScroll);
+		document.removeEventListener('click', onMouseClick);
+		window.removeEventListener('resize', onWindowResize);
+		document.removeEventListener('keyup', onEscape);
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		removeColorPicker();
+		enableCursor();
 	}
 }
 
@@ -853,6 +853,8 @@ function activateColorPalette(port, request) {
 		return hex.toUpperCase();
 	}
 
+	port.postMessage({action: 'Color Palette Activated'});
+
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -868,8 +870,6 @@ function activateColorPalette(port, request) {
 		document.removeEventListener('keyup', onEscape);
 		chrome.storage.local.set({setHomePageActive: true});
 	}
-
-	port.postMessage({action: 'Color Palette Activated'});
 }
 
 function deactivateColorPalette(port, request) {
@@ -878,25 +878,14 @@ function deactivateColorPalette(port, request) {
 }
 
 function activatePageGuideline(port, request) {
-	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
 	let guidelineWrapper = document.createElement('guideline-wrapper');
 	guidelineWrapper.classList.add('guidelineWrapper');
 	document.body.appendChild(guidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyPageGuideline();
-			}
-		}
-	}
 
 	function onMouseOver(event) {
 		event.preventDefault();
@@ -912,23 +901,6 @@ function activatePageGuideline(port, request) {
 			renderPageGuideline(false);
 			event.target.classList.remove('guidelineOutline');
 		}
-	}
-
-	function destroyPageGuideline() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
@@ -964,6 +936,34 @@ function activatePageGuideline(port, request) {
 
 	port.postMessage({action: 'Page Guideline Activated'});
 	chrome.storage.local.set({setMinimised: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyPageGuideline();
+			}
+		}
+	}
+
+	function destroyPageGuideline() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		document.querySelector('.guidelineWrapper').remove();
+	}
 }
 
 function deactivatePageGuideline(port, request) {
@@ -1184,6 +1184,9 @@ function activatePageHighlight(port, request) {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
+	port.postMessage({action: 'Page Highlight Activated'});
+	chrome.storage.local.set({setMinimised: true});
+
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -1399,9 +1402,6 @@ function activatePageHighlight(port, request) {
 			});
 		});
 	}
-
-	port.postMessage({action: 'Page Highlight Activated'});
-	chrome.storage.local.set({setMinimised: true});
 }
 
 function deactivatePageHighlight(port, request) {
@@ -1410,26 +1410,15 @@ function deactivatePageHighlight(port, request) {
 }
 
 function activateMoveElement(port, request) {
-	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
+	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
 	let guidelineWrapper = document.createElement('guideline-wrapper');
 	guidelineWrapper.classList.add('guidelineWrapper');
 	document.body.appendChild(guidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyMoveElement();
-			}
-		}
-	}
 
 	function onMouseOver(event) {
 		event.preventDefault();
@@ -1471,32 +1460,6 @@ function activateMoveElement(port, request) {
 		}
 	}
 
-	function destroyMoveElement() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('click', onMouseClick);
-
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		if (document.querySelector('.moveElementDraggable')) {
-			$('.moveElementDraggable').draggable('destroy');
-			document.querySelectorAll('.moveElementDraggable').forEach(function (element) {
-				element.style.setProperty('cursor', 'default', 'important');
-			});
-			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
-		}
-
-		document.querySelector('.guidelineWrapper').remove();
-	}
-
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
@@ -1529,6 +1492,43 @@ function activateMoveElement(port, request) {
 
 	port.postMessage({action: 'Move Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyMoveElement();
+			}
+		}
+	}
+
+	function destroyMoveElement() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		if (document.querySelector('.moveElementDraggable')) {
+			$('.moveElementDraggable').draggable('destroy');
+			document.querySelectorAll('.moveElementDraggable').forEach(function (element) {
+				element.style.setProperty('cursor', 'default', 'important');
+			});
+			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
+		}
+
+		document.querySelector('.guidelineWrapper').remove();
+	}
 }
 
 function deactivateMoveElement(port, request) {
@@ -1537,26 +1537,15 @@ function deactivateMoveElement(port, request) {
 }
 
 function activateExportElement(port, request) {
-	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
+	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
 	let guidelineWrapper = document.createElement('guideline-wrapper');
 	guidelineWrapper.classList.add('guidelineWrapper');
 	document.body.appendChild(guidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyExportElement();
-			}
-		}
-	}
 
 	function onMouseOver(event) {
 		event.preventDefault();
@@ -1975,24 +1964,6 @@ function activateExportElement(port, request) {
 		}
 	}
 
-	function destroyExportElement() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('click', onMouseClick);
-
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		document.querySelector('.guidelineWrapper').remove();
-	}
-
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
 			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
@@ -2025,6 +1996,35 @@ function activateExportElement(port, request) {
 
 	port.postMessage({action: 'Export Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyExportElement();
+			}
+		}
+	}
+
+	function destroyExportElement() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		document.querySelector('.guidelineWrapper').remove();
+	}
 }
 
 function deactivateExportElement(port, request) {
@@ -2033,26 +2033,15 @@ function deactivateExportElement(port, request) {
 }
 
 function activateDeleteElement(port, request) {
-	document.addEventListener('keyup', onEscape);
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
+	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
 	let guidelineWrapper = document.createElement('guideline-wrapper');
 	guidelineWrapper.classList.add('guidelineWrapper');
 	document.body.appendChild(guidelineWrapper);
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
-			} else if (event.isTrusted === false) {
-				destroyDeleteElement();
-			}
-		}
-	}
 
 	function onMouseOver(event) {
 		event.preventDefault();
@@ -2076,24 +2065,6 @@ function activateDeleteElement(port, request) {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
-	}
-
-	function destroyDeleteElement() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
-		document.removeEventListener('click', onMouseClick);
-
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
-		});
-
-		document.querySelector('.guidelineWrapper').remove();
 	}
 
 	function renderPageGuideline(toShow) {
@@ -2128,6 +2099,35 @@ function activateDeleteElement(port, request) {
 
 	port.postMessage({action: 'Delete Element Activated'});
 	chrome.storage.local.set({setMinimised: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({setActFeatDisabled: true});
+			} else if (event.isTrusted === false) {
+				destroyDeleteElement();
+			}
+		}
+	}
+
+	function destroyDeleteElement() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.guidelineOutline')) {
+			document.querySelector('.guidelineOutline').blur();
+			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs'], function (result) {
+			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		});
+
+		document.querySelector('.guidelineWrapper').remove();
+	}
 }
 
 function deactivateDeleteElement(port, request) {
