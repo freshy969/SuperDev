@@ -73,10 +73,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 function showHideExtension(port, request) {
 	// If Popup Doesn't Exists, Create
-	if (document.querySelector('#superDev') === null) {
-		let superDev = document.createElement('super-dev');
-		superDev.id = 'superDev';
-		superDev.style.cssText = `
+	if (document.querySelector('#superDevWrapper') === null) {
+		let superDevWrapper = document.createElement('super-dev-wrapper');
+		superDevWrapper.id = 'superDevWrapper';
+		superDevWrapper.style.cssText = `
 			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
@@ -91,7 +91,7 @@ function showHideExtension(port, request) {
 			width: 335px !important;
 			visibility: hidden !important;
 			z-index: 2147483646 !important;`;
-		document.body.appendChild(superDev);
+		document.body.appendChild(superDevWrapper);
 
 		let superDevHandler = document.createElement('super-dev-handler');
 		superDevHandler.id = 'superDevHandler';
@@ -111,7 +111,7 @@ function showHideExtension(port, request) {
 			margin-left: 168px !important;
 			margin-bottom: -38.5px !important;
 			z-index: 2147483647 !important;`;
-		superDev.appendChild(superDevHandler);
+		superDevWrapper.appendChild(superDevHandler);
 
 		let superDevPopup = document.createElement('iframe');
 		superDevPopup.src = chrome.runtime.getURL('index.html');
@@ -131,9 +131,9 @@ function showHideExtension(port, request) {
 			border-radius: 8px !important;
 			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px !important;
 			z-index: 2147483646 !important;`;
-		superDev.appendChild(superDevPopup);
+		superDevWrapper.appendChild(superDevPopup);
 
-		$('#superDev').draggable({
+		$('#superDevWrapper').draggable({
 			handle: '#superDevHandler',
 			iframeFix: true,
 			containment: 'document',
@@ -142,10 +142,10 @@ function showHideExtension(port, request) {
 	}
 
 	// If Popup Visible, Set Hidden
-	else if (document.querySelector('#superDev').style.visibility !== 'hidden') {
+	else if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 		chrome.storage.local.set({setHomePageActive: true});
 		chrome.storage.local.set({setActFeatDisabled: true});
-		document.querySelector('#superDev').style.visibility = 'hidden';
+		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
 
@@ -158,10 +158,10 @@ function showHideExtension(port, request) {
 		chrome.storage.local.set({whichFeatureActive: null}); // String, Null
 		//chrome.storage.local.set({howLongPopupIs: null}); // Number, Null
 
-		document.querySelector('#superDev').style.top = '18px';
-		document.querySelector('#superDev').style.right = '18px';
-		document.querySelector('#superDev').style.left = '';
-		document.querySelector('#superDev').style.visibility = 'visible';
+		document.querySelector('#superDevWrapper').style.top = '18px';
+		document.querySelector('#superDevWrapper').style.right = '18px';
+		document.querySelector('#superDevWrapper').style.left = '';
+		document.querySelector('#superDevWrapper').style.visibility = 'visible';
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
@@ -176,7 +176,7 @@ function changeHeight(port, request) {
 		if (result.howLongPopupIs !== request.height) {
 			chrome.storage.local.set({howLongPopupIs: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
-			if (document.querySelector('#superDev').style.visibility === 'hidden') document.querySelector('#superDev').style.visibility = 'visible';
+			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') document.querySelector('#superDevWrapper').style.visibility = 'visible';
 			port.postMessage({action: 'Height Changed'});
 		}
 	});
@@ -197,17 +197,17 @@ function activateTextEditor(port, request) {
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
 
-	let guidelineWrapper = document.createElement('guideline-wrapper');
-	guidelineWrapper.classList.add('guidelineWrapper');
-	document.body.appendChild(guidelineWrapper);
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
-				event.target.classList.add('guidelineOutline');
+				event.target.classList.add('pageGuidelineOutline');
 				renderPageGuideline(true);
 				event.target.focus({preventScroll: true});
 			}
@@ -216,11 +216,11 @@ function activateTextEditor(port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			if (event.target.classList.contains('guidelineOutline')) {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			if (event.target.classList.contains('pageGuidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
-				event.target.classList.remove('guidelineOutline');
+				event.target.classList.remove('pageGuidelineOutline');
 				renderPageGuideline(false);
 			}
 		}
@@ -228,7 +228,7 @@ function activateTextEditor(port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -241,7 +241,7 @@ function activateTextEditor(port, request) {
 			let left = guidelinePosition.left + document.documentElement.scrollLeft;
 			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			guidelineWrapper.innerHTML = `
+			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -252,7 +252,7 @@ function activateTextEditor(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			guidelineWrapper.innerHTML = ``;
+			pageGuidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -275,18 +275,18 @@ function activateTextEditor(port, request) {
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').removeAttribute('contenteditable', true);
-			document.querySelector('.guidelineOutline').removeAttribute('spellcheck', false);
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').removeAttribute('contenteditable', true);
+			document.querySelector('.pageGuidelineOutline').removeAttribute('spellcheck', false);
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.guidelineWrapper').remove();
+		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
@@ -308,8 +308,8 @@ function activatePageRuler(port, request) {
 	let paused = true;
 	let inputX, inputY;
 	let connectionClosed = false;
-	let overlay = document.createElement('div');
-	overlay.className = 'pageRulerOverlay';
+	let pageRulerOverlay = document.createElement('page-ruler-overlay');
+	pageRulerOverlay.className = 'pageRulerOverlay';
 
 	portTwo.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -327,8 +327,8 @@ function activatePageRuler(port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		document.querySelector('#superDev').style.visibility = 'hidden';
+	if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
+		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
@@ -379,7 +379,7 @@ function activatePageRuler(port, request) {
 	}
 
 	function removeDimensions() {
-		let dimensions = body.querySelector('.pageRulerEle');
+		let dimensions = body.querySelector('.pageRulerWrapper');
 		if (dimensions) body.removeChild(dimensions);
 	}
 
@@ -397,8 +397,8 @@ function activatePageRuler(port, request) {
 
 	function requestNewScreenshot() {
 		// In Case od Scroll or Resize
-		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-			document.querySelector('#superDev').style.visibility = 'hidden';
+		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
+			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 			chrome.storage.local.set({setMinimised: null});
 			port.postMessage({action: 'Popup Hidden'});
 
@@ -425,16 +425,16 @@ function activatePageRuler(port, request) {
 	}
 
 	function disableCursor() {
-		body.appendChild(overlay);
+		body.appendChild(pageRulerOverlay);
 	}
 
 	function enableCursor() {
-		body.removeChild(overlay);
+		body.removeChild(pageRulerOverlay);
 	}
 
 	function onMouseMove(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -463,25 +463,25 @@ function activatePageRuler(port, request) {
 		removeDimensions();
 		if (!dimensions) return;
 
-		let newPageRulerEle = document.createElement('div');
-		newPageRulerEle.className = 'pageRulerEle';
-		newPageRulerEle.style.left = dimensions.x + 'px';
-		newPageRulerEle.style.top = dimensions.y + 'px';
+		let pageRulerWrapper = document.createElement('page-ruler-wrapper');
+		pageRulerWrapper.className = 'pageRulerWrapper';
+		pageRulerWrapper.style.left = dimensions.x + 'px';
+		pageRulerWrapper.style.top = dimensions.y + 'px';
 
 		let measureWidth = dimensions.left + dimensions.right;
 		let measureHeight = dimensions.top + dimensions.bottom;
 
-		let xAxis = document.createElement('div');
+		let xAxis = document.createElement('page-ruler-x-axis');
 		xAxis.className = 'x pageRulerAxis';
 		xAxis.style.left = -dimensions.left + 'px';
 		xAxis.style.width = measureWidth + 'px';
 
-		let yAxis = document.createElement('div');
+		let yAxis = document.createElement('page-ruler-y-axis');
 		yAxis.className = 'y pageRulerAxis';
 		yAxis.style.top = -dimensions.top + 'px';
 		yAxis.style.height = measureHeight + 'px';
 
-		let pageRulerTooltip = document.createElement('div');
+		let pageRulerTooltip = document.createElement('page-ruler-tooltip');
 		pageRulerTooltip.className = 'pageRulerTooltip';
 
 		pageRulerTooltip.textContent = measureWidth + 1 + ' x ' + (measureHeight + 1) + ' px';
@@ -490,11 +490,11 @@ function activatePageRuler(port, request) {
 
 		if (dimensions.x > window.innerWidth - 120) pageRulerTooltip.classList.add('left');
 
-		newPageRulerEle.appendChild(xAxis);
-		newPageRulerEle.appendChild(yAxis);
-		newPageRulerEle.appendChild(pageRulerTooltip);
+		pageRulerWrapper.appendChild(xAxis);
+		pageRulerWrapper.appendChild(yAxis);
+		pageRulerWrapper.appendChild(pageRulerTooltip);
 
-		body.appendChild(newPageRulerEle);
+		body.appendChild(pageRulerWrapper);
 	}
 
 	function onEscape(event) {
@@ -543,8 +543,8 @@ function activateColorPicker(port, request) {
 	let paused = true;
 	let inputX, inputY;
 	let connectionClosed = false;
-	let overlay = document.createElement('div');
-	overlay.className = 'colorPickerOverlay';
+	let colorPickerOverlay = document.createElement('color-picker-overlay');
+	colorPickerOverlay.className = 'colorPickerOverlay';
 
 	portTwo.onMessage.addListener(function (request) {
 		if (connectionClosed) return;
@@ -562,8 +562,8 @@ function activateColorPicker(port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-		document.querySelector('#superDev').style.visibility = 'hidden';
+	if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
+		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
@@ -615,8 +615,8 @@ function activateColorPicker(port, request) {
 	}
 
 	function removeColorPicker() {
-		let colorPickerEle = body.querySelector('.colorPickerEle');
-		if (colorPickerEle) body.removeChild(colorPickerEle);
+		let colorPickerWrapper = body.querySelector('.colorPickerWrapper');
+		if (colorPickerWrapper) body.removeChild(colorPickerWrapper);
 	}
 
 	function onPageScroll() {
@@ -633,8 +633,8 @@ function activateColorPicker(port, request) {
 
 	function requestNewScreenshot() {
 		// In Case od Scroll or Resize
-		if (document.querySelector('#superDev').style.visibility !== 'hidden') {
-			document.querySelector('#superDev').style.visibility = 'hidden';
+		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
+			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 			chrome.storage.local.set({setMinimised: null});
 			port.postMessage({action: 'Popup Hidden'});
 
@@ -661,16 +661,16 @@ function activateColorPicker(port, request) {
 	}
 
 	function disableCursor() {
-		body.appendChild(overlay);
+		body.appendChild(colorPickerOverlay);
 	}
 
 	function enableCursor() {
-		body.removeChild(overlay);
+		body.removeChild(colorPickerOverlay);
 	}
 
 	function onMouseMove(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -706,18 +706,18 @@ function activateColorPicker(port, request) {
 		removeColorPicker();
 		if (!spotColor) return;
 
-		let newColorPickerEle = document.createElement('div');
-		newColorPickerEle.className = 'colorPickerEle';
-		newColorPickerEle.style.left = spotColor.x + 'px';
-		newColorPickerEle.style.top = spotColor.y + 'px';
+		let colorPickerWrapper = document.createElement('color-picker-wrapper');
+		colorPickerWrapper.className = 'colorPickerWrapper';
+		colorPickerWrapper.style.left = spotColor.x + 'px';
+		colorPickerWrapper.style.top = spotColor.y + 'px';
 
-		let colorPickerTooltip = document.createElement('div');
+		let colorPickerTooltip = document.createElement('color-picker-tooltip');
 		colorPickerTooltip.className = 'colorPickerTooltip';
 
-		let colorPickerTooltipBG = document.createElement('div');
+		let colorPickerTooltipBG = document.createElement('color-picker-tooltip-bg');
 		colorPickerTooltipBG.className = 'colorPickerTooltipBG';
 
-		let colorPickerTooltipChild = document.createElement('div');
+		let colorPickerTooltipChild = document.createElement('color-picker-tooltip-child');
 		colorPickerTooltipChild.className = 'colorPickerTooltipChild';
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
@@ -740,8 +740,8 @@ function activateColorPicker(port, request) {
 
 		colorPickerTooltip.appendChild(colorPickerTooltipBG);
 		colorPickerTooltip.appendChild(colorPickerTooltipChild);
-		newColorPickerEle.appendChild(colorPickerTooltip);
-		body.appendChild(newColorPickerEle);
+		colorPickerWrapper.appendChild(colorPickerTooltip);
+		body.appendChild(colorPickerWrapper);
 	}
 
 	function onEscape(event) {
@@ -883,29 +883,29 @@ function activatePageGuideline(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	let guidelineWrapper = document.createElement('guideline-wrapper');
-	guidelineWrapper.classList.add('guidelineWrapper');
-	document.body.appendChild(guidelineWrapper);
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('guidelineOutline');
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
-			event.target.classList.remove('guidelineOutline');
+			event.target.classList.remove('pageGuidelineOutline');
 		}
 	}
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -919,7 +919,7 @@ function activatePageGuideline(port, request) {
 			let left = guidelinePosition.left + document.documentElement.scrollLeft;
 			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			guidelineWrapper.innerHTML = `
+			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -930,7 +930,7 @@ function activatePageGuideline(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			guidelineWrapper.innerHTML = ``;
+			pageGuidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -953,16 +953,16 @@ function activatePageGuideline(port, request) {
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.guidelineWrapper').remove();
+		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
@@ -986,7 +986,7 @@ function activatePageHighlight(port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDev'
+							element.id !== 'superDevWrapper'
 						) {
 							let color = rgba();
 							if (value.settings.checkboxPageHighlight6 !== true) {
@@ -1005,7 +1005,7 @@ function activatePageHighlight(port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDev'
+							element.id !== 'superDevWrapper'
 						) {
 							if (
 								element.tagName === 'ADDRESS' ||
@@ -1061,7 +1061,7 @@ function activatePageHighlight(port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDev'
+							element.id !== 'superDevWrapper'
 						) {
 							if (
 								element.tagName === 'A' ||
@@ -1116,7 +1116,7 @@ function activatePageHighlight(port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDev'
+							element.id !== 'superDevWrapper'
 						) {
 							if (
 								element.tagName === 'ARTICLE' ||
@@ -1151,7 +1151,7 @@ function activatePageHighlight(port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDev'
+							element.id !== 'superDevWrapper'
 						) {
 							if (
 								element.tagName === 'H1' ||
@@ -1216,7 +1216,7 @@ function activatePageHighlight(port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDev'
+								element.id !== 'superDevWrapper'
 							) {
 								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.removeProperty('box-sizing');
@@ -1234,7 +1234,7 @@ function activatePageHighlight(port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDev'
+								element.id !== 'superDevWrapper'
 							) {
 								if (
 									element.tagName === 'ADDRESS' ||
@@ -1289,7 +1289,7 @@ function activatePageHighlight(port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDev'
+								element.id !== 'superDevWrapper'
 							) {
 								if (
 									element.tagName === 'A' ||
@@ -1343,7 +1343,7 @@ function activatePageHighlight(port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDev'
+								element.id !== 'superDevWrapper'
 							) {
 								if (
 									element.tagName === 'ARTICLE' ||
@@ -1377,7 +1377,7 @@ function activatePageHighlight(port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDev'
+								element.id !== 'superDevWrapper'
 							) {
 								if (
 									element.tagName === 'H1' ||
@@ -1416,29 +1416,29 @@ function activateMoveElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	let guidelineWrapper = document.createElement('guideline-wrapper');
-	guidelineWrapper.classList.add('guidelineWrapper');
-	document.body.appendChild(guidelineWrapper);
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('guidelineOutline');
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
-			event.target.classList.remove('guidelineOutline');
+			event.target.classList.remove('pageGuidelineOutline');
 		}
 	}
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			event.target.style.setProperty('cursor', 'move', 'important');
 			event.target.classList.add('moveElementDraggable');
 			$('.moveElementDraggable').draggable({
@@ -1462,7 +1462,7 @@ function activateMoveElement(port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -1475,7 +1475,7 @@ function activateMoveElement(port, request) {
 			let left = guidelinePosition.left + document.documentElement.scrollLeft;
 			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			guidelineWrapper.innerHTML = `
+			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -1486,7 +1486,7 @@ function activateMoveElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			guidelineWrapper.innerHTML = ``;
+			pageGuidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -1510,9 +1510,9 @@ function activateMoveElement(port, request) {
 		document.removeEventListener('click', onMouseClick);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
@@ -1527,7 +1527,7 @@ function activateMoveElement(port, request) {
 			document.querySelector('.moveElementDraggable').classList.remove('moveElementDraggable');
 		}
 
-		document.querySelector('.guidelineWrapper').remove();
+		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
@@ -1543,23 +1543,23 @@ function activateExportElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	let guidelineWrapper = document.createElement('guideline-wrapper');
-	guidelineWrapper.classList.add('guidelineWrapper');
-	document.body.appendChild(guidelineWrapper);
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('guidelineOutline');
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
-			event.target.classList.remove('guidelineOutline');
+			event.target.classList.remove('pageGuidelineOutline');
 		}
 	}
 
@@ -1584,19 +1584,18 @@ function activateExportElement(port, request) {
 
 	// Saving External Stylesheets' CSSRules
 	// to AllStyleSheets 2D Array
-	let superDev = document.querySelector('#superDev');
-	let styleWrapper = document.createElement('style-wrapper');
-	let styleShaRoot = styleWrapper.attachShadow({mode: 'closed'});
-	let styleExport = document.createElement('style');
-	styleShaRoot.appendChild(styleExport);
-	superDev.appendChild(styleWrapper);
+	let exportElementWrapper = document.createElement('export-element-wrapper');
+	let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
+	let exportElementStyle = document.createElement('style');
+	exportElementShaRoot.appendChild(exportElementStyle);
+	document.body.appendChild(exportElementWrapper);
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i].length === 0) {
-					styleExport.textContent = request.styleSheet;
-					[...styleWrapper.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
+					exportElementStyle.textContent = request.styleSheet;
+					[...exportElementWrapper.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
 						if ([...valueOne.cssRules].length !== 0) {
 							let singleStylesheet = [];
 							[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
@@ -1614,7 +1613,7 @@ function activateExportElement(port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			// Saving OutHTML Selectors
 			// IDs, Classes, Tags
 			let usedStyles = [];
@@ -1627,7 +1626,7 @@ function activateExportElement(port, request) {
 				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
 				if (valueOne.className !== '') {
 					[...valueOne.classList].map(function (valueTwo, indexTwo) {
-						if (valueTwo !== 'guidelineOutline') tempSelectors.push('.' + valueTwo);
+						if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
 					});
 				}
 				tempSelectors.push(valueOne.tagName.toLowerCase());
@@ -1903,12 +1902,12 @@ function activateExportElement(port, request) {
 						usedStyles = []; // Reset
 
 						// Remove PageGuidelineOutline Class From OuterHTML
-						if (html.includes('class="guidelineOutline"')) {
-							html = html.replace('class="guidelineOutline"', '');
-						} else if (html.includes(' guidelineOutline')) {
-							html = html.replace(' guidelineOutline', '');
-						} else if (html.includes('guidelineOutline ')) {
-							html = html.replace('guidelineOutline ', '');
+						if (html.includes('class="pageGuidelineOutline"')) {
+							html = html.replace('class="pageGuidelineOutline"', '');
+						} else if (html.includes(' pageGuidelineOutline')) {
+							html = html.replace(' pageGuidelineOutline', '');
+						} else if (html.includes('pageGuidelineOutline ')) {
+							html = html.replace('pageGuidelineOutline ', '');
 						}
 
 						// Remove MoveElement Cursor From OuterHTML
@@ -1919,7 +1918,7 @@ function activateExportElement(port, request) {
 						}
 
 						// Remove SuperDev Html from Body
-						html = html.replaceAll(/<super-dev(.+)<\/super-dev>/gm, '');
+						html = html.replaceAll(/<super-dev-wrapper(.+)<\/super-dev-wrapper>/gm, '');
 
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
@@ -1966,7 +1965,7 @@ function activateExportElement(port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -1979,7 +1978,7 @@ function activateExportElement(port, request) {
 			let left = guidelinePosition.left + document.documentElement.scrollLeft;
 			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			guidelineWrapper.innerHTML = `
+			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -1990,7 +1989,7 @@ function activateExportElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			guidelineWrapper.innerHTML = ``;
+			pageGuidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -2014,16 +2013,16 @@ function activateExportElement(port, request) {
 		document.removeEventListener('click', onMouseClick);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.guidelineWrapper').remove();
+		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
@@ -2039,29 +2038,29 @@ function activateDeleteElement(port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	let guidelineWrapper = document.createElement('guideline-wrapper');
-	guidelineWrapper.classList.add('guidelineWrapper');
-	document.body.appendChild(guidelineWrapper);
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
-			event.target.classList.add('guidelineOutline');
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
-			event.target.classList.remove('guidelineOutline');
+			event.target.classList.remove('pageGuidelineOutline');
 		}
 	}
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDev') {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
@@ -2069,7 +2068,7 @@ function activateDeleteElement(port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.guidelineOutline').getBoundingClientRect();
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -2082,7 +2081,7 @@ function activateDeleteElement(port, request) {
 			let left = guidelinePosition.left + document.documentElement.scrollLeft;
 			let right = guidelinePosition.right + document.documentElement.scrollLeft;
 
-			guidelineWrapper.innerHTML = `
+			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
 			xmlns="http://www.w3.org/2000/svg">
 				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
@@ -2093,7 +2092,7 @@ function activateDeleteElement(port, request) {
 					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
 			</svg>`;
 		} else {
-			guidelineWrapper.innerHTML = ``;
+			pageGuidelineWrapper.innerHTML = ``;
 		}
 	}
 
@@ -2117,16 +2116,16 @@ function activateDeleteElement(port, request) {
 		document.removeEventListener('click', onMouseClick);
 		document.removeEventListener('keyup', onEscape);
 
-		if (document.querySelector('.guidelineOutline')) {
-			document.querySelector('.guidelineOutline').blur();
-			document.querySelector('.guidelineOutline').classList.remove('guidelineOutline');
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
 		chrome.storage.local.get(['howLongPopupIs'], function (result) {
 			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
 		});
 
-		document.querySelector('.guidelineWrapper').remove();
+		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 

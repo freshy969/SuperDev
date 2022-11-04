@@ -10,8 +10,8 @@
 	z-index: 2147483645;
 }
 
-.pageRulerEle,
-.colorPickerEle {
+.pageRulerWrapper,
+.colorPickerWrapper {
 	position: fixed;
 	width: 0;
 	height: 0;
@@ -130,10 +130,10 @@
 /** Page Ruler + Color Picker **/
 
 /**  Page Guideline **/
-.guidelineOutline {
+.pageGuidelineOutline {
 	outline: red solid 2px !important;
 }
-.guidelineWrapper > svg {
+.pageGuidelineWrapper > svg {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -142,7 +142,7 @@
 	z-index: 2147483645;
 }
 
-.guidelineWrapper line {
+.pageGuidelineWrapper line {
 	stroke: rgb(255, 26, 26);
 	stroke-dasharray: 2;
 }
