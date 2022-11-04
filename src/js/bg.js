@@ -177,7 +177,7 @@ chrome.runtime.onInstalled.addListener(async function () {
 		}
 	});
 
-	// All Features Read Only Initialisation
+	// Read Only All Features Initialisation
 	chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
 		if (result.allFeaturesReadOnly === undefined) {
 			chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
@@ -261,8 +261,9 @@ chrome.runtime.onInstalled.addListener(async function () {
 						});
 					});
 
-					chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
 					chrome.storage.local.set({allFeatures: JSON.stringify(storedAllFeatures)});
+					chrome.storage.local.set({extVersion: chrome.runtime.getManifest().version});
+					chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
 				});
 			}
 		}
@@ -354,7 +355,7 @@ chrome.action.onClicked.addListener(function (tab) {
 			}
 		});
 
-		// All Features Read Only Initialisation
+		// Read Only All Features Initialisation
 		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
 			if (result.allFeaturesReadOnly === undefined) {
 				chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});
@@ -390,7 +391,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 			}
 		});
 
-		// All Features Read Only Initialisation
+		// Read Only All Features Initialisation
 		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
 			if (result.allFeaturesReadOnly === undefined) {
 				chrome.storage.local.set({allFeaturesReadOnly: JSON.stringify(allFeatures)});

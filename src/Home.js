@@ -12,9 +12,11 @@ export default function Home() {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
 	const [isLoadingTwo, setIsLoadingTwo] = useState(true);
 	const [isLoadingThree, setIsLoadingThree] = useState(true);
+	const [isLoadingFour, setIsLoadingFour] = useState(true);
 
 	const [allFeatures, setAllFeatures] = useState([]);
 	const [portThree, setPortThree] = useState();
+	const [allFeaturesReadOnly, setAllFeaturesReadOnly] = useState([]);
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
@@ -69,16 +71,22 @@ export default function Home() {
 				setIsLoadingThree(false);
 			}
 		});
+
+		// Set Read Only All Features
+		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
+			setAllFeaturesReadOnly(JSON.parse(result.allFeaturesReadOnly));
+			setIsLoadingFour(false);
+		});
 	}, []);
 
-	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree) {
+	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
 		ChangeHeight(portThree, PopupHeight(allFeatures));
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} portThree={portThree} />
 				<MainBody allFeatures={allFeatures} portThree={portThree} />
 				<ToggleInfo allFeatures={allFeatures} portThree={portThree} />
-				<ToggleSettings allFeatures={allFeatures} portThree={portThree} />
+				<ToggleSettings allFeatures={allFeatures} portThree={portThree} allFeaturesReadOnly={allFeaturesReadOnly} />
 				<ColorPalette allFeatures={allFeatures} portThree={portThree} />
 			</>
 		);
