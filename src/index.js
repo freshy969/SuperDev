@@ -4,7 +4,7 @@ import Home from './Home';
 import './css/global.css';
 import './libs/css/font-awesome/css/pro.min.css';
 
-const root = ReactDOM.createRoot(document.getElementById('superDevBody'));
+const root = ReactDOM.createRoot(document.querySelector('#superDevBody'));
 root.render(
 	<React.StrictMode>
 		<Home />
