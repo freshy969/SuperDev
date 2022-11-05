@@ -1935,6 +1935,7 @@ function activateExportElement(port, request) {
 								css: css,
 								tags: ['SuperDev'],
 							});
+
 							let codepenForm = document.createElement('form');
 							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
 							codepenForm.setAttribute('method', 'POST');

@@ -2,21 +2,19 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import HideAllCompExcept from './functions/HideAllCompExcept';
 import PopupHeight from './functions/PopupHeight';
-import ChangeHeight from './functions/ChangeHeight';
-import JustChangeHeight from './functions/JustChangeHeight';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function NavBar({allFeatures, portThree}) {
+export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	useEffect(function () {
 		// OnUpdate SetMinimised
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setMinimised) {
 				if (changes.setMinimised.newValue === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					ChangeHeight(portThree, 40.5); // 40.5 = Header Height
+					portThree.postMessage({action: 'changeHeight', height: 40.5});
 					chrome.storage.local.set({setMinimised: null});
 				} else if (changes.setMinimised.newValue === false) {
-					ChangeHeight(portThree, PopupHeight(allFeatures));
+					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 					document.querySelector('#navBar').firstChild.style.borderRadius = '';
 					chrome.storage.local.set({setMinimised: null});
 				}
@@ -27,7 +25,7 @@ export default function NavBar({allFeatures, portThree}) {
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes.setHomePageActive) {
 				if (changes.setHomePageActive.newValue === true) {
-					JustChangeHeight(portThree, PopupHeight(allFeatures));
+					portThree.postMessage({action: 'justChangeHeight', height: PopupHeight(allFeatures)});
 					HideAllCompExcept('mainBody');
 					chrome.storage.local.set({setHomePageActive: false});
 				}
@@ -40,7 +38,7 @@ export default function NavBar({allFeatures, portThree}) {
 				if (changes.setActFeatDisabled.newValue === true) {
 					chrome.storage.local.get(['whichFeatureActive'], function (result) {
 						if (result.whichFeatureActive !== null) {
-							ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+							ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
 							chrome.storage.local.set({setActFeatDisabled: false});
 						}
 					});
@@ -60,7 +58,7 @@ export default function NavBar({allFeatures, portThree}) {
 						chrome.storage.local.set({whichFeatureActive: null});
 					}, 1000);
 				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					ChangeHeight(portThree, PopupHeight(allFeatures));
+					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 					HideAllCompExcept('colorPalettePage');
 					let childHeight = PopupHeight(allFeatures) - 41.5;
 					document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
@@ -74,8 +72,8 @@ export default function NavBar({allFeatures, portThree}) {
 			if (event.key === 'Escape' && event.isTrusted === true) {
 				chrome.storage.local.get(['whichFeatureActive'], function (result) {
 					if (result.whichFeatureActive !== null) {
-						ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
-						ChangeHeight(portThree, PopupHeight(allFeatures));
+						ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
+						portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 						HideAllCompExcept('mainBody');
 					}
 				});
@@ -99,17 +97,17 @@ export default function NavBar({allFeatures, portThree}) {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
-					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+					ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
 				}
 			});
-			ChangeHeight(portThree, PopupHeight(allFeatures));
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 			HideAllCompExcept('toggleInfo');
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
 		} else {
-			ChangeHeight(portThree, PopupHeight(allFeatures));
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 			HideAllCompExcept('mainBody');
 		}
 	}
@@ -118,17 +116,17 @@ export default function NavBar({allFeatures, portThree}) {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
 			chrome.storage.local.get(['whichFeatureActive'], function (result) {
 				if (result.whichFeatureActive !== null) {
-					ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+					ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
 				}
 			});
-			ChangeHeight(portThree, PopupHeight(allFeatures));
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 			HideAllCompExcept('toggleSettings');
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
 		} else {
-			ChangeHeight(portThree, PopupHeight(allFeatures));
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 			HideAllCompExcept('mainBody');
 		}
 	}
@@ -136,7 +134,7 @@ export default function NavBar({allFeatures, portThree}) {
 	function stopActFeatButton() {
 		chrome.storage.local.get(['whichFeatureActive'], function (result) {
 			if (result.whichFeatureActive !== null) {
-				ActDeactFeature(portThree, allFeatures, result.whichFeatureActive);
+				ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
 			}
 		});
 	}

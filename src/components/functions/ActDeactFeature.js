@@ -1,4 +1,4 @@
-export default function ActDeactFeature(portThree, allFeatures, featureId) {
+export default function ActDeactFeature(allFeatures, activeTab, portThree, featureId) {
 	// Disable All
 	allFeatures.map(function (value, index) {
 		if (value.id !== featureId) {

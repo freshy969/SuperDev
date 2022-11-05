@@ -1,7 +1,7 @@
 import React from 'react';
 import {useEffect} from 'react';
 
-export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOnly}) {
+export default function ToggleSettings({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	useEffect(function () {
 		// Set Visible Settings
 
@@ -73,7 +73,7 @@ export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOn
 				break;
 			case 'checkboxColorPicker3':
 				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesReadOnly.map(function (valueTwo, indexTwo) {
+					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'colorPicker' && valueTwo.id === 'colorPicker') {
 							if (document.querySelector('#checkboxColorPicker3').checked === true) {
 								setTimeout(function () {
@@ -129,7 +129,7 @@ export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOn
 				break;
 			case 'checkboxColorPalette3':
 				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesReadOnly.map(function (valueTwo, indexTwo) {
+					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'colorPalette' && valueTwo.id === 'colorPalette') {
 							if (document.querySelector('#checkboxColorPalette3').checked === true) {
 								setTimeout(function () {
@@ -276,7 +276,7 @@ export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOn
 				break;
 			case 'checkboxPageHighlight7':
 				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesReadOnly.map(function (valueTwo, indexTwo) {
+					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'pageHighlight' && valueTwo.id === 'pageHighlight') {
 							if (document.querySelector('#checkboxPageHighlight7').checked === true) {
 								setTimeout(function () {
@@ -340,7 +340,7 @@ export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOn
 				break;
 			case 'checkboxExportElement3':
 				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesReadOnly.map(function (valueTwo, indexTwo) {
+					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'exportElement' && valueTwo.id === 'exportElement') {
 							if (document.querySelector('#checkboxExportElement3').checked === true) {
 								setTimeout(function () {
@@ -429,7 +429,7 @@ export default function ToggleSettings({allFeatures, portThre, allFeaturesReadOn
 				break;
 			case 'checkboxClearAllCache6':
 				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesReadOnly.map(function (valueTwo, indexTwo) {
+					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'clearAllCache' && valueTwo.id === 'clearAllCache') {
 							if (document.querySelector('#checkboxClearAllCache6').checked === true) {
 								setTimeout(function () {

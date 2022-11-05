@@ -6,7 +6,6 @@ import ToggleInfo from './components/ToggleInfo';
 import ToggleSettings from './components/ToggleSettings';
 import ColorPalette from './components/ColorPalette';
 import PopupHeight from './components/functions/PopupHeight';
-import ChangeHeight from './components/functions/ChangeHeight';
 
 export default function Home() {
 	const [isLoadingOne, setIsLoadingOne] = useState(true);
@@ -15,8 +14,9 @@ export default function Home() {
 	const [isLoadingFour, setIsLoadingFour] = useState(true);
 
 	const [allFeatures, setAllFeatures] = useState([]);
+	const [activeTab, setActiveTab] = useState();
 	const [portThree, setPortThree] = useState();
-	const [allFeaturesReadOnly, setAllFeaturesReadOnly] = useState([]);
+	const [allFeaturesRef, setAllFeaturesReadOnly] = useState([]);
 
 	useEffect(function () {
 		// Initialisation/Reset on First Load
@@ -67,27 +67,28 @@ export default function Home() {
 				!tabs[0].url.includes('https://chrome.google.com/webstore')
 			) {
 				let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
+				setActiveTab(tabs);
 				setPortThree(portThree);
 				setIsLoadingThree(false);
 			}
 		});
 
 		// Set Read Only All Features
-		chrome.storage.local.get(['allFeaturesReadOnly'], function (result) {
-			setAllFeaturesReadOnly(JSON.parse(result.allFeaturesReadOnly));
+		chrome.storage.local.get(['allFeaturesRef'], function (result) {
+			setAllFeaturesReadOnly(JSON.parse(result.allFeaturesRef));
 			setIsLoadingFour(false);
 		});
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
-		ChangeHeight(portThree, PopupHeight(allFeatures));
+		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
 		return (
 			<>
-				<NavBar allFeatures={allFeatures} portThree={portThree} />
-				<MainBody allFeatures={allFeatures} portThree={portThree} />
-				<ToggleInfo allFeatures={allFeatures} portThree={portThree} />
-				<ToggleSettings allFeatures={allFeatures} portThree={portThree} allFeaturesReadOnly={allFeaturesReadOnly} />
-				<ColorPalette allFeatures={allFeatures} portThree={portThree} />
+				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
+				<MainBody allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
+				<ToggleInfo allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
+				<ToggleSettings allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
+				<ColorPalette allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
 			</>
 		);
 	}

@@ -8,7 +8,8 @@
 	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "browsingData"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
-		"service_worker": "js/bg.js"
+		"service_worker": "js/bg.js",
+		"type": "module"
 	},
 	"commands": {
 		"_execute_action": {

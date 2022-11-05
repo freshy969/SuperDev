@@ -1,7 +1,7 @@
 import React from 'react';
 import ActDeactFeature from './functions/ActDeactFeature';
 
-export default function MainBody({allFeatures, portThree}) {
+export default function MainBody({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	return (
 		<section id='mainBody'>
 			<div className='grid grid-cols-2 gap-x-[14px] p-4 pb-0 border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
@@ -12,7 +12,7 @@ export default function MainBody({allFeatures, portThree}) {
 							tabIndex='-1'
 							id={value.id}
 							onClick={function () {
-								ActDeactFeature(portThree, allFeatures, value.id);
+								ActDeactFeature(allFeatures, activeTab, portThree, value.id);
 							}}
 							className={
 								value.id +
