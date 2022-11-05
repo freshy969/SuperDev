@@ -2,76 +2,76 @@ chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			case 'showHideExtension':
-				showHideExtension(port, request);
+				showHideExtension(request.tabs, port, request);
 				break;
 			case 'changeHeight':
-				changeHeight(port, request);
+				changeHeight(request.tabs, port, request);
 				break;
 			case 'justChangeHeight':
-				justChangeHeight(port, request);
+				justChangeHeight(request.tabs, port, request);
 				break;
 			case 'activateTextEditor':
-				activateTextEditor(port, request);
+				activateTextEditor(request.tabs, port, request);
 				break;
 			case 'deactivateTextEditor':
-				deactivateTextEditor(port, request);
+				deactivateTextEditor(request.tabs, port, request);
 				break;
 			case 'activatePageRuler':
-				activatePageRuler(port, request);
+				activatePageRuler(request.tabs, port, request);
 				break;
 			case 'deactivatePageRuler':
-				deactivatePageRuler(port, request);
+				deactivatePageRuler(request.tabs, port, request);
 				break;
 			case 'activateColorPicker':
-				activateColorPicker(port, request);
+				activateColorPicker(request.tabs, port, request);
 				break;
 			case 'deactivateColorPicker':
-				deactivateColorPicker(port, request);
+				deactivateColorPicker(request.tabs, port, request);
 				break;
 			case 'activateColorPalette':
-				activateColorPalette(port, request);
+				activateColorPalette(request.tabs, port, request);
 				break;
 			case 'deactivateColorPalette':
-				deactivateColorPalette(port, request);
+				deactivateColorPalette(request.tabs, port, request);
 				break;
 			case 'activatePageGuideline':
-				activatePageGuideline(port, request);
+				activatePageGuideline(request.tabs, port, request);
 				break;
 			case 'deactivatePageGuideline':
-				deactivatePageGuideline(port, request);
+				deactivatePageGuideline(request.tabs, port, request);
 				break;
 			case 'activatePageHighlight':
-				activatePageHighlight(port, request);
+				activatePageHighlight(request.tabs, port, request);
 				break;
 			case 'deactivatePageHighlight':
-				deactivatePageHighlight(port, request);
+				deactivatePageHighlight(request.tabs, port, request);
 				break;
 			case 'activateMoveElement':
-				activateMoveElement(port, request);
+				activateMoveElement(request.tabs, port, request);
 				break;
 			case 'deactivateMoveElement':
-				deactivateMoveElement(port, request);
+				deactivateMoveElement(request.tabs, port, request);
 				break;
 			case 'activateExportElement':
-				activateExportElement(port, request);
+				activateExportElement(request.tabs, port, request);
 				break;
 			case 'deactivateExportElement':
-				deactivateExportElement(port, request);
+				deactivateExportElement(request.tabs, port, request);
 				break;
 			case 'activateDeleteElement':
-				activateDeleteElement(port, request);
+				activateDeleteElement(request.tabs, port, request);
 				break;
 			case 'deactivateDeleteElement':
-				deactivateDeleteElement(port, request);
+				deactivateDeleteElement(request.tabs, port, request);
 				break;
 			case 'activateClearAllCache':
-				activateClearAllCache(port, request);
+				activateClearAllCache(request.tabs, port, request);
 				break;
 		}
 	});
 });
 
-function showHideExtension(port, request) {
+function showHideExtension(tabs, port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDevWrapper') === null) {
 		let superDevWrapper = document.createElement('superdev-wrapper');
@@ -143,8 +143,8 @@ function showHideExtension(port, request) {
 
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-		chrome.storage.local.set({setHomePageActive: true});
-		chrome.storage.local.set({setActFeatDisabled: true});
+		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: true});
+		chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -152,29 +152,29 @@ function showHideExtension(port, request) {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({setHomePageActive: false}); // True, False
-		chrome.storage.local.set({setActFeatDisabled: false}); // True, False
-		chrome.storage.local.set({setMinimised: null}); // True, False, Null
-		chrome.storage.local.set({whichFeatureActive: null}); // String, Null
-		//chrome.storage.local.set({howLongPopupIs: null}); // Number, Null
+		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: false}); // True, False
+		chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: false}); // True, False
+		chrome.storage.local.set({['setMinimised' + tabs[0].id]: null}); // True, False, Null
+		chrome.storage.local.set({['whichFeatureActive' + tabs[0].id]: null}); // String, Null
+		//chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: null}); // Number, Null
 
 		document.querySelector('#superDevWrapper').style.top = '18px';
 		document.querySelector('#superDevWrapper').style.right = '18px';
 		document.querySelector('#superDevWrapper').style.left = '';
 		document.querySelector('#superDevWrapper').style.visibility = 'visible';
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		port.postMessage({action: 'Popup Visible'});
 	}
 }
 
-function changeHeight(port, request) {
-	chrome.storage.local.get(['howLongPopupIs'], function (result) {
-		if (result.howLongPopupIs !== request.height) {
-			chrome.storage.local.set({howLongPopupIs: request.height});
+function changeHeight(tabs, port, request) {
+	chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+		if (result['howLongPopupIs' + tabs[0].id] !== request.height) {
+			chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') document.querySelector('#superDevWrapper').style.visibility = 'visible';
 			port.postMessage({action: 'Height Changed'});
@@ -182,17 +182,17 @@ function changeHeight(port, request) {
 	});
 }
 
-function justChangeHeight(port, request) {
-	chrome.storage.local.get(['howLongPopupIs'], function (result) {
-		if (result.howLongPopupIs !== request.height) {
-			chrome.storage.local.set({howLongPopupIs: request.height});
+function justChangeHeight(tabs, port, request) {
+	chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+		if (result['howLongPopupIs' + tabs[0].id] !== request.height) {
+			chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			port.postMessage({action: 'Just Height Changed'});
 		}
 	});
 }
 
-function activateTextEditor(port, request) {
+function activateTextEditor(tabs, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -257,13 +257,13 @@ function activateTextEditor(port, request) {
 	}
 
 	port.postMessage({action: 'Text Editor Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyTextEditor();
 			}
@@ -282,20 +282,20 @@ function activateTextEditor(port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateTextEditor(port, request) {
+function deactivateTextEditor(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Text Editor Deactivated'});
 }
 
-function activatePageRuler(port, request) {
+function activatePageRuler(tabs, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -368,7 +368,7 @@ function activatePageRuler(port, request) {
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({setMinimised: true});
+		chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'toGrayscale',
@@ -399,7 +399,7 @@ function activatePageRuler(port, request) {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({setMinimised: null});
+			chrome.storage.local.set({['setMinimised' + tabs[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -501,7 +501,7 @@ function activatePageRuler(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageRuler();
 			}
@@ -516,8 +516,8 @@ function activatePageRuler(port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		removeDimensions();
@@ -525,12 +525,12 @@ function activatePageRuler(port, request) {
 	}
 }
 
-function deactivatePageRuler(port, request) {
+function deactivatePageRuler(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 }
 
-function activateColorPicker(port, request) {
+function activateColorPicker(tabs, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -604,7 +604,7 @@ function activateColorPicker(port, request) {
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({setMinimised: true});
+		chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'setColorPicker',
@@ -635,7 +635,7 @@ function activateColorPicker(port, request) {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({setMinimised: null});
+			chrome.storage.local.set({['setMinimised' + tabs[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -721,7 +721,7 @@ function activateColorPicker(port, request) {
 		colorPickerTooltipChild.className = 'colorPickerTooltipChild';
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result.allFeatures).map(function (value, index) {
+			JSON.parse(result['allFeatures']).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
 						colorPickerTooltipBG.style.backgroundColor = spotColor.hex;
@@ -748,7 +748,7 @@ function activateColorPicker(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPicker();
 			}
@@ -764,8 +764,8 @@ function activateColorPicker(port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		removeColorPicker();
@@ -773,12 +773,12 @@ function activateColorPicker(port, request) {
 	}
 }
 
-function deactivateColorPicker(port, request) {
+function deactivateColorPicker(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Picker Deactivated'});
 }
 
-function activateColorPalette(port, request) {
+function activateColorPalette(tabs, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -832,7 +832,7 @@ function activateColorPalette(port, request) {
 
 	// RGB or Hex?
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result.allFeatures).map(function (value, index) {
+		JSON.parse(result['allFeatures']).map(function (value, index) {
 			if (value.id === 'colorPalette') {
 				if (value.settings.checkboxColorPalette1 === true) {
 					allColors = allColors.map(function (value, index) {
@@ -859,7 +859,7 @@ function activateColorPalette(port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPalette();
 			}
@@ -868,16 +868,16 @@ function activateColorPalette(port, request) {
 
 	function destroyColorPalette() {
 		document.removeEventListener('keyup', onEscape);
-		chrome.storage.local.set({setHomePageActive: true});
+		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: true});
 	}
 }
 
-function deactivateColorPalette(port, request) {
+function deactivateColorPalette(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Palette Deactivated'});
 }
 
-function activatePageGuideline(port, request) {
+function activatePageGuideline(tabs, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -935,13 +935,13 @@ function activatePageGuideline(port, request) {
 	}
 
 	port.postMessage({action: 'Page Guideline Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageGuideline();
 			}
@@ -958,25 +958,25 @@ function activatePageGuideline(port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivatePageGuideline(port, request) {
+function deactivatePageGuideline(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Guideline Deactivated'});
 }
 
-function activatePageHighlight(port, request) {
+function activatePageHighlight(tabs, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result.allFeatures).map(function (value, index) {
+		JSON.parse(result['allFeatures']).map(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
 					// All Page Elements
@@ -1185,13 +1185,13 @@ function activatePageHighlight(port, request) {
 	}
 
 	port.postMessage({action: 'Page Highlight Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageHighlight();
 			}
@@ -1201,12 +1201,12 @@ function activatePageHighlight(port, request) {
 	function destroyPageHighlight() {
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result.allFeatures).map(function (value, index) {
+			JSON.parse(result['allFeatures']).map(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
 						// All Page Elements
@@ -1404,12 +1404,12 @@ function activatePageHighlight(port, request) {
 	}
 }
 
-function deactivatePageHighlight(port, request) {
+function deactivatePageHighlight(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Highlight Deactivated'});
 }
 
-function activateMoveElement(port, request) {
+function activateMoveElement(tabs, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1491,13 +1491,13 @@ function activateMoveElement(port, request) {
 	}
 
 	port.postMessage({action: 'Move Element Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyMoveElement();
 			}
@@ -1515,8 +1515,8 @@ function activateMoveElement(port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		if (document.querySelector('.moveElementDraggable')) {
@@ -1531,12 +1531,12 @@ function activateMoveElement(port, request) {
 	}
 }
 
-function deactivateMoveElement(port, request) {
+function deactivateMoveElement(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
 }
 
-function activateExportElement(port, request) {
+function activateExportElement(tabs, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1893,7 +1893,7 @@ function activateExportElement(port, request) {
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
-				JSON.parse(result.allFeatures).map(function (value, index) {
+				JSON.parse(result['allFeatures']).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = event.target.outerHTML;
 						let helper = 'body { background: #eee; /* Helper CSS, Remove This */ }';
@@ -2001,13 +2001,13 @@ function activateExportElement(port, request) {
 	}
 
 	port.postMessage({action: 'Export Element Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyExportElement();
 			}
@@ -2025,20 +2025,20 @@ function activateExportElement(port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateExportElement(port, request) {
+function deactivateExportElement(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Export Element Deactivated'});
 }
 
-function activateDeleteElement(port, request) {
+function activateDeleteElement(tabs, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -2104,13 +2104,13 @@ function activateDeleteElement(port, request) {
 	}
 
 	port.postMessage({action: 'Delete Element Activated'});
-	chrome.storage.local.set({setMinimised: true});
+	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({setActFeatDisabled: true});
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyDeleteElement();
 			}
@@ -2128,22 +2128,22 @@ function activateDeleteElement(port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
+			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateDeleteElement(port, request) {
+function deactivateDeleteElement(tabs, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
-function activateClearAllCache(port, request) {
+function activateClearAllCache(tabs, port, request) {
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result.allFeatures).map(function (value, index) {
+		JSON.parse(result['allFeatures']).map(function (value, index) {
 			if (value.id === 'clearAllCache') {
 				let portTwo = chrome.runtime.connect({name: 'portTwo'});
 				portTwo.postMessage({action: 'clearAllCache', settings: value.settings});

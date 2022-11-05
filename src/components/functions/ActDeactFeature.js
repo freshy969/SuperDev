@@ -2,21 +2,21 @@ export default function ActDeactFeature(allFeatures, activeTab, portThree, featu
 	// Disable All
 	allFeatures.map(function (value, index) {
 		if (value.id !== featureId) {
-			if (value.id === 'clearAllCache' || value.id === 'colorPalette') JustHideMeExcep(portThree, value.id);
-			else JustHideMe(portThree, value.id);
+			if (value.id === 'clearAllCache' || value.id === 'colorPalette') JustHideMeExcep(activeTab, portThree, value.id);
+			else JustHideMe(activeTab, portThree, value.id);
 		}
 	});
 
 	// Except The One Clicked
 	allFeatures.map(function (value, index) {
 		if (value.id === featureId) {
-			if (value.id === 'clearAllCache' || value.id === 'colorPalette') HideMeShowMeExcep(portThree, value.id);
-			else HideMeShowMe(portThree, value.id);
+			if (value.id === 'clearAllCache' || value.id === 'colorPalette') HideMeShowMeExcep(activeTab, portThree, value.id);
+			else HideMeShowMe(activeTab, portThree, value.id);
 		}
 	});
 }
 
-function HideMeShowMeExcep(portThree, featureId) {
+function HideMeShowMeExcep(activeTab, portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
 	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
 
@@ -25,10 +25,10 @@ function HideMeShowMeExcep(portThree, featureId) {
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			// Clear Cache
 			if (featureId === 'clearAllCache') {
-				portThree.postMessage({action: 'activate' + featureIdUC});
+				portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
-						chrome.storage.local.set({whichFeatureActive: featureId});
+						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
 					}
 				});
 			}
@@ -37,10 +37,10 @@ function HideMeShowMeExcep(portThree, featureId) {
 			else if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.add('active');
-				portThree.postMessage({action: 'activate' + featureIdUC});
+				portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
-						chrome.storage.local.set({whichFeatureActive: featureId});
+						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
 					}
 				});
 			}
@@ -49,10 +49,10 @@ function HideMeShowMeExcep(portThree, featureId) {
 			if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
-				portThree.postMessage({action: 'deactivate' + featureIdUC});
+				portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
-						chrome.storage.local.set({whichFeatureActive: null});
+						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 					}
 				});
 			}
@@ -60,7 +60,7 @@ function HideMeShowMeExcep(portThree, featureId) {
 	}
 }
 
-function HideMeShowMe(portThree, featureId) {
+function HideMeShowMe(activeTab, portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
 	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
 	let arrDef = ['from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD'];
@@ -72,10 +72,10 @@ function HideMeShowMe(portThree, featureId) {
 			document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 			document.querySelector('#' + featureId).classList.remove(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			document.querySelector('#' + featureId).classList.add(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
-			portThree.postMessage({action: 'activate' + featureIdUC});
+			portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Activated')) {
-					chrome.storage.local.set({whichFeatureActive: featureId});
+					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
 				}
 			});
 		}
@@ -85,17 +85,17 @@ function HideMeShowMe(portThree, featureId) {
 			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
-			portThree.postMessage({action: 'deactivate' + featureIdUC});
+			portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
-					chrome.storage.local.set({whichFeatureActive: null});
+					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 				}
 			});
 		}
 	}
 }
 
-function JustHideMeExcep(portThree, featureId) {
+function JustHideMeExcep(activeTab, portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
 	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
 
@@ -104,10 +104,10 @@ function JustHideMeExcep(portThree, featureId) {
 			if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
-				portThree.postMessage({action: 'deactivate' + featureIdUC});
+				portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
-						chrome.storage.local.set({whichFeatureActive: null});
+						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 					}
 				});
 			}
@@ -115,7 +115,7 @@ function JustHideMeExcep(portThree, featureId) {
 	}
 }
 
-function JustHideMe(portThree, featureId) {
+function JustHideMe(activeTab, portThree, featureId) {
 	let featureIdUC = featureId.charAt(0).toUpperCase() + featureId.slice(1);
 	let featRespMessage = featureIdUC.match(/[A-Z][a-z]+/g).join(' ');
 	let arrDef = ['from-btnOne', 'dark:from-btnOneD', 'to-btnTwo', 'dark:to-btnTwoD'];
@@ -125,10 +125,10 @@ function JustHideMe(portThree, featureId) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
-			portThree.postMessage({action: 'deactivate' + featureIdUC});
+			portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
-					chrome.storage.local.set({whichFeatureActive: null});
+					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 				}
 			});
 		}

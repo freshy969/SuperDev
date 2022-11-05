@@ -16,46 +16,37 @@ export default function Home() {
 	const [allFeatures, setAllFeatures] = useState([]);
 	const [activeTab, setActiveTab] = useState();
 	const [portThree, setPortThree] = useState();
-	const [allFeaturesRef, setAllFeaturesReadOnly] = useState([]);
+	const [allFeaturesRef, setAllFeaturesRef] = useState([]);
 
 	useEffect(function () {
-		// Initialisation/Reset on First Load
-		chrome.storage.local.set({setHomePageActive: false}); // True, False
-		chrome.storage.local.set({setActFeatDisabled: false}); // True, False
-		chrome.storage.local.set({setMinimised: null}); // True, False, Null
-		chrome.storage.local.set({whichFeatureActive: null}); // String, Null
-		chrome.storage.local.set({howLongPopupIs: null}); // Number, Null
-
 		// Dark Mode Initialisation
 		chrome.storage.local.get(['colorTheme'], function (result) {
-			if (result.colorTheme === undefined) {
+			if (result['colorTheme'] === undefined) {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
-					chrome.storage.local.set({colorTheme: 'dark'});
+					chrome.storage.local.set({['colorTheme']: 'dark'});
 					setIsLoadingOne(false);
 				} else {
-					// Dark Theme as Default
-					chrome.storage.local.set({colorTheme: 'dark'});
-					document.documentElement.classList.add('dark');
+					chrome.storage.local.set({['colorTheme']: 'light'});
 					setIsLoadingOne(false);
 				}
-			} else if (result.colorTheme === 'dark') {
+			} else if (result['colorTheme'] === 'dark') {
 				document.documentElement.classList.add('dark');
 				setIsLoadingOne(false);
-			} else if (result.colorTheme === 'light') {
+			} else if (result['colorTheme'] === 'light') {
 				setIsLoadingOne(false);
 			}
 		});
 
 		// Set AllFeatures
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			setAllFeatures(JSON.parse(result.allFeatures));
+			setAllFeatures(JSON.parse(result['allFeatures']));
 			setIsLoadingTwo(false);
 		});
 
 		// OnUpdate AllFeatures
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.allFeatures) setAllFeatures(JSON.parse(changes.allFeatures.newValue));
+			if (changes['allFeatures']) setAllFeatures(JSON.parse(changes['allFeatures']['newValue']));
 		});
 
 		// Set PortThree
@@ -66,22 +57,59 @@ export default function Home() {
 				!tabs[0].url.includes('file://') &&
 				!tabs[0].url.includes('https://chrome.google.com/webstore')
 			) {
+				// Initialisation/Reset on First Load
+				chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: false}); // True, False
+				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: false}); // True, False
+				chrome.storage.local.set({['setMinimised' + tabs[0].id]: null}); // True, False, Null
+				chrome.storage.local.set({['whichFeatureActive' + tabs[0].id]: null}); // String, Null
+				chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: null}); // Number, Null
+
+				// Initialising PortThree and ActiveTab
 				let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
 				setActiveTab(tabs);
 				setPortThree(portThree);
+
 				setIsLoadingThree(false);
 			}
 		});
 
 		// Set Read Only All Features
 		chrome.storage.local.get(['allFeaturesRef'], function (result) {
-			setAllFeaturesReadOnly(JSON.parse(result.allFeaturesRef));
+			setAllFeaturesRef(JSON.parse(result['allFeaturesRef']));
 			setIsLoadingFour(false);
+		});
+
+		// Remove Old Data
+		chrome.storage.local.get(null, function (result) {
+			let allKeys = Object.keys(result);
+			console.log(allKeys);
+			chrome.tabs.query({}, function (allTabs) {
+				allTabs = allTabs.map(function (value, index) {
+					return value.id;
+				});
+				allKeys = allKeys.map(function (value, index) {
+					if (value.match(/(\d+)/)) return +value.split(/(\d+)/)[1];
+				});
+				allKeys = allKeys.filter(function (value, index) {
+					return value !== undefined;
+				});
+				allKeys = [...new Set(allKeys)];
+				let oldState = allKeys.filter(function (value, index) {
+					return allTabs.indexOf(value) === -1;
+				});
+				oldState.map(function (value, index) {
+					chrome.storage.local.remove(['setHomePageActive' + value]);
+					chrome.storage.local.remove(['setActFeatDisabled' + value]);
+					chrome.storage.local.remove(['setMinimised' + value]);
+					chrome.storage.local.remove(['whichFeatureActive' + value]);
+					chrome.storage.local.remove(['howLongPopupIs' + value]);
+				});
+			});
 		});
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
-		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />

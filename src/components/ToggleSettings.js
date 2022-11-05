@@ -47,10 +47,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxColorPicker2 = false;
 							document.querySelector('#checkboxColorPicker1').checked = true;
 							document.querySelector('#checkboxColorPicker2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPicker1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -63,10 +63,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxColorPicker2 = true;
 							document.querySelector('#checkboxColorPicker1').checked = false;
 							document.querySelector('#checkboxColorPicker2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPicker2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -83,7 +83,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 									document.querySelector('#checkboxColorPicker1').checked = valueTwo.settings.checkboxColorPicker1;
 									document.querySelector('#checkboxColorPicker2').checked = valueTwo.settings.checkboxColorPicker2;
 									document.querySelector('#checkboxColorPicker3').checked = valueTwo.settings.checkboxColorPicker3;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+									chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
 						}
@@ -103,10 +103,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxColorPalette2 = false;
 							document.querySelector('#checkboxColorPalette1').checked = true;
 							document.querySelector('#checkboxColorPalette2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPalette1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -119,10 +119,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxColorPalette2 = true;
 							document.querySelector('#checkboxColorPalette1').checked = false;
 							document.querySelector('#checkboxColorPalette2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxColorPalette2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -139,7 +139,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 									document.querySelector('#checkboxColorPalette1').checked = valueTwo.settings.checkboxColorPalette1;
 									document.querySelector('#checkboxColorPalette2').checked = valueTwo.settings.checkboxColorPalette2;
 									document.querySelector('#checkboxColorPalette3').checked = valueTwo.settings.checkboxColorPalette3;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+									chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
 						}
@@ -165,10 +165,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -187,10 +187,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -209,10 +209,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							document.querySelector('#checkboxPageHighlight3').checked = true;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight3 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -231,10 +231,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = true;
 							document.querySelector('#checkboxPageHighlight5').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight4 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -253,10 +253,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							document.querySelector('#checkboxPageHighlight3').checked = false;
 							document.querySelector('#checkboxPageHighlight4').checked = false;
 							document.querySelector('#checkboxPageHighlight5').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight5 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -266,10 +266,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
 							value.settings.checkboxPageHighlight6 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxPageHighlight6 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -294,7 +294,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 									document.querySelector('#checkboxPageHighlight5').checked = valueTwo.settings.checkboxPageHighlight5;
 									document.querySelector('#checkboxPageHighlight6').checked = valueTwo.settings.checkboxPageHighlight6;
 									document.querySelector('#checkboxPageHighlight7').checked = valueTwo.settings.checkboxPageHighlight7;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+									chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
 						}
@@ -314,10 +314,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxExportElement2 = false;
 							document.querySelector('#checkboxExportElement1').checked = true;
 							document.querySelector('#checkboxExportElement2').checked = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -330,10 +330,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							value.settings.checkboxExportElement2 = true;
 							document.querySelector('#checkboxExportElement1').checked = false;
 							document.querySelector('#checkboxExportElement2').checked = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -350,7 +350,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 									document.querySelector('#checkboxExportElement1').checked = valueTwo.settings.checkboxExportElement1;
 									document.querySelector('#checkboxExportElement2').checked = valueTwo.settings.checkboxExportElement2;
 									document.querySelector('#checkboxExportElement3').checked = valueTwo.settings.checkboxExportElement3;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+									chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
 						}
@@ -367,10 +367,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache1').checked === true) {
 							value.settings.checkboxClearAllCache1 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache1 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -380,10 +380,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache2').checked === true) {
 							value.settings.checkboxClearAllCache2 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache2 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -393,10 +393,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache3').checked === true) {
 							value.settings.checkboxClearAllCache3 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache3 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -406,10 +406,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache4').checked === true) {
 							value.settings.checkboxClearAllCache4 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache4 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -419,10 +419,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache5').checked === true) {
 							value.settings.checkboxClearAllCache5 = true;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxClearAllCache5 = false;
-							chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+							chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						}
 					}
 				});
@@ -445,7 +445,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 									document.querySelector('#checkboxClearAllCache4').checked = valueTwo.settings.checkboxClearAllCache4;
 									document.querySelector('#checkboxClearAllCache5').checked = valueTwo.settings.checkboxClearAllCache5;
 									document.querySelector('#checkboxClearAllCache6').checked = valueTwo.settings.checkboxClearAllCache6;
-									chrome.storage.local.set({allFeatures: JSON.stringify(allFeatures)});
+									chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
 						}

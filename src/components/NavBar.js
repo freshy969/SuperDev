@@ -8,38 +8,38 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 	useEffect(function () {
 		// OnUpdate SetMinimised
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.setMinimised) {
-				if (changes.setMinimised.newValue === true) {
+			if (changes['setMinimised' + activeTab[0].id]) {
+				if (changes['setMinimised' + activeTab[0].id]['newValue'] === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
-					portThree.postMessage({action: 'changeHeight', height: 40.5});
-					chrome.storage.local.set({setMinimised: null});
-				} else if (changes.setMinimised.newValue === false) {
-					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+					portThree.postMessage({action: 'changeHeight', height: 40.5, tabs: activeTab});
+					chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
+				} else if (changes['setMinimised' + activeTab[0].id]['newValue'] === false) {
+					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 					document.querySelector('#navBar').firstChild.style.borderRadius = '';
-					chrome.storage.local.set({setMinimised: null});
+					chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 				}
 			}
 		});
 
 		// OnUpdate setHomePageActive
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.setHomePageActive) {
-				if (changes.setHomePageActive.newValue === true) {
-					portThree.postMessage({action: 'justChangeHeight', height: PopupHeight(allFeatures)});
+			if (changes['setHomePageActive' + activeTab[0].id]) {
+				if (changes['setHomePageActive' + activeTab[0].id]['newValue'] === true) {
+					portThree.postMessage({action: 'justChangeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 					HideAllCompExcept('mainBody');
-					chrome.storage.local.set({setHomePageActive: false});
+					chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false});
 				}
 			}
 		});
 
 		// OnUpdate SetActFeatDisabled
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.setActFeatDisabled) {
-				if (changes.setActFeatDisabled.newValue === true) {
-					chrome.storage.local.get(['whichFeatureActive'], function (result) {
-						if (result.whichFeatureActive !== null) {
-							ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
-							chrome.storage.local.set({setActFeatDisabled: false});
+			if (changes['setActFeatDisabled' + activeTab[0].id]) {
+				if (changes['setActFeatDisabled' + activeTab[0].id]['newValue'] === true) {
+					chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+						if (result['whichFeatureActive' + activeTab[0].id] !== null) {
+							ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
+							chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false});
 						}
 					});
 				}
@@ -48,17 +48,17 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 
 		// OnUpdate WhichFeatureActive
 		chrome.storage.onChanged.addListener(function (changes) {
-			if (changes.whichFeatureActive) {
-				if (changes.whichFeatureActive.newValue === 'clearAllCache') {
+			if (changes['whichFeatureActive' + activeTab[0].id]) {
+				if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'clearAllCache') {
 					document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
 					document.querySelector('#clearAllCache > i').classList.add('fa-badge-check');
 					setTimeout(function () {
 						document.querySelector('#clearAllCache > i').classList.remove('fa-badge-check');
 						document.querySelector('#clearAllCache > i').classList.add('fa-recycle');
-						chrome.storage.local.set({whichFeatureActive: null});
+						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 					}, 1000);
-				} else if (changes.whichFeatureActive.newValue === 'colorPalette') {
-					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+				} else if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'colorPalette') {
+					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 					HideAllCompExcept('colorPalettePage');
 					let childHeight = PopupHeight(allFeatures) - 41.5;
 					document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
@@ -70,10 +70,10 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 		document.addEventListener('keyup', function (event) {
 			event.preventDefault();
 			if (event.key === 'Escape' && event.isTrusted === true) {
-				chrome.storage.local.get(['whichFeatureActive'], function (result) {
-					if (result.whichFeatureActive !== null) {
-						ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
-						portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+				chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+					if (result['whichFeatureActive' + activeTab[0].id] !== null) {
+						ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
+						portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 						HideAllCompExcept('mainBody');
 					}
 				});
@@ -82,75 +82,73 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 	}, []);
 
 	function darkMode() {
-		chrome.storage.local.get(['colorTheme'], function (result) {
-			if (result.colorTheme === 'light') {
-				document.documentElement.classList.add('dark');
-				chrome.storage.local.set({colorTheme: 'dark'});
-			} else if (result.colorTheme === 'dark') {
-				document.documentElement.classList.remove('dark');
-				chrome.storage.local.set({colorTheme: 'light'});
-			}
-		});
+		if (document.documentElement.classList.contains('dark')) {
+			document.documentElement.classList.remove('dark');
+			chrome.storage.local.set({['colorTheme']: 'light'});
+		} else if (!document.documentElement.classList.contains('dark')) {
+			document.documentElement.classList.add('dark');
+			chrome.storage.local.set({['colorTheme']: 'dark'});
+		}
 	}
 
 	function toggleInfo() {
 		if (document.querySelector('#toggleInfo').classList.contains('hidden')) {
-			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) {
-					ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
+			chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+				if (result['whichFeatureActive' + activeTab[0].id] !== null) {
+					ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 				}
 			});
-			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 			HideAllCompExcept('toggleInfo');
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
 		} else {
-			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 			HideAllCompExcept('mainBody');
 		}
 	}
 
 	function toggleSettings() {
 		if (document.querySelector('#toggleSettings').classList.contains('hidden')) {
-			chrome.storage.local.get(['whichFeatureActive'], function (result) {
-				if (result.whichFeatureActive !== null) {
-					ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
+			chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+				if (result['whichFeatureActive' + activeTab[0].id] !== null) {
+					ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 				}
 			});
-			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 			HideAllCompExcept('toggleSettings');
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
 			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
 		} else {
-			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures)});
+			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
 			HideAllCompExcept('mainBody');
 		}
 	}
 
 	function stopActFeatButton() {
-		chrome.storage.local.get(['whichFeatureActive'], function (result) {
-			if (result.whichFeatureActive !== null) {
-				ActDeactFeature(allFeatures, activeTab, portThree, result.whichFeatureActive);
+		chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+			if (result['whichFeatureActive' + activeTab[0].id] !== null) {
+				ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 			}
 		});
 	}
 
 	function minimiseExtension() {
-		chrome.storage.local.get(['howLongPopupIs'], function (result) {
-			if (result.howLongPopupIs === 40.5) {
-				chrome.storage.local.set({setMinimised: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			} else {
-				chrome.storage.local.set({setMinimised: true});
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 			}
 		});
 	}
 
 	function showHideExtension() {
-		portThree.postMessage({action: 'showHideExtension'});
+		portThree.postMessage({action: 'showHideExtension', tabs: activeTab});
 	}
 
 	return (
