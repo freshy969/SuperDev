@@ -1959,23 +1959,8 @@ function activateExportElement(activeTab, port, request) {
 							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
 							codepenForm.querySelector('#codepenValue').value = codepenValue;
 							document.body.appendChild(codepenForm);
-							//codepenForm.submit();
-							//codepenForm.remove();
-
-							fetch('https://codepen.io/pen/define', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded',
-								},
-								redirect: 'follow',
-								body: JSON.stringify(codepenValue),
-							})
-								.then(function (response) {
-									return response.text();
-								})
-								.then(function (data) {
-									console.log(data);
-								});
+							codepenForm.submit();
+							codepenForm.remove();
 						}
 						// Export to File
 						else if (value.settings.checkboxExportElement2 === true) {
