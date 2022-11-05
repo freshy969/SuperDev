@@ -2,11 +2,9 @@ import React from 'react';
 
 export default function ToggleInfo({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	function openShortcutPage() {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			chrome.tabs.create({
-				index: activeTab[0].index + 1,
-				url: 'chrome://extensions/shortcuts',
-			});
+		chrome.tabs.create({
+			index: activeTab[0].index + 1,
+			url: 'chrome://extensions/shortcuts',
 		});
 	}
 

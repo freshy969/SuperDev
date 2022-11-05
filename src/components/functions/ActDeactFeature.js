@@ -25,7 +25,7 @@ function HideMeShowMeExcep(activeTab, portThree, featureId) {
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
 			// Clear Cache
 			if (featureId === 'clearAllCache') {
-				portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
+				portThree.postMessage({action: 'activate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
 						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
@@ -37,7 +37,7 @@ function HideMeShowMeExcep(activeTab, portThree, featureId) {
 			else if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 				document.querySelector('#' + featureId).classList.add('active');
-				portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
+				portThree.postMessage({action: 'activate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Activated')) {
 						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
@@ -49,7 +49,7 @@ function HideMeShowMeExcep(activeTab, portThree, featureId) {
 			if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
-				portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
+				portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
 						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
@@ -72,7 +72,7 @@ function HideMeShowMe(activeTab, portThree, featureId) {
 			document.querySelector('#stopActFeatButton').style.visibility = 'visible';
 			document.querySelector('#' + featureId).classList.remove(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			document.querySelector('#' + featureId).classList.add(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
-			portThree.postMessage({action: 'activate' + featureIdUC, tabs: activeTab});
+			portThree.postMessage({action: 'activate' + featureIdUC, activeTab: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Activated')) {
 					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: featureId});
@@ -85,7 +85,7 @@ function HideMeShowMe(activeTab, portThree, featureId) {
 			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
-			portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
+			portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
 					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
@@ -104,7 +104,7 @@ function JustHideMeExcep(activeTab, portThree, featureId) {
 			if (featureId === 'colorPalette') {
 				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 				document.querySelector('#' + featureId).classList.remove('active');
-				portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
+				portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(function (response) {
 					if (response.action.includes(featRespMessage + ' Deactivated')) {
 						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
@@ -125,7 +125,7 @@ function JustHideMe(activeTab, portThree, featureId) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
-			portThree.postMessage({action: 'deactivate' + featureIdUC, tabs: activeTab});
+			portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 			portThree.onMessage.addListener(function (response) {
 				if (response.action.includes(featRespMessage + ' Deactivated')) {
 					chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});

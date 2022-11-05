@@ -202,9 +202,9 @@ chrome.action.onClicked.addListener(function (tab) {
 			}
 		});
 
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension', tabs: tabs});
+		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+			let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 		});
 	}
 });
@@ -238,27 +238,25 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 			}
 		});
 
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension', tabs: tabs});
+		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+			let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+			portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 		});
 	}
 });
 
 // Extension Shortcuts
 chrome.commands.onCommand.addListener(function (command) {
-	chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 		if (
-			!tabs[0].url.includes('chrome://') &&
-			!tabs[0].url.includes('chrome-extension://') &&
-			!tabs[0].url.includes('file://') &&
-			!tabs[0].url.includes('https://chrome.google.com/webstore')
+			!activeTab[0].url.includes('chrome://') &&
+			!activeTab[0].url.includes('chrome-extension://') &&
+			!activeTab[0].url.includes('file://') &&
+			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
 			if (command === 'clearAllCache') {
-				chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-					let portOne = chrome.tabs.connect(tabs[0].id, {name: 'portOne'});
-					portOne.postMessage({action: 'activateClearAllCache', tabs: tabs});
-				});
+				let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+				portOne.postMessage({action: 'activateClearAllCache', activeTab: activeTab});
 			}
 		}
 	});
@@ -479,10 +477,10 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 
 	// Clear All Cache
 	function clearAllCache(settings) {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 			chrome.browsingData.remove(
 				{
-					origins: [tabs[0].url],
+					origins: [activeTab[0].url],
 				},
 				{
 					cookies: settings.checkboxClearAllCache3,
@@ -497,7 +495,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 						},
 						function () {
 							if (settings.checkboxClearAllCache1 === true) {
-								chrome.tabs.reload(tabs[0].id);
+								chrome.tabs.reload(activeTab[0].id);
 							}
 						}
 					);

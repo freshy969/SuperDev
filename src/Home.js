@@ -50,23 +50,23 @@ export default function Home() {
 		});
 
 		// Set PortThree
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 			if (
-				!tabs[0].url.includes('chrome://') &&
-				!tabs[0].url.includes('chrome-extension://') &&
-				!tabs[0].url.includes('file://') &&
-				!tabs[0].url.includes('https://chrome.google.com/webstore')
+				!activeTab[0].url.includes('chrome://') &&
+				!activeTab[0].url.includes('chrome-extension://') &&
+				!activeTab[0].url.includes('file://') &&
+				!activeTab[0].url.includes('https://chrome.google.com/webstore')
 			) {
 				// Initialisation/Reset on First Load
-				chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: false}); // True, False
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: false}); // True, False
-				chrome.storage.local.set({['setMinimised' + tabs[0].id]: null}); // True, False, Null
-				chrome.storage.local.set({['whichFeatureActive' + tabs[0].id]: null}); // String, Null
-				chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: null}); // Number, Null
+				chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
+				chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+				chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
 				// Initialising PortThree and ActiveTab
-				let portThree = chrome.tabs.connect(tabs[0].id, {name: 'portThree'});
-				setActiveTab(tabs);
+				let portThree = chrome.tabs.connect(activeTab[0].id, {name: 'portThree'});
+				setActiveTab(activeTab);
 				setPortThree(portThree);
 
 				setIsLoadingThree(false);
@@ -108,7 +108,7 @@ export default function Home() {
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
-		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), tabs: activeTab});
+		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />

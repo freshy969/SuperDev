@@ -2,76 +2,76 @@ chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			case 'showHideExtension':
-				showHideExtension(request.tabs, port, request);
+				showHideExtension(request.activeTab, port, request);
 				break;
 			case 'changeHeight':
-				changeHeight(request.tabs, port, request);
+				changeHeight(request.activeTab, port, request);
 				break;
 			case 'justChangeHeight':
-				justChangeHeight(request.tabs, port, request);
+				justChangeHeight(request.activeTab, port, request);
 				break;
 			case 'activateTextEditor':
-				activateTextEditor(request.tabs, port, request);
+				activateTextEditor(request.activeTab, port, request);
 				break;
 			case 'deactivateTextEditor':
-				deactivateTextEditor(request.tabs, port, request);
+				deactivateTextEditor(request.activeTab, port, request);
 				break;
 			case 'activatePageRuler':
-				activatePageRuler(request.tabs, port, request);
+				activatePageRuler(request.activeTab, port, request);
 				break;
 			case 'deactivatePageRuler':
-				deactivatePageRuler(request.tabs, port, request);
+				deactivatePageRuler(request.activeTab, port, request);
 				break;
 			case 'activateColorPicker':
-				activateColorPicker(request.tabs, port, request);
+				activateColorPicker(request.activeTab, port, request);
 				break;
 			case 'deactivateColorPicker':
-				deactivateColorPicker(request.tabs, port, request);
+				deactivateColorPicker(request.activeTab, port, request);
 				break;
 			case 'activateColorPalette':
-				activateColorPalette(request.tabs, port, request);
+				activateColorPalette(request.activeTab, port, request);
 				break;
 			case 'deactivateColorPalette':
-				deactivateColorPalette(request.tabs, port, request);
+				deactivateColorPalette(request.activeTab, port, request);
 				break;
 			case 'activatePageGuideline':
-				activatePageGuideline(request.tabs, port, request);
+				activatePageGuideline(request.activeTab, port, request);
 				break;
 			case 'deactivatePageGuideline':
-				deactivatePageGuideline(request.tabs, port, request);
+				deactivatePageGuideline(request.activeTab, port, request);
 				break;
 			case 'activatePageHighlight':
-				activatePageHighlight(request.tabs, port, request);
+				activatePageHighlight(request.activeTab, port, request);
 				break;
 			case 'deactivatePageHighlight':
-				deactivatePageHighlight(request.tabs, port, request);
+				deactivatePageHighlight(request.activeTab, port, request);
 				break;
 			case 'activateMoveElement':
-				activateMoveElement(request.tabs, port, request);
+				activateMoveElement(request.activeTab, port, request);
 				break;
 			case 'deactivateMoveElement':
-				deactivateMoveElement(request.tabs, port, request);
+				deactivateMoveElement(request.activeTab, port, request);
 				break;
 			case 'activateExportElement':
-				activateExportElement(request.tabs, port, request);
+				activateExportElement(request.activeTab, port, request);
 				break;
 			case 'deactivateExportElement':
-				deactivateExportElement(request.tabs, port, request);
+				deactivateExportElement(request.activeTab, port, request);
 				break;
 			case 'activateDeleteElement':
-				activateDeleteElement(request.tabs, port, request);
+				activateDeleteElement(request.activeTab, port, request);
 				break;
 			case 'deactivateDeleteElement':
-				deactivateDeleteElement(request.tabs, port, request);
+				deactivateDeleteElement(request.activeTab, port, request);
 				break;
 			case 'activateClearAllCache':
-				activateClearAllCache(request.tabs, port, request);
+				activateClearAllCache(request.activeTab, port, request);
 				break;
 		}
 	});
 });
 
-function showHideExtension(tabs, port, request) {
+function showHideExtension(activeTab, port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDevWrapper') === null) {
 		let superDevWrapper = document.createElement('superdev-wrapper');
@@ -143,8 +143,8 @@ function showHideExtension(tabs, port, request) {
 
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: true});
-		chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
+		chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -152,47 +152,51 @@ function showHideExtension(tabs, port, request) {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: false}); // True, False
-		chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: false}); // True, False
-		chrome.storage.local.set({['setMinimised' + tabs[0].id]: null}); // True, False, Null
-		chrome.storage.local.set({['whichFeatureActive' + tabs[0].id]: null}); // String, Null
-		//chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: null}); // Number, Null
+		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+		chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
+		chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+		//chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
 		document.querySelector('#superDevWrapper').style.top = '18px';
 		document.querySelector('#superDevWrapper').style.right = '18px';
 		document.querySelector('#superDevWrapper').style.left = '';
 		document.querySelector('#superDevWrapper').style.visibility = 'visible';
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		port.postMessage({action: 'Popup Visible'});
 	}
 }
 
-function changeHeight(tabs, port, request) {
-	chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-		if (result['howLongPopupIs' + tabs[0].id] !== request.height) {
-			chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: request.height});
+function changeHeight(activeTab, port, request) {
+	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
+			chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
-			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') document.querySelector('#superDevWrapper').style.visibility = 'visible';
+			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') {
+				document.querySelector('#superDevWrapper').style.visibility = 'visible';
+			}
 			port.postMessage({action: 'Height Changed'});
 		}
 	});
 }
 
-function justChangeHeight(tabs, port, request) {
-	chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-		if (result['howLongPopupIs' + tabs[0].id] !== request.height) {
-			chrome.storage.local.set({['howLongPopupIs' + tabs[0].id]: request.height});
+function justChangeHeight(activeTab, port, request) {
+	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
+			chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			port.postMessage({action: 'Just Height Changed'});
 		}
 	});
 }
 
-function activateTextEditor(tabs, port, request) {
+function activateTextEditor(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -257,13 +261,13 @@ function activateTextEditor(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Text Editor Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyTextEditor();
 			}
@@ -282,20 +286,22 @@ function activateTextEditor(tabs, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateTextEditor(tabs, port, request) {
+function deactivateTextEditor(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Text Editor Deactivated'});
 }
 
-function activatePageRuler(tabs, port, request) {
+function activatePageRuler(activeTab, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -368,7 +374,7 @@ function activatePageRuler(tabs, port, request) {
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'toGrayscale',
@@ -399,7 +405,7 @@ function activatePageRuler(tabs, port, request) {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({['setMinimised' + tabs[0].id]: null});
+			chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -501,7 +507,7 @@ function activatePageRuler(tabs, port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageRuler();
 			}
@@ -516,8 +522,10 @@ function activatePageRuler(tabs, port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		removeDimensions();
@@ -525,12 +533,12 @@ function activatePageRuler(tabs, port, request) {
 	}
 }
 
-function deactivatePageRuler(tabs, port, request) {
+function deactivatePageRuler(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Ruler Deactivated'});
 }
 
-function activateColorPicker(tabs, port, request) {
+function activateColorPicker(activeTab, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
@@ -604,7 +612,7 @@ function activateColorPicker(tabs, port, request) {
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'setColorPicker',
@@ -635,7 +643,7 @@ function activateColorPicker(tabs, port, request) {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({['setMinimised' + tabs[0].id]: null});
+			chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -748,7 +756,7 @@ function activateColorPicker(tabs, port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPicker();
 			}
@@ -764,8 +772,10 @@ function activateColorPicker(tabs, port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		removeColorPicker();
@@ -773,12 +783,12 @@ function activateColorPicker(tabs, port, request) {
 	}
 }
 
-function deactivateColorPicker(tabs, port, request) {
+function deactivateColorPicker(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Picker Deactivated'});
 }
 
-function activateColorPalette(tabs, port, request) {
+function activateColorPalette(activeTab, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -859,7 +869,7 @@ function activateColorPalette(tabs, port, request) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPalette();
 			}
@@ -868,16 +878,16 @@ function activateColorPalette(tabs, port, request) {
 
 	function destroyColorPalette() {
 		document.removeEventListener('keyup', onEscape);
-		chrome.storage.local.set({['setHomePageActive' + tabs[0].id]: true});
+		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 	}
 }
 
-function deactivateColorPalette(tabs, port, request) {
+function deactivateColorPalette(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Color Palette Deactivated'});
 }
 
-function activatePageGuideline(tabs, port, request) {
+function activatePageGuideline(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -935,13 +945,13 @@ function activatePageGuideline(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Page Guideline Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageGuideline();
 			}
@@ -958,20 +968,22 @@ function activatePageGuideline(tabs, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivatePageGuideline(tabs, port, request) {
+function deactivatePageGuideline(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Guideline Deactivated'});
 }
 
-function activatePageHighlight(tabs, port, request) {
+function activatePageHighlight(activeTab, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -1185,13 +1197,13 @@ function activatePageHighlight(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Page Highlight Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageHighlight();
 			}
@@ -1201,8 +1213,10 @@ function activatePageHighlight(tabs, port, request) {
 	function destroyPageHighlight() {
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
@@ -1404,12 +1418,12 @@ function activatePageHighlight(tabs, port, request) {
 	}
 }
 
-function deactivatePageHighlight(tabs, port, request) {
+function deactivatePageHighlight(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Page Highlight Deactivated'});
 }
 
-function activateMoveElement(tabs, port, request) {
+function activateMoveElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1491,13 +1505,13 @@ function activateMoveElement(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Move Element Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyMoveElement();
 			}
@@ -1515,8 +1529,10 @@ function activateMoveElement(tabs, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		if (document.querySelector('.moveElementDraggable')) {
@@ -1531,12 +1547,12 @@ function activateMoveElement(tabs, port, request) {
 	}
 }
 
-function deactivateMoveElement(tabs, port, request) {
+function deactivateMoveElement(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Move Element Deactivated'});
 }
 
-function activateExportElement(tabs, port, request) {
+function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1939,12 +1955,27 @@ function activateExportElement(tabs, port, request) {
 							let codepenForm = document.createElement('form');
 							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
 							codepenForm.setAttribute('method', 'POST');
-							codepenForm.setAttribute('target', '_blank');
+							codepenForm.setAttribute('target', 'view');
 							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
 							codepenForm.querySelector('#codepenValue').value = codepenValue;
 							document.body.appendChild(codepenForm);
-							codepenForm.submit();
-							codepenForm.remove();
+							//codepenForm.submit();
+							//codepenForm.remove();
+
+							fetch('https://codepen.io/pen/define', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded',
+								},
+								redirect: 'follow',
+								body: JSON.stringify(codepenValue),
+							})
+								.then(function (response) {
+									return response.text();
+								})
+								.then(function (data) {
+									console.log(data);
+								});
 						}
 						// Export to File
 						else if (value.settings.checkboxExportElement2 === true) {
@@ -2001,13 +2032,13 @@ function activateExportElement(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Export Element Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyExportElement();
 			}
@@ -2025,20 +2056,22 @@ function activateExportElement(tabs, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateExportElement(tabs, port, request) {
+function deactivateExportElement(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Export Element Deactivated'});
 }
 
-function activateDeleteElement(tabs, port, request) {
+function activateDeleteElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -2104,13 +2137,13 @@ function activateDeleteElement(tabs, port, request) {
 	}
 
 	port.postMessage({action: 'Delete Element Activated'});
-	chrome.storage.local.set({['setMinimised' + tabs[0].id]: true});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 	function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + tabs[0].id]: true});
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyDeleteElement();
 			}
@@ -2128,20 +2161,22 @@ function activateDeleteElement(tabs, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + tabs[0].id], function (result) {
-			if (result['howLongPopupIs' + tabs[0].id] === 40.5) chrome.storage.local.set({['setMinimised' + tabs[0].id]: false});
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
 }
 
-function deactivateDeleteElement(tabs, port, request) {
+function deactivateDeleteElement(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
-function activateClearAllCache(tabs, port, request) {
+function activateClearAllCache(activeTab, port, request) {
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		JSON.parse(result['allFeatures']).map(function (value, index) {
 			if (value.id === 'clearAllCache') {
