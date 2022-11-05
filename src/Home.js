@@ -82,7 +82,6 @@ export default function Home() {
 		// Remove Old Data
 		chrome.storage.local.get(null, function (result) {
 			let allKeys = Object.keys(result);
-			console.log(allKeys);
 			chrome.tabs.query({}, function (allTabs) {
 				allTabs = allTabs.map(function (value, index) {
 					return value.id;
