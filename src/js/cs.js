@@ -1570,6 +1570,129 @@ function deactivateMoveElement(activeTab, port, request) {
 	port.postMessage({action: 'Move Element Deactivated'});
 }
 
+function activateDeleteElement(activeTab, port, request) {
+	document.addEventListener('mouseover', onMouseOver);
+	document.addEventListener('mouseout', onMouseOut);
+	document.addEventListener('click', onMouseClick);
+	document.addEventListener('keyup', onEscape);
+	window.focus({preventScroll: true});
+
+	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
+	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
+	document.body.appendChild(pageGuidelineWrapper);
+
+	function onMouseOver(event) {
+		event.preventDefault();
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
+			event.target.classList.add('pageGuidelineOutline');
+			renderPageGuideline(true);
+		}
+	}
+
+	function onMouseOut(event) {
+		event.preventDefault();
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
+			renderPageGuideline(false);
+			event.target.classList.remove('pageGuidelineOutline');
+		}
+	}
+
+	function onMouseClick(event) {
+		event.preventDefault();
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
+			event.target.classList.add('deleteElementWrapper');
+			document.querySelector('.deleteElementWrapper').remove();
+		}
+	}
+
+	function renderPageGuideline(toShow) {
+		if (toShow === true) {
+			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let scrollWidth =
+				document.body.scrollWidth -
+				(document.body.scrollWidth -
+					(document.body.offsetWidth +
+						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
+							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
+			let scrollHeight = document.body.scrollHeight;
+			let top = guidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = guidelinePosition.left + document.documentElement.scrollLeft;
+			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+
+			pageGuidelineWrapper.innerHTML = `
+			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
+			xmlns="http://www.w3.org/2000/svg">
+				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
+				</rect>
+					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
+					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
+					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
+					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
+			</svg>`;
+		} else {
+			pageGuidelineWrapper.innerHTML = ``;
+		}
+	}
+
+	port.postMessage({action: 'Delete Element Activated'});
+	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+
+	function onEscape(event) {
+		event.preventDefault();
+		if (event.key === 'Escape') {
+			if (event.isTrusted === true) {
+				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+			} else if (event.isTrusted === false) {
+				destroyDeleteElement();
+			}
+		}
+	}
+
+	function destroyDeleteElement() {
+		document.removeEventListener('mouseover', onMouseOver);
+		document.removeEventListener('mouseout', onMouseOut);
+		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('keyup', onEscape);
+
+		if (document.querySelector('.pageGuidelineOutline')) {
+			document.querySelector('.pageGuidelineOutline').blur();
+			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
+		}
+
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+			}
+		});
+
+		document.querySelector('.pageGuidelineWrapper').remove();
+	}
+}
+
+function deactivateDeleteElement(activeTab, port, request) {
+	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
+	port.postMessage({action: 'Delete Element Deactivated'});
+}
+
 function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
@@ -2072,129 +2195,6 @@ function activateExportElement(activeTab, port, request) {
 function deactivateExportElement(activeTab, port, request) {
 	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
 	port.postMessage({action: 'Export Element Deactivated'});
-}
-
-function activateDeleteElement(activeTab, port, request) {
-	document.addEventListener('mouseover', onMouseOver);
-	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
-	document.addEventListener('keyup', onEscape);
-	window.focus({preventScroll: true});
-
-	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
-	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
-
-	function onMouseOver(event) {
-		event.preventDefault();
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
-			event.target.classList.add('pageGuidelineOutline');
-			renderPageGuideline(true);
-		}
-	}
-
-	function onMouseOut(event) {
-		event.preventDefault();
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
-			renderPageGuideline(false);
-			event.target.classList.remove('pageGuidelineOutline');
-		}
-	}
-
-	function onMouseClick(event) {
-		event.preventDefault();
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
-			event.target.classList.add('deleteElementWrapper');
-			document.querySelector('.deleteElementWrapper').remove();
-		}
-	}
-
-	function renderPageGuideline(toShow) {
-		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
-			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
-			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
-
-			pageGuidelineWrapper.innerHTML = `
-			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
-			xmlns="http://www.w3.org/2000/svg">
-				<rect fill="none" width="${scrollWidth}" height="${scrollHeight}" x="${left}" y="${top}" style="display:none;">
-				</rect>
-					<line x1="${left}" y1="0" x2="${left}" y2="${scrollHeight}"></line>
-					<line x1="${right}" y1="0" x2="${right}" y2="${scrollHeight}"></line>
-					<line x1="0" y1="${top}" x2="${scrollWidth}" y2="${top}"></line>
-					<line x1="0" y1="${bottom}" x2="${scrollWidth}" y2="${bottom}"></line>
-			</svg>`;
-		} else {
-			pageGuidelineWrapper.innerHTML = ``;
-		}
-	}
-
-	port.postMessage({action: 'Delete Element Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
-	function onEscape(event) {
-		event.preventDefault();
-		if (event.key === 'Escape') {
-			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
-			} else if (event.isTrusted === false) {
-				destroyDeleteElement();
-			}
-		}
-	}
-
-	function destroyDeleteElement() {
-		document.removeEventListener('mouseover', onMouseOver);
-		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('click', onMouseClick);
-		document.removeEventListener('keyup', onEscape);
-
-		if (document.querySelector('.pageGuidelineOutline')) {
-			document.querySelector('.pageGuidelineOutline').blur();
-			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
-		}
-
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
-			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
-			}
-		});
-
-		document.querySelector('.pageGuidelineWrapper').remove();
-	}
-}
-
-function deactivateDeleteElement(activeTab, port, request) {
-	document.dispatchEvent(new KeyboardEvent('keyup', {key: 'Escape'}));
-	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
 function activateClearAllCache(activeTab, port, request) {
