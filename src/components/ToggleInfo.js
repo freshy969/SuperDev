@@ -17,7 +17,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none cursor-pointer'
 							onClick={openShortcutPage}>
 							<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
-							SuperDev Extension Shortcuts
+							SuperDev Free Shortcuts
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{[
@@ -42,7 +42,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-arrows-up-down-left-right px-[5px] text-allText dark:text-allTextD'></i>Move Element Feature Information
+							<i className='fa-regular fa-arrows-up-down-left-right px-[5px] text-allText dark:text-allTextD'></i>About Move Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{["It Can't Be Used On HTML Body Tag", 'Since This Will Reload The Extension'].map(function (value, index) {
@@ -62,10 +62,10 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-trash-can px-[5px] text-allText dark:text-allTextD'></i>Delete Element Feature Information
+							<i className='fa-regular fa-trash-can px-[5px] text-allText dark:text-allTextD'></i>About Delete Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["It Can't Be Used On HTML Body Tag", 'Since This Will Delete The Ext. Popup'].map(function (value, index) {
+							{["It Can't Be Used On HTML Body Since", 'This Will Remove The Extension Popup'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
@@ -82,7 +82,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Feature Information
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{["Export Element's CSS Is Inconsistent", 'Its CSS Calc. Algorithm Is Being Fixed'].map(function (value, index) {
