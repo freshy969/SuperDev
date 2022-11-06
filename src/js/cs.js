@@ -794,8 +794,9 @@ function activateColorPalette(activeTab, port, request) {
 
 	// Get All Colors
 	let allColors = [];
+	let elementComputedStyles;
 	document.querySelectorAll('*').forEach(function (element) {
-		let elementComputedStyles = window.getComputedStyle(element);
+		elementComputedStyles = window.getComputedStyle(element);
 		allColors.push(elementComputedStyles.getPropertyValue('background-color'));
 		allColors.push(elementComputedStyles.getPropertyValue('border-color'));
 		allColors.push(elementComputedStyles.getPropertyValue('border-block-color'));
@@ -830,31 +831,35 @@ function activateColorPalette(activeTab, port, request) {
 	});
 
 	// Color Processing/Filtering
-	allColors = [...new Set(allColors)];
-	allColors = allColors.filter(function (value, index) {
-		return value.startsWith('rgb(');
-	});
-	allColors = allColors.map(function (valueOne, indexOne) {
-		if (valueOne.includes(') ')) return valueOne.replaceAll(') ', ');').split(';');
-		else return valueOne;
-	});
-	allColors = [...new Set(allColors.flat())];
-
-	// RGB or Hex?
-	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result['allFeatures']).map(function (value, index) {
-			if (value.id === 'colorPalette') {
-				if (value.settings.checkboxColorPalette1 === true) {
-					allColors = allColors.map(function (value, index) {
-						return rgbToHex(value);
-					});
-					port.postMessage({action: 'allColors', allColors: allColors});
-				} else if (value.settings.checkboxColorPalette2 === true) {
-					port.postMessage({action: 'allColors', allColors: allColors});
-				}
-			}
+	if (allColors.length !== 0) {
+		allColors = [...new Set(allColors)];
+		allColors = allColors.filter(function (value, index) {
+			return value.startsWith('rgb(');
 		});
-	});
+		if (allColors.length !== 0) {
+			allColors = allColors.map(function (valueOne, indexOne) {
+				if (valueOne.includes(') ')) return valueOne.replaceAll(') ', ');').split(';');
+				else return valueOne;
+			});
+			allColors = [...new Set(allColors.flat())];
+
+			// RGB or Hex?
+			chrome.storage.local.get(['allFeatures'], function (result) {
+				JSON.parse(result['allFeatures']).map(function (value, index) {
+					if (value.id === 'colorPalette') {
+						if (value.settings.checkboxColorPalette1 === true) {
+							allColors = allColors.map(function (value, index) {
+								return rgbToHex(value);
+							});
+							port.postMessage({action: 'allColors', allColors: allColors});
+						} else if (value.settings.checkboxColorPalette2 === true) {
+							port.postMessage({action: 'allColors', allColors: allColors});
+						}
+					}
+				});
+			});
+		}
+	}
 
 	function rgbToHex(rgb) {
 		let hex = rgb.split('(')[1].split(')')[0];
@@ -1724,20 +1729,22 @@ function activateExportElement(activeTab, port, request) {
 	let allStyleSheets = [];
 
 	// Saving All CSSRules to AllStyleSheets 2D Array
-	[...document.styleSheets].map(function (valueOne, indexOne) {
-		try {
-			if ([...valueOne.cssRules].length !== 0) {
-				let singleStylesheet = [];
-				[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
-					singleStylesheet.push(valueTwo);
-				});
-				allStyleSheets.push(singleStylesheet);
+	if ([...document.styleSheets].length !== 0) {
+		[...document.styleSheets].map(function (valueOne, indexOne) {
+			try {
+				let singleStylesheetOne = [];
+				if ([...valueOne.cssRules].length !== 0) {
+					[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
+						singleStylesheetOne.push(valueTwo);
+					});
+					allStyleSheets.push(singleStylesheetOne);
+				}
+			} catch (e) {
+				allStyleSheets.push([]);
+				portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
 			}
-		} catch (e) {
-			allStyleSheets.push([]);
-			portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
-		}
-	});
+		});
+	}
 
 	// Saving External Stylesheets' CSSRules
 	// to AllStyleSheets 2D Array
@@ -1752,17 +1759,19 @@ function activateExportElement(activeTab, port, request) {
 			for (let i = 0; i < allStyleSheets.length; i++) {
 				if (allStyleSheets[i].length === 0) {
 					exportElementStyle.textContent = request.styleSheet;
-					[...exportElementWrapper.contentWindow.document.styleSheets].map(function (valueOne, indexOne) {
-						if ([...valueOne.cssRules].length !== 0) {
-							let singleStylesheet = [];
-							[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
-								singleStylesheet.push(valueTwo);
-							});
-							allStyleSheets[i].push(singleStylesheet);
-							allStyleSheets[i] = allStyleSheets[i].flat();
-						}
-					});
-					break;
+					if ([...exportElementShaRoot.styleSheets].length !== 0) {
+						[...exportElementShaRoot.styleSheets].map(function (valueOne, indexOne) {
+							let singleStylesheetTwo = [];
+							if ([...valueOne.cssRules].length !== 0) {
+								[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
+									singleStylesheetTwo.push(valueTwo);
+								});
+								allStyleSheets[i].push(singleStylesheetTwo);
+								allStyleSheets[i] = allStyleSheets[i].flat();
+							}
+						});
+						break;
+					}
 				}
 			}
 		}
@@ -1778,243 +1787,271 @@ function activateExportElement(activeTab, port, request) {
 			let allKeyframes = [];
 			let allAnimations = [];
 
-			[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
-				let tempSelectors = [];
-				if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
-				if (valueOne.className !== '') {
-					[...valueOne.classList].map(function (valueTwo, indexTwo) {
-						if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
-					});
-				}
-				tempSelectors.push(valueOne.tagName.toLowerCase());
-				allSelectors.push(tempSelectors);
-			});
-			allSelectors = [...new Set(allSelectors.flat())];
+			if ([event.target, ...event.target.querySelectorAll('*')].length !== 0) {
+				[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
+					let tempSelectors = [];
+					if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
+					if ([...valueOne.classList].length !== 0) {
+						[...valueOne.classList].map(function (valueTwo, indexTwo) {
+							if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
+						});
+					}
+					tempSelectors.push(valueOne.tagName.toLowerCase());
+					allSelectors.push(tempSelectors);
+				});
+				allSelectors = [...new Set(allSelectors.flat())];
+			}
 
 			// Removing Unused CSS
-			allStyleSheets.flat().map(function (valueOne, indexOne) {
-				allSelectors.map(function (valueTwo, indexTwo) {
-					let regexZero = new RegExp(/\\/gm);
-					let regexOne = new RegExp('[ ,]([*]|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
-					let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
-					let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
+			if (allStyleSheets.flat().length !== 0) {
+				allStyleSheets.flat().map(function (valueOne, indexOne) {
+					if (allSelectors.length !== 0) {
+						allSelectors.map(function (valueTwo, indexTwo) {
+							let regexZero = new RegExp(/\\/gm);
+							let regexOne = new RegExp('[ ,]([*]|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
+							let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
+							let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
 
-					// If CSSStyles
-					if (!valueOne.cssText.startsWith('@')) {
-						// IDs
-						if (valueTwo.startsWith('#')) {
-							if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-								usedStyles.push(valueOne.cssText);
-							}
-						}
-						// Classes
-						else if (valueTwo.startsWith('.')) {
-							if (
-								(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-								(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-							) {
-								usedStyles.push(valueOne.cssText);
-							}
-						}
-						// Tags
-						else {
-							if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-								usedStyles.push(valueOne.cssText);
-							}
-						}
-					}
-
-					// If MediaQuery
-					else if (valueOne.cssText.startsWith('@media')) {
-						let mediaStyles = [];
-						[...valueOne.cssRules].map(function (valueThree, indexThree) {
 							// If CSSStyles
-							if (!valueThree.cssText.startsWith('@')) {
+							if (!valueOne.cssText.startsWith('@')) {
 								// IDs
 								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-										mediaStyles.push(valueThree.cssText);
+									if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
+										usedStyles.push(valueOne.cssText);
 									}
 								}
 								// Classes
 								else if (valueTwo.startsWith('.')) {
 									if (
-										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
+										(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+										(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
 									) {
-										mediaStyles.push(valueThree.cssText);
+										usedStyles.push(valueOne.cssText);
 									}
 								}
 								// Tags
 								else {
-									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-										mediaStyles.push(valueThree.cssText);
+									if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
+										usedStyles.push(valueOne.cssText);
 									}
 								}
 							}
-							// If CSSSupports
-							else if (valueThree.cssText.startsWith('@supports')) {
-								let cssSupports = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									// If CSSStyles
-									if (!valueFour.cssText.startsWith('@')) {
-										// IDs
-										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-												cssSupports.push(valueFour.cssText);
-											}
-										}
-										// Classes
-										else if (valueTwo.startsWith('.')) {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-											) {
-												cssSupports.push(valueFour.cssText);
-											}
-										}
-										// Tags
-										else {
-											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-												cssSupports.push(valueFour.cssText);
-											}
-										}
-									}
-									// If CSSKeyframes
-									else if (valueFour.cssText.startsWith('@keyframes')) {
-										let cssKeyframes = [];
-										[...valueFour.cssRules].map(function (valueFive, indexFive) {
-											cssKeyframes.push(valueFive.cssText);
-										});
-										if (cssKeyframes.length !== 0) {
-											allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`});
-											cssSupports.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
-										}
-									}
-								});
-								if (cssSupports.length !== 0) {
-									mediaStyles.push(`@supports ${valueThree.conditionText} { ${cssSupports.join('\n')} }`);
-								}
-							}
-							// If CSSKeyframes
-							else if (valueThree.cssText.startsWith('@keyframes')) {
-								let cssKeyframes = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									cssKeyframes.push(valueFour.cssText);
-								});
-								if (cssKeyframes.length !== 0) {
-									allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`});
-									mediaStyles.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
-								}
-							}
-						});
-						if (mediaStyles.length !== 0) {
-							usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStyles.join('\n')} }`);
-						}
-					}
 
-					// If CSSSupports
-					else if (valueOne.cssText.startsWith('@supports')) {
-						let cssSupports = [];
-						[...valueOne.cssRules].map(function (valueThree, indexThree) {
-							// If CSSStyles
-							if (!valueThree.cssText.startsWith('@')) {
-								// IDs
-								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-										cssSupports.push(valueThree.cssText);
-									}
-								}
-								// Classes
-								else if (valueTwo.startsWith('.')) {
-									if (
-										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-										(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-									) {
-										cssSupports.push(valueThree.cssText);
-									}
-								}
-								// Tags
-								else {
-									if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-										cssSupports.push(valueThree.cssText);
-									}
-								}
-							}
 							// If MediaQuery
-							else if (valueThree.cssText.startsWith('@media')) {
-								let mediaStyles = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									// If CSSStyles
-									if (!valueFour.cssText.startsWith('@')) {
-										// IDs
-										if (valueTwo.startsWith('#')) {
-											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-												mediaStyles.push(valueFour.cssText);
+							else if (valueOne.cssText.startsWith('@media')) {
+								let mediaStylesOne = [];
+								if ([...valueOne.cssRules].length !== 0) {
+									[...valueOne.cssRules].map(function (valueThree, indexThree) {
+										// If CSSStyles
+										if (!valueThree.cssText.startsWith('@')) {
+											// IDs
+											if (valueTwo.startsWith('#')) {
+												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
+													mediaStylesOne.push(valueThree.cssText);
+												}
+											}
+											// Classes
+											else if (valueTwo.startsWith('.')) {
+												if (
+													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
+												) {
+													mediaStylesOne.push(valueThree.cssText);
+												}
+											}
+											// Tags
+											else {
+												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
+													mediaStylesOne.push(valueThree.cssText);
+												}
 											}
 										}
-										// Classes
-										else if (valueTwo.startsWith('.')) {
-											if (
-												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-												(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-											) {
-												mediaStyles.push(valueFour.cssText);
+										// If CSSSupports
+										else if (valueThree.cssText.startsWith('@supports')) {
+											let cssSupportsOne = [];
+											if ([...valueThree.cssRules].length !== 0) {
+												[...valueThree.cssRules].map(function (valueFour, indexFour) {
+													// If CSSStyles
+													if (!valueFour.cssText.startsWith('@')) {
+														// IDs
+														if (valueTwo.startsWith('#')) {
+															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
+																cssSupportsOne.push(valueFour.cssText);
+															}
+														}
+														// Classes
+														else if (valueTwo.startsWith('.')) {
+															if (
+																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
+															) {
+																cssSupportsOne.push(valueFour.cssText);
+															}
+														}
+														// Tags
+														else {
+															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
+																cssSupportsOne.push(valueFour.cssText);
+															}
+														}
+													}
+													// If CSSKeyframes
+													else if (valueFour.cssText.startsWith('@keyframes')) {
+														let cssKeyframesOne = [];
+														if ([...valueFour.cssRules].length !== 0) {
+															[...valueFour.cssRules].map(function (valueFive, indexFive) {
+																cssKeyframesOne.push(valueFive.cssText);
+															});
+														}
+														if (cssKeyframesOne.length !== 0) {
+															allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframesOne.join('\n')} }`});
+															cssSupportsOne.push(`@keyframes ${valueFour.name} { ${cssKeyframesOne.join('\n')} }`);
+														}
+													}
+												});
 											}
-										}
-										// Tags
-										else {
-											if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-												mediaStyles.push(valueFour.cssText);
-											}
-										}
-									}
-									// If CSSKeyframes
-									else if (valueFour.cssText.startsWith('@keyframes')) {
-										let cssKeyframes = [];
-										[...valueFour.cssRules].map(function (valueFive, indexFive) {
-											cssKeyframes.push(valueFive.cssText);
-										});
-										if (cssKeyframes.length !== 0) {
-											allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`});
-											mediaStyles.push(`@keyframes ${valueFour.name} { ${cssKeyframes.join('\n')} }`);
-										}
-									}
-								});
-								if (mediaStyles.length !== 0) {
-									cssSupports.push(`@media ${valueThree.conditionText} { ${mediaStyles.join('\n')} }`);
-								}
-							}
-							// If CSSKeyframes
-							else if (valueThree.cssText.startsWith('@keyframes')) {
-								let cssKeyframes = [];
-								[...valueThree.cssRules].map(function (valueFour, indexFour) {
-									cssKeyframes.push(valueFour.cssText);
-								});
-								if (cssKeyframes.length !== 0) {
-									allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`});
-									cssSupports.push(`@keyframes ${valueThree.name} { ${cssKeyframes.join('\n')} }`);
-								}
-							}
-						});
-						if (cssSupports.length !== 0) {
-							usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupports.join('\n')} }`);
-						}
-					}
 
-					// If CSSKeyframes
-					else if (valueOne.cssText.startsWith('@keyframes')) {
-						let cssKeyframes = [];
-						[...valueOne.cssRules].map(function (valueThree, indexThree) {
-							cssKeyframes.push(valueThree.cssText);
+											if (cssSupportsOne.length !== 0) {
+												mediaStylesOne.push(`@supports ${valueThree.conditionText} { ${cssSupportsOne.join('\n')} }`);
+											}
+										}
+										// If CSSKeyframes
+										else if (valueThree.cssText.startsWith('@keyframes')) {
+											let cssKeyframesTwo = [];
+											if ([...valueThree.cssRules].length !== 0) {
+												[...valueThree.cssRules].map(function (valueFour, indexFour) {
+													cssKeyframesTwo.push(valueFour.cssText);
+												});
+											}
+											if (cssKeyframesTwo.length !== 0) {
+												allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframesTwo.join('\n')} }`});
+												mediaStylesOne.push(`@keyframes ${valueThree.name} { ${cssKeyframesTwo.join('\n')} }`);
+											}
+										}
+									});
+								}
+
+								if (mediaStylesOne.length !== 0) {
+									usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStylesOne.join('\n')} }`);
+								}
+							}
+
+							// If CSSSupports
+							else if (valueOne.cssText.startsWith('@supports')) {
+								let cssSupportsTwo = [];
+								if ([...valueOne.cssRules].length !== 0) {
+									[...valueOne.cssRules].map(function (valueThree, indexThree) {
+										// If CSSStyles
+										if (!valueThree.cssText.startsWith('@')) {
+											// IDs
+											if (valueTwo.startsWith('#')) {
+												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
+													cssSupportsTwo.push(valueThree.cssText);
+												}
+											}
+											// Classes
+											else if (valueTwo.startsWith('.')) {
+												if (
+													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
+												) {
+													cssSupportsTwo.push(valueThree.cssText);
+												}
+											}
+											// Tags
+											else {
+												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
+													cssSupportsTwo.push(valueThree.cssText);
+												}
+											}
+										}
+										// If MediaQuery
+										else if (valueThree.cssText.startsWith('@media')) {
+											let mediaStylesTwo = [];
+											if ([...valueThree.cssRules].length !== 0) {
+												[...valueThree.cssRules].map(function (valueFour, indexFour) {
+													// If CSSStyles
+													if (!valueFour.cssText.startsWith('@')) {
+														// IDs
+														if (valueTwo.startsWith('#')) {
+															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
+																mediaStylesTwo.push(valueFour.cssText);
+															}
+														}
+														// Classes
+														else if (valueTwo.startsWith('.')) {
+															if (
+																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
+																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
+															) {
+																mediaStylesTwo.push(valueFour.cssText);
+															}
+														}
+														// Tags
+														else {
+															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
+																mediaStylesTwo.push(valueFour.cssText);
+															}
+														}
+													}
+													// If CSSKeyframes
+													else if (valueFour.cssText.startsWith('@keyframes')) {
+														let cssKeyframesThree = [];
+														if ([...valueFour.cssRules].length !== 0) {
+															[...valueFour.cssRules].map(function (valueFive, indexFive) {
+																cssKeyframesThree.push(valueFive.cssText);
+															});
+														}
+														if (cssKeyframesThree.length !== 0) {
+															allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframesThree.join('\n')} }`});
+															mediaStylesTwo.push(`@keyframes ${valueFour.name} { ${cssKeyframesThree.join('\n')} }`);
+														}
+													}
+												});
+											}
+
+											if (mediaStylesTwo.length !== 0) {
+												cssSupportsTwo.push(`@media ${valueThree.conditionText} { ${mediaStylesTwo.join('\n')} }`);
+											}
+										}
+										// If CSSKeyframes
+										else if (valueThree.cssText.startsWith('@keyframes')) {
+											let cssKeyframesFour = [];
+											if ([...valueThree.cssRules].length !== 0) {
+												[...valueThree.cssRules].map(function (valueFour, indexFour) {
+													cssKeyframesFour.push(valueFour.cssText);
+												});
+											}
+											if (cssKeyframesFour.length !== 0) {
+												allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframesFour.join('\n')} }`});
+												cssSupportsTwo.push(`@keyframes ${valueThree.name} { ${cssKeyframesFour.join('\n')} }`);
+											}
+										}
+									});
+								}
+
+								if (cssSupportsTwo.length !== 0) {
+									usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupportsTwo.join('\n')} }`);
+								}
+							}
+
+							// If CSSKeyframes
+							else if (valueOne.cssText.startsWith('@keyframes')) {
+								let cssKeyframesFive = [];
+								if ([...valueOne.cssRules].length !== 0) {
+									[...valueOne.cssRules].map(function (valueThree, indexThree) {
+										cssKeyframesFive.push(valueThree.cssText);
+									});
+								}
+								if (cssKeyframesFive.length !== 0) {
+									allKeyframes.push({name: valueOne.name, value: `@keyframes ${valueOne.name} { ${cssKeyframesFive.join('\n')} }`});
+									usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframesFive.join('\n')} }`);
+								}
+							}
 						});
-						if (cssKeyframes.length !== 0) {
-							allKeyframes.push({name: valueOne.name, value: `@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`});
-							usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframes.join('\n')} }`);
-						}
 					}
 				});
-			});
+			}
 
 			usedStyles = [...new Set(usedStyles)];
 			usedStyles = usedStyles.join(' ');
@@ -2024,21 +2061,25 @@ function activateExportElement(activeTab, port, request) {
 			let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
 			if (usedVars !== null) {
 				usedVars = [...new Set(usedVars?.flat())];
-				usedVars.map(function (valueOne, indexOne) {
-					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
-						if (valueTwo !== null && bodyStyle.getPropertyValue(valueTwo) !== '') {
-							usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
+				if (usedVars.length !== 0) {
+					usedVars.map(function (valueOne, indexOne) {
+						if (valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).length !== 0) {
+							valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+								if (valueTwo !== null && bodyStyle.getPropertyValue(valueTwo) !== '') {
+									usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
+								}
+							});
 						}
 					});
-				});
+				}
 			}
 
 			// CSS Keyframe Replace, Regex Will Get Chars Between Two Strings Without The Two Chars Itself
 			allAnimations = usedStyles.match(/(?<=animation:)([\S\s]*?)(?=;)|(?<=animation-name:)([\S\s]*?)(?=;)/gm);
 			allAnimations = [...new Set(allAnimations)];
-			if (allAnimations !== null) {
+			if (allAnimations.length !== 0) {
 				allAnimations.map(function (valueOne, indexOne) {
-					if (allKeyframes !== null) {
+					if (allKeyframes.length !== 0) {
 						allKeyframes.map(function (valueTwo, indexTwo) {
 							if (!valueOne.includes(valueTwo.name + ';') && !valueOne.includes(valueTwo.name + ' ')) {
 								usedStyles = usedStyles.replaceAll(valueTwo.value, '');
@@ -2108,17 +2149,17 @@ function activateExportElement(activeTab, port, request) {
 							let text = `${html} <style> ${css} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 
-							let a = document.createElement('a');
-							a.href = URL.createObjectURL(file);
-							a.download = 'exported-element.html';
-							document.body.appendChild(a);
+							let anchor = document.createElement('a');
+							anchor.href = URL.createObjectURL(file);
+							anchor.download = 'exported-element.html';
+							document.body.appendChild(anchor);
 
 							let clickEvent = new MouseEvent('click', {bubbles: false});
-							a.dispatchEvent(clickEvent);
+							anchor.dispatchEvent(clickEvent);
 
 							setTimeout(function () {
-								URL.revokeObjectURL(a.href);
-								document.body.removeChild(a);
+								URL.revokeObjectURL(anchor.href);
+								document.body.removeChild(anchor);
 							}, 50);
 						}
 					}
