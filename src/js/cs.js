@@ -1756,21 +1756,23 @@ function activateExportElement(activeTab, port, request) {
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
-			for (let i = 0; i < allStyleSheets.length; i++) {
-				if (allStyleSheets[i].length === 0) {
-					exportElementStyle.textContent = request.styleSheet;
-					if ([...exportElementShaRoot.styleSheets].length !== 0) {
-						[...exportElementShaRoot.styleSheets].map(function (valueOne, indexOne) {
-							let singleStylesheetTwo = [];
-							if ([...valueOne.cssRules].length !== 0) {
-								[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
-									singleStylesheetTwo.push(valueTwo);
-								});
-								allStyleSheets[i].push(singleStylesheetTwo);
-								allStyleSheets[i] = allStyleSheets[i].flat();
-							}
-						});
-						break;
+			if (allStyleSheets.length !== 0) {
+				for (let i = 0; i < allStyleSheets.length; i++) {
+					if (allStyleSheets[i].length === 0) {
+						exportElementStyle.textContent = request.styleSheet;
+						if ([...exportElementShaRoot.styleSheets].length !== 0) {
+							[...exportElementShaRoot.styleSheets].map(function (valueOne, indexOne) {
+								let singleStylesheetTwo = [];
+								if ([...valueOne.cssRules].length !== 0) {
+									[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
+										singleStylesheetTwo.push(valueTwo);
+									});
+									allStyleSheets[i].push(singleStylesheetTwo);
+									allStyleSheets[i] = allStyleSheets[i].flat();
+								}
+							});
+							break;
+						}
 					}
 				}
 			}
