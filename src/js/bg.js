@@ -49,8 +49,8 @@ chrome.runtime.onInstalled.addListener(async function () {
 						return value !== null;
 					});
 
-					// If Feature Exists in Stored Data
-					// Sync That Feature Data + Settings
+					// If Feature Exists in Both Stored Data And
+					// Local Storage Sync That Feature's Data + Settings
 					localAllFeatures.map(function (valueOne, indexOne) {
 						storedAllFeatures.map(function (valueTwo, indexTwo) {
 							if (valueOne.id === valueTwo.id) {
