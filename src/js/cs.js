@@ -2137,7 +2137,7 @@ function activateExportElement(activeTab, port, request) {
 							let codepenForm = document.createElement('form');
 							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
 							codepenForm.setAttribute('method', 'POST');
-							codepenForm.setAttribute('target', 'view');
+							codepenForm.setAttribute('target', '_blank');
 							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
 							codepenForm.querySelector('#codepenValue').value = codepenValue;
 							document.body.appendChild(codepenForm);
