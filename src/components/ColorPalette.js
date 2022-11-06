@@ -45,6 +45,8 @@ export default function ColorPalette({allFeatures, activeTab, portThree, allFeat
 				<div id='colorPalettePageChild' className='rounded-md p-4'>
 					<div className='flex flex-wrap'>
 						{!isLoadingOne &&
+							Array.isArray(allColors) &&
+							allColors.length !== 0 &&
 							allColors.map(function (value, index) {
 								// Margin Right/Bottom Calculation
 								let id = 'colorPalette' + (index + 1);
