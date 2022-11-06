@@ -2,7 +2,7 @@
 import allFeatures from './data.js';
 
 // On Extension Install/Update
-chrome.runtime.onInstalled.addListener(async function () {
+chrome.runtime.onInstalled.addListener(function (reason) {
 	// All Features Initialisation
 	chrome.storage.local.get(['allFeatures'], function (result) {
 		if (result['allFeatures'] === undefined) {
@@ -110,50 +110,17 @@ chrome.runtime.onInstalled.addListener(async function () {
 	});
 
 	// Content Scripts Reinjection
-	for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-		for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
-			if (
-				!tab.url.includes('chrome://') &&
-				!tab.url.includes('chrome-extension://') &&
-				!tab.url.includes('file://') &&
-				!tab.url.includes('https://chrome.google.com/webstore')
-			) {
-				chrome.scripting.executeScript({
-					target: {tabId: tab.id},
-					files: [
-						'libs/js/jquery.min.js',
-						'libs/js/jquery-ui.min.js',
-						'libs/js/beautify.min.js',
-						'libs/js/beautify-css.min.js',
-						'libs/js/beautify-html.min.js',
-						'js/cs.js',
-					],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: tab.id},
-					files: ['css/tabs.css'],
-				});
-			}
-		}
-	}
-
-	// Creating Chrome Context Menu
-	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
-});
-
-// Content Scripts Reinjection on Extension Enable
-chrome.management.onEnabled.addListener(async function (extension) {
-	if (extension.name === chrome.runtime.getManifest().name) {
-		for (const contentScript of chrome.runtime.getManifest().content_scripts) {
-			for (const tab of await chrome.tabs.query({url: contentScript.matches})) {
+	chrome.runtime.getManifest().content_scripts.map(function (valueOne, indexOne) {
+		chrome.tabs.query({url: valueOne.matches}, function (result) {
+			result.map(function (valueTwo, indexTwo) {
 				if (
-					!tab.url.includes('chrome://') &&
-					!tab.url.includes('chrome-extension://') &&
-					!tab.url.includes('file://') &&
-					!tab.url.includes('https://chrome.google.com/webstore')
+					!valueTwo.url.includes('chrome://') &&
+					!valueTwo.url.includes('chrome-extension://') &&
+					!valueTwo.url.includes('file://') &&
+					!valueTwo.url.includes('https://chrome.google.com/webstore')
 				) {
 					chrome.scripting.executeScript({
-						target: {tabId: tab.id},
+						target: {tabId: valueTwo.id},
 						files: [
 							'libs/js/jquery.min.js',
 							'libs/js/jquery-ui.min.js',
@@ -164,85 +131,125 @@ chrome.management.onEnabled.addListener(async function (extension) {
 						],
 					});
 					chrome.scripting.insertCSS({
-						target: {tabId: tab.id},
+						target: {tabId: valueTwo.id},
 						files: ['css/tabs.css'],
 					});
 				}
-			}
-		}
+			});
+		});
+	});
+
+	// Creating Chrome Context Menu
+	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
+});
+
+// Content Scripts Reinjection on Extension Enable
+chrome.management.onEnabled.addListener(function (extension) {
+	if (extension.name === chrome.runtime.getManifest().name) {
+		// Content Scripts Reinjection
+		chrome.runtime.getManifest().content_scripts.map(function (valueOne, indexOne) {
+			chrome.tabs.query({url: valueOne.matches}, function (result) {
+				result.map(function (valueTwo, indexTwo) {
+					if (
+						!valueTwo.url.includes('chrome://') &&
+						!valueTwo.url.includes('chrome-extension://') &&
+						!valueTwo.url.includes('file://') &&
+						!valueTwo.url.includes('https://chrome.google.com/webstore')
+					) {
+						chrome.scripting.executeScript({
+							target: {tabId: valueTwo.id},
+							files: [
+								'libs/js/jquery.min.js',
+								'libs/js/jquery-ui.min.js',
+								'libs/js/beautify.min.js',
+								'libs/js/beautify-css.min.js',
+								'libs/js/beautify-html.min.js',
+								'js/cs.js',
+							],
+						});
+						chrome.scripting.insertCSS({
+							target: {tabId: valueTwo.id},
+							files: ['css/tabs.css'],
+						});
+					}
+				});
+			});
+		});
 	}
 });
 
 // Open Extension on Extension Icon Click
 chrome.action.onClicked.addListener(function (tab) {
-	if (
-		!tab.url.includes('chrome://') &&
-		!tab.url.includes('chrome-extension://') &&
-		!tab.url.includes('file://') &&
-		!tab.url.includes('https://chrome.google.com/webstore')
-	) {
-		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result['allFeatures'] === undefined) {
-				chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
-			}
-		});
+	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+		if (
+			!activeTab[0].url.includes('chrome://') &&
+			!activeTab[0].url.includes('chrome-extension://') &&
+			!activeTab[0].url.includes('file://') &&
+			!activeTab[0].url.includes('https://chrome.google.com/webstore')
+		) {
+			// All Features Initialisation
+			chrome.storage.local.get(['allFeatures'], function (result) {
+				if (result['allFeatures'] === undefined) {
+					chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+				}
+			});
 
-		// Extension Version Initialisation
-		chrome.storage.local.get(['extVersion'], function (result) {
-			if (result['extVersion'] === undefined) {
-				chrome.storage.local.set({['extVersion']: chrome.runtime.getManifest().version});
-			}
-		});
+			// Extension Version Initialisation
+			chrome.storage.local.get(['extVersion'], function (result) {
+				if (result['extVersion'] === undefined) {
+					chrome.storage.local.set({['extVersion']: chrome.runtime.getManifest().version});
+				}
+			});
 
-		// Read Only All Features Initialisation
-		chrome.storage.local.get(['allFeaturesRef'], function (result) {
-			if (result['allFeaturesRef'] === undefined) {
-				chrome.storage.local.set({['allFeaturesRef']: JSON.stringify(allFeatures)});
-			}
-		});
+			// Read Only All Features Initialisation
+			chrome.storage.local.get(['allFeaturesRef'], function (result) {
+				if (result['allFeaturesRef'] === undefined) {
+					chrome.storage.local.set({['allFeaturesRef']: JSON.stringify(allFeatures)});
+				}
+			});
+		}
 
-		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
-			let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
-		});
-	}
+		let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+		portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
+	});
 });
 
 // Open Extension on Context Menu Click
 chrome.contextMenus.onClicked.addListener(function (tab) {
-	if (
-		!tab.pageUrl.includes('chrome://') &&
-		!tab.pageUrl.includes('chrome-extension://') &&
-		!tab.pageUrl.includes('file://') &&
-		!tab.pageUrl.includes('https://chrome.google.com/webstore')
-	) {
-		// All Features Initialisation
-		chrome.storage.local.get(['allFeatures'], function (result) {
-			if (result['allFeatures'] === undefined) {
-				chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
-			}
-		});
+	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+		if (
+			!activeTab[0].url.includes('chrome://') &&
+			!activeTab[0].url.includes('chrome-extension://') &&
+			!activeTab[0].url.includes('file://') &&
+			!activeTab[0].url.includes('https://chrome.google.com/webstore')
+		) {
+			// All Features Initialisation
+			chrome.storage.local.get(['allFeatures'], function (result) {
+				if (result['allFeatures'] === undefined) {
+					chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+				}
+			});
 
-		// Extension Version Initialisation
-		chrome.storage.local.get(['extVersion'], function (result) {
-			if (result['extVersion'] === undefined) {
-				chrome.storage.local.set({['extVersion']: chrome.runtime.getManifest().version});
-			}
-		});
+			// Extension Version Initialisation
+			chrome.storage.local.get(['extVersion'], function (result) {
+				if (result['extVersion'] === undefined) {
+					chrome.storage.local.set({['extVersion']: chrome.runtime.getManifest().version});
+				}
+			});
 
-		// Read Only All Features Initialisation
-		chrome.storage.local.get(['allFeaturesRef'], function (result) {
-			if (result['allFeaturesRef'] === undefined) {
-				chrome.storage.local.set({['allFeaturesRef']: JSON.stringify(allFeatures)});
-			}
-		});
+			// Read Only All Features Initialisation
+			chrome.storage.local.get(['allFeaturesRef'], function (result) {
+				if (result['allFeaturesRef'] === undefined) {
+					chrome.storage.local.set({['allFeaturesRef']: JSON.stringify(allFeatures)});
+				}
+			});
 
-		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
-			let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
-		});
-	}
+			chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+				let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+				portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
+			});
+		}
+	});
 });
 
 // Extension Shortcuts
@@ -263,11 +270,11 @@ chrome.commands.onCommand.addListener(function (command) {
 });
 
 // Page Ruler + Color Picker + Export Element + Clear All Cache
-chrome.runtime.onConnect.addListener(function (portTwo) {
+chrome.runtime.onConnect.addListener(function (port) {
 	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
 
-	portTwo.onMessage.addListener(function (request) {
+	port.onMessage.addListener(function (request) {
 		switch (request.action) {
 			// Page Ruler + Color Picker
 			case 'takeScreenshot':
@@ -280,7 +287,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 				data = grayscale(imageData);
 				width = request.width;
 				height = request.height;
-				portTwo.postMessage({action: 'screenshotProcessed'});
+				port.postMessage({action: 'screenshotProcessed'});
 				break;
 
 			// Page Ruler
@@ -293,7 +300,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 				imageData = new Uint8ClampedArray(request.imageData);
 				width = request.width;
 				height = request.height;
-				portTwo.postMessage({action: 'colorPickerSet'});
+				port.postMessage({action: 'colorPickerSet'});
 				break;
 
 			// Color Picker
@@ -315,7 +322,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 	// Page Ruler + Color Picker
 	function takeScreenshot() {
 		chrome.tabs.captureVisibleTab({format: 'png'}, function (dataUrl) {
-			portTwo.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
+			port.postMessage({action: 'parseScreenshot', dataUrl: dataUrl});
 		});
 	}
 
@@ -419,7 +426,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 		dimensions.x = input.x;
 		dimensions.y = input.y;
 
-		portTwo.postMessage({
+		port.postMessage({
 			action: 'showDimensions',
 			data: dimensions,
 		});
@@ -451,7 +458,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 			hex: rgbToHex(r, g, b),
 		};
 
-		portTwo.postMessage({
+		port.postMessage({
 			action: 'showColorPicker',
 			data: spotColor,
 		});
@@ -471,7 +478,7 @@ chrome.runtime.onConnect.addListener(function (portTwo) {
 				else return false;
 			})
 			.then(function (styleSheet) {
-				portTwo.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
+				port.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
 			});
 	}
 
