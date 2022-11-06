@@ -1436,7 +1436,13 @@ function activateMoveElement(activeTab, port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -1444,7 +1450,13 @@ function activateMoveElement(activeTab, port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1452,7 +1464,13 @@ function activateMoveElement(activeTab, port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			event.target.style.setProperty('cursor', 'move', 'important');
 			event.target.classList.add('moveElementDraggable');
 			$('.moveElementDraggable').draggable({
@@ -2069,7 +2087,13 @@ function activateDeleteElement(activeTab, port, request) {
 
 	function onMouseOver(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
@@ -2077,7 +2101,13 @@ function activateDeleteElement(activeTab, port, request) {
 
 	function onMouseOut(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -2085,7 +2115,13 @@ function activateDeleteElement(activeTab, port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.tagName !== 'BODY'
+		) {
 			event.target.classList.add('deleteElementWrapper');
 			document.querySelector('.deleteElementWrapper').remove();
 		}
