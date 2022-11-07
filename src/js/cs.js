@@ -145,10 +145,10 @@ async function showHideExtension(activeTab, port, request) {
 	}
 
 	// If Popup Visible, Set Hidden
-	else if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
+	else if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
 		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 		await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
-		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
+		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
 		port.postMessage({action: 'Popup Hidden'});
 	}
 
@@ -161,10 +161,9 @@ async function showHideExtension(activeTab, port, request) {
 		await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
 		//await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
-		document.querySelector('#superDevWrapper').style.top = '18px';
-		document.querySelector('#superDevWrapper').style.right = '18px';
-		document.querySelector('#superDevWrapper').style.left = '';
-		document.querySelector('#superDevWrapper').style.visibility = 'visible';
+		document.querySelector('#superDevWrapper').style.setProperty('top', '18px', 'important');
+		document.querySelector('#superDevWrapper').style.setProperty('right', '18px', 'important');
+		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'visible', 'important');
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
@@ -180,9 +179,9 @@ function changeHeight(activeTab, port, request) {
 	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
 			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
-			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
-			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') {
-				document.querySelector('#superDevWrapper').style.visibility = 'visible';
+			document.querySelector('#superDevPopup').style.setProperty('height', `${request.height}px`, 'important');
+			if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') === 'hidden') {
+				document.querySelector('#superDevWrapper').style.setProperty('visibility', 'visible', 'important');
 			}
 			port.postMessage({action: 'Height Changed'});
 		}
@@ -193,7 +192,7 @@ function justChangeHeight(activeTab, port, request) {
 	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
 			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
-			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
+			document.querySelector('#superDevPopup').style.setProperty('height', `${request.height}px`, 'important');
 			port.postMessage({action: 'Just Height Changed'});
 		}
 	});
@@ -336,8 +335,8 @@ function activatePageRuler(activeTab, port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
+	if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
+		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
@@ -406,8 +405,8 @@ function activatePageRuler(activeTab, port, request) {
 
 	async function requestNewScreenshot() {
 		// In Case od Scroll or Resize
-		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
+		if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
+			document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
 			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
@@ -474,21 +473,21 @@ function activatePageRuler(activeTab, port, request) {
 
 		let pageRulerWrapper = document.createElement('page-ruler-wrapper');
 		pageRulerWrapper.className = 'pageRulerWrapper';
-		pageRulerWrapper.style.left = dimensions.x + 'px';
-		pageRulerWrapper.style.top = dimensions.y + 'px';
+		pageRulerWrapper.style.setProperty('left', `${dimensions.x}px`, 'important');
+		pageRulerWrapper.style.setProperty('top', `${dimensions.y}px`, 'important');
 
 		let measureWidth = dimensions.left + dimensions.right;
 		let measureHeight = dimensions.top + dimensions.bottom;
 
 		let xAxis = document.createElement('page-ruler-x-axis');
 		xAxis.className = 'x pageRulerAxis';
-		xAxis.style.left = -dimensions.left + 'px';
-		xAxis.style.width = measureWidth + 'px';
+		xAxis.style.setProperty('left', `-${dimensions.left}px`, 'important');
+		xAxis.style.setProperty('width', `${measureWidth}px`, 'important');
 
 		let yAxis = document.createElement('page-ruler-y-axis');
 		yAxis.className = 'y pageRulerAxis';
-		yAxis.style.top = -dimensions.top + 'px';
-		yAxis.style.height = measureHeight + 'px';
+		yAxis.style.setProperty('top', `-${dimensions.top}px`, 'important');
+		yAxis.style.setProperty('height', `${measureHeight}px`, 'important');
 
 		let pageRulerTooltip = document.createElement('page-ruler-tooltip');
 		pageRulerTooltip.className = 'pageRulerTooltip';
@@ -573,8 +572,8 @@ function activateColorPicker(activeTab, port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
+	if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
+		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
 		port.postMessage({action: 'Popup Hidden'});
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
@@ -644,8 +643,8 @@ function activateColorPicker(activeTab, port, request) {
 
 	async function requestNewScreenshot() {
 		// In Case od Scroll or Resize
-		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
+		if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
+			document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
 			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
@@ -719,8 +718,8 @@ function activateColorPicker(activeTab, port, request) {
 
 		let colorPickerWrapper = document.createElement('color-picker-wrapper');
 		colorPickerWrapper.className = 'colorPickerWrapper';
-		colorPickerWrapper.style.left = spotColor.x + 'px';
-		colorPickerWrapper.style.top = spotColor.y + 'px';
+		colorPickerWrapper.style.setProperty('left', `${spotColor.x}px`, 'important');
+		colorPickerWrapper.style.setProperty('top', `${spotColor.y}px`, 'important');
 
 		let colorPickerTooltip = document.createElement('color-picker-tooltip');
 		colorPickerTooltip.className = 'colorPickerTooltip';
@@ -735,12 +734,12 @@ function activateColorPicker(activeTab, port, request) {
 			JSON.parse(result['allFeatures']).map(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
-						colorPickerTooltipBG.style.backgroundColor = spotColor.hex;
+						colorPickerTooltipBG.style.setProperty('background-color', `${spotColor.hex}`, 'important');
 						colorPickerTooltipChild.textContent = spotColor.hex;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
 						if (spotColor.x > window.innerWidth - 110) colorPickerTooltip.classList.add('left');
 					} else if (value.settings.checkboxColorPicker2 === true) {
-						colorPickerTooltipBG.style.backgroundColor = spotColor.rgb;
+						colorPickerTooltipBG.style.setProperty('background-color', `${spotColor.rgb}`, 'important');
 						colorPickerTooltipChild.textContent = spotColor.rgb;
 						if (spotColor.y < 60) colorPickerTooltip.classList.add('bottom');
 						if (spotColor.x > window.innerWidth - 220) colorPickerTooltip.classList.add('left');
