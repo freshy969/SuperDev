@@ -307,7 +307,6 @@ function activatePageRuler(activeTab, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.body;
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
@@ -387,8 +386,8 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function removeDimensions() {
-		let dimensions = body.querySelector('.pageRulerWrapper');
-		if (dimensions) body.removeChild(dimensions);
+		let dimensions = document.body.querySelector('.pageRulerWrapper');
+		if (dimensions) document.body.removeChild(dimensions);
 	}
 
 	function onPageScroll() {
@@ -433,11 +432,11 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		body.appendChild(pageRulerOverlay);
+		document.body.appendChild(pageRulerOverlay);
 	}
 
 	function enableCursor() {
-		body.removeChild(pageRulerOverlay);
+		document.body.removeChild(pageRulerOverlay);
 	}
 
 	function onMouseMove(event) {
@@ -502,7 +501,7 @@ function activatePageRuler(activeTab, port, request) {
 		pageRulerWrapper.appendChild(yAxis);
 		pageRulerWrapper.appendChild(pageRulerTooltip);
 
-		body.appendChild(pageRulerWrapper);
+		document.body.appendChild(pageRulerWrapper);
 	}
 
 	async function onEscape(event) {
@@ -544,7 +543,6 @@ function activateColorPicker(activeTab, port, request) {
 	let image = new Image();
 	let canvas = document.createElement('canvas');
 	let ctx = canvas.getContext('2d', {willReadFrequently: true});
-	let body = document.body;
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
@@ -625,8 +623,8 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function removeColorPicker() {
-		let colorPickerWrapper = body.querySelector('.colorPickerWrapper');
-		if (colorPickerWrapper) body.removeChild(colorPickerWrapper);
+		let colorPickerWrapper = document.body.querySelector('.colorPickerWrapper');
+		if (colorPickerWrapper) document.body.removeChild(colorPickerWrapper);
 	}
 
 	function onPageScroll() {
@@ -671,11 +669,11 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		body.appendChild(colorPickerOverlay);
+		document.body.appendChild(colorPickerOverlay);
 	}
 
 	function enableCursor() {
-		body.removeChild(colorPickerOverlay);
+		document.body.removeChild(colorPickerOverlay);
 	}
 
 	function onMouseMove(event) {
@@ -751,7 +749,7 @@ function activateColorPicker(activeTab, port, request) {
 		colorPickerTooltip.appendChild(colorPickerTooltipBG);
 		colorPickerTooltip.appendChild(colorPickerTooltipChild);
 		colorPickerWrapper.appendChild(colorPickerTooltip);
-		body.appendChild(colorPickerWrapper);
+		document.body.appendChild(colorPickerWrapper);
 	}
 
 	async function onEscape(event) {
