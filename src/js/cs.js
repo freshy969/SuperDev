@@ -304,15 +304,15 @@ function deactivateTextEditor(activeTab, port, request) {
 }
 
 function activatePageRuler(activeTab, port, request) {
-	let image = new Image();
-	let canvas = document.createElement('canvas');
-	let ctx = canvas.getContext('2d', {willReadFrequently: true});
+	let canvasImage = new Image();
+	let domCanvas = document.createElement('canvas');
+	let canvasCtx = domCanvas.getContext('2d', {willReadFrequently: true});
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
 	let changeTimeout;
-	let paused = true;
+	let isPaused = true;
 	let inputX, inputY;
 	let connectionClosed = false;
 	let pageRulerOverlay = document.createElement('page-ruler-overlay');
@@ -359,7 +359,7 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function parseScreenshot(dataUrl) {
-		image.src = dataUrl;
+		canvasImage.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
 			requestAnimationFrame(function () {
@@ -369,10 +369,10 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	async function loadImage() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+		domCanvas.width = window.innerWidth;
+		domCanvas.height = window.innerHeight;
+		canvasCtx.drawImage(canvasImage, 0, 0, domCanvas.width, domCanvas.height);
+		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
 		// Show Minimised Popup
 		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
@@ -380,8 +380,8 @@ function activatePageRuler(activeTab, port, request) {
 		portTwo.postMessage({
 			action: 'toGrayscale',
 			imageData: Array.from(imageData),
-			width: canvas.width,
-			height: canvas.height,
+			width: domCanvas.width,
+			height: domCanvas.height,
 		});
 	}
 
@@ -391,13 +391,13 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function onPageScroll() {
-		if (!paused) pause();
+		if (!isPaused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
 	}
 
 	function onWindowResize() {
-		if (!paused) pause();
+		if (!isPaused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
 	}
@@ -421,13 +421,13 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function pause() {
-		paused = true;
+		isPaused = true;
 		removeDimensions();
 		enableCursor();
 	}
 
 	function resume() {
-		paused = false;
+		isPaused = false;
 		disableCursor();
 	}
 
@@ -456,7 +456,7 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function sendToWorker(event) {
-		if (paused) return;
+		if (isPaused) return;
 
 		portTwo.postMessage({
 			action: 'measureDistances',
@@ -465,7 +465,7 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function showDimensions(dimensions) {
-		if (paused) return;
+		if (isPaused) return;
 
 		removeDimensions();
 		if (!dimensions) return;
@@ -540,15 +540,15 @@ function deactivatePageRuler(activeTab, port, request) {
 }
 
 function activateColorPicker(activeTab, port, request) {
-	let image = new Image();
-	let canvas = document.createElement('canvas');
-	let ctx = canvas.getContext('2d', {willReadFrequently: true});
+	let canvasImage = new Image();
+	let domCanvas = document.createElement('canvas');
+	let canvasCtx = domCanvas.getContext('2d', {willReadFrequently: true});
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
 	let changeTimeout;
-	let paused = true;
+	let isPaused = true;
 	let inputX, inputY;
 	let connectionClosed = false;
 	let colorPickerOverlay = document.createElement('color-picker-overlay');
@@ -596,7 +596,7 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function parseScreenshot(dataUrl) {
-		image.src = dataUrl;
+		canvasImage.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
 		requestAnimationFrame(function () {
 			requestAnimationFrame(function () {
@@ -606,10 +606,10 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	async function loadImage() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+		domCanvas.width = window.innerWidth;
+		domCanvas.height = window.innerHeight;
+		canvasCtx.drawImage(canvasImage, 0, 0, domCanvas.width, domCanvas.height);
+		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
 		// Show Minimised Popup
 		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
@@ -617,8 +617,8 @@ function activateColorPicker(activeTab, port, request) {
 		portTwo.postMessage({
 			action: 'setColorPicker',
 			imageData: Array.from(imageData),
-			width: canvas.width,
-			height: canvas.height,
+			width: domCanvas.width,
+			height: domCanvas.height,
 		});
 	}
 
@@ -628,13 +628,13 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function onPageScroll() {
-		if (!paused) pause();
+		if (!isPaused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, pageScrollDelay);
 	}
 
 	function onWindowResize() {
-		if (!paused) pause();
+		if (!isPaused) pause();
 		if (changeTimeout) clearTimeout(changeTimeout);
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
 	}
@@ -658,13 +658,13 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function pause() {
-		paused = true;
+		isPaused = true;
 		removeColorPicker();
 		enableCursor();
 	}
 
 	function resume() {
-		paused = false;
+		isPaused = false;
 		disableCursor();
 	}
 
@@ -700,7 +700,7 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function sendToWorker(event) {
-		if (paused) return;
+		if (isPaused) return;
 
 		portTwo.postMessage({
 			action: 'getColorAt',
@@ -709,7 +709,7 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function showColorPicker(spotColor) {
-		if (paused) return;
+		if (isPaused) return;
 
 		removeColorPicker();
 		if (!spotColor) return;
