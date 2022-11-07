@@ -67,11 +67,11 @@ p {
 }
 /**  Custom Checkbox **/
 
-/**  Custom Scrollbar **/
+/** Custom Scrollbar **/
 #toggleInfoChild,
 #toggleSettingsChild,
 #colorPalettePageChild {
-	overflow-y: scroll !important;
+	overflow-y: scroll;
 }
 
 #toggleInfoChild::-webkit-scrollbar,
@@ -97,4 +97,4 @@ html.dark #toggleSettingsChild::-webkit-scrollbar-thumb,
 html.dark #colorPalettePageChild::-webkit-scrollbar-thumb {
 	background: #6c757dff;
 }
-/**  Custom Scrollbar **/
+/** Custom Scrollbar **/

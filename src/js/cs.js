@@ -84,6 +84,7 @@ async function showHideExtension(activeTab, port, request) {
 			outline: 0 !important;
 			background-color: transparent !important;
 			box-sizing: border-box !important;
+			overflow: hidden !important;
 
 			position: fixed !important;
 			top: 18px !important;
@@ -104,6 +105,7 @@ async function showHideExtension(activeTab, port, request) {
 			outline: 0 !important;
 			background-color: transparent !important;
 			box-sizing: border-box !important;
+			overflow: hidden !important;
 
 			cursor: move !important;
 			width: 18px !important;
@@ -126,6 +128,7 @@ async function showHideExtension(activeTab, port, request) {
 			outline: 0 !important;
 			background-color: transparent !important;
 			box-sizing: border-box !important;
+			overflow: hidden !important;
 
 			width: 335px !important;
 			border-radius: 8px !important;
