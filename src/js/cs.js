@@ -2122,17 +2122,17 @@ async function activateExportElement(activeTab, port, request) {
 							let text = `${html} <style> ${css} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 
-							let anchor = document.createElement('a');
-							anchor.href = URL.createObjectURL(file);
-							anchor.download = 'exported-element.html';
-							document.body.appendChild(anchor);
+							let saveToFileAnchor = document.createElement('a');
+							saveToFileAnchor.href = URL.createObjectURL(file);
+							saveToFileAnchor.download = 'exported-element.html';
+							document.body.appendChild(saveToFileAnchor);
 
 							let clickEvent = new MouseEvent('click', {bubbles: false});
-							anchor.dispatchEvent(clickEvent);
+							saveToFileAnchor.dispatchEvent(clickEvent);
 
 							setTimeout(function () {
-								URL.revokeObjectURL(anchor.href);
-								document.body.removeChild(anchor);
+								URL.revokeObjectURL(saveToFileAnchor.href);
+								document.body.removeChild(saveToFileAnchor);
 							}, 50);
 						}
 					}
