@@ -79,8 +79,8 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 										// Iterating Local Settings Keys
 										Object.keys(valueOne.settings).map(function (valueThree, indexThree) {
 											// Put Local Settings Key to Stored Settings
-											// Undefined Means That Key Doesn't Exists in Stored
-											// Add That Key-Value to Stored Settings
+											// Undefined Means That Key Doesn't Exists in Stored,
+											// Add That Key-Value Pair to Stored Settings
 											if (valueTwo.settings[valueThree] === undefined) {
 												valueTwo.settings[valueThree] = valueOne.settings[valueThree];
 											}
@@ -271,7 +271,6 @@ chrome.commands.onCommand.addListener(function (command) {
 
 // Page Ruler + Color Picker + Export Element + Clear All Cache
 chrome.runtime.onConnect.addListener(function (port) {
-	let dimensionsThreshold = 6;
 	let imageData, data, width, height;
 
 	port.onMessage.addListener(function (request) {
@@ -329,15 +328,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 	// Page Ruler
 	function grayscale(imageData) {
 		let gray = new Int16Array(imageData.length / 4);
-
 		for (let i = 0, n = 0, l = imageData.length; i < l; i += 4, n++) {
-			let r = imageData[i],
-				g = imageData[i + 1],
-				b = imageData[i + 2];
-
+			let r = imageData[i];
+			let g = imageData[i + 1];
+			let b = imageData[i + 2];
 			gray[n] = Math.round(r * 0.3 + g * 0.59 + b * 0.11);
 		}
-
 		return gray;
 	}
 
@@ -365,22 +361,16 @@ chrome.runtime.onConnect.addListener(function (port) {
 			let sx = input.x;
 			let sy = input.y;
 			let currentLightness;
-
 			lastLightness = startLightness;
-
 			while (!boundaryFound) {
 				sx += vector.x;
 				sy += vector.y;
 				currentLightness = getLightnessAt(data, sx, sy);
-
-				if (currentLightness > -1 && Math.abs(currentLightness - lastLightness) < dimensionsThreshold) {
+				if (currentLightness > -1 && Math.abs(currentLightness - lastLightness) < 6) {
 					dimensions[direction]++;
 					lastLightness = currentLightness;
-				} else {
-					boundaryFound = true;
-				}
+				} else boundaryFound = true;
 			}
-
 			area += dimensions[direction];
 		}
 
@@ -395,18 +385,14 @@ chrome.runtime.onConnect.addListener(function (port) {
 				let sy = input.y;
 				let currentLightness;
 				let similarColorStreak = 0;
-
 				lastLightness = startLightness;
-
 				while (!boundaryFound) {
 					sx += vector.x;
 					sy += vector.y;
 					currentLightness = getLightnessAt(data, sx, sy);
-
 					if (currentLightness > -1) {
 						dimensions[direction]++;
-
-						if (Math.abs(currentLightness - lastLightness) < dimensionsThreshold) {
+						if (Math.abs(currentLightness - lastLightness) < 6) {
 							similarColorStreak++;
 							if (similarColorStreak === similarColorStreakThreshold) {
 								dimensions[direction] -= similarColorStreakThreshold + 1;
@@ -416,16 +402,13 @@ chrome.runtime.onConnect.addListener(function (port) {
 							lastLightness = currentLightness;
 							similarColorStreak = 0;
 						}
-					} else {
-						boundaryFound = true;
-					}
+					} else boundaryFound = true;
 				}
 			}
 		}
 
 		dimensions.x = input.x;
 		dimensions.y = input.y;
-
 		port.postMessage({
 			action: 'showDimensions',
 			data: dimensions,
@@ -447,10 +430,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 	function getColorAt(input) {
 		if (!inBoundaries(input.x, input.y)) return -1;
 		let i = input.y * width * 4 + input.x * 4;
-		let r = imageData[i],
-			g = imageData[i + 1],
-			b = imageData[i + 2];
-
+		let r = imageData[i];
+		let g = imageData[i + 1];
+		let b = imageData[i + 2];
 		let spotColor = {
 			x: input.x,
 			y: input.y,
@@ -471,8 +453,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 	}
 
 	// Export Element
-	function getStylesheet(styleSheetUrl) {
-		fetch(styleSheetUrl)
+	async function getStylesheet(styleSheetUrl) {
+		await fetch(styleSheetUrl)
 			.then(function (response) {
 				if (response.status >= 200 && response.status < 300) return response.text();
 				else return false;
