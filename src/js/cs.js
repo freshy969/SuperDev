@@ -4,8 +4,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'showHideExtension':
 				showHideExtension(request.activeTab, port, request);
 				break;
-			case 'changeHeight':
-				changeHeight(request.activeTab, port, request);
+			case 'setPopupHeight':
+				setPopupHeight(request.activeTab, port, request);
 				break;
 			case 'setPopupVisible':
 				setPopupVisible(request.activeTab, port, request);
@@ -182,7 +182,7 @@ async function showHideExtension(activeTab, port, request) {
 	}
 }
 
-function changeHeight(activeTab, port, request) {
+function setPopupHeight(activeTab, port, request) {
 	let superDevPopup = document.querySelector('#superDevPopup');
 	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 		console.log(result['howLongPopupIs' + activeTab[0].id], request.height);
@@ -366,7 +366,8 @@ function activatePageRuler(activeTab, port, request) {
 		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
 		// Minimised + Visible After Screenshot Processed
-		await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: 40.5});
+		superDevPopup.style.setProperty('height', '40.5px', 'important');
 		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
 
 		portTwo.postMessage({
@@ -586,7 +587,8 @@ function activateColorPicker(activeTab, port, request) {
 		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
 		// Minimised + Visible After Screenshot Processed
-		await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: 40.5});
+		superDevPopup.style.setProperty('height', '40.5px', 'important');
 		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
 
 		portTwo.postMessage({
