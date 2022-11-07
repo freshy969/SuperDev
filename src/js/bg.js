@@ -29,8 +29,8 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 		if (result['extVersion'] !== undefined) {
 			// Means Updated, Not Installed
 			if (result['extVersion'] !== chrome.runtime.getManifest().version) {
+				// Update Old AllFeatures Data
 				chrome.storage.local.get(['allFeatures'], async function (result) {
-					// Update Old AllFeatures Data
 					let localAllFeatures = allFeatures;
 					let storedAllFeatures = JSON.parse(result['allFeatures']);
 
@@ -49,8 +49,8 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 						return value !== null;
 					});
 
-					// If Feature Exists in Both Stored Data And
-					// Local Storage Sync That Feature's Data + Settings
+					// If A Feature Exists in Both Stored Data And
+					// Local Storage, Sync That Feature's Data + Settings
 					localAllFeatures.map(function (valueOne, indexOne) {
 						storedAllFeatures.map(function (valueTwo, indexTwo) {
 							if (valueOne.id === valueTwo.id) {
