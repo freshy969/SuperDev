@@ -314,12 +314,12 @@ function activatePageRuler(activeTab, port, request) {
 	let changeTimeout;
 	let isPaused = true;
 	let inputX, inputY;
-	let connectionClosed = false;
+	let isConnClosed = false;
 	let pageRulerOverlay = document.createElement('page-ruler-overlay');
 	pageRulerOverlay.className = 'pageRulerOverlay';
 
 	portTwo.onMessage.addListener(function (request) {
-		if (connectionClosed) return;
+		if (isConnClosed) return;
 
 		switch (request.action) {
 			case 'parseScreenshot':
@@ -516,7 +516,7 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function destroyPageRuler() {
-		connectionClosed = true;
+		isConnClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
 		document.removeEventListener('scroll', onPageScroll);
@@ -550,12 +550,12 @@ function activateColorPicker(activeTab, port, request) {
 	let changeTimeout;
 	let isPaused = true;
 	let inputX, inputY;
-	let connectionClosed = false;
+	let isConnClosed = false;
 	let colorPickerOverlay = document.createElement('color-picker-overlay');
 	colorPickerOverlay.className = 'colorPickerOverlay';
 
 	portTwo.onMessage.addListener(function (request) {
-		if (connectionClosed) return;
+		if (isConnClosed) return;
 
 		switch (request.action) {
 			case 'parseScreenshot':
@@ -764,7 +764,7 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function destroyColorPicker() {
-		connectionClosed = true;
+		isConnClosed = true;
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
 		document.removeEventListener('scroll', onPageScroll);
