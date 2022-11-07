@@ -20,14 +20,14 @@ export default function Home() {
 
 	useEffect(function () {
 		// Dark Mode Initialisation
-		chrome.storage.local.get(['colorTheme'], function (result) {
+		chrome.storage.local.get(['colorTheme'], async function (result) {
 			if (result['colorTheme'] === undefined) {
 				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 					document.documentElement.classList.add('dark');
-					chrome.storage.local.set({['colorTheme']: 'dark'});
+					await chrome.storage.local.set({['colorTheme']: 'dark'});
 					setIsLoadingOne(false);
 				} else {
-					chrome.storage.local.set({['colorTheme']: 'light'});
+					await chrome.storage.local.set({['colorTheme']: 'light'});
 					setIsLoadingOne(false);
 				}
 			} else if (result['colorTheme'] === 'dark') {
@@ -50,7 +50,7 @@ export default function Home() {
 		});
 
 		// Set PortThree
-		chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
+		chrome.tabs.query({active: true, currentWindow: true}, async function (activeTab) {
 			if (
 				!activeTab[0].url.includes('chrome://') &&
 				!activeTab[0].url.includes('chrome-extension://') &&
@@ -58,11 +58,11 @@ export default function Home() {
 				!activeTab[0].url.includes('https://chrome.google.com/webstore')
 			) {
 				// Initialisation/Reset on First Load
-				chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
-				chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
-				chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
+				await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
+				await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+				await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
 				// Initialising PortThree and ActiveTab
 				let portThree = chrome.tabs.connect(activeTab[0].id, {name: 'portThree'});

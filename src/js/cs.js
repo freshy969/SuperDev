@@ -71,7 +71,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 	});
 });
 
-function showHideExtension(activeTab, port, request) {
+async function showHideExtension(activeTab, port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDevWrapper') === null) {
 		let superDevWrapper = document.createElement('superdev-wrapper');
@@ -143,8 +143,8 @@ function showHideExtension(activeTab, port, request) {
 
 	// If Popup Visible, Set Hidden
 	else if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
-		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
-		chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 		document.querySelector('#superDevWrapper').style.visibility = 'hidden';
 		port.postMessage({action: 'Popup Hidden'});
 	}
@@ -152,20 +152,20 @@ function showHideExtension(activeTab, port, request) {
 	// If Popup Hidden, Set Visible
 	else {
 		// Reset on Visible
-		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
-		chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
-		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
-		chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
-		//chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
+		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+		await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
+		await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+		//await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
 		document.querySelector('#superDevWrapper').style.top = '18px';
 		document.querySelector('#superDevWrapper').style.right = '18px';
 		document.querySelector('#superDevWrapper').style.left = '';
 		document.querySelector('#superDevWrapper').style.visibility = 'visible';
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -174,9 +174,9 @@ function showHideExtension(activeTab, port, request) {
 }
 
 function changeHeight(activeTab, port, request) {
-	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
-			chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
+			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			if (document.querySelector('#superDevWrapper').style.visibility === 'hidden') {
 				document.querySelector('#superDevWrapper').style.visibility = 'visible';
@@ -187,16 +187,16 @@ function changeHeight(activeTab, port, request) {
 }
 
 function justChangeHeight(activeTab, port, request) {
-	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
-			chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
+			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			document.querySelector('#superDevPopup').style.height = `${request.height}px`;
 			port.postMessage({action: 'Just Height Changed'});
 		}
 	});
 }
 
-function activateTextEditor(activeTab, port, request) {
+async function activateTextEditor(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -261,13 +261,13 @@ function activateTextEditor(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Text Editor Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyTextEditor();
 			}
@@ -286,9 +286,9 @@ function activateTextEditor(activeTab, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -367,14 +367,14 @@ function activatePageRuler(activeTab, port, request) {
 		});
 	}
 
-	function loadImage() {
+	async function loadImage() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'toGrayscale',
@@ -401,11 +401,11 @@ function activatePageRuler(activeTab, port, request) {
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
 	}
 
-	function requestNewScreenshot() {
+	async function requestNewScreenshot() {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
+			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -503,11 +503,11 @@ function activatePageRuler(activeTab, port, request) {
 		body.appendChild(pageRulerWrapper);
 	}
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageRuler();
 			}
@@ -522,9 +522,9 @@ function activatePageRuler(activeTab, port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -605,14 +605,14 @@ function activateColorPicker(activeTab, port, request) {
 		});
 	}
 
-	function loadImage() {
+	async function loadImage() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 		// Show Minimised Popup
-		chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
 		portTwo.postMessage({
 			action: 'setColorPicker',
@@ -639,11 +639,11 @@ function activateColorPicker(activeTab, port, request) {
 		changeTimeout = setTimeout(requestNewScreenshot, windowResizeDelay);
 	}
 
-	function requestNewScreenshot() {
+	async function requestNewScreenshot() {
 		// In Case od Scroll or Resize
 		if (document.querySelector('#superDevWrapper').style.visibility !== 'hidden') {
 			document.querySelector('#superDevWrapper').style.visibility = 'hidden';
-			chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
+			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 			port.postMessage({action: 'Popup Hidden'});
 
 			requestAnimationFrame(function () {
@@ -752,11 +752,11 @@ function activateColorPicker(activeTab, port, request) {
 		body.appendChild(colorPickerWrapper);
 	}
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPicker();
 			}
@@ -772,9 +772,9 @@ function activateColorPicker(activeTab, port, request) {
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -870,20 +870,20 @@ function activateColorPalette(activeTab, port, request) {
 
 	port.postMessage({action: 'Color Palette Activated'});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyColorPalette();
 			}
 		}
 	}
 
-	function destroyColorPalette() {
+	async function destroyColorPalette() {
 		document.removeEventListener('keyup', onEscape);
-		chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
+		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 	}
 }
 
@@ -892,7 +892,7 @@ function deactivateColorPalette(activeTab, port, request) {
 	port.postMessage({action: 'Color Palette Deactivated'});
 }
 
-function activatePageGuideline(activeTab, port, request) {
+async function activatePageGuideline(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('keyup', onEscape);
@@ -950,13 +950,13 @@ function activatePageGuideline(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Page Guideline Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageGuideline();
 			}
@@ -973,9 +973,9 @@ function activatePageGuideline(activeTab, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -988,7 +988,7 @@ function deactivatePageGuideline(activeTab, port, request) {
 	port.postMessage({action: 'Page Guideline Deactivated'});
 }
 
-function activatePageHighlight(activeTab, port, request) {
+async function activatePageHighlight(activeTab, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -1202,13 +1202,13 @@ function activatePageHighlight(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Page Highlight Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyPageHighlight();
 			}
@@ -1218,9 +1218,9 @@ function activatePageHighlight(activeTab, port, request) {
 	function destroyPageHighlight() {
 		document.removeEventListener('keyup', onEscape);
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -1428,7 +1428,7 @@ function deactivatePageHighlight(activeTab, port, request) {
 	port.postMessage({action: 'Page Highlight Deactivated'});
 }
 
-function activateMoveElement(activeTab, port, request) {
+async function activateMoveElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1467,7 +1467,7 @@ function activateMoveElement(activeTab, port, request) {
 		}
 	}
 
-	function onMouseClick(event) {
+	async function onMouseClick(event) {
 		event.preventDefault();
 		if (
 			event.target.id !== 'superDevHandler' &&
@@ -1528,13 +1528,13 @@ function activateMoveElement(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Move Element Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyMoveElement();
 			}
@@ -1552,9 +1552,9 @@ function activateMoveElement(activeTab, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -1575,7 +1575,7 @@ function deactivateMoveElement(activeTab, port, request) {
 	port.postMessage({action: 'Move Element Deactivated'});
 }
 
-function activateDeleteElement(activeTab, port, request) {
+async function activateDeleteElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1659,13 +1659,13 @@ function activateDeleteElement(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Delete Element Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyDeleteElement();
 			}
@@ -1683,9 +1683,9 @@ function activateDeleteElement(activeTab, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 
@@ -1698,7 +1698,7 @@ function deactivateDeleteElement(activeTab, port, request) {
 	port.postMessage({action: 'Delete Element Deactivated'});
 }
 
-function activateExportElement(activeTab, port, request) {
+async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick);
@@ -1802,6 +1802,7 @@ function activateExportElement(activeTab, port, request) {
 					allSelectors.push(tempSelectors);
 				});
 				allSelectors = [...new Set(allSelectors.flat())];
+				console.log(allSelectors);
 			}
 
 			// Removing Unused CSS
@@ -2201,13 +2202,13 @@ function activateExportElement(activeTab, port, request) {
 	}
 
 	port.postMessage({action: 'Export Element Activated'});
-	chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 
-	function onEscape(event) {
+	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
-				chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			} else if (event.isTrusted === false) {
 				destroyExportElement();
 			}
@@ -2225,9 +2226,9 @@ function activateExportElement(activeTab, port, request) {
 			document.querySelector('.pageGuidelineOutline').classList.remove('pageGuidelineOutline');
 		}
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			}
 		});
 

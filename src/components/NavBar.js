@@ -7,27 +7,27 @@ import ActDeactFeature from './functions/ActDeactFeature';
 export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	useEffect(function () {
 		// OnUpdate SetMinimised
-		chrome.storage.onChanged.addListener(function (changes) {
+		chrome.storage.onChanged.addListener(async function (changes) {
 			if (changes['setMinimised' + activeTab[0].id]) {
 				if (changes['setMinimised' + activeTab[0].id]['newValue'] === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
 					portThree.postMessage({action: 'changeHeight', height: 40.5, activeTab: activeTab});
-					chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
+					await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 				} else if (changes['setMinimised' + activeTab[0].id]['newValue'] === false) {
 					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 					document.querySelector('#navBar').firstChild.style.borderRadius = '';
-					chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
+					await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
 				}
 			}
 		});
 
 		// OnUpdate setHomePageActive
-		chrome.storage.onChanged.addListener(function (changes) {
+		chrome.storage.onChanged.addListener(async function (changes) {
 			if (changes['setHomePageActive' + activeTab[0].id]) {
 				if (changes['setHomePageActive' + activeTab[0].id]['newValue'] === true) {
 					portThree.postMessage({action: 'justChangeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 					HideAllCompExcept('mainBody');
-					chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false});
+					await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false});
 				}
 			}
 		});
@@ -36,10 +36,10 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 		chrome.storage.onChanged.addListener(function (changes) {
 			if (changes['setActFeatDisabled' + activeTab[0].id]) {
 				if (changes['setActFeatDisabled' + activeTab[0].id]['newValue'] === true) {
-					chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], function (result) {
+					chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], async function (result) {
 						if (result['whichFeatureActive' + activeTab[0].id] !== null) {
 							ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
-							chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false});
+							await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false});
 						}
 					});
 				}
@@ -52,10 +52,10 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 				if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'clearAllCache') {
 					document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
 					document.querySelector('#clearAllCache > i').classList.add('fa-badge-check');
-					setTimeout(function () {
+					setTimeout(async function () {
 						document.querySelector('#clearAllCache > i').classList.remove('fa-badge-check');
 						document.querySelector('#clearAllCache > i').classList.add('fa-recycle');
-						chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
+						await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null});
 					}, 1000);
 				} else if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'colorPalette') {
 					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
@@ -81,13 +81,13 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 		});
 	}, []);
 
-	function darkMode() {
+	async function darkMode() {
 		if (document.documentElement.classList.contains('dark')) {
 			document.documentElement.classList.remove('dark');
-			chrome.storage.local.set({['colorTheme']: 'light'});
+			await chrome.storage.local.set({['colorTheme']: 'light'});
 		} else if (!document.documentElement.classList.contains('dark')) {
 			document.documentElement.classList.add('dark');
-			chrome.storage.local.set({['colorTheme']: 'dark'});
+			await chrome.storage.local.set({['colorTheme']: 'dark'});
 		}
 	}
 
@@ -138,11 +138,11 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 	}
 
 	function minimiseExtension() {
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], function (result) {
+		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
 			} else {
-				chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
 			}
 		});
 	}
