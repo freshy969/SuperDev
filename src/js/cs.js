@@ -7,8 +7,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'changeHeight':
 				changeHeight(request.activeTab, port, request);
 				break;
-			case 'justChangeHeight':
-				justChangeHeight(request.activeTab, port, request);
+			case 'setPopupVisible':
+				setPopupVisible(request.activeTab, port, request);
 				break;
 			case 'activateTextEditor':
 				activateTextEditor(request.activeTab, port, request);
@@ -144,58 +144,61 @@ async function showHideExtension(activeTab, port, request) {
 		port.postMessage({action: 'Popup Created'});
 	}
 
-	// If Popup Visible, Set Hidden
-	else if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
-		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
-		await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
-		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
-		port.postMessage({action: 'Popup Hidden'});
-	}
+	// If Popup Exists, Show/Hide
+	else if (document.querySelector('#superDevWrapper') !== null) {
+		let superDevWrapper = document.querySelector('#superDevWrapper');
 
-	// If Popup Hidden, Set Visible
-	else {
-		// Reset on Visible
-		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
-		await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
-		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
-		await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
-		//await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
+		// If Popup Visible, Set Hidden
+		if (superDevWrapper.style.getPropertyValue('visibility') !== 'hidden') {
+			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
+			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+			superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
+			port.postMessage({action: 'Popup Hidden'});
+		}
 
-		document.querySelector('#superDevWrapper').style.setProperty('top', '18px', 'important');
-		document.querySelector('#superDevWrapper').style.setProperty('right', '18px', 'important');
-		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'visible', 'important');
+		// If Popup Hidden, Set Visible
+		else {
+			// Reset on Visible
+			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+			await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false}); // True, False
+			await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false}); // True, False
+			await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
 
-		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
-			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
-			}
-		});
+			superDevWrapper.style.setProperty('top', '18px', 'important');
+			superDevWrapper.style.setProperty('right', '18px', 'important');
+			superDevWrapper.style.setProperty('bottom', '', 'important');
+			superDevWrapper.style.setProperty('left', '', 'important');
+			superDevWrapper.style.setProperty('visibility', 'visible', 'important');
 
-		port.postMessage({action: 'Popup Visible'});
+			chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
+				if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
+					await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
+				}
+			});
+
+			port.postMessage({action: 'Popup Visible'});
+		}
 	}
 }
 
 function changeHeight(activeTab, port, request) {
+	let superDevPopup = document.querySelector('#superDevPopup');
 	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
+		console.log(result['howLongPopupIs' + activeTab[0].id], request.height);
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
 			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
-			document.querySelector('#superDevPopup').style.setProperty('height', `${request.height}px`, 'important');
-			if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') === 'hidden') {
-				document.querySelector('#superDevWrapper').style.setProperty('visibility', 'visible', 'important');
-			}
+			superDevPopup.style.setProperty('height', `${request.height}px`, 'important');
 			port.postMessage({action: 'Height Changed'});
 		}
 	});
 }
 
-function justChangeHeight(activeTab, port, request) {
-	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
-		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
-			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
-			document.querySelector('#superDevPopup').style.setProperty('height', `${request.height}px`, 'important');
-			port.postMessage({action: 'Just Height Changed'});
-		}
-	});
+function setPopupVisible() {
+	let superDevWrapper = document.querySelector('#superDevWrapper');
+	if (superDevWrapper.style.getPropertyValue('visibility') === 'hidden') {
+		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
+	}
 }
 
 async function activateTextEditor(activeTab, port, request) {
@@ -262,9 +265,6 @@ async function activateTextEditor(activeTab, port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Text Editor Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -290,12 +290,15 @@ async function activateTextEditor(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
+
+	port.postMessage({action: 'Text Editor Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivateTextEditor(activeTab, port, request) {
@@ -308,6 +311,8 @@ function activatePageRuler(activeTab, port, request) {
 	let domCanvas = document.createElement('canvas');
 	let canvasCtx = domCanvas.getContext('2d', {willReadFrequently: true});
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
+	let superDevWrapper = document.querySelector('#superDevWrapper');
+	let superDevPopup = document.querySelector('#superDevPopup');
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
@@ -317,6 +322,16 @@ function activatePageRuler(activeTab, port, request) {
 	let isConnClosed = false;
 	let pageRulerOverlay = document.createElement('page-ruler-overlay');
 	pageRulerOverlay.className = 'pageRulerOverlay';
+
+	document.addEventListener('mousemove', onMouseMove);
+	document.addEventListener('touchmove', onMouseMove);
+	document.addEventListener('scroll', onPageScroll);
+	window.addEventListener('resize', onWindowResize);
+	document.addEventListener('keyup', onEscape);
+	window.focus({preventScroll: true});
+
+	disableCursor();
+	requestNewScreenshot();
 
 	portTwo.onMessage.addListener(function (request) {
 		if (isConnClosed) return;
@@ -334,30 +349,6 @@ function activatePageRuler(activeTab, port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
-		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
-		port.postMessage({action: 'Popup Hidden'});
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				initiate();
-				port.postMessage({action: 'Page Ruler Activated'});
-			});
-		});
-	}
-
-	function initiate() {
-		document.addEventListener('mousemove', onMouseMove);
-		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('scroll', onPageScroll);
-		window.addEventListener('resize', onWindowResize);
-		document.addEventListener('keyup', onEscape);
-		window.focus({preventScroll: true});
-
-		disableCursor();
-		requestNewScreenshot();
-	}
-
 	function parseScreenshot(dataUrl) {
 		canvasImage.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
@@ -374,8 +365,9 @@ function activatePageRuler(activeTab, port, request) {
 		canvasCtx.drawImage(canvasImage, 0, 0, domCanvas.width, domCanvas.height);
 		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
-		// Show Minimised Popup
-		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+		// Minimised + Visible After Screenshot Processed
+		await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
+		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
 
 		portTwo.postMessage({
 			action: 'toGrayscale',
@@ -404,20 +396,12 @@ function activatePageRuler(activeTab, port, request) {
 
 	async function requestNewScreenshot() {
 		// In Case od Scroll or Resize
-		if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
-			document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
-			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
-			port.postMessage({action: 'Popup Hidden'});
-
+		superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
+		requestAnimationFrame(function () {
 			requestAnimationFrame(function () {
-				requestAnimationFrame(function () {
-					portTwo.postMessage({action: 'takeScreenshot'});
-				});
+				portTwo.postMessage({action: 'takeScreenshot'});
 			});
-		}
-
-		// First Screenshot
-		else portTwo.postMessage({action: 'takeScreenshot'});
+		});
 	}
 
 	function pause() {
@@ -525,13 +509,15 @@ function activatePageRuler(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		removeDimensions();
 		enableCursor();
 	}
+
+	port.postMessage({action: 'Page Ruler Activated'});
 }
 
 function deactivatePageRuler(activeTab, port, request) {
@@ -544,6 +530,8 @@ function activateColorPicker(activeTab, port, request) {
 	let domCanvas = document.createElement('canvas');
 	let canvasCtx = domCanvas.getContext('2d', {willReadFrequently: true});
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
+	let superDevWrapper = document.querySelector('#superDevWrapper');
+	let superDevPopup = document.querySelector('#superDevPopup');
 	let pageScrollDelay = 600;
 	let windowResizeDelay = 1200;
 
@@ -553,6 +541,17 @@ function activateColorPicker(activeTab, port, request) {
 	let isConnClosed = false;
 	let colorPickerOverlay = document.createElement('color-picker-overlay');
 	colorPickerOverlay.className = 'colorPickerOverlay';
+
+	document.addEventListener('mousemove', onMouseMove);
+	document.addEventListener('touchmove', onMouseMove);
+	document.addEventListener('scroll', onPageScroll);
+	document.addEventListener('click', onMouseClick);
+	window.addEventListener('resize', onWindowResize);
+	document.addEventListener('keyup', onEscape);
+	window.focus({preventScroll: true});
+
+	disableCursor();
+	requestNewScreenshot();
 
 	portTwo.onMessage.addListener(function (request) {
 		if (isConnClosed) return;
@@ -570,31 +569,6 @@ function activateColorPicker(activeTab, port, request) {
 		}
 	});
 
-	if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
-		document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
-		port.postMessage({action: 'Popup Hidden'});
-		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
-		requestAnimationFrame(function () {
-			requestAnimationFrame(function () {
-				initiate();
-				port.postMessage({action: 'Color Picker Activated'});
-			});
-		});
-	}
-
-	function initiate() {
-		document.addEventListener('mousemove', onMouseMove);
-		document.addEventListener('touchmove', onMouseMove);
-		document.addEventListener('scroll', onPageScroll);
-		document.addEventListener('click', onMouseClick);
-		window.addEventListener('resize', onWindowResize);
-		document.addEventListener('keyup', onEscape);
-		window.focus({preventScroll: true});
-
-		disableCursor();
-		requestNewScreenshot();
-	}
-
 	function parseScreenshot(dataUrl) {
 		canvasImage.src = dataUrl;
 		// https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous
@@ -611,8 +585,9 @@ function activateColorPicker(activeTab, port, request) {
 		canvasCtx.drawImage(canvasImage, 0, 0, domCanvas.width, domCanvas.height);
 		let imageData = canvasCtx.getImageData(0, 0, domCanvas.width, domCanvas.height).data;
 
-		// Show Minimised Popup
-		await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
+		// Minimised + Visible After Screenshot Processed
+		await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
+		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
 
 		portTwo.postMessage({
 			action: 'setColorPicker',
@@ -640,21 +615,12 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	async function requestNewScreenshot() {
-		// In Case od Scroll or Resize
-		if (document.querySelector('#superDevWrapper').style.getPropertyValue('visibility') !== 'hidden') {
-			document.querySelector('#superDevWrapper').style.setProperty('visibility', 'hidden', 'important');
-			await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null});
-			port.postMessage({action: 'Popup Hidden'});
-
+		superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
+		requestAnimationFrame(function () {
 			requestAnimationFrame(function () {
-				requestAnimationFrame(function () {
-					portTwo.postMessage({action: 'takeScreenshot'});
-				});
+				portTwo.postMessage({action: 'takeScreenshot'});
 			});
-		}
-
-		// First Screenshot
-		else portTwo.postMessage({action: 'takeScreenshot'});
+		});
 	}
 
 	function pause() {
@@ -774,13 +740,15 @@ function activateColorPicker(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		removeColorPicker();
 		enableCursor();
 	}
+
+	port.postMessage({action: 'Color Picker Activated'});
 }
 
 function deactivateColorPicker(activeTab, port, request) {
@@ -868,8 +836,6 @@ function activateColorPalette(activeTab, port, request) {
 		return hex.toUpperCase();
 	}
 
-	port.postMessage({action: 'Color Palette Activated'});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -885,6 +851,8 @@ function activateColorPalette(activeTab, port, request) {
 		document.removeEventListener('keyup', onEscape);
 		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 	}
+
+	port.postMessage({action: 'Color Palette Activated'});
 }
 
 function deactivateColorPalette(activeTab, port, request) {
@@ -949,9 +917,6 @@ async function activatePageGuideline(activeTab, port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Page Guideline Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -975,12 +940,15 @@ async function activatePageGuideline(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
+
+	port.postMessage({action: 'Page Guideline Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivatePageGuideline(activeTab, port, request) {
@@ -1201,9 +1169,6 @@ async function activatePageHighlight(activeTab, port, request) {
 		return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.4 + ')';
 	}
 
-	port.postMessage({action: 'Page Highlight Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -1220,7 +1185,7 @@ async function activatePageHighlight(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
@@ -1421,6 +1386,9 @@ async function activatePageHighlight(activeTab, port, request) {
 			});
 		});
 	}
+
+	port.postMessage({action: 'Page Highlight Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivatePageHighlight(activeTab, port, request) {
@@ -1527,9 +1495,6 @@ async function activateMoveElement(activeTab, port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Move Element Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -1554,7 +1519,7 @@ async function activateMoveElement(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
@@ -1568,6 +1533,9 @@ async function activateMoveElement(activeTab, port, request) {
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
+
+	port.postMessage({action: 'Move Element Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivateMoveElement(activeTab, port, request) {
@@ -1658,9 +1626,6 @@ async function activateDeleteElement(activeTab, port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Delete Element Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -1685,12 +1650,15 @@ async function activateDeleteElement(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
+
+	port.postMessage({action: 'Delete Element Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivateDeleteElement(activeTab, port, request) {
@@ -2201,9 +2169,6 @@ async function activateExportElement(activeTab, port, request) {
 		}
 	}
 
-	port.postMessage({action: 'Export Element Activated'});
-	await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: true});
-
 	async function onEscape(event) {
 		event.preventDefault();
 		if (event.key === 'Escape') {
@@ -2228,12 +2193,15 @@ async function activateExportElement(activeTab, port, request) {
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: false});
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
 			}
 		});
 
 		document.querySelector('.pageGuidelineWrapper').remove();
 	}
+
+	port.postMessage({action: 'Export Element Activated'});
+	await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: true});
 }
 
 function deactivateExportElement(activeTab, port, request) {

@@ -60,7 +60,8 @@ export default function Home() {
 				// Initialisation/Reset on First Load
 				await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
-				await chrome.storage.local.set({['setMinimised' + activeTab[0].id]: null}); // True, False, Null
+				await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false}); // True, False
 				await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
 				await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: null}); // Number, Null
 
@@ -105,7 +106,8 @@ export default function Home() {
 				oldState.map(async function (value, index) {
 					await chrome.storage.local.remove(['setHomePageActive' + value]);
 					await chrome.storage.local.remove(['setActFeatDisabled' + value]);
-					await chrome.storage.local.remove(['setMinimised' + value]);
+					await chrome.storage.local.remove(['setPopupMinimised' + value]);
+					await chrome.storage.local.remove(['setPopupMaximised' + value]);
 					await chrome.storage.local.remove(['whichFeatureActive' + value]);
 					await chrome.storage.local.remove(['howLongPopupIs' + value]);
 				});
@@ -115,6 +117,7 @@ export default function Home() {
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
 		portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
+		portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
