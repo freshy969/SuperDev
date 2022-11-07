@@ -6,8 +6,8 @@ import ActDeactFeature from './functions/ActDeactFeature';
 
 export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRef}) {
 	useEffect(function () {
-		// OnUpdate SetMinimised
 		chrome.storage.onChanged.addListener(async function (changes) {
+			// OnUpdate SetMinimised
 			if (changes['setPopupMinimised' + activeTab[0].id]) {
 				if (changes['setPopupMinimised' + activeTab[0].id]['newValue'] === true) {
 					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
@@ -16,10 +16,8 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false});
 				}
 			}
-		});
 
-		// OnUpdate SetMaximised
-		chrome.storage.onChanged.addListener(async function (changes) {
+			// OnUpdate SetMaximised
 			if (changes['setPopupMaximised' + activeTab[0].id]) {
 				if (changes['setPopupMaximised' + activeTab[0].id]['newValue'] === true) {
 					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
@@ -28,10 +26,8 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false});
 				}
 			}
-		});
 
-		// OnUpdate setHomePageActive
-		chrome.storage.onChanged.addListener(async function (changes) {
+			// OnUpdate setHomePageActive
 			if (changes['setHomePageActive' + activeTab[0].id]) {
 				if (changes['setHomePageActive' + activeTab[0].id]['newValue'] === true) {
 					portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
@@ -39,10 +35,8 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false});
 				}
 			}
-		});
 
-		// OnUpdate SetActFeatDisabled
-		chrome.storage.onChanged.addListener(function (changes) {
+			// OnUpdate SetActFeatDisabled
 			if (changes['setActFeatDisabled' + activeTab[0].id]) {
 				if (changes['setActFeatDisabled' + activeTab[0].id]['newValue'] === true) {
 					chrome.storage.local.get(['whichFeatureActive' + activeTab[0].id], async function (result) {
@@ -53,10 +47,8 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					});
 				}
 			}
-		});
 
-		// OnUpdate WhichFeatureActive
-		chrome.storage.onChanged.addListener(function (changes) {
+			// OnUpdate WhichFeatureActive
 			if (changes['whichFeatureActive' + activeTab[0].id]) {
 				if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'clearAllCache') {
 					document.querySelector('#clearAllCache > i').classList.remove('fa-recycle');
