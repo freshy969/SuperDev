@@ -98,6 +98,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 				}
 			});
+
 			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 			HideAllCompExcept('toggleInfo');
 
@@ -117,6 +118,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 				}
 			});
+
 			portThree.postMessage({action: 'changeHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 			HideAllCompExcept('toggleSettings');
 

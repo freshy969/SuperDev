@@ -461,6 +461,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 				<div id='toggleSettingsChild' className='rounded-md p-4'>
 					<div>
+						{/* Color Picker Settings */}
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-eye-dropper px-[5px] text-allText dark:text-allTextD'></i>Color Picker Settings
 						</div>
@@ -486,6 +487,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 						</div>
 					</div>
 
+					{/* Color Palette Settings */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-swatchbook px-[5px] text-allText dark:text-allTextD'></i>Color Palette Settings
@@ -512,6 +514,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 						</div>
 					</div>
 
+					{/* Page Highlight Settings */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-paintbrush px-[5px] text-allText dark:text-allTextD'></i>Page Highlight Settings
@@ -546,6 +549,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 						</div>
 					</div>
 
+					{/* Export Element Settings */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Settings
@@ -572,6 +576,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 						</div>
 					</div>
 
+					{/* Clear All Cache Settings */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-recycle px-[5px] text-allText dark:text-allTextD'></i>Clear All Cache Settings

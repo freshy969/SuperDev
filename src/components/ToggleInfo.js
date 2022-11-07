@@ -12,6 +12,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 		<section id='toggleInfo' className='hidden'>
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 				<div id='toggleInfoChild' className='rounded-md p-4'>
+					{/* SuperDev Free Shortcuts */}
 					<div>
 						<div
 							className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none cursor-pointer'
@@ -40,6 +41,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 						</div>
 					</div>
 
+					{/* About Move Element Feature */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-arrows-up-down-left-right px-[5px] text-allText dark:text-allTextD'></i>About Move Element Feature
@@ -60,6 +62,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 						</div>
 					</div>
 
+					{/* About Delete Element Feature */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-trash-can px-[5px] text-allText dark:text-allTextD'></i>About Delete Element Feature
@@ -80,6 +83,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 						</div>
 					</div>
 
+					{/* About Export Element Feature */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
@@ -100,6 +104,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 						</div>
 					</div>
 
+					{/* SuperDev Pro Coming Soon */}
 					<div>
 						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
 							<i className='fa-regular fa-badge-check px-[5px] text-allText dark:text-allTextD'></i>SuperDev Pro Coming Soon
