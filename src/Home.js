@@ -102,12 +102,12 @@ export default function Home() {
 				});
 				if (oldState.length === 0) return false;
 
-				oldState.map(function (value, index) {
-					chrome.storage.local.remove(['setHomePageActive' + value]);
-					chrome.storage.local.remove(['setActFeatDisabled' + value]);
-					chrome.storage.local.remove(['setMinimised' + value]);
-					chrome.storage.local.remove(['whichFeatureActive' + value]);
-					chrome.storage.local.remove(['howLongPopupIs' + value]);
+				oldState.map(async function (value, index) {
+					await chrome.storage.local.remove(['setHomePageActive' + value]);
+					await chrome.storage.local.remove(['setActFeatDisabled' + value]);
+					await chrome.storage.local.remove(['setMinimised' + value]);
+					await chrome.storage.local.remove(['whichFeatureActive' + value]);
+					await chrome.storage.local.remove(['howLongPopupIs' + value]);
 				});
 			});
 		});
