@@ -234,7 +234,7 @@ async function activateTextEditor(activeTab, port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -242,10 +242,10 @@ async function activateTextEditor(activeTab, port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -920,7 +920,7 @@ async function activatePageGuideline(activeTab, port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -929,10 +929,10 @@ async function activatePageGuideline(activeTab, port, request) {
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', '').replace('px', ''))));
 
 			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -1499,7 +1499,7 @@ async function activateMoveElement(activeTab, port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -1507,10 +1507,10 @@ async function activateMoveElement(activeTab, port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -1630,7 +1630,7 @@ async function activateDeleteElement(activeTab, port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -1638,10 +1638,10 @@ async function activateDeleteElement(activeTab, port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
@@ -2173,7 +2173,7 @@ async function activateExportElement(activeTab, port, request) {
 
 	function renderPageGuideline(toShow) {
 		if (toShow === true) {
-			let guidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
+			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
 				document.body.scrollWidth -
 				(document.body.scrollWidth -
@@ -2181,10 +2181,10 @@ async function activateExportElement(activeTab, port, request) {
 						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replace('px', '') +
 							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replace('px', ''))));
 			let scrollHeight = document.body.scrollHeight;
-			let top = guidelinePosition.top + document.documentElement.scrollTop;
-			let bottom = guidelinePosition.bottom + document.documentElement.scrollTop;
-			let left = guidelinePosition.left + document.documentElement.scrollLeft;
-			let right = guidelinePosition.right + document.documentElement.scrollLeft;
+			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
+			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
+			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
+			let right = pageGuidelinePosition.right + document.documentElement.scrollLeft;
 
 			pageGuidelineWrapper.innerHTML = `
 			<svg  width="100%" viewBox="0 0 ${scrollWidth} ${scrollHeight}" version="1.1"
