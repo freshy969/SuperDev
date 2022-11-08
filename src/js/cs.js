@@ -1689,6 +1689,10 @@ async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
+	// const postcss = require('postcss-js');
+	// const prefixer = postcss.sync([require('autoprefixer')]);
+	// console.log(prefixer({display: 'none'}));
+
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
