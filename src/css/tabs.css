@@ -32,7 +32,6 @@
 	border-radius: 4px !important;
 	background: rgba(16, 18, 30, 0.95) !important;
 	-webkit-box-sizing: border-box !important;
-	-moz-box-sizing: border-box !important;
 	box-sizing: border-box !important;
 	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em !important;
 	font-family: system-ui, -apple-system, sans-serif !important;
@@ -48,7 +47,6 @@
 	border-radius: 4px !important;
 	background: rgba(16, 18, 30, 0.95) !important;
 	-webkit-box-sizing: border-box !important;
-	-moz-box-sizing: border-box !important;
 	box-sizing: border-box !important;
 	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em !important;
 }
