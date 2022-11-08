@@ -27,7 +27,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 				}
 			}
 
-			// OnUpdate setHomePageActive
+			// OnUpdate SetHomePageActive
 			if (changes['setHomePageActive' + activeTab[0].id]) {
 				if (changes['setHomePageActive' + activeTab[0].id]['newValue'] === true) {
 					portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
