@@ -71,6 +71,17 @@ chrome.runtime.onConnect.addListener(function (port) {
 	});
 });
 
+chrome.storage.onChanged.addListener(function (changes) {
+	if (changes['colorTheme']) {
+		let superDevWrapper = document.querySelector('#superDevWrapper');
+		if (changes['colorTheme']['newValue'] === 'dark') {
+			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px`, 'important');
+		} else if (changes['colorTheme']['newValue'] === 'light') {
+			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 6%) 0px 0px 8px 0px, rgb(0 0 0 / 12%) 0px 4px 8px 0px`, 'important');
+		}
+	}
+});
+
 async function showHideExtension(activeTab, port, request) {
 	// If Popup Doesn't Exists, Create
 	if (document.querySelector('#superDevWrapper') === null) {
@@ -89,8 +100,9 @@ async function showHideExtension(activeTab, port, request) {
 			position: fixed !important;
 			top: 18px !important;
 			right: 18px !important;
-			width: 335px !important;
 			visibility: hidden !important;
+			width: 335px !important;
+			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
 		document.body.appendChild(superDevWrapper);
 
@@ -112,6 +124,7 @@ async function showHideExtension(activeTab, port, request) {
 			height: 38.5px !important;
 			margin-left: 168px !important;
 			margin-bottom: -38.5px !important;
+			border-radius: 8px !important;
 			z-index: 2147483647 !important;`;
 		superDevWrapper.appendChild(superDevHandler);
 
@@ -132,7 +145,6 @@ async function showHideExtension(activeTab, port, request) {
 
 			width: 335px !important;
 			border-radius: 8px !important;
-			box-shadow: rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px !important;
 			z-index: 2147483646 !important;`;
 		superDevWrapper.appendChild(superDevPopup);
 
@@ -185,7 +197,6 @@ async function showHideExtension(activeTab, port, request) {
 function setPopupHeight(activeTab, port, request) {
 	let superDevPopup = document.querySelector('#superDevPopup');
 	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
-		console.log(result['howLongPopupIs' + activeTab[0].id], request.height);
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
 			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			superDevPopup.style.setProperty('height', `${request.height}px`, 'important');
@@ -194,7 +205,7 @@ function setPopupHeight(activeTab, port, request) {
 	});
 }
 
-function setPopupVisible() {
+function setPopupVisible(activeTab, port, request) {
 	let superDevWrapper = document.querySelector('#superDevWrapper');
 	if (superDevWrapper.style.getPropertyValue('visibility') === 'hidden') {
 		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
@@ -1772,7 +1783,6 @@ async function activateExportElement(activeTab, port, request) {
 					allSelectors.push(tempSelectors);
 				});
 				allSelectors = [...new Set(allSelectors.flat())];
-				console.log(allSelectors);
 			}
 
 			// Removing Unused CSS

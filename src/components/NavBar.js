@@ -60,7 +60,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					}, 1000);
 				} else if (changes['whichFeatureActive' + activeTab[0].id]['newValue'] === 'colorPalette') {
 					portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-					portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 					HideAllCompExcept('colorPalettePage');
 					let childHeight = PopupHeight(allFeatures) - 41.5;
 					document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
@@ -76,7 +75,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					if (result['whichFeatureActive' + activeTab[0].id] !== null) {
 						ActDeactFeature(allFeatures, activeTab, portThree, result['whichFeatureActive' + activeTab[0].id]);
 						portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-						portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 						HideAllCompExcept('mainBody');
 					}
 				});
@@ -103,7 +101,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			});
 
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 			HideAllCompExcept('toggleInfo');
 
 			// Set Child Height, Only Needed For Scrollbar
@@ -111,7 +108,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
 		} else {
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 			HideAllCompExcept('mainBody');
 		}
 	}
@@ -125,7 +121,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			});
 
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 			HideAllCompExcept('toggleSettings');
 
 			// Set Child Height, Only Needed For Scrollbar
@@ -133,7 +128,6 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
 		} else {
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 			HideAllCompExcept('mainBody');
 		}
 	}
