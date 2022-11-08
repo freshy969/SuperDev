@@ -123,6 +123,7 @@ function JustHideMe(activeTab, portThree, featureId) {
 
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
+			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
