@@ -10,7 +10,7 @@
 	"scripts": {
 		"build": "react-scripts build",
 		"move": "mv -v build/static/* build/ && mv build/js/main.*.js build/js/main.js && mv build/css/main.*.css build/css/main.css",
-		"copy": "cp -R src/icons src/libs manifest.json build && cp -R src/css/tabs.css build/css && cp -R src/js/* build/js",
+		"copy": "cp -R src/icons src/libs manifest.json build && cp -R src/css/cs.css build/css && cp -R src/js/* build/js",
 		"remove": "rm -r build/asset-manifest.json build/js/*.txt build/libs/css/font-awesome build/static",
 		"renameCSS": "sed -i '' 's~/static/media/~chrome-extension://__MSG_@@extension_id__/media/~g' build/css/main.css",
 		"renameHTML": "sed -i '' 's~/static/js/main.*.js~/js/main.js~g' build/index.html && sed -i '' 's~/static/css/main.*.css~/css/main.css~g' build/index.html"

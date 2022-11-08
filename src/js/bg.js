@@ -132,7 +132,7 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 					});
 					chrome.scripting.insertCSS({
 						target: {tabId: valueTwo.id},
-						files: ['css/tabs.css'],
+						files: ['css/cs.css'],
 					});
 				}
 			});
@@ -169,7 +169,7 @@ chrome.management.onEnabled.addListener(function (extension) {
 						});
 						chrome.scripting.insertCSS({
 							target: {tabId: valueTwo.id},
-							files: ['css/tabs.css'],
+							files: ['css/cs.css'],
 						});
 					}
 				});
