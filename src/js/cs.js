@@ -1730,13 +1730,14 @@ async function activateExportElement(activeTab, port, request) {
 		});
 	}
 
-	// Saving External Stylesheets' CSSRules
-	// to AllStyleSheets 2D Array
+	// Saving External Stylesheets' CSSRules To
+	// AllStyleSheets 2D Array After CSSOM Parsing
 	let exportElementWrapper = document.createElement('export-element-wrapper');
+	document.body.appendChild(exportElementWrapper);
+
 	let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
 	let exportElementStyle = document.createElement('style');
 	exportElementShaRoot.appendChild(exportElementStyle);
-	document.body.appendChild(exportElementWrapper);
 
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
