@@ -10,9 +10,8 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			// OnUpdate SetMinimised
 			if (changes['setPopupMinimised' + activeTab[0].id]) {
 				if (changes['setPopupMinimised' + activeTab[0].id]['newValue'] === true) {
-					document.querySelector('#navBar').firstChild.style.borderRadius = '8px';
+					document.querySelector('#navBar').firstChild.style.setProperty('border-radius', '8px');
 					portThree.postMessage({action: 'setPopupHeight', height: 40.5, activeTab: activeTab});
-					portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 					await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false});
 				}
 			}
@@ -21,8 +20,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 			if (changes['setPopupMaximised' + activeTab[0].id]) {
 				if (changes['setPopupMaximised' + activeTab[0].id]['newValue'] === true) {
 					portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-					portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
-					document.querySelector('#navBar').firstChild.style.borderRadius = '';
+					document.querySelector('#navBar').firstChild.style.setProperty('border-radius', '');
 					await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false});
 				}
 			}
@@ -62,7 +60,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 					portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 					HideAllCompExcept('colorPalettePage');
 					let childHeight = PopupHeight(allFeatures) - 41.5;
-					document.querySelector('#colorPalettePageChild').style.height = `${childHeight}px`;
+					document.querySelector('#colorPalettePageChild').style.setProperty('height', `${childHeight}px`);
 				}
 			}
 		});
@@ -107,7 +105,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
-			document.querySelector('#toggleInfoChild').style.height = `${childHeight}px`;
+			document.querySelector('#toggleInfoChild').style.setProperty('height', `${childHeight}px`);
 		} else {
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 			HideAllCompExcept('mainBody');
@@ -127,7 +125,7 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 
 			// Set Child Height, Only Needed For Scrollbar
 			let childHeight = PopupHeight(allFeatures) - 41.5;
-			document.querySelector('#toggleSettingsChild').style.height = `${childHeight}px`;
+			document.querySelector('#toggleSettingsChild').style.setProperty('height', `${childHeight}px`);
 		} else {
 			portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 			HideAllCompExcept('mainBody');

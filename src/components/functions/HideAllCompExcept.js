@@ -8,7 +8,7 @@ export default function HideAllCompExcept(componentId) {
 		} else {
 			if (document.querySelector('#' + value).classList.contains('hidden')) {
 				document.querySelector('#' + value).classList.remove('hidden');
-				document.querySelector('#navBar').firstChild.style.borderRadius = '';
+				document.querySelector('#navBar').firstChild.style.setProperty('border-radius', '');
 			}
 		}
 	});

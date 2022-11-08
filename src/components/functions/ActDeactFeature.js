@@ -35,7 +35,7 @@ function HideMeShowMeExcep(activeTab, portThree, featureId) {
 
 			// Color Palette
 			else if (featureId === 'colorPalette') {
-				document.querySelector('#stopActFeatButton').style.visibility = 'visible';
+				document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'visible');
 				document.querySelector('#' + featureId).classList.add('active');
 				portThree.postMessage({action: 'activate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(async function (response) {
@@ -47,7 +47,7 @@ function HideMeShowMeExcep(activeTab, portThree, featureId) {
 		} else {
 			// Color Palette
 			if (featureId === 'colorPalette') {
-				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
+				document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'hidden');
 				document.querySelector('#' + featureId).classList.remove('active');
 				portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(async function (response) {
@@ -69,7 +69,7 @@ function HideMeShowMe(activeTab, portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		// Activate
 		if (!document.querySelector('#' + featureId).classList.contains('active')) {
-			document.querySelector('#stopActFeatButton').style.visibility = 'visible';
+			document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'visible');
 			document.querySelector('#' + featureId).classList.remove(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			document.querySelector('#' + featureId).classList.add(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			portThree.postMessage({action: 'activate' + featureIdUC, activeTab: activeTab});
@@ -82,7 +82,7 @@ function HideMeShowMe(activeTab, portThree, featureId) {
 
 		// Deactivate
 		else {
-			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
+			document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'hidden');
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
@@ -102,7 +102,7 @@ function JustHideMeExcep(activeTab, portThree, featureId) {
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
 			if (featureId === 'colorPalette') {
-				document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
+				document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'hidden');
 				document.querySelector('#' + featureId).classList.remove('active');
 				portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
 				portThree.onMessage.addListener(async function (response) {
@@ -123,7 +123,7 @@ function JustHideMe(activeTab, portThree, featureId) {
 
 	if (document.querySelector('#' + featureId)) {
 		if (document.querySelector('#' + featureId).classList.contains('active')) {
-			document.querySelector('#stopActFeatButton').style.visibility = 'hidden';
+			document.querySelector('#stopActFeatButton').style.setProperty('visibility', 'hidden');
 			document.querySelector('#' + featureId).classList.remove(arrAct[0], arrAct[1], arrAct[2], arrAct[3], arrAct[4], arrAct[5], arrAct[6]);
 			document.querySelector('#' + featureId).classList.add(arrDef[0], arrDef[1], arrDef[2], arrDef[3]);
 			portThree.postMessage({action: 'deactivate' + featureIdUC, activeTab: activeTab});
