@@ -127,7 +127,6 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 							'libs/js/beautify.min.js',
 							'libs/js/beautify-css.min.js',
 							'libs/js/beautify-html.min.js',
-							'js/ps.js',
 							'js/cs.js',
 						],
 					});
@@ -165,7 +164,6 @@ chrome.management.onEnabled.addListener(function (extension) {
 								'libs/js/beautify.min.js',
 								'libs/js/beautify-css.min.js',
 								'libs/js/beautify-html.min.js',
-								'js/ps.js',
 								'js/cs.js',
 							],
 						});

@@ -47,7 +47,6 @@
 				"libs/js/beautify.min.js",
 				"libs/js/beautify-css.min.js",
 				"libs/js/beautify-html.min.js",
-				"js/ps.js",
 				"js/cs.js"
 			],
 			"matches": ["http://*/*", "https://*/*"]

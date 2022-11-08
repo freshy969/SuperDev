@@ -33,6 +33,6 @@ List of Feature below -
 ## Commands
 
 ```
-browserify ./src/js/cs.js -o ./src/js/ps.js
+browserify ./src/js/cjs.js -o ./src/js/cs.js
 pnpm install && pnpm run build && pnpm run move && pnpm run copy && pnpm run remove && pnpm run renameCSS && pnpm run renameHTML && clear
 ```

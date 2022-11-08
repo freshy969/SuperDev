@@ -4,9 +4,7 @@
     "webextensions": true,
     "es2021": true,
     "jquery": true,
-    "node": true,
-    "amd": true // PostCSS
-    
+    "node": true    
   },
   "globals": {
     "window": true,
@@ -31,9 +29,6 @@
   "rules": {
     "no-unused-vars": "off",
     "react/prop-types": "off",
-    "no-mixed-spaces-and-tabs": "off",
-    "no-empty": "off", // PostCSS
-    "no-constant-condition": "off", // PostCSS
-    "no-redeclare": "off" // PostCSS
+    "no-mixed-spaces-and-tabs": "off"
   }
 }
