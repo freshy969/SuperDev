@@ -47,7 +47,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							<i className='fa-regular fa-arrows-up-down-left-right px-[5px] text-allText dark:text-allTextD'></i>About Move Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["It Can't Be Used On HTML Body Tag", 'Since This Will Reload The Extension'].map(function (value, index) {
+							{["It Can't Be Used On HTML Body", "And It's A Feature, Not A Bug :)"].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
@@ -68,7 +68,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							<i className='fa-regular fa-trash-can px-[5px] text-allText dark:text-allTextD'></i>About Delete Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["It Can't Be Used On HTML Body Since", 'This Will Remove The Extension Popup'].map(function (value, index) {
+							{["It Can't Be Used On HTML Body", "And It's A Feature, Not A Bug :)"].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
@@ -89,7 +89,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["Export Element's CSS Is Inconsistent", 'Its CSS Calc. Algorithm Is Being Fixed'].map(function (value, index) {
+							{["Export Element's CSS Is Buggy", 'Its CSS Algorithm Is Being Fixed'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
