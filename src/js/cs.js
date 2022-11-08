@@ -320,8 +320,8 @@ function activatePageRuler(activeTab, port, request) {
 	let isPaused = true;
 	let inputX, inputY;
 	let isConnClosed = false;
-	let pageRulerOverlay = document.createElement('page-ruler-overlay');
-	pageRulerOverlay.className = 'pageRulerOverlay';
+	let pageRulerCursor = document.createElement('page-ruler-cursor');
+	pageRulerCursor.className = 'pageRulerCursor';
 
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('touchmove', onMouseMove);
@@ -417,11 +417,11 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		document.body.appendChild(pageRulerOverlay);
+		document.body.appendChild(pageRulerCursor);
 	}
 
 	function enableCursor() {
-		document.body.removeChild(pageRulerOverlay);
+		document.body.removeChild(pageRulerCursor);
 	}
 
 	function onMouseMove(event) {
@@ -540,8 +540,8 @@ function activateColorPicker(activeTab, port, request) {
 	let isPaused = true;
 	let inputX, inputY;
 	let isConnClosed = false;
-	let colorPickerOverlay = document.createElement('color-picker-overlay');
-	colorPickerOverlay.className = 'colorPickerOverlay';
+	let colorPickerCursor = document.createElement('color-picker-cursor');
+	colorPickerCursor.className = 'colorPickerCursor';
 
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('touchmove', onMouseMove);
@@ -637,11 +637,11 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		document.body.appendChild(colorPickerOverlay);
+		document.body.appendChild(colorPickerCursor);
 	}
 
 	function enableCursor() {
-		document.body.removeChild(colorPickerOverlay);
+		document.body.removeChild(colorPickerCursor);
 	}
 
 	function onMouseMove(event) {

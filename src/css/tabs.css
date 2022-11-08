@@ -1,131 +1,130 @@
 /** Page Ruler + Color Picker **/
-.pageRulerOverlay,
-.colorPickerOverlay {
+.pageRulerCursor,
+.colorPickerCursor {
 	cursor: crosshair !important;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 2147483645;
+	position: fixed !important;
+	left: 0 !important;
+	top: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	z-index: 2147483645 !important;
 }
 
 .pageRulerWrapper,
 .colorPickerWrapper {
-	position: fixed;
-	width: 0;
-	height: 0;
-	z-index: 2147483644;
-	pointer-events: none;
+	position: fixed !important;
+	height: 0 !important;
+	z-index: 2147483644 !important;
+	pointer-events: none !important;
 }
 
 .pageRulerTooltip {
-	position: absolute;
-	left: 7px;
-	bottom: 6px;
-	padding: 1px 10px;
-	color: white;
-	text-align: center;
-	white-space: nowrap;
-	font-size: 12px;
-	line-height: 25px;
-	direction: ltr;
-	border-radius: 4px;
-	background: rgba(16, 18, 30, 0.95);
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+	position: absolute !important;
+	left: 7px !important;
+	bottom: 6px !important;
+	padding: 1px 10px !important;
+	color: white !important;
+	text-align: center !important;
+	white-space: nowrap !important;
+	font-size: 12px !important;
+	line-height: 25px !important;
+	direction: ltr !important;
+	border-radius: 4px !important;
+	background: rgba(16, 18, 30, 0.95) !important;
+	-webkit-box-sizing: border-box !important;
+	-moz-box-sizing: border-box !important;
+	box-sizing: border-box !important;
 	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em !important;
-	font-family: system-ui, -apple-system, sans-serif;
+	font-family: system-ui, -apple-system, sans-serif !important;
 }
 
 .colorPickerTooltip {
-	position: absolute;
-	display: flex;
-	align-items: center;
-	left: 7px;
-	bottom: 6px;
-	padding: 1px 10px;
-	border-radius: 4px;
-	background: rgba(16, 18, 30, 0.95);
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em;
+	position: absolute !important;
+	display: flex !important;
+	align-items: center !important;
+	left: 7px !important;
+	bottom: 6px !important;
+	padding: 1px 10px !important;
+	border-radius: 4px !important;
+	background: rgba(16, 18, 30, 0.95) !important;
+	-webkit-box-sizing: border-box !important;
+	-moz-box-sizing: border-box !important;
+	box-sizing: border-box !important;
+	box-shadow: rgba(0, 0, 0, 0.15) 0.15em 0.15em 0.2em !important;
 }
 
 .colorPickerTooltipBG {
-	height: 24px;
-	width: 24px;
-	border: 1px solid rgba(209, 213, 219, 0.3);
-	border-radius: 4px;
-	margin: 8px 10px 8px 0px;
+	height: 24px !important;
+	width: 24px !important;
+	border: 1px solid rgba(209, 213, 219, 0.3) !important;
+	border-radius: 4px !important;
+	margin: 8px 10px 8px 0px !important;
 }
 
 .colorPickerTooltipChild {
-	color: white;
-	text-align: center;
-	white-space: nowrap;
-	font-size: 14px;
-	line-height: 25px;
-	direction: ltr;
-	font-family: system-ui, -apple-system, sans-serif;
+	color: white !important;
+	text-align: center !important;
+	white-space: nowrap !important;
+	font-size: 14px !important;
+	line-height: 25px !important;
+	direction: ltr !important;
+	font-family: system-ui, -apple-system, sans-serif !important;
 }
 
 .pageRulerTooltip.left,
 .colorPickerTooltip.left {
-	left: auto;
-	right: 7px;
+	left: auto !important;
+	right: 7px !important;
 }
 
 .pageRulerTooltip.bottom,
 .colorPickerTooltip.bottom {
-	bottom: auto;
-	top: 6px;
+	bottom: auto !important;
+	top: 6px !important;
 }
 
 .pageRulerAxis {
-	position: absolute;
-	background: rgb(255, 0, 0);
+	position: absolute !important;
+	background: rgb(255, 0, 0) !important;
 }
 
 .pageRulerAxis:before,
 .pageRulerAxis:after {
-	content: '';
-	position: absolute;
-	background: inherit;
+	content: '' !important;
+	position: absolute !important;
+	background: inherit !important;
 }
 
 .x.pageRulerAxis:before,
 .x.pageRulerAxis:after {
-	left: 0;
-	height: 5px;
-	top: -2px;
-	width: 1px;
+	left: 0 !important;
+	height: 5px !important;
+	top: -2px !important;
+	width: 1px !important;
 }
 
 .x.pageRulerAxis:after {
-	left: 100%;
+	left: 100% !important;
 }
 
 .y.pageRulerAxis:before,
 .y.pageRulerAxis:after {
-	left: -2px;
-	height: 1px;
-	top: 0;
-	width: 5px;
+	left: -2px !important;
+	height: 1px !important;
+	top: 0 !important;
+	width: 5px !important;
 }
 
 .y.pageRulerAxis:after {
-	top: 100%;
+	top: 100% !important;
 }
 
 .x.pageRulerAxis {
-	height: 1px;
+	height: 1px !important;
 }
 
 .y.pageRulerAxis {
-	width: 1px;
+	width: 1px !important;
 }
 /** Page Ruler + Color Picker **/
 
@@ -134,16 +133,16 @@
 	outline: red solid 2px !important;
 }
 .pageGuidelineWrapper > svg {
-	position: absolute;
-	top: 0;
-	left: 0;
-	overflow: visible;
-	pointer-events: none;
-	z-index: 2147483645;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	overflow: visible !important;
+	pointer-events: none !important;
+	z-index: 2147483645 !important;
 }
 
 .pageGuidelineWrapper line {
-	stroke: rgb(255, 26, 26);
-	stroke-dasharray: 2;
+	stroke: rgb(255, 26, 26) !important;
+	stroke-dasharray: 2 !important;
 }
 /**  Page Guideline **/
