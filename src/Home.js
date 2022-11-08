@@ -117,6 +117,7 @@ export default function Home() {
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
 		portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
+		portThree.postMessage({action: 'setPopupShadow'});
 		portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
 		return (
 			<>
