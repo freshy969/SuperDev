@@ -460,7 +460,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 				else return false;
 			})
 			.then(function (styleSheet) {
-				port.postMessage({action: 'parseStylesheet', styleSheet: styleSheet});
+				port.postMessage({action: 'fetchedStylesheet', styleSheet: styleSheet});
 			});
 	}
 

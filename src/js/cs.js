@@ -1,3 +1,5 @@
+const autoprefixer = require('autoprefixer');
+
 chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
@@ -1689,10 +1691,6 @@ async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
-	const postcss = require('postcss-js');
-	const prefixer = postcss.sync([require('autoprefixer')]);
-	console.log(prefixer({display: 'none'}));
-
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
 	document.body.appendChild(pageGuidelineWrapper);
@@ -1716,369 +1714,118 @@ async function activateExportElement(activeTab, port, request) {
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
 
-	// Saving All CSSRules to AllStyleSheets 2D Array
+	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
 		[...document.styleSheets].map(function (valueOne, indexOne) {
 			try {
-				let singleStylesheetOne = [];
-				if ([...valueOne.cssRules].length !== 0) {
-					[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
-						singleStylesheetOne.push(valueTwo);
-					});
-					allStyleSheets.push(singleStylesheetOne);
-				}
+				allStyleSheets[indexOne] = [...valueOne.cssRules]
+					.map(function (valueTwo, indexTwo) {
+						return valueTwo.cssText;
+					})
+					.filter(Boolean)
+					.join('');
 			} catch (e) {
-				allStyleSheets.push([]);
+				allStyleSheets[indexOne] = null;
 				portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
 			}
 		});
 	}
 
-	// Saving External Stylesheets' CSSRules To
-	// AllStyleSheets 2D Array After CSSOM Parsing
-	let exportElementWrapper = document.createElement('export-element-wrapper');
-	document.body.appendChild(exportElementWrapper);
-
-	let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
-	let exportElementStyle = document.createElement('style');
-	exportElementShaRoot.appendChild(exportElementStyle);
-
+	// All Different Origin Stylesheets
+	// Async Issue
 	portTwo.onMessage.addListener(function (request) {
-		if (request.action === 'parseStylesheet' && request.styleSheet !== false) {
+		if (request.action === 'fetchedStylesheet' && request.styleSheet !== false) {
 			if (allStyleSheets.length !== 0) {
-				for (let i = 0; i < allStyleSheets.length; i++) {
-					if (allStyleSheets[i].length === 0) {
-						exportElementStyle.textContent = request.styleSheet;
-						if ([...exportElementShaRoot.styleSheets].length !== 0) {
-							[...exportElementShaRoot.styleSheets].map(function (valueOne, indexOne) {
-								let singleStylesheetTwo = [];
-								if ([...valueOne.cssRules].length !== 0) {
-									[...valueOne.cssRules].map(function (valueTwo, indexTwo) {
-										singleStylesheetTwo.push(valueTwo);
-									});
-									allStyleSheets[i].push(singleStylesheetTwo);
-									allStyleSheets[i] = allStyleSheets[i].flat();
-								}
-							});
-							break;
-						}
-					}
-				}
+				allStyleSheets = allStyleSheets.map(function (valueOne, indexOne) {
+					if (valueOne === null) return request.styleSheet;
+					else return valueOne;
+				});
 			}
 		}
 	});
 
-	function onMouseClick(event) {
+	async function onMouseClick(event) {
 		event.preventDefault();
+		allStyleSheets = allStyleSheets.join('\n\n');
+
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
-			// Saving OutHTML Selectors
-			// IDs, Classes, Tags
-			let usedStyles = [];
-			let allSelectors = [];
-			let allKeyframes = [];
-			let allAnimations = [];
+			const postcss = require('postcss');
+			const autoprefixer = require('autoprefixer'); //CSSNano
+			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
+			const calc = require('postcss-calc'); //CSSNano
+			const colormin = require('postcss-colormin');
+			const discardunused = require('postcss-discard-unused'); //CSSNano
 
-			if ([event.target, ...event.target.querySelectorAll('*')].length !== 0) {
-				[event.target, ...event.target.querySelectorAll('*')].map(function (valueOne, indexOne) {
-					let tempSelectors = [];
-					if (valueOne.id !== '') tempSelectors.push('#' + valueOne.id);
-					if ([...valueOne.classList].length !== 0) {
-						[...valueOne.classList].map(function (valueTwo, indexTwo) {
-							if (valueTwo !== 'pageGuidelineOutline') tempSelectors.push('.' + valueTwo);
-						});
-					}
-					tempSelectors.push(valueOne.tagName.toLowerCase());
-					allSelectors.push(tempSelectors);
+			const stylehacks = require('stylehacks');
+			const mergelonghand = require('postcss-merge-longhand');
+			const colornamestohex = require('postcss-colornames-to-hex');
+			const mergerules = require('postcss-merge-rules');
+			const remover = require('postcss-remove-unused-css');
+
+			// Add/Remove -Moz, -WebKit Vendor
+			// Prefixes Accordingly
+			await postcss([autoprefixer])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
 				});
-				allSelectors = [...new Set(allSelectors.flat())];
-			}
 
-			// Removing Unused CSS
-			if (allStyleSheets.flat().length !== 0) {
-				allStyleSheets.flat().map(function (valueOne, indexOne) {
-					if (allSelectors.length !== 0) {
-						allSelectors.map(function (valueTwo, indexTwo) {
-							let regexZero = new RegExp(/\\/gm);
-							let regexOne = new RegExp('[ ,]([*]|html|body)[ [,:.>+~#]', 'gm'); // For Html, Body, :Root
-							let regexTwo = new RegExp('[ [,:.>+~#](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Classes
-							let regexThree = new RegExp('[ ,](' + valueTwo + ')[ [,:.>+~#]', 'gm'); // For Tags Only
-
-							// If CSSStyles
-							if (!valueOne.cssText.startsWith('@')) {
-								// IDs
-								if (valueTwo.startsWith('#')) {
-									if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-										usedStyles.push(valueOne.cssText);
-									}
-								}
-								// Classes
-								else if (valueTwo.startsWith('.')) {
-									if (
-										(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-										(' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-									) {
-										usedStyles.push(valueOne.cssText);
-									}
-								}
-								// Tags
-								else {
-									if ((' ' + valueOne.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-										usedStyles.push(valueOne.cssText);
-									}
-								}
-							}
-
-							// If MediaQuery
-							else if (valueOne.cssText.startsWith('@media')) {
-								let mediaStylesOne = [];
-								if ([...valueOne.cssRules].length !== 0) {
-									[...valueOne.cssRules].map(function (valueThree, indexThree) {
-										// If CSSStyles
-										if (!valueThree.cssText.startsWith('@')) {
-											// IDs
-											if (valueTwo.startsWith('#')) {
-												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-													mediaStylesOne.push(valueThree.cssText);
-												}
-											}
-											// Classes
-											else if (valueTwo.startsWith('.')) {
-												if (
-													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-												) {
-													mediaStylesOne.push(valueThree.cssText);
-												}
-											}
-											// Tags
-											else {
-												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-													mediaStylesOne.push(valueThree.cssText);
-												}
-											}
-										}
-										// If CSSSupports
-										else if (valueThree.cssText.startsWith('@supports')) {
-											let cssSupportsOne = [];
-											if ([...valueThree.cssRules].length !== 0) {
-												[...valueThree.cssRules].map(function (valueFour, indexFour) {
-													// If CSSStyles
-													if (!valueFour.cssText.startsWith('@')) {
-														// IDs
-														if (valueTwo.startsWith('#')) {
-															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-																cssSupportsOne.push(valueFour.cssText);
-															}
-														}
-														// Classes
-														else if (valueTwo.startsWith('.')) {
-															if (
-																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-															) {
-																cssSupportsOne.push(valueFour.cssText);
-															}
-														}
-														// Tags
-														else {
-															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-																cssSupportsOne.push(valueFour.cssText);
-															}
-														}
-													}
-													// If CSSKeyframes
-													else if (valueFour.cssText.startsWith('@keyframes')) {
-														let cssKeyframesOne = [];
-														if ([...valueFour.cssRules].length !== 0) {
-															[...valueFour.cssRules].map(function (valueFive, indexFive) {
-																cssKeyframesOne.push(valueFive.cssText);
-															});
-														}
-														if (cssKeyframesOne.length !== 0) {
-															allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframesOne.join('\n')} }`});
-															cssSupportsOne.push(`@keyframes ${valueFour.name} { ${cssKeyframesOne.join('\n')} }`);
-														}
-													}
-												});
-											}
-
-											if (cssSupportsOne.length !== 0) {
-												mediaStylesOne.push(`@supports ${valueThree.conditionText} { ${cssSupportsOne.join('\n')} }`);
-											}
-										}
-										// If CSSKeyframes
-										else if (valueThree.cssText.startsWith('@keyframes')) {
-											let cssKeyframesTwo = [];
-											if ([...valueThree.cssRules].length !== 0) {
-												[...valueThree.cssRules].map(function (valueFour, indexFour) {
-													cssKeyframesTwo.push(valueFour.cssText);
-												});
-											}
-											if (cssKeyframesTwo.length !== 0) {
-												allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframesTwo.join('\n')} }`});
-												mediaStylesOne.push(`@keyframes ${valueThree.name} { ${cssKeyframesTwo.join('\n')} }`);
-											}
-										}
-									});
-								}
-
-								if (mediaStylesOne.length !== 0) {
-									usedStyles.push(`@media ${valueOne.conditionText} { ${mediaStylesOne.join('\n')} }`);
-								}
-							}
-
-							// If CSSSupports
-							else if (valueOne.cssText.startsWith('@supports')) {
-								let cssSupportsTwo = [];
-								if ([...valueOne.cssRules].length !== 0) {
-									[...valueOne.cssRules].map(function (valueThree, indexThree) {
-										// If CSSStyles
-										if (!valueThree.cssText.startsWith('@')) {
-											// IDs
-											if (valueTwo.startsWith('#')) {
-												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-													cssSupportsTwo.push(valueThree.cssText);
-												}
-											}
-											// Classes
-											else if (valueTwo.startsWith('.')) {
-												if (
-													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-													(' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-												) {
-													cssSupportsTwo.push(valueThree.cssText);
-												}
-											}
-											// Tags
-											else {
-												if ((' ' + valueThree.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-													cssSupportsTwo.push(valueThree.cssText);
-												}
-											}
-										}
-										// If MediaQuery
-										else if (valueThree.cssText.startsWith('@media')) {
-											let mediaStylesTwo = [];
-											if ([...valueThree.cssRules].length !== 0) {
-												[...valueThree.cssRules].map(function (valueFour, indexFour) {
-													// If CSSStyles
-													if (!valueFour.cssText.startsWith('@')) {
-														// IDs
-														if (valueTwo.startsWith('#')) {
-															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null) {
-																mediaStylesTwo.push(valueFour.cssText);
-															}
-														}
-														// Classes
-														else if (valueTwo.startsWith('.')) {
-															if (
-																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexOne) !== null ||
-																(' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexTwo) !== null
-															) {
-																mediaStylesTwo.push(valueFour.cssText);
-															}
-														}
-														// Tags
-														else {
-															if ((' ' + valueFour.selectorText.replaceAll(regexZero, '') + ' ').match(regexThree) !== null) {
-																mediaStylesTwo.push(valueFour.cssText);
-															}
-														}
-													}
-													// If CSSKeyframes
-													else if (valueFour.cssText.startsWith('@keyframes')) {
-														let cssKeyframesThree = [];
-														if ([...valueFour.cssRules].length !== 0) {
-															[...valueFour.cssRules].map(function (valueFive, indexFive) {
-																cssKeyframesThree.push(valueFive.cssText);
-															});
-														}
-														if (cssKeyframesThree.length !== 0) {
-															allKeyframes.push({name: valueFour.name, value: `@keyframes ${valueFour.name} { ${cssKeyframesThree.join('\n')} }`});
-															mediaStylesTwo.push(`@keyframes ${valueFour.name} { ${cssKeyframesThree.join('\n')} }`);
-														}
-													}
-												});
-											}
-
-											if (mediaStylesTwo.length !== 0) {
-												cssSupportsTwo.push(`@media ${valueThree.conditionText} { ${mediaStylesTwo.join('\n')} }`);
-											}
-										}
-										// If CSSKeyframes
-										else if (valueThree.cssText.startsWith('@keyframes')) {
-											let cssKeyframesFour = [];
-											if ([...valueThree.cssRules].length !== 0) {
-												[...valueThree.cssRules].map(function (valueFour, indexFour) {
-													cssKeyframesFour.push(valueFour.cssText);
-												});
-											}
-											if (cssKeyframesFour.length !== 0) {
-												allKeyframes.push({name: valueThree.name, value: `@keyframes ${valueThree.name} { ${cssKeyframesFour.join('\n')} }`});
-												cssSupportsTwo.push(`@keyframes ${valueThree.name} { ${cssKeyframesFour.join('\n')} }`);
-											}
-										}
-									});
-								}
-
-								if (cssSupportsTwo.length !== 0) {
-									usedStyles.push(`@supports ${valueOne.conditionText} { ${cssSupportsTwo.join('\n')} }`);
-								}
-							}
-
-							// If CSSKeyframes
-							else if (valueOne.cssText.startsWith('@keyframes')) {
-								let cssKeyframesFive = [];
-								if ([...valueOne.cssRules].length !== 0) {
-									[...valueOne.cssRules].map(function (valueThree, indexThree) {
-										cssKeyframesFive.push(valueThree.cssText);
-									});
-								}
-								if (cssKeyframesFive.length !== 0) {
-									allKeyframes.push({name: valueOne.name, value: `@keyframes ${valueOne.name} { ${cssKeyframesFive.join('\n')} }`});
-									usedStyles.push(`@keyframes ${valueOne.name} { ${cssKeyframesFive.join('\n')} }`);
-								}
-							}
-						});
-					}
+			// Sort CSS Declarations
+			await postcss([cssdeclarationsorter])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
 				});
-			}
 
-			usedStyles = [...new Set(usedStyles)];
-			usedStyles = usedStyles.join(' ');
-
-			// CSS Variables Replace
-			let bodyStyle = window.getComputedStyle(document.body);
-			let usedVars = usedStyles.match(/var\(([a-zA-Z0-9-_\s]+)\)/gm); // /var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm
-			if (usedVars !== null) {
-				usedVars = [...new Set(usedVars?.flat())];
-				if (usedVars.length !== 0) {
-					usedVars.map(function (valueOne, indexOne) {
-						if (valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).length !== 0) {
-							valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
-								if (valueTwo !== null && bodyStyle.getPropertyValue(valueTwo) !== '') {
-									usedStyles = usedStyles.replaceAll(valueOne, bodyStyle.getPropertyValue(valueTwo));
-								}
-							});
-						}
-					});
-				}
-			}
-
-			// CSS Keyframe Replace, Regex Will Get Chars Between Two Strings Without The Two Chars Itself
-			allAnimations = usedStyles.match(/(?<=animation:)([\S\s]*?)(?=;)|(?<=animation-name:)([\S\s]*?)(?=;)/gm);
-			allAnimations = [...new Set(allAnimations)];
-			if (allAnimations.length !== 0) {
-				allAnimations.map(function (valueOne, indexOne) {
-					if (allKeyframes.length !== 0) {
-						allKeyframes.map(function (valueTwo, indexTwo) {
-							if (!valueOne.includes(valueTwo.name + ';') && !valueOne.includes(valueTwo.name + ' ')) {
-								usedStyles = usedStyles.replaceAll(valueTwo.value, '');
-							}
-						});
-					}
+			// Calc -> Values
+			await postcss([calc])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
 				});
-			}
+
+			// Shortest Color String
+			await postcss([colormin])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
+
+			// Remove Unused At Rules, fontFace
+			// counterStyle, keyframes, namespace
+			await postcss([discardunused])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
+
+			// Remove Style Hacks
+			await postcss([stylehacks])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
+
+			// Merge Longhand
+			await postcss([mergelonghand])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
+
+			// Color Names to Hex
+			await postcss([colornamestohex])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
+
+			// Merge Rules
+			await postcss([mergerules])
+				.process(allStyleSheets, {from: undefined})
+				.then((result) => {
+					allStyleSheets = result.css;
+				});
 
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
@@ -2086,9 +1833,8 @@ async function activateExportElement(activeTab, port, request) {
 					if (value.id === 'exportElement') {
 						let html = event.target.outerHTML;
 						let helper = 'body { background: #eee; /* Helper CSS, Remove This */ }';
-						let css = helper + usedStyles;
-						usedStyles = []; // Reset
-
+						let css = helper + allStyleSheets;
+						allStyleSheets = []; // Reset
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
 							html = html.replace('class="pageGuidelineOutline"', '');
@@ -2097,24 +1843,20 @@ async function activateExportElement(activeTab, port, request) {
 						} else if (html.includes('pageGuidelineOutline ')) {
 							html = html.replace('pageGuidelineOutline ', '');
 						}
-
 						// Remove MoveElement Cursor From OuterHTML
 						if (html.includes('cursor: default !important; ')) {
 							html = html.replace('cursor: default !important; ', '');
 						} else if (html.includes(' cursor: default !important;')) {
 							html = html.replace(' cursor: default !important;', '');
 						}
-
 						// Remove SuperDev && Page Guideline Wrapper from Body
 						// Regex Will Get Chars Between Two Strings + The Two Chars Itself
 						html = html.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
 						html = html.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
 						html = html.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
-
 						// Format Before Codepen/Save File
 						html = html_beautify(html, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
 						css = css_beautify(css, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
-
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
@@ -2124,7 +1866,6 @@ async function activateExportElement(activeTab, port, request) {
 								css: css,
 								tags: ['SuperDev'],
 							});
-
 							let codepenForm = document.createElement('form');
 							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
 							codepenForm.setAttribute('method', 'POST');
@@ -2139,15 +1880,12 @@ async function activateExportElement(activeTab, port, request) {
 						else if (value.settings.checkboxExportElement2 === true) {
 							let text = `${html} <style> ${css} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
-
 							let saveToFileAnchor = document.createElement('a');
 							saveToFileAnchor.href = URL.createObjectURL(file);
 							saveToFileAnchor.download = 'exported-element.html';
 							document.body.appendChild(saveToFileAnchor);
-
 							let clickEvent = new MouseEvent('click', {bubbles: false});
 							saveToFileAnchor.dispatchEvent(clickEvent);
-
 							setTimeout(function () {
 								URL.revokeObjectURL(saveToFileAnchor.href);
 								document.body.removeChild(saveToFileAnchor);

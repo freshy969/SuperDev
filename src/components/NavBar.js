@@ -84,11 +84,11 @@ export default function NavBar({allFeatures, activeTab, portThree, allFeaturesRe
 		if (document.documentElement.classList.contains('dark')) {
 			document.documentElement.classList.remove('dark');
 			await chrome.storage.local.set({['colorTheme']: 'light'});
-			portThree.postMessage({action: 'setPopupShadow'});
+			portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
 		} else if (!document.documentElement.classList.contains('dark')) {
 			document.documentElement.classList.add('dark');
 			await chrome.storage.local.set({['colorTheme']: 'dark'});
-			portThree.postMessage({action: 'setPopupShadow'});
+			portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
 		}
 	}
 
