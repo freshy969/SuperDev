@@ -1759,9 +1759,12 @@ async function activateExportElement(activeTab, port, request) {
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'fetchedStyles') {
 			if (allStyleSheets.length !== 0) {
-				allStyleSheets = allStyleSheets.map(function (valueOne, indexOne) {
-					if (valueOne === null) return request.fetchedStyles[indexOne];
-					else return valueOne;
+				allStyleSheets = allStyleSheets.map(function (value, index) {
+					if (value === null) return request.fetchedStyles[index];
+					else return value;
+				});
+				allStyleSheets = allStyleSheets.filter(function (value, index) {
+					return value !== null;
 				});
 			}
 		}
