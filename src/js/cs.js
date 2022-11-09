@@ -1734,6 +1734,7 @@ async function activateExportElement(activeTab, port, request) {
 
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
+	let fetchStylesURL = [];
 
 	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
@@ -1745,19 +1746,21 @@ async function activateExportElement(activeTab, port, request) {
 					})
 					.filter(Boolean)
 					.join('');
+				fetchStylesURL[indexOne] = null;
 			} catch (e) {
 				allStyleSheets[indexOne] = null;
-				portTwo.postMessage({action: 'getStylesheet', styleSheetUrl: valueOne.href});
+				fetchStylesURL[indexOne] = valueOne.href;
 			}
 		});
+		portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
 	}
 
 	// All Different Origin Stylesheets
 	portTwo.onMessage.addListener(function (request) {
-		if (request.action === 'fetchedStylesheet' && request.styleSheet !== false) {
+		if (request.action === 'fetchedStyles') {
 			if (allStyleSheets.length !== 0) {
 				allStyleSheets = allStyleSheets.map(function (valueOne, indexOne) {
-					if (valueOne === null) return request.styleSheet;
+					if (valueOne === null) return request.fetchedStyles[indexOne];
 					else return valueOne;
 				});
 			}
@@ -1777,16 +1780,13 @@ async function activateExportElement(activeTab, port, request) {
 	}
 
 	function mainWorker(event) {
-		allStyleSheets = allStyleSheets.join('\n\n');
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result['allFeatures']).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						let html = event.target.outerHTML;
-						let helper = 'body { background: #eee; /* Helper CSS, Remove This */ }';
-						let css = helper + allStyleSheets;
-						allStyleSheets = []; // Reset
+						let css = allStyleSheets.join('\n\n');
 						// Remove PageGuidelineOutline Class From OuterHTML
 						if (html.includes('class="pageGuidelineOutline"')) {
 							html = html.replace('class="pageGuidelineOutline"', '');

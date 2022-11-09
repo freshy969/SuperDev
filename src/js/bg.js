@@ -466,8 +466,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 				break;
 
 			// Export Element
-			case 'getStylesheet':
-				getStylesheet(request.styleSheetUrl);
+			case 'fetchStyles':
+				fetchStyles(request.fetchStylesURL);
 				break;
 
 			// Clear All Cache
@@ -611,15 +611,30 @@ chrome.runtime.onConnect.addListener(function (port) {
 	}
 
 	// Export Element
-	async function getStylesheet(styleSheetUrl) {
-		await fetch(styleSheetUrl)
-			.then(function (response) {
-				if (response.status >= 200 && response.status < 300) return response.text();
-				else return false;
-			})
-			.then(function (styleSheet) {
-				port.postMessage({action: 'fetchedStylesheet', styleSheet: styleSheet});
-			});
+	function fetchStyles(fetchStylesURL) {
+		let promiseAll = [];
+		let fetchedStyles = [];
+
+		fetchStylesURL.map(async function (value, index) {
+			if (value !== null) {
+				promiseAll.push(
+					fetch(value)
+						.then(function (response) {
+							if (response.status >= 200 && response.status < 300) return response.text();
+							else return null;
+						})
+						.then(function (data) {
+							fetchedStyles[index] = data;
+						})
+				);
+			} else {
+				fetchedStyles[index] = null;
+			}
+		});
+
+		Promise.all(promiseAll).then(function () {
+			port.postMessage({action: 'fetchedStyles', fetchedStyles: fetchedStyles});
+		});
 	}
 
 	// Clear All Cache
