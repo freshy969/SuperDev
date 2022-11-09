@@ -1,5 +1,3 @@
-const autoprefixer = require('autoprefixer');
-
 chrome.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (request) {
 		switch (request.action) {
@@ -147,7 +145,7 @@ async function showHideExtension(activeTab, port, request) {
 			iframeFix: true,
 			containment: 'document',
 		});
-		port.postMessage({action: 'Popup Created'});
+		port.postMessage({action: 'popupCreated'});
 	}
 
 	// If Popup Exists, Show/Hide
@@ -159,7 +157,7 @@ async function showHideExtension(activeTab, port, request) {
 			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
 			superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
-			port.postMessage({action: 'Popup Hidden'});
+			port.postMessage({action: 'popupHidden'});
 		}
 
 		// If Popup Hidden, Set Visible
@@ -183,7 +181,7 @@ async function showHideExtension(activeTab, port, request) {
 				}
 			});
 
-			port.postMessage({action: 'Popup Visible'});
+			port.postMessage({action: 'popupVisible'});
 		}
 	}
 }
@@ -194,7 +192,7 @@ function setPopupHeight(activeTab, port, request) {
 		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
 			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
 			superDevPopup.style.setProperty('height', `${request.height}px`, 'important');
-			port.postMessage({action: 'Height Changed'});
+			port.postMessage({action: 'heightChanged'});
 		}
 	});
 }
@@ -204,8 +202,10 @@ function setPopupShadow(activeTab, port, request) {
 	chrome.storage.local.get(['colorTheme'], async function (result) {
 		if (result['colorTheme'] === 'dark') {
 			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px`, 'important');
+			port.postMessage({action: 'shadowChanged'});
 		} else if (result['colorTheme'] === 'light') {
 			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 6%) 0px 0px 8px 0px, rgb(0 0 0 / 12%) 0px 4px 8px 0px`, 'important');
+			port.postMessage({action: 'shadowChanged'});
 		}
 	});
 }

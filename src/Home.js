@@ -117,10 +117,16 @@ export default function Home() {
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
 		portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-		portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
-		setTimeout(function () {
-			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
-		}, 50);
+		portThree.onMessage.addListener(function (response) {
+			if (response.action === 'heightChanged') {
+				portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
+				portThree.onMessage.addListener(function (response) {
+					if (response.action === 'shadowChanged') {
+						portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
+					}
+				});
+			}
+		});
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
