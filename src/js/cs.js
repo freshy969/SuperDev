@@ -1753,7 +1753,6 @@ async function activateExportElement(activeTab, port, request) {
 	}
 
 	// All Different Origin Stylesheets
-	// Async Issue
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'fetchedStylesheet' && request.styleSheet !== false) {
 			if (allStyleSheets.length !== 0) {
@@ -1765,10 +1764,20 @@ async function activateExportElement(activeTab, port, request) {
 		}
 	});
 
-	async function onMouseClick(event) {
+	function onMouseClick(event) {
 		event.preventDefault();
-		allStyleSheets = allStyleSheets.join('\n\n');
+		let intId = setInterval(function () {
+			event.target.style.setProperty('cursor', 'wait', 'important');
+			if (!allStyleSheets.includes(null)) {
+				event.target.style.removeProperty('cursor');
+				mainWorker(event);
+				clearInterval(intId);
+			}
+		}, 50);
+	}
 
+	function mainWorker(event) {
+		allStyleSheets = allStyleSheets.join('\n\n');
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
