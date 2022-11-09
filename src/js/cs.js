@@ -1733,7 +1733,9 @@ async function activateExportElement(activeTab, port, request) {
 
 	// All Different Origin Stylesheets
 	// Async Issue
+	console.log(0);
 	portTwo.onMessage.addListener(function (request) {
+		console.log(1);
 		if (request.action === 'fetchedStylesheet' && request.styleSheet !== false) {
 			if (allStyleSheets.length !== 0) {
 				allStyleSheets = allStyleSheets.map(function (valueOne, indexOne) {
@@ -1749,84 +1751,6 @@ async function activateExportElement(activeTab, port, request) {
 		allStyleSheets = allStyleSheets.join('\n\n');
 
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
-			const postcss = require('postcss');
-			const autoprefixer = require('autoprefixer'); //CSSNano
-			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
-			const calc = require('postcss-calc'); //CSSNano
-			const colormin = require('postcss-colormin');
-			const discardunused = require('postcss-discard-unused'); //CSSNano
-
-			const stylehacks = require('stylehacks');
-			const mergelonghand = require('postcss-merge-longhand');
-			const colornamestohex = require('postcss-colornames-to-hex');
-			const mergerules = require('postcss-merge-rules');
-			const remover = require('postcss-remove-unused-css');
-
-			// Add/Remove -Moz, -WebKit Vendor
-			// Prefixes Accordingly
-			await postcss([autoprefixer])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Sort CSS Declarations
-			await postcss([cssdeclarationsorter])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Calc -> Values
-			await postcss([calc])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Shortest Color String
-			await postcss([colormin])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Remove Unused At Rules, fontFace
-			// counterStyle, keyframes, namespace
-			await postcss([discardunused])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Remove Style Hacks
-			await postcss([stylehacks])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Merge Longhand
-			await postcss([mergelonghand])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Color Names to Hex
-			await postcss([colornamestohex])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
-			// Merge Rules
-			await postcss([mergerules])
-				.process(allStyleSheets, {from: undefined})
-				.then((result) => {
-					allStyleSheets = result.css;
-				});
-
 			// CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result['allFeatures']).map(function (value, index) {

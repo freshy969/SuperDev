@@ -118,7 +118,9 @@ export default function Home() {
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
 		portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
 		portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
-		portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
+		setTimeout(function () {
+			portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
+		}, 50);
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />
