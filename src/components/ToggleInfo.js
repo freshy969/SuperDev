@@ -21,6 +21,28 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							Click To Change Shortcuts
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
+							{['Some Shortcuts Might Not Work', 'Since They Already Being Used', "Change Them If That's The Case"].map(function (value, index) {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<h6
+											className='inline-block text-xs text-allText dark:text-allTextD font-normal select-none'
+											htmlFor={'checkboxExportElement' + (index + 1)}>
+											<i className='fa-regular fa-square-info pr-[5px] text-allText dark:text-allTextD'></i>
+											{value}
+										</h6>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					{/* SuperDev Default Shortcuts */}
+					<div>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+							<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
+							SuperDev Default Shortcuts
+						</div>
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{[
 								`Open Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
 								`Close Extension : ${window.navigator?.userAgentData?.platform === 'macOS' ? 'Cmd+Shift+S' : 'Ctrl+Shift+S'}`,
@@ -89,7 +111,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							<i className='fa-regular fa-arrows-up-down-left-right px-[5px] text-allText dark:text-allTextD'></i>About Move Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["It Can't Be Used On HTML Body", "And It's A Feature, Not A Bug :)"].map(function (value, index) {
+							{["It Can't Be Used On HTML BODY", 'Since This Will Reload The Extension'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
@@ -110,7 +132,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 							<i className='fa-regular fa-trash-can px-[5px] text-allText dark:text-allTextD'></i>About Delete Element Feature
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{["It Can't Be Used On HTML Body", "And It's A Feature, Not A Bug :)"].map(function (value, index) {
+							{["It Can't Be Used On HTML BODY", 'Since This Will Delete All Page Data'].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
