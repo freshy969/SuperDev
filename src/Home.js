@@ -116,17 +116,8 @@ export default function Home() {
 	}, []);
 
 	if (!isLoadingOne && !isLoadingTwo && !isLoadingThree && !isLoadingFour) {
-		portThree.postMessage({action: 'setPopupHeight', height: PopupHeight(allFeatures), activeTab: activeTab});
-		portThree.onMessage.addListener(function (response) {
-			if (response.action === 'heightChanged') {
-				portThree.postMessage({action: 'setPopupShadow', activeTab: activeTab});
-				portThree.onMessage.addListener(function (response) {
-					if (response.action === 'shadowChanged') {
-						portThree.postMessage({action: 'setPopupVisible', activeTab: activeTab});
-					}
-				});
-			}
-		});
+		// Height, Shadow, Visible
+		portThree.postMessage({action: 'setFirstRender', height: PopupHeight(allFeatures), activeTab: activeTab});
 		return (
 			<>
 				<NavBar allFeatures={allFeatures} activeTab={activeTab} portThree={portThree} allFeaturesRef={allFeaturesRef} />

@@ -10,8 +10,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 			case 'setPopupShadow':
 				setPopupShadow(request.activeTab, port, request);
 				break;
-			case 'setPopupVisible':
-				setPopupVisible(request.activeTab, port, request);
+			case 'setFirstRender':
+				setFirstRender(request.activeTab, port, request);
 				break;
 			case 'activateTextEditor':
 				activateTextEditor(request.activeTab, port, request);
@@ -154,9 +154,9 @@ async function showHideExtension(activeTab, port, request) {
 
 		// If Popup Visible, Set Hidden
 		if (superDevWrapper.style.getPropertyValue('visibility') !== 'hidden') {
+			superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
 			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
-			superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
 			port.postMessage({action: 'popupHidden'});
 		}
 
@@ -174,13 +174,6 @@ async function showHideExtension(activeTab, port, request) {
 			superDevWrapper.style.setProperty('bottom', '', 'important');
 			superDevWrapper.style.setProperty('left', '', 'important');
 			superDevWrapper.style.setProperty('visibility', 'visible', 'important');
-
-			chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
-				if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
-					await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: true});
-				}
-			});
-
 			port.postMessage({action: 'popupVisible'});
 		}
 	}
@@ -210,11 +203,39 @@ function setPopupShadow(activeTab, port, request) {
 	});
 }
 
-function setPopupVisible(activeTab, port, request) {
+function setFirstRender(activeTab, port, request) {
 	let superDevWrapper = document.querySelector('#superDevWrapper');
-	if (superDevWrapper.style.getPropertyValue('visibility') === 'hidden') {
-		superDevWrapper.style.setProperty('visibility', 'visible', 'important');
-	}
+	let superDevPopup = document.querySelector('#superDevPopup');
+
+	// Height
+	chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
+		if (result['howLongPopupIs' + activeTab[0].id] !== request.height) {
+			await chrome.storage.local.set({['howLongPopupIs' + activeTab[0].id]: request.height});
+			superDevPopup.style.setProperty('height', `${request.height}px`, 'important');
+			port.postMessage({action: 'firstRenderHeightChanged'});
+		}
+	});
+
+	// Shadow
+	chrome.storage.local.get(['colorTheme'], async function (result) {
+		if (result['colorTheme'] === 'dark') {
+			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 12%) 0px 0px 8px 0px, rgb(0 0 0 / 24%) 0px 4px 8px 0px`, 'important');
+			port.postMessage({action: 'shadowChanged'});
+		} else if (result['colorTheme'] === 'light') {
+			superDevWrapper.style.setProperty('box-shadow', `rgb(0 0 0 / 6%) 0px 0px 8px 0px, rgb(0 0 0 / 12%) 0px 4px 8px 0px`, 'important');
+			port.postMessage({action: 'firstRenderShadowChanged'});
+		}
+	});
+
+	// Visible
+	requestAnimationFrame(function () {
+		requestAnimationFrame(function () {
+			if (superDevWrapper.style.getPropertyValue('visibility') === 'hidden') {
+				superDevWrapper.style.setProperty('visibility', 'visible', 'important');
+				port.postMessage({action: 'firstRenderPopupVisible'});
+			}
+		});
+	});
 }
 
 async function activateTextEditor(activeTab, port, request) {
@@ -1733,9 +1754,7 @@ async function activateExportElement(activeTab, port, request) {
 
 	// All Different Origin Stylesheets
 	// Async Issue
-	console.log(0);
 	portTwo.onMessage.addListener(function (request) {
-		console.log(1);
 		if (request.action === 'fetchedStylesheet' && request.styleSheet !== false) {
 			if (allStyleSheets.length !== 0) {
 				allStyleSheets = allStyleSheets.map(function (valueOne, indexOne) {
