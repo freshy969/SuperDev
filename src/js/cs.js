@@ -1775,9 +1775,9 @@ async function activateExportElement(activeTab, port, request) {
 		let intId = setInterval(function () {
 			event.target.style.setProperty('cursor', 'wait', 'important');
 			if (!allStyleSheets.includes(null)) {
+				clearInterval(intId);
 				event.target.style.removeProperty('cursor');
 				mainWorker(event);
-				clearInterval(intId);
 			}
 		}, 50);
 	}
@@ -1801,7 +1801,9 @@ async function activateExportElement(activeTab, port, request) {
 			let usedSelectors = [];
 			let usedRuleSelectors;
 			let filteredHTML = event.target.outerHTML;
-			let filteredCSS = postcss.parse(allStyleSheets);
+			let allStylesRef = allStyleSheets.join('\n');
+			let filteredCSS = postcss.parse(allStylesRef);
+			let usedAnimations = [];
 
 			// Which Pseudo Selectors to Remove
 			const dePseudify = (function () {
@@ -1892,7 +1894,6 @@ async function activateExportElement(activeTab, port, request) {
 			});
 
 			// Filter Unused Keyframes
-			const usedAnimations = [];
 			filteredCSS.walkDecls((decl) => {
 				if (decl.prop.endsWith('animation-name')) {
 					usedAnimations.push(...postcss.list.comma(decl.value));
@@ -1902,9 +1903,9 @@ async function activateExportElement(activeTab, port, request) {
 					});
 				}
 			});
-			const usedAnimationsSet = new Set(usedAnimations);
+			usedAnimations = new Set(usedAnimations);
 			filteredCSS.walkAtRules(/keyframes$/, (atRule) => {
-				if (!usedAnimationsSet.has(atRule.params)) {
+				if (!usedAnimations.has(atRule.params)) {
 					atRule.remove();
 				}
 			});
@@ -1934,6 +1935,34 @@ async function activateExportElement(activeTab, port, request) {
 				.then((result) => {
 					filteredCSS = result.css;
 				});
+
+			// CSS Variables Replace
+			let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm);
+			let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm);
+			let allVars = window.getComputedStyle(document.body);
+			let usedVars = allStylesRef.match(regexOne);
+			let filteredVars = [];
+			usedVars = [...new Set(usedVars.flat())];
+			usedVars.map(function (valueOne, indexOne) {
+				valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+					if (allVars.getPropertyValue(valueTwo) !== '') {
+						valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
+						filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
+					} else filteredVars.push(valueOne);
+				});
+			});
+			usedVars.map(function (valueOne, indexOne) {
+				filteredVars.map(function (valueTwo, indexTwo) {
+					if (indexOne === indexTwo) {
+						filteredCSS = filteredCSS.replaceAll(valueOne, valueTwo);
+					}
+				});
+			});
+
+			// If CSS Uses REM?
+			filteredCSS = 'body { background: #eee; }' + filteredCSS;
+			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
+			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
 
 			// Remove PageGuidelineOutline Class From OuterHTML
 			if (filteredHTML.includes('class="pageGuidelineOutline"')) {
