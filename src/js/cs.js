@@ -1858,7 +1858,7 @@ async function activateExportElement(activeTab, port, request) {
 			usedSelectors = usedSelectors.filter((selector) => {
 				try {
 					return event.target.querySelector(selector) !== null;
-				} catch {
+				} catch (e) {
 					return false;
 				}
 			});
@@ -1988,7 +1988,7 @@ async function activateExportElement(activeTab, port, request) {
 
 			// Format Before Codepen/Save File
 			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
-			filteredCSS = css_beautify(filteredCSS.replaceAll(/\\/gm, ''), {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+			filteredCSS = css_beautify(filteredCSS, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
 
 			//CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
