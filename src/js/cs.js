@@ -1900,6 +1900,11 @@ async function activateExportElement(activeTab, port, request) {
 				}
 			});
 
+			// Remove Comments
+			filteredCSS.walkComments((Comments) => {
+				Comments.remove();
+			});
+
 			// Filter Unused Keyframes
 			filteredCSS.walkDecls((decl) => {
 				if (decl.prop.endsWith('animation-name')) {
@@ -1944,7 +1949,6 @@ async function activateExportElement(activeTab, port, request) {
 				});
 
 			// CSS Variables Replace
-
 			usedVars = [...new Set(usedVars.flat())];
 			usedVars.map(function (valueOne, indexOne) {
 				valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
@@ -1971,7 +1975,9 @@ async function activateExportElement(activeTab, port, request) {
 				'body { background: #eee; }' +
 				`.inherited-styles { color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
 					'font-family'
-				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue('line-height')}; }` +
+				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
+					'line-height'
+				)};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` +
 				filteredCSS;
 
 			// If CSS Uses REM?
