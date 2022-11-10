@@ -39,6 +39,7 @@
 		"eslint-plugin-react": "^7.31.8",
 		"postcss": "^8.4.18",
 		"postcss-colornames-to-hex": "^1.0.1",
+		"postcss-discard-comments": "^5.1.2",
 		"postcss-discard-duplicates": "^5.1.0",
 		"postcss-discard-empty": "^5.1.1",
 		"postcss-discard-unused": "^5.1.0",

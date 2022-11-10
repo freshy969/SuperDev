@@ -1786,6 +1786,7 @@ async function activateExportElement(activeTab, port, request) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			const postcss = require('postcss');
 			const selectorparser = require('postcss-selector-parser');
+			const discardcomments = require('postcss-discard-comments');
 			const autoprefixer = require('autoprefixer'); //CSSNano
 			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
 			const mergelonghand = require('postcss-merge-longhand');
@@ -1886,14 +1887,8 @@ async function activateExportElement(activeTab, port, request) {
 			// Remove Font-Face AtRules
 			filteredCSS.walkAtRules((atRule) => {
 				if (atRule.name === 'font-face') {
-					console.log(atRule.name);
 					atRule.remove();
 				}
-			});
-
-			// Remove Comments
-			filteredCSS.walkComments((Comment) => {
-				Comment.remove();
 			});
 
 			// Filter Unused Keyframes
@@ -1923,6 +1918,7 @@ async function activateExportElement(activeTab, port, request) {
 
 			// Add Prefixes Accordingly
 			await postcss([
+				discardcomments,
 				autoprefixer,
 				cssdeclarationsorter,
 				mergelonghand,
