@@ -1782,43 +1782,200 @@ async function activateExportElement(activeTab, port, request) {
 		}, 50);
 	}
 
-	function mainWorker(event) {
+	async function mainWorker(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
-			// CodePen or Save to File
+			const postcss = require('postcss');
+			const selectorparser = require('postcss-selector-parser');
+			const autoprefixer = require('autoprefixer'); //CSSNano
+			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
+			const mergelonghand = require('postcss-merge-longhand');
+			const colornamestohex = require('postcss-colornames-to-hex');
+			const mergerules = require('postcss-merge-rules');
+			const discardempty = require('postcss-discard-empty');
+			const discardduplicates = require('postcss-discard-duplicates');
+			const discardunused = require('postcss-discard-unused');
+			const orderedvalues = require('postcss-ordered-values');
+			const uniqueselectors = require('postcss-unique-selectors');
+
+			let usedSelectors = [];
+			let usedRuleSelectors;
+			let filteredHTML = event.target.outerHTML;
+			let filteredCSS = postcss.parse(allStyleSheets);
+
+			// Which Pseudo Selectors to Remove
+			const dePseudify = (function () {
+				const ignoredPseudos = [
+					':link',
+					':visited',
+					':hover',
+					':active',
+					':focus',
+					':focus-within',
+					':enabled',
+					':disabled',
+					':checked',
+					':indeterminate',
+					':required',
+					':invalid',
+					':valid',
+					'::first-line',
+					'::first-letter',
+					'::selection',
+					'::before',
+					'::after',
+					':target',
+					':before',
+					':after',
+					'::?-(?:moz|ms|webkit|o)-[a-z0-9-]+',
+				];
+				const pseudosRegex = new RegExp('^(' + ignoredPseudos.join('|') + ')$', 'i');
+
+				function transform(selectors) {
+					selectors.walkPseudos((selector) => {
+						if (pseudosRegex.test(selector.value)) {
+							selector.remove();
+						}
+					});
+				}
+
+				const processor = selectorparser(transform);
+
+				return function (selector) {
+					return processor.processSync(selector);
+				};
+			})();
+
+			// Remove Pseudos from Selectors
+			filteredCSS.walkRules((rule) => {
+				usedSelectors.push(rule.selectors.map(dePseudify));
+			});
+			usedSelectors = [...new Set(usedSelectors.flat())];
+
+			// Filter Unused Selectors
+			usedSelectors = usedSelectors.filter((selector) => {
+				try {
+					return event.target.querySelector(selector) !== null;
+				} catch {
+					return false;
+				}
+			});
+
+			// Remove Unused CSS
+			filteredCSS.walk((rule) => {
+				if (rule.type === 'rule') {
+					if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) {
+						return;
+					}
+
+					usedRuleSelectors = rule.selectors.filter((selector) => {
+						selector = dePseudify(selector);
+						if (selector[0] === '@') {
+							return true;
+						}
+						return usedSelectors.indexOf(selector) !== -1;
+					});
+
+					if (usedRuleSelectors.length === 0) {
+						rule.remove();
+					} else {
+						rule.selectors = usedRuleSelectors;
+					}
+				}
+			});
+
+			// Remove Font-Face AtRules
+			filteredCSS.walkAtRules((atRule) => {
+				if (atRule.name === 'font-face') {
+					console.log(atRule.name);
+					atRule.remove();
+				}
+			});
+
+			// Remove Comments
+			filteredCSS.walkComments((Comment) => {
+				Comment.remove();
+			});
+
+			// Filter Unused Keyframes
+			const usedAnimations = [];
+			filteredCSS.walkDecls((decl) => {
+				if (decl.prop.endsWith('animation-name')) {
+					usedAnimations.push(...postcss.list.comma(decl.value));
+				} else if (decl.prop.endsWith('animation')) {
+					postcss.list.comma(decl.value).forEach((anim) => {
+						usedAnimations.push(...postcss.list.space(anim));
+					});
+				}
+			});
+			const usedAnimationsSet = new Set(usedAnimations);
+			filteredCSS.walkAtRules(/keyframes$/, (atRule) => {
+				if (!usedAnimationsSet.has(atRule.params)) {
+					atRule.remove();
+				}
+			});
+
+			// Stringify FilteredCSS
+			let finalCSS = '';
+			postcss.stringify(filteredCSS, (result) => {
+				finalCSS += result;
+			});
+			filteredCSS = finalCSS;
+
+			// Add Prefixes Accordingly
+			await postcss([
+				autoprefixer,
+				cssdeclarationsorter,
+				mergelonghand,
+				colornamestohex,
+				mergerules,
+				discardempty,
+				discardduplicates,
+				discardunused,
+				orderedvalues,
+				uniqueselectors,
+			])
+				.process(filteredCSS, {from: undefined})
+				.then((result) => {
+					filteredCSS = result.css;
+				});
+
+			// Remove PageGuidelineOutline Class From OuterHTML
+			if (filteredHTML.includes('class="pageGuidelineOutline"')) {
+				filteredHTML = filteredHTML.replace('class="pageGuidelineOutline"', '');
+			} else if (filteredHTML.includes(' pageGuidelineOutline')) {
+				filteredHTML = filteredHTML.replace(' pageGuidelineOutline', '');
+			} else if (filteredHTML.includes('pageGuidelineOutline ')) {
+				filteredHTML = filteredHTML.replace('pageGuidelineOutline ', '');
+			}
+
+			// Remove MoveElement Cursor From OuterHTML
+			if (filteredHTML.includes('cursor: default !important; ')) {
+				filteredHTML = filteredHTML.replace('cursor: default !important; ', '');
+			} else if (filteredHTML.includes(' cursor: default !important;')) {
+				filteredHTML = filteredHTML.replace(' cursor: default !important;', '');
+			}
+
+			// Remove SuperDev && Page Guideline Wrapper from Body
+			// Regex Will Get Chars Between Two Strings + The Two Chars Itself
+			filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
+
+			// Format Before Codepen/Save File
+			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+			filteredCSS = css_beautify(filteredCSS, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+
+			//CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
 				JSON.parse(result['allFeatures']).map(function (value, index) {
 					if (value.id === 'exportElement') {
-						let html = event.target.outerHTML;
-						let css = allStyleSheets.join('\n\n');
-						// Remove PageGuidelineOutline Class From OuterHTML
-						if (html.includes('class="pageGuidelineOutline"')) {
-							html = html.replace('class="pageGuidelineOutline"', '');
-						} else if (html.includes(' pageGuidelineOutline')) {
-							html = html.replace(' pageGuidelineOutline', '');
-						} else if (html.includes('pageGuidelineOutline ')) {
-							html = html.replace('pageGuidelineOutline ', '');
-						}
-						// Remove MoveElement Cursor From OuterHTML
-						if (html.includes('cursor: default !important; ')) {
-							html = html.replace('cursor: default !important; ', '');
-						} else if (html.includes(' cursor: default !important;')) {
-							html = html.replace(' cursor: default !important;', '');
-						}
-						// Remove SuperDev && Page Guideline Wrapper from Body
-						// Regex Will Get Chars Between Two Strings + The Two Chars Itself
-						html = html.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
-						html = html.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
-						html = html.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
-						// Format Before Codepen/Save File
-						html = html_beautify(html, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
-						css = css_beautify(css, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
 						// Export to Codepen
 						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
 								title: 'SuperDev - Exported Element',
 								description: 'Copied with SuperDev',
-								html: html,
-								css: css,
+								html: filteredHTML,
+								css: filteredCSS,
 								tags: ['SuperDev'],
 							});
 							let codepenForm = document.createElement('form');
@@ -1833,7 +1990,7 @@ async function activateExportElement(activeTab, port, request) {
 						}
 						// Export to File
 						else if (value.settings.checkboxExportElement2 === true) {
-							let text = `${html} <style> ${css} </style>`;
+							let text = `${filteredHTML} <style> ${filteredCSS} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 							let saveToFileAnchor = document.createElement('a');
 							saveToFileAnchor.href = URL.createObjectURL(file);
