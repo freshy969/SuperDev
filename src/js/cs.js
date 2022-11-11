@@ -1799,6 +1799,8 @@ async function activateExportElement(activeTab, port, request) {
 			const uniqueselectors = require('postcss-unique-selectors');
 
 			let usedSelectors = [];
+			let usedSelecOne = [];
+			let usedSelecTwo = [];
 			let usedRuleSelectors;
 			let filteredHTML;
 			let selectedElement;
@@ -1862,13 +1864,34 @@ async function activateExportElement(activeTab, port, request) {
 			usedSelectors = [...new Set(usedSelectors.flat())];
 
 			// Filter Unused Selectors
-			usedSelectors = usedSelectors.filter((selector) => {
+			let exportElementWrapper = document.createElement('export-element-wrapper');
+			let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
+			exportElementWrapper.style.setProperty('display', 'none', 'important');
+			exportElementShaRoot.innerHTML = `
+			<!DOCTYPE html>
+			<html>
+			<head><style>${allStylesRef}</style></head>
+			<body>${event.target.outerHTML}</body>
+			</html>`;
+			document.body.appendChild(exportElementWrapper);
+			usedSelecOne = usedSelectors.filter((selector) => {
+				try {
+					return exportElementShaRoot.querySelector(selector) !== null;
+				} catch (e) {
+					return false;
+				}
+			});
+			usedSelecTwo = usedSelectors.filter((selector) => {
 				try {
 					return event.target.querySelector(selector) !== null;
 				} catch (e) {
 					return false;
 				}
 			});
+			// Everything Done Above Is Because Queryselector
+			// On Event.Target Misses Self :) :( :_)
+			exportElementWrapper.remove();
+			usedSelectors = [...new Set(usedSelecOne.concat(usedSelecTwo))];
 
 			// Remove Unused CSS
 			filteredCSS.walk((rule) => {
