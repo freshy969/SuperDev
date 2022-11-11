@@ -1810,7 +1810,7 @@ async function activateExportElement(activeTab, port, request) {
 			let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm);
 			let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm);
 			let allVars = window.getComputedStyle(document.body);
-			let usedVars = allStylesRef.match(regexOne);
+			let usedVars = [];
 			let filteredVars = [];
 			let finalCSS = '';
 
@@ -1972,22 +1972,25 @@ async function activateExportElement(activeTab, port, request) {
 				});
 
 			// CSS Variables Replace
-			usedVars = [...new Set(usedVars.flat())];
-			usedVars.map(function (valueOne, indexOne) {
-				valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
-					if (allVars.getPropertyValue(valueTwo) !== '') {
-						valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
-						filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
-					} else filteredVars.push(valueOne);
+			usedVars = allStylesRef.match(regexOne);
+			if (usedVars && usedVars.length !== 0) {
+				usedVars = [...new Set(usedVars.flat())];
+				usedVars.map(function (valueOne, indexOne) {
+					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+						if (allVars.getPropertyValue(valueTwo) !== '') {
+							valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
+							filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
+						} else filteredVars.push(valueOne);
+					});
 				});
-			});
-			usedVars.map(function (valueOne, indexOne) {
-				filteredVars.map(function (valueTwo, indexTwo) {
-					if (indexOne === indexTwo) {
-						filteredCSS = filteredCSS.replaceAll(valueOne, valueTwo);
-					}
+				usedVars.map(function (valueOne, indexOne) {
+					filteredVars.map(function (valueTwo, indexTwo) {
+						if (indexOne === indexTwo) {
+							filteredCSS = filteredCSS.replaceAll(valueOne, valueTwo);
+						}
+					});
 				});
-			});
+			}
 
 			// Inherited Styles + Other Optimisation
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1995,13 +1998,11 @@ async function activateExportElement(activeTab, port, request) {
 			filteredHTML = event.target.outerHTML;
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
-				'body { background: #eee; }' +
 				`.inherited-styles { color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
 					'font-family'
 				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
 					'line-height'
-				)};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` +
-				filteredCSS;
+				)};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` + filteredCSS;
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
