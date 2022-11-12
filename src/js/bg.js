@@ -629,30 +629,19 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 							// Relative CSS URL to Absolute CSS URL
 							if (fetchedStyles[indexOne].includes('url(')) {
-								let toBeReplaced = [];
-								let groupStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
+								let finalMatchURLs = [];
+								let matchStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
 
-								let matchStyleURLs = groupStyleURLs.map(function (value, index) {
-									return value[0];
-								});
-
-								groupStyleURLs = groupStyleURLs.map(function (value, index) {
-									return value[1];
-								});
-
-								groupStyleURLs = [...new Set(groupStyleURLs)];
-								matchStyleURLs = [...new Set(matchStyleURLs)];
-
-								groupStyleURLs.map(function (valueTwo, indexTwo) {
-									if (!valueTwo.startsWith('//') && !valueTwo.startsWith('blob:') && !valueTwo.startsWith('data:') && !valueTwo.includes('://')) {
-										if (valueTwo.startsWith('/')) {
-											toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, new URL(valueOne).origin + valueTwo);
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
-											console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+								matchStyleURLs.map(function (valueTwo, indexTwo) {
+									if (!valueTwo[1].startsWith('//') && !valueTwo[1].startsWith('blob') && !valueTwo[1].startsWith('data') && !valueTwo[1].startsWith('http')) {
+										if (valueTwo[1].startsWith('/')) {
+											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1]);
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+											console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 										} else {
-											toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo);
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
-											console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]);
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+											console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 										}
 									}
 								});

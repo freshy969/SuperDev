@@ -1751,30 +1751,19 @@ async function activateExportElement(activeTab, port, request) {
 
 				// Relative CSS URL to Absolute CSS URL
 				if (allStyleSheets[indexOne].includes('url(')) {
-					let toBeReplaced = [];
-					let groupStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
+					let finalMatchURLs = [];
+					let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
 
-					let matchStyleURLs = groupStyleURLs.map(function (value, index) {
-						return value[0];
-					});
-
-					groupStyleURLs = groupStyleURLs.map(function (value, index) {
-						return value[1];
-					});
-
-					groupStyleURLs = [...new Set(groupStyleURLs)];
-					matchStyleURLs = [...new Set(matchStyleURLs)];
-
-					groupStyleURLs.map(function (valueTwo, indexTwo) {
-						if (!valueTwo.startsWith('//') && !valueTwo.startsWith('blob:') && !valueTwo.startsWith('data:') && !valueTwo.includes('://')) {
-							if (valueTwo.startsWith('/')) {
-								toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
-								console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+					matchStyleURLs.map(function (valueTwo, indexTwo) {
+						if (!valueTwo[1].startsWith('//') && !valueTwo[1].startsWith('blob') && !valueTwo[1].startsWith('data') && !valueTwo[1].startsWith('http')) {
+							if (valueTwo[1].startsWith('/')) {
+								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1]);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 							} else {
-								toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo);
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
-								console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 							}
 						}
 					});
@@ -2035,30 +2024,20 @@ async function activateExportElement(activeTab, port, request) {
 			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
 
 			// Relative HTML URL to Absolute HTML URL
-			if (filteredHTML.includes('href=')) {
-				let toBeReplaced = [];
-				let groupHTMLURLs = [...filteredHTML.matchAll(regexThree)];
-				let matchHTMLURLs = groupHTMLURLs.map(function (value, index) {
-					return value[0];
-				});
+			if (filteredHTML.includes('url(')) {
+				let finalMatchURLs = [];
+				let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
 
-				groupHTMLURLs = groupHTMLURLs.map(function (value, index) {
-					return value[2];
-				});
-
-				groupHTMLURLs = [...new Set(groupHTMLURLs)];
-				matchHTMLURLs = [...new Set(matchHTMLURLs)];
-
-				groupHTMLURLs.map(function (value, index) {
-					if (!value.startsWith('//') && !value.startsWith('blob:') && !value.startsWith('data:') && !value.includes('://')) {
-						if (value.startsWith('/')) {
-							toBeReplaced[index] = matchHTMLURLs[index].replaceAll(value, new URL(document.baseURI).origin + value);
-							filteredHTML = filteredHTML.replaceAll(matchHTMLURLs[index], toBeReplaced[index]);
-							console.log(matchHTMLURLs[index], toBeReplaced[index]);
+				matchHTMLURLs.map(function (value, index) {
+					if (!value[2].startsWith('//') && !value[2].startsWith('blob') && !value[2].startsWith('data') && !value[2].startsWith('http')) {
+						if (value[2].startsWith('/')) {
+							finalMatchURLs[index] = value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]);
+							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
+							console.log(value[0], finalMatchURLs[index]);
 						} else {
-							toBeReplaced[index] = matchHTMLURLs[index].replaceAll(value, document.baseURI.replace(/\/[^/]*$/, '') + '/' + value);
-							filteredHTML = filteredHTML.replaceAll(matchHTMLURLs[index], toBeReplaced[index]);
-							console.log(matchHTMLURLs[index], toBeReplaced[index]);
+							finalMatchURLs[index] = value[0].replaceAll(value[2], document.baseURI.replace(/\/[^/]*$/, '') + '/' + value[2]);
+							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
+							console.log(value[0], finalMatchURLs[index]);
 						}
 					}
 				});
