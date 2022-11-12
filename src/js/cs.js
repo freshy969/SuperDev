@@ -1755,7 +1755,12 @@ async function activateExportElement(activeTab, port, request) {
 					let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
 
 					matchStyleURLs.map(function (valueTwo, indexTwo) {
-						if (!valueTwo[1].startsWith('//') && !valueTwo[1].startsWith('blob') && !valueTwo[1].startsWith('data') && !valueTwo[1].startsWith('http')) {
+						if (
+							!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
+							!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
+							!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
+							!valueTwo[1].replace(/\\/g, '').includes('://')
+						) {
 							if (valueTwo[1].startsWith('/')) {
 								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1]);
 								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
@@ -2024,12 +2029,17 @@ async function activateExportElement(activeTab, port, request) {
 			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
 
 			// Relative HTML URL to Absolute HTML URL
-			if (filteredHTML.includes('url(')) {
+			if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
 				let finalMatchURLs = [];
 				let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
 
 				matchHTMLURLs.map(function (value, index) {
-					if (!value[2].startsWith('//') && !value[2].startsWith('blob') && !value[2].startsWith('data') && !value[2].startsWith('http')) {
+					if (
+						!value[2].replace(/\\/g, '').startsWith('//') &&
+						!value[2].replace(/\\/g, '').startsWith('blob:') &&
+						!value[2].replace(/\\/g, '').startsWith('data:') &&
+						!value[2].replace(/\\/g, '').includes('://')
+					) {
 						if (value[2].startsWith('/')) {
 							finalMatchURLs[index] = value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]);
 							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);

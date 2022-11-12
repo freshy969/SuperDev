@@ -633,7 +633,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 								let matchStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
 
 								matchStyleURLs.map(function (valueTwo, indexTwo) {
-									if (!valueTwo[1].startsWith('//') && !valueTwo[1].startsWith('blob') && !valueTwo[1].startsWith('data') && !valueTwo[1].startsWith('http')) {
+									if (
+										!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
+										!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
+										!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
+										!valueTwo[1].replace(/\\/g, '').includes('://')
+									) {
 										if (valueTwo[1].startsWith('/')) {
 											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1]);
 											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
