@@ -1735,6 +1735,7 @@ async function activateExportElement(activeTab, port, request) {
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
 	let fetchStylesURL = [];
+	let regexZero = new RegExp(/url\(['"](?!http:)(?!https:)(?!data:)(?!blob:)(.*?)['"]\)/gm);
 
 	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
@@ -1746,6 +1747,25 @@ async function activateExportElement(activeTab, port, request) {
 					})
 					.filter(Boolean)
 					.join('');
+
+				// Relative URL to Absolute URL
+				if (allStyleSheets[indexOne].includes('url(')) {
+					let allStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
+					allStyleURLs = allStyleURLs.map(function (valueTwo, indexTwo) {
+						return valueTwo[1];
+					});
+					allStyleURLs = [...new Set(allStyleURLs)];
+					allStyleURLs.map(function (valueTwo, indexTwo) {
+						if (!valueTwo.startsWith('//')) {
+							if (valueTwo.startsWith('/')) {
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
+							} else {
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo, valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo);
+							}
+						}
+					});
+				}
+
 				fetchStylesURL[indexOne] = null;
 			} catch (e) {
 				allStyleSheets[indexOne] = null;
@@ -1785,6 +1805,7 @@ async function activateExportElement(activeTab, port, request) {
 	async function mainWorker(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			const postcss = require('postcss');
+			const importurl = require('postcss-import-url');
 			const selectorparser = require('postcss-selector-parser');
 			const discardcomments = require('postcss-discard-comments');
 			const autoprefixer = require('autoprefixer'); //CSSNano

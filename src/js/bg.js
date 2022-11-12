@@ -614,21 +614,42 @@ chrome.runtime.onConnect.addListener(function (port) {
 	function fetchStyles(fetchStylesURL) {
 		let promiseAll = [];
 		let fetchedStyles = [];
+		let regexZero = new RegExp(/url\(['"](?!http:)(?!https:)(?!data:)(?!blob:)(.*?)['"]\)/gm);
 
-		fetchStylesURL.map(async function (value, index) {
-			if (value !== null) {
+		fetchStylesURL.map(async function (valueOne, indexOne) {
+			if (valueOne !== null) {
 				promiseAll.push(
-					fetch(value)
+					fetch(valueOne)
 						.then(function (response) {
 							if (response.status >= 200 && response.status < 300) return response.text();
 							else return null;
 						})
 						.then(function (data) {
-							fetchedStyles[index] = data;
+							fetchedStyles[indexOne] = data;
+
+							// Relative URL to Absolute URL
+							if (fetchedStyles[indexOne].includes('url(')) {
+								let allStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
+								allStyleURLs = allStyleURLs.map(function (valueTwo, indexTwo) {
+									return valueTwo[1];
+								});
+								allStyleURLs = [...new Set(allStyleURLs)];
+								console.log(allStyleURLs);
+
+								allStyleURLs.map(function (valueTwo, indexTwo) {
+									if (!valueTwo.startsWith('//')) {
+										if (valueTwo.startsWith('/')) {
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
+										} else {
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo, valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo);
+										}
+									}
+								});
+							}
 						})
 				);
 			} else {
-				fetchedStyles[index] = null;
+				fetchedStyles[indexOne] = null;
 			}
 		});
 
