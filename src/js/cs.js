@@ -1937,12 +1937,12 @@ async function activateExportElement(activeTab, port, request) {
 				}
 			});
 
-			// Remove Font-Face AtRules
-			filteredCSS.walkAtRules((atRule) => {
-				if (atRule.name === 'font-face') {
-					atRule.remove();
-				}
-			});
+			// // Remove Font-Face AtRules
+			// filteredCSS.walkAtRules((atRule) => {
+			// 	if (atRule.name === 'font-face') {
+			// 		atRule.remove();
+			// 	}
+			// });
 
 			// Remove Comments
 			filteredCSS.walkComments((Comments) => {
@@ -1967,7 +1967,6 @@ async function activateExportElement(activeTab, port, request) {
 			});
 
 			// Stringify FilteredCSS
-
 			postcss.stringify(filteredCSS, (result) => {
 				finalCSS += result;
 			});

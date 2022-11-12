@@ -5,7 +5,7 @@
 	"description": "A Swiss Army Toolbox for Web Designers and Developers.",
 	"manifest_version": 3,
 	"minimum_chrome_version": "88",
-	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "browsingData"],
+	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "browsingData", "declarativeNetRequest"],
 	"host_permissions": ["http://*/*", "https://*/*"],
 	"background": {
 		"service_worker": "js/bg.js",
@@ -57,5 +57,14 @@
 			"matches": ["http://*/*", "https://*/*"],
 			"resources": ["index.html", "css/*", "icons/*", "js/*", "libs/*", "media/*"]
 		}
-	]
+	],
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"id": "1",
+				"enabled": true,
+				"path": "rules.json"
+			}
+		]
+	}
 }

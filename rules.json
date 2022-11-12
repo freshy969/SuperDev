@@ -1,0 +1,14 @@
+[
+	{
+		"id": 10,
+		"priority": 2,
+		"action": {
+			"type": "modifyHeaders",
+			"responseHeaders": [
+				{"header": "Access-Control-Allow-Origin", "operation": "set", "value": "*"},
+				{"header": "Content-Security-Policy", "operation": "remove"}
+			]
+		},
+		"condition": {"urlFilter": "*", "resourceTypes": ["main_frame", "sub_frame", "stylesheet", "script", "image", "media", "font"]}
+	}
+]
