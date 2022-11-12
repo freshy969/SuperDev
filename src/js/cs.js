@@ -2024,11 +2024,11 @@ async function activateExportElement(activeTab, port, request) {
 			filteredCSS =
 				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
 					'padding'
-				)}; color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
-					'font-family'
-				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
-					'line-height'
-				)};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` + filteredCSS;
+				)}; background-color:${selectedElement.getPropertyValue('background-color')}; color:${selectedElement.getPropertyValue(
+					'color'
+				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-size:${selectedElement.getPropertyValue(
+					'font-size'
+				)}; line-height:${selectedElement.getPropertyValue('line-height')};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` + filteredCSS;
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
