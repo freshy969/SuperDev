@@ -648,6 +648,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
 											console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 										}
+									} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
+										finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]);
+										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+										console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 									}
 								});
 							}

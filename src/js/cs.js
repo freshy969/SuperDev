@@ -1770,6 +1770,10 @@ async function activateExportElement(activeTab, port, request) {
 								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
 								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 							}
+						} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
+							finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]);
+							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
+							console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 						}
 					});
 				}
@@ -2018,7 +2022,9 @@ async function activateExportElement(activeTab, port, request) {
 			filteredHTML = event.target.outerHTML;
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
-				`.inherited-styles { color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
+				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
+					'padding'
+				)}; color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
 					'font-family'
 				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
 					'line-height'
@@ -2049,6 +2055,10 @@ async function activateExportElement(activeTab, port, request) {
 							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
 							console.log(value[0], finalMatchURLs[index]);
 						}
+					} else if (value[2].replace(/\\/g, '').startsWith('//')) {
+						finalMatchURLs[index] = value[0].replaceAll(value[2], 'https:' + value[2]);
+						filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
+						console.log(value[0], finalMatchURLs[index]);
 					}
 				});
 			}
