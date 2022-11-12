@@ -1875,7 +1875,7 @@ async function activateExportElement(activeTab, port, request) {
 				const pseudosRegex = new RegExp('^(' + ignoredPseudos.join('|') + ')$', 'i');
 
 				function transform(selectors) {
-					selectors.walkPseudos((selector) => {
+					selectors.walkPseudos(function (selector) {
 						if (pseudosRegex.test(selector.value)) {
 							selector.remove();
 						}
@@ -1890,7 +1890,7 @@ async function activateExportElement(activeTab, port, request) {
 			})();
 
 			// Remove Pseudos from Selectors
-			filteredCSS.walkRules((rule) => {
+			filteredCSS.walkRules(function (rule) {
 				usedSelectors.push(rule.selectors.map(dePseudify));
 			});
 			usedSelectors = [...new Set(usedSelectors.flat())];
@@ -1906,14 +1906,14 @@ async function activateExportElement(activeTab, port, request) {
 			<body>${event.target.outerHTML}</body>
 			</html>`;
 			document.documentElement.appendChild(exportElementWrapper);
-			usedSelecOne = usedSelectors.filter((selector) => {
+			usedSelecOne = usedSelectors.filter(function (selector) {
 				try {
 					return exportElementShaRoot.querySelector(selector) !== null;
 				} catch (e) {
 					return false;
 				}
 			});
-			usedSelecTwo = usedSelectors.filter((selector) => {
+			usedSelecTwo = usedSelectors.filter(function (selector) {
 				try {
 					return event.target.querySelector(selector) !== null;
 				} catch (e) {
@@ -1926,13 +1926,13 @@ async function activateExportElement(activeTab, port, request) {
 			usedSelectors = [...new Set(usedSelecOne.concat(usedSelecTwo))];
 
 			// Remove Unused CSS
-			filteredCSS.walk((rule) => {
+			filteredCSS.walk(function (rule) {
 				if (rule.type === 'rule') {
 					if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) {
 						return;
 					}
 
-					usedRuleSelectors = rule.selectors.filter((selector) => {
+					usedRuleSelectors = rule.selectors.filter(function (selector) {
 						selector = dePseudify(selector);
 						if (selector[0] === '@') {
 							return true;
@@ -1949,29 +1949,29 @@ async function activateExportElement(activeTab, port, request) {
 			});
 
 			// Remove Comments
-			filteredCSS.walkComments((Comments) => {
+			filteredCSS.walkComments(function (Comments) {
 				Comments.remove();
 			});
 
 			// Filter Unused Keyframes
-			filteredCSS.walkDecls((decl) => {
+			filteredCSS.walkDecls(function (decl) {
 				if (decl.prop.endsWith('animation-name')) {
 					usedAnimations.push(...postcss.list.comma(decl.value));
 				} else if (decl.prop.endsWith('animation')) {
-					postcss.list.comma(decl.value).forEach((anim) => {
+					postcss.list.comma(decl.value).forEach(function (anim) {
 						usedAnimations.push(...postcss.list.space(anim));
 					});
 				}
 			});
 			usedAnimations = new Set(usedAnimations);
-			filteredCSS.walkAtRules(/keyframes$/, (atRule) => {
+			filteredCSS.walkAtRules(/keyframes$/, function (atRule) {
 				if (!usedAnimations.has(atRule.params)) {
 					atRule.remove();
 				}
 			});
 
 			// Stringify FilteredCSS
-			postcss.stringify(filteredCSS, (result) => {
+			postcss.stringify(filteredCSS, function (result) {
 				finalCSS += result;
 			});
 			filteredCSS = finalCSS;
@@ -1991,7 +1991,7 @@ async function activateExportElement(activeTab, port, request) {
 				uniqueselectors,
 			])
 				.process(filteredCSS, {from: undefined})
-				.then((result) => {
+				.then(function (result) {
 					filteredCSS = result.css;
 				});
 
