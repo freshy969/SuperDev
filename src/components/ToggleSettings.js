@@ -18,6 +18,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				document.querySelector('#checkboxExportElement1').checked = value.settings.checkboxExportElement1;
 				document.querySelector('#checkboxExportElement2').checked = value.settings.checkboxExportElement2;
 				document.querySelector('#checkboxExportElement3').checked = value.settings.checkboxExportElement3;
+				document.querySelector('#checkboxExportElement4').checked = value.settings.checkboxExportElement4;
 			} else if (value.id === 'colorPicker') {
 				document.querySelector('#checkboxColorPicker1').checked = value.settings.checkboxColorPicker1;
 				document.querySelector('#checkboxColorPicker2').checked = value.settings.checkboxColorPicker2;
@@ -311,9 +312,6 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 					if (value.id === 'exportElement') {
 						if (document.querySelector('#checkboxExportElement1').checked === true) {
 							value.settings.checkboxExportElement1 = true;
-							value.settings.checkboxExportElement2 = false;
-							document.querySelector('#checkboxExportElement1').checked = true;
-							document.querySelector('#checkboxExportElement2').checked = false;
 							await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement1 = false;
@@ -326,10 +324,10 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				allFeatures.map(async function (value, index) {
 					if (value.id === 'exportElement') {
 						if (document.querySelector('#checkboxExportElement2').checked === true) {
-							value.settings.checkboxExportElement1 = false;
 							value.settings.checkboxExportElement2 = true;
-							document.querySelector('#checkboxExportElement1').checked = false;
+							value.settings.checkboxExportElement3 = false;
 							document.querySelector('#checkboxExportElement2').checked = true;
+							document.querySelector('#checkboxExportElement3').checked = false;
 							await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 						} else {
 							value.settings.checkboxExportElement2 = false;
@@ -339,17 +337,35 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxExportElement3':
+				allFeatures.map(async function (value, index) {
+					if (value.id === 'exportElement') {
+						if (document.querySelector('#checkboxExportElement3').checked === true) {
+							value.settings.checkboxExportElement2 = false;
+							value.settings.checkboxExportElement3 = true;
+							document.querySelector('#checkboxExportElement2').checked = false;
+							document.querySelector('#checkboxExportElement3').checked = true;
+							await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+						} else {
+							value.settings.checkboxExportElement3 = false;
+							await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+						}
+					}
+				});
+				break;
+			case 'checkboxExportElement4':
 				allFeatures.map(function (valueOne, indexTwo) {
 					allFeaturesRef.map(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'exportElement' && valueTwo.id === 'exportElement') {
-							if (document.querySelector('#checkboxExportElement3').checked === true) {
+							if (document.querySelector('#checkboxExportElement4').checked === true) {
 								setTimeout(async function () {
 									valueOne.settings.checkboxExportElement1 = valueTwo.settings.checkboxExportElement1;
 									valueOne.settings.checkboxExportElement2 = valueTwo.settings.checkboxExportElement2;
 									valueOne.settings.checkboxExportElement3 = valueTwo.settings.checkboxExportElement3;
+									valueOne.settings.checkboxExportElement4 = valueTwo.settings.checkboxExportElement4;
 									document.querySelector('#checkboxExportElement1').checked = valueTwo.settings.checkboxExportElement1;
 									document.querySelector('#checkboxExportElement2').checked = valueTwo.settings.checkboxExportElement2;
 									document.querySelector('#checkboxExportElement3').checked = valueTwo.settings.checkboxExportElement3;
+									document.querySelector('#checkboxExportElement4').checked = valueTwo.settings.checkboxExportElement4;
 									await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
 								}, 500);
 							}
@@ -555,7 +571,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>Export Element Settings
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{['Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
+							{['Disable CORS/CSP (30Mins)', 'Export Element to Codepen', 'Export Element to a File', 'Reset Settings to Default'].map(function (value, index) {
 								let checkboxId = 'checkboxExportElement' + (index + 1);
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>

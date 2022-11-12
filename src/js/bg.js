@@ -69,9 +69,10 @@ const allFeatures = [
 		icon: 'fa-up-right-from-square',
 		id: 'exportElement',
 		settings: {
-			checkboxExportElement1: true,
-			checkboxExportElement2: false,
+			checkboxExportElement1: false,
+			checkboxExportElement2: true,
 			checkboxExportElement3: false,
+			checkboxExportElement4: false,
 		},
 	},
 	// {
@@ -693,6 +694,47 @@ chrome.runtime.onConnect.addListener(function (port) {
 					);
 				}
 			);
+		});
+	}
+});
+
+// Enable/Disable CORS/CSP
+chrome.storage.onChanged.addListener(function (changes) {
+	if (changes['allFeatures']) {
+		JSON.parse(changes['allFeatures']['newValue']).map(function (value, index) {
+			if (value.id === 'exportElement') {
+				// Disable CORS/CSP
+				if (value.settings.checkboxExportElement1 === true) {
+					chrome.declarativeNetRequest.updateEnabledRulesets({enableRulesetIds: ['1']}, function () {
+						chrome.alarms.create('alarmOne', {delayInMinutes: 30});
+					});
+				}
+				// Enable CORS/CSP
+				else if (value.settings.checkboxExportElement1 === false) {
+					chrome.declarativeNetRequest.updateEnabledRulesets({disableRulesetIds: ['1']}, function () {
+						chrome.alarms.clear('alarmOne');
+					});
+				}
+			}
+		});
+	}
+});
+
+// Clear CORS/CSP Alarm + Enable CORS/CSP
+chrome.alarms.onAlarm.addListener(function (alarm) {
+	if (alarm.name === 'alarmOne') {
+		chrome.storage.local.get(['allFeatures'], function (result) {
+			JSON.parse(result['allFeatures']).map(async function (value, index) {
+				if (value.id === 'exportElement') {
+					if (value.settings.checkboxExportElement1 === true) {
+						chrome.declarativeNetRequest.updateEnabledRulesets({disableRulesetIds: ['1']}, function () {
+							chrome.alarms.clear('alarmOne');
+						});
+						value.settings.checkboxExportElement1 = false;
+						await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+					}
+				}
+			});
 		});
 	}
 });
