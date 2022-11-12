@@ -1735,7 +1735,8 @@ async function activateExportElement(activeTab, port, request) {
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
 	let fetchStylesURL = [];
-	let regexZero = new RegExp(/url\(['"](?!http:)(?!https:)(?!data:)(?!blob:)(.*?)['"]\)/gm);
+	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
+	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm);
 
 	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
@@ -1748,19 +1749,32 @@ async function activateExportElement(activeTab, port, request) {
 					.filter(Boolean)
 					.join('');
 
-				// Relative URL to Absolute URL
+				// Relative CSS URL to Absolute CSS URL
 				if (allStyleSheets[indexOne].includes('url(')) {
-					let allStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
-					allStyleURLs = allStyleURLs.map(function (valueTwo, indexTwo) {
-						return valueTwo[1];
+					let toBeReplaced = [];
+					let groupStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
+
+					let matchStyleURLs = groupStyleURLs.map(function (value, index) {
+						return value[0];
 					});
-					allStyleURLs = [...new Set(allStyleURLs)];
-					allStyleURLs.map(function (valueTwo, indexTwo) {
-						if (!valueTwo.startsWith('//')) {
+
+					groupStyleURLs = groupStyleURLs.map(function (value, index) {
+						return value[1];
+					});
+
+					groupStyleURLs = [...new Set(groupStyleURLs)];
+					matchStyleURLs = [...new Set(matchStyleURLs)];
+
+					groupStyleURLs.map(function (valueTwo, indexTwo) {
+						if (!valueTwo.startsWith('//') && !valueTwo.startsWith('blob:') && !valueTwo.startsWith('data:') && !valueTwo.includes('://')) {
 							if (valueTwo.startsWith('/')) {
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
+								toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+								console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
 							} else {
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo, valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo);
+								toBeReplaced[indexTwo] = matchStyleURLs[indexTwo].replaceAll(valueTwo, valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
+								console.log(matchStyleURLs[indexTwo], toBeReplaced[indexTwo]);
 							}
 						}
 					});
@@ -1805,7 +1819,6 @@ async function activateExportElement(activeTab, port, request) {
 	async function mainWorker(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			const postcss = require('postcss');
-			const importurl = require('postcss-import-url');
 			const selectorparser = require('postcss-selector-parser');
 			const discardcomments = require('postcss-discard-comments');
 			const autoprefixer = require('autoprefixer'); //CSSNano
@@ -1937,13 +1950,6 @@ async function activateExportElement(activeTab, port, request) {
 				}
 			});
 
-			// // Remove Font-Face AtRules
-			// filteredCSS.walkAtRules((atRule) => {
-			// 	if (atRule.name === 'font-face') {
-			// 		atRule.remove();
-			// 	}
-			// });
-
 			// Remove Comments
 			filteredCSS.walkComments((Comments) => {
 				Comments.remove();
@@ -2028,6 +2034,36 @@ async function activateExportElement(activeTab, port, request) {
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
 			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
 
+			// Relative HTML URL to Absolute HTML URL
+			if (filteredHTML.includes('href=')) {
+				let toBeReplaced = [];
+				let groupHTMLURLs = [...filteredHTML.matchAll(regexThree)];
+				let matchHTMLURLs = groupHTMLURLs.map(function (value, index) {
+					return value[0];
+				});
+
+				groupHTMLURLs = groupHTMLURLs.map(function (value, index) {
+					return value[2];
+				});
+
+				groupHTMLURLs = [...new Set(groupHTMLURLs)];
+				matchHTMLURLs = [...new Set(matchHTMLURLs)];
+
+				groupHTMLURLs.map(function (value, index) {
+					if (!value.startsWith('//') && !value.startsWith('blob:') && !value.startsWith('data:') && !value.includes('://')) {
+						if (value.startsWith('/')) {
+							toBeReplaced[index] = matchHTMLURLs[index].replaceAll(value, new URL(document.baseURI).origin + value);
+							filteredHTML = filteredHTML.replaceAll(matchHTMLURLs[index], toBeReplaced[index]);
+							console.log(matchHTMLURLs[index], toBeReplaced[index]);
+						} else {
+							toBeReplaced[index] = matchHTMLURLs[index].replaceAll(value, document.baseURI.replace(/\/[^/]*$/, '') + '/' + value);
+							filteredHTML = filteredHTML.replaceAll(matchHTMLURLs[index], toBeReplaced[index]);
+							console.log(matchHTMLURLs[index], toBeReplaced[index]);
+						}
+					}
+				});
+			}
+
 			// Remove MoveElement Cursor From OuterHTML
 			if (filteredHTML.includes('cursor: default !important; ')) {
 				filteredHTML = filteredHTML.replace('cursor: default !important; ', '');
@@ -2040,6 +2076,7 @@ async function activateExportElement(activeTab, port, request) {
 			filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
 			filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
 			filteredHTML = filteredHTML.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
 
 			// Format Before Codepen/Save File
 			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
