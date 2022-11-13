@@ -616,9 +616,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 							// Relative CSS URL to Absolute CSS URL
 							if (fetchedStyles[indexOne].includes('url(')) {
-								let finalMatchURLs = [];
 								let matchStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
-
 								matchStyleURLs.map(function (valueTwo, indexTwo) {
 									if (
 										!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
@@ -628,18 +626,18 @@ chrome.runtime.onConnect.addListener(function (port) {
 										!valueTwo[1].replace(/\\/g, '').startsWith('https://')
 									) {
 										if (valueTwo[1].startsWith('/')) {
-											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1]);
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-											console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+												valueTwo[0],
+												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1])
+											);
 										} else {
-											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]);
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-											console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+												valueTwo[0],
+												valueTwo[0].replaceAll(valueTwo[1], valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1])
+											);
 										}
 									} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
-										finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]);
-										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-										console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
 									}
 								});
 							}

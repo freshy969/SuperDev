@@ -1737,11 +1737,14 @@ async function activateExportElement(activeTab, port, request) {
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
 	let fetchStylesURL = [];
-	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
-	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm);
-	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm);
-	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm);
-	let regexFour = new RegExp(/<script([\S\s]*?)<\/script>/gm);
+	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url('') or url("")
+	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm); // CSS variables used in CSS
+	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm); // CSS variables declaration
+	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm); // Search for href and src attributes
+	let regexFour = new RegExp(/<script([\S\s]*?)<\/script>/gm); // Remove script tags
+	let regexFive = new RegExp(/(srcset=['"]|srcSet=['"])(.*?)(['"])/gm); // Search for srcset and srcSet attributes
+	let regexSix = new RegExp(/\\/gm); // Remove backslashes
+	let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
 
 	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
@@ -1756,30 +1759,28 @@ async function activateExportElement(activeTab, port, request) {
 
 				// Relative CSS URL to Absolute CSS URL
 				if (allStyleSheets[indexOne].includes('url(')) {
-					let finalMatchURLs = [];
 					let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
-
 					matchStyleURLs.map(function (valueTwo, indexTwo) {
 						if (
-							!valueTwo[1].replaceAll(/\\/g, '').startsWith('//') &&
-							!valueTwo[1].replaceAll(/\\/g, '').startsWith('blob:') &&
-							!valueTwo[1].replaceAll(/\\/g, '').startsWith('data:') &&
-							!valueTwo[1].replaceAll(/\\/g, '').startsWith('http://') &&
-							!valueTwo[1].replaceAll(/\\/g, '').startsWith('https://')
+							!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
+							!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
+							!valueTwo[1].replaceAll(regexSix, '').startsWith('data:') &&
+							!valueTwo[1].replaceAll(regexSix, '').startsWith('http://') &&
+							!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
 						) {
 							if (valueTwo[1].startsWith('/')) {
-								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1]);
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+									valueTwo[0],
+									valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1])
+								);
 							} else {
-								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(/\/[^/]*$/, '') + '/' + valueTwo[1]);
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+									valueTwo[0],
+									valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(regexSeven, '') + '/' + valueTwo[1])
+								);
 							}
-						} else if (valueTwo[1].replaceAll(/\\/g, '').startsWith('//')) {
-							finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]);
-							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
-							console.log(valueTwo[0], finalMatchURLs[indexTwo]);
+						} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
+							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
 						}
 					});
 				}
@@ -2053,33 +2054,58 @@ async function activateExportElement(activeTab, port, request) {
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
 			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
 
-			// Relative HTML URL to Absolute HTML URL
+			// Relative to Absolute, HREF + SRC
 			if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
-				let finalMatchURLs = [];
 				let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
-
 				matchHTMLURLs.map(function (value, index) {
 					if (
-						!value[2].replaceAll(/\\/g, '').startsWith('//') &&
-						!value[2].replaceAll(/\\/g, '').startsWith('blob:') &&
-						!value[2].replaceAll(/\\/g, '').startsWith('data:') &&
-						!value[2].replaceAll(/\\/g, '').startsWith('http://') &&
-						!value[2].replaceAll(/\\/g, '').startsWith('https://')
+						!value[2].replaceAll(regexSix, '').startsWith('//') &&
+						!value[2].replaceAll(regexSix, '').startsWith('blob:') &&
+						!value[2].replaceAll(regexSix, '').startsWith('data:') &&
+						!value[2].replaceAll(regexSix, '').startsWith('http://') &&
+						!value[2].replaceAll(regexSix, '').startsWith('https://')
 					) {
 						if (value[2].startsWith('/')) {
-							finalMatchURLs[index] = value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]);
-							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
-							console.log(value[0], finalMatchURLs[index]);
+							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]));
 						} else {
-							finalMatchURLs[index] = value[0].replaceAll(value[2], document.baseURI.replaceAll(/\/[^/]*$/, '') + '/' + value[2]);
-							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
-							console.log(value[0], finalMatchURLs[index]);
+							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], document.baseURI.replaceAll(regexSeven, '') + '/' + value[2]));
 						}
-					} else if (value[2].replaceAll(/\\/g, '').startsWith('//')) {
-						finalMatchURLs[index] = value[0].replaceAll(value[2], 'https:' + value[2]);
-						filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
-						console.log(value[0], finalMatchURLs[index]);
+					} else if (value[2].replaceAll(regexSix, '').startsWith('//')) {
+						filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], 'https:' + value[2]));
 					}
+				});
+			}
+
+			// Relative to Absolute, SRCSET
+			if (filteredHTML.includes('srcset=') || filteredHTML.includes('srcSet=')) {
+				let matchHTMLURLs = [...filteredHTML.matchAll(regexFive)];
+				matchHTMLURLs.map(function (valueOne, indexOne) {
+					valueOne[0]
+						.replaceAll(/(\s+[0-9]+(\.[0-9]+)?[wx])/gm, '')
+						.replaceAll(/ /gm, '')
+						.replaceAll(/(srcset=['"]|srcSet=['"])/gm, '')
+						.replaceAll(/['"]/gm, '')
+						.split(',')
+						.map(function (valueTwo, indexTwo) {
+							if (
+								!valueTwo.replaceAll(regexSix, '').startsWith('//') &&
+								!valueTwo.replaceAll(regexSix, '').startsWith('blob:') &&
+								!valueTwo.replaceAll(regexSix, '').startsWith('data:') &&
+								!valueTwo.replaceAll(regexSix, '').startsWith('http://') &&
+								!valueTwo.replaceAll(regexSix, '').startsWith('https://')
+							) {
+								if (valueTwo.startsWith('/')) {
+									filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOne[0].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo));
+								} else {
+									filteredHTML = filteredHTML.replaceAll(
+										valueOne[0],
+										valueOne[0].replaceAll(valueTwo, document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo)
+									);
+								}
+							} else if (valueTwo.replaceAll(regexSix, '').startsWith('//')) {
+								filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOne[0].replaceAll(valueTwo, 'https:' + valueTwo));
+							}
+						});
 				});
 			}
 
