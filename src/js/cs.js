@@ -1901,6 +1901,8 @@ async function activateExportElement(activeTab, port, request) {
 			usedSelectors = [...new Set(usedSelectors.flat())];
 
 			// HTML Entities Removal
+			event.target.classList.remove('pageGuidelineOutline');
+			event.target.classList.add('inherited-styles');
 			filteredHTML = document.createElement('textarea');
 			filteredHTML.innerHTML = event.target.outerHTML;
 			filteredHTML = filteredHTML.value;
@@ -2035,10 +2037,6 @@ async function activateExportElement(activeTab, port, request) {
 					});
 				});
 			}
-
-			// Inherited Styles + Other Optimisation
-			event.target.classList.remove('pageGuidelineOutline');
-			event.target.classList.add('inherited-styles');
 
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
