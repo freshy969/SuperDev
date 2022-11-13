@@ -281,8 +281,8 @@ async function activateTextEditor(activeTab, port, request) {
 				document.documentElement.scrollWidth -
 				(document.documentElement.scrollWidth -
 					(document.documentElement.offsetWidth +
-						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replace('px', '') +
-							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replace('px', ''))));
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
 			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -934,8 +934,8 @@ async function activatePageGuideline(activeTab, port, request) {
 				document.documentElement.scrollWidth -
 				(document.documentElement.scrollWidth -
 					(document.documentElement.offsetWidth +
-						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replace('px', '').replace('px', '') +
-							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replace('px', '').replace('px', ''))));
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', '').replaceAll('px', ''))));
 
 			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
@@ -1513,8 +1513,8 @@ async function activateMoveElement(activeTab, port, request) {
 				document.documentElement.scrollWidth -
 				(document.documentElement.scrollWidth -
 					(document.documentElement.offsetWidth +
-						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replace('px', '') +
-							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replace('px', ''))));
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
 			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1644,8 +1644,8 @@ async function activateDeleteElement(activeTab, port, request) {
 				document.documentElement.scrollWidth -
 				(document.documentElement.scrollWidth -
 					(document.documentElement.offsetWidth +
-						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replace('px', '') +
-							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replace('px', ''))));
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
 			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
@@ -1758,22 +1758,22 @@ async function activateExportElement(activeTab, port, request) {
 
 					matchStyleURLs.map(function (valueTwo, indexTwo) {
 						if (
-							!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
-							!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
-							!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
-							!valueTwo[1].replace(/\\/g, '').startsWith('http://') &&
-							!valueTwo[1].replace(/\\/g, '').startsWith('https://')
+							!valueTwo[1].replaceAll(/\\/g, '').startsWith('//') &&
+							!valueTwo[1].replaceAll(/\\/g, '').startsWith('blob:') &&
+							!valueTwo[1].replaceAll(/\\/g, '').startsWith('data:') &&
+							!valueTwo[1].replaceAll(/\\/g, '').startsWith('http://') &&
+							!valueTwo[1].replaceAll(/\\/g, '').startsWith('https://')
 						) {
 							if (valueTwo[1].startsWith('/')) {
 								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1]);
 								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
 								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 							} else {
-								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]);
+								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(/\/[^/]*$/, '') + '/' + valueTwo[1]);
 								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
 								console.log(valueTwo[0], finalMatchURLs[indexTwo]);
 							}
-						} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
+						} else if (valueTwo[1].replaceAll(/\\/g, '').startsWith('//')) {
 							finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]);
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], finalMatchURLs[indexTwo]);
 							console.log(valueTwo[0], finalMatchURLs[indexTwo]);
@@ -1898,7 +1898,12 @@ async function activateExportElement(activeTab, port, request) {
 			});
 			usedSelectors = [...new Set(usedSelectors.flat())];
 
-			// Filter Unused Selectors
+			// HTML Entities Removal
+			filteredHTML = document.createElement('textarea');
+			filteredHTML.innerHTML = event.target.outerHTML;
+			filteredHTML = filteredHTML.value;
+
+			// Render Event Target Into ShadowRoot
 			let exportElementWrapper = document.createElement('export-element-wrapper');
 			let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
 			exportElementWrapper.style.setProperty('display', 'none', 'important');
@@ -1906,9 +1911,11 @@ async function activateExportElement(activeTab, port, request) {
 			<!DOCTYPE html>
 			<html>
 			<head><style>${allStylesRef}</style></head>
-			<body>${event.target.outerHTML}</body>
+			<body>${filteredHTML}</body>
 			</html>`;
 			document.documentElement.appendChild(exportElementWrapper);
+
+			// Filter Unused Selectors
 			usedSelecOne = usedSelectors.filter(function (selector) {
 				try {
 					return exportElementShaRoot.querySelector(selector) !== null;
@@ -1923,8 +1930,6 @@ async function activateExportElement(activeTab, port, request) {
 					return false;
 				}
 			});
-			// Everything Done Above Is Because Queryselector
-			// On Event.Target Misses Self :) :( :_)
 			exportElementWrapper.remove();
 			usedSelectors = [...new Set(usedSelecOne.concat(usedSelecTwo))];
 
@@ -2023,11 +2028,6 @@ async function activateExportElement(activeTab, port, request) {
 			event.target.classList.remove('pageGuidelineOutline');
 			event.target.classList.add('inherited-styles');
 
-			// HTML Entities Removal
-			filteredHTML = document.createElement('textarea');
-			filteredHTML.innerHTML = event.target.outerHTML;
-			filteredHTML = filteredHTML.value;
-
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
 				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
@@ -2049,22 +2049,22 @@ async function activateExportElement(activeTab, port, request) {
 
 				matchHTMLURLs.map(function (value, index) {
 					if (
-						!value[2].replace(/\\/g, '').startsWith('//') &&
-						!value[2].replace(/\\/g, '').startsWith('blob:') &&
-						!value[2].replace(/\\/g, '').startsWith('data:') &&
-						!value[2].replace(/\\/g, '').startsWith('http://') &&
-						!value[2].replace(/\\/g, '').startsWith('https://')
+						!value[2].replaceAll(/\\/g, '').startsWith('//') &&
+						!value[2].replaceAll(/\\/g, '').startsWith('blob:') &&
+						!value[2].replaceAll(/\\/g, '').startsWith('data:') &&
+						!value[2].replaceAll(/\\/g, '').startsWith('http://') &&
+						!value[2].replaceAll(/\\/g, '').startsWith('https://')
 					) {
 						if (value[2].startsWith('/')) {
 							finalMatchURLs[index] = value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]);
 							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
 							console.log(value[0], finalMatchURLs[index]);
 						} else {
-							finalMatchURLs[index] = value[0].replaceAll(value[2], document.baseURI.replace(/\/[^/]*$/, '') + '/' + value[2]);
+							finalMatchURLs[index] = value[0].replaceAll(value[2], document.baseURI.replaceAll(/\/[^/]*$/, '') + '/' + value[2]);
 							filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
 							console.log(value[0], finalMatchURLs[index]);
 						}
-					} else if (value[2].replace(/\\/g, '').startsWith('//')) {
+					} else if (value[2].replaceAll(/\\/g, '').startsWith('//')) {
 						finalMatchURLs[index] = value[0].replaceAll(value[2], 'https:' + value[2]);
 						filteredHTML = filteredHTML.replaceAll(value[0], finalMatchURLs[index]);
 						console.log(value[0], finalMatchURLs[index]);
@@ -2074,9 +2074,9 @@ async function activateExportElement(activeTab, port, request) {
 
 			// Remove MoveElement Cursor From OuterHTML
 			if (filteredHTML.includes('cursor: default !important; ')) {
-				filteredHTML = filteredHTML.replace('cursor: default !important; ', '');
+				filteredHTML = filteredHTML.replaceAll('cursor: default !important; ', '');
 			} else if (filteredHTML.includes(' cursor: default !important;')) {
-				filteredHTML = filteredHTML.replace(' cursor: default !important;', '');
+				filteredHTML = filteredHTML.replaceAll(' cursor: default !important;', '');
 			}
 
 			// Remove Scripts
@@ -2137,8 +2137,8 @@ async function activateExportElement(activeTab, port, request) {
 				document.documentElement.scrollWidth -
 				(document.documentElement.scrollWidth -
 					(document.documentElement.offsetWidth +
-						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replace('px', '') +
-							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replace('px', ''))));
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
 			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
