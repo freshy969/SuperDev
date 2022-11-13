@@ -2020,7 +2020,12 @@ async function activateExportElement(activeTab, port, request) {
 			// Inherited Styles + Other Optimisation
 			event.target.classList.remove('pageGuidelineOutline');
 			event.target.classList.add('inherited-styles');
-			filteredHTML = event.target.outerHTML;
+
+			// HTML Entities Removal
+			filteredHTML = document.createElement('textarea');
+			filteredHTML.innerHTML = event.target.outerHTML;
+			filteredHTML = filteredHTML.value;
+
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
 				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
