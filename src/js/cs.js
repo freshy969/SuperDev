@@ -1907,13 +1907,23 @@ async function activateExportElement(activeTab, port, request) {
 			let exportElementWrapper = document.createElement('export-element-wrapper');
 			let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
 			exportElementWrapper.style.setProperty('display', 'none', 'important');
-			exportElementShaRoot.innerHTML = `
-			<!DOCTYPE html>
-			<html>
-			<head><style>${allStylesRef}</style></head>
-			<body>${filteredHTML}</body>
-			</html>`;
-			document.documentElement.appendChild(exportElementWrapper);
+			if (filteredHTML.includes('</body>')) {
+				exportElementShaRoot.innerHTML = `
+				<!DOCTYPE html>
+				<html>
+				<head><style>${allStylesRef}</style></head>
+				${filteredHTML}
+				</html>`;
+				document.documentElement.appendChild(exportElementWrapper);
+			} else {
+				exportElementShaRoot.innerHTML = `
+				<!DOCTYPE html>
+				<html>
+				<head><style>${allStylesRef}</style></head>
+				<body>${filteredHTML}</body>
+				</html>`;
+				document.documentElement.appendChild(exportElementWrapper);
+			}
 
 			// Filter Unused Selectors
 			usedSelecOne = usedSelectors.filter(function (selector) {
