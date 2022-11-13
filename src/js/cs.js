@@ -1738,7 +1738,10 @@ async function activateExportElement(activeTab, port, request) {
 	let allStyleSheets = [];
 	let fetchStylesURL = [];
 	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
+	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm);
+	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm);
 	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm);
+	let regexFour = new RegExp(/<script([\S\s]*?)<\/script>/gm);
 
 	// All Same Origin Stylesheets
 	if ([...document.styleSheets].length !== 0) {
@@ -1842,8 +1845,6 @@ async function activateExportElement(activeTab, port, request) {
 			let allStylesRef = allStyleSheets.join('\n');
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
-			let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm);
-			let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm);
 			let allVars = window.getComputedStyle(document.body);
 			let usedVars = [];
 			let filteredVars = [];
@@ -2018,7 +2019,7 @@ async function activateExportElement(activeTab, port, request) {
 			if (usedVars && usedVars.length !== 0) {
 				usedVars = [...new Set(usedVars.flat())];
 				usedVars.map(function (valueOne, indexOne) {
-					valueOne.match(/(--[a-zA-Z0-9-_]+)/gm).map(function (valueTwo, indexTwo) {
+					valueOne.match(regexTwo).map(function (valueTwo, indexTwo) {
 						if (allVars.getPropertyValue(valueTwo) !== '') {
 							valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
 							filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
@@ -2090,7 +2091,7 @@ async function activateExportElement(activeTab, port, request) {
 			}
 
 			// Remove Scripts
-			filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(regexFour, '');
 
 			// Format Before Codepen/Save File
 			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
