@@ -75,11 +75,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 async function showHideExtension(activeTab, port, request) {
-	// If Popup Doesn't Exists, Create
-	if (document.querySelector('#superDevWrapper') === null) {
-		let superDevWrapper = document.createElement('superdev-wrapper');
-		superDevWrapper.id = 'superDevWrapper';
-		superDevWrapper.style.cssText = `
+	if (document.contentType === 'text/html') {
+		// If Popup Doesn't Exists, Create
+		if (document.querySelector('#superDevWrapper') === null) {
+			let superDevWrapper = document.createElement('superdev-wrapper');
+			superDevWrapper.id = 'superDevWrapper';
+			superDevWrapper.style.cssText = `
 			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
@@ -96,11 +97,11 @@ async function showHideExtension(activeTab, port, request) {
 			width: 335px !important;
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
-		document.documentElement.appendChild(superDevWrapper);
+			document.documentElement.appendChild(superDevWrapper);
 
-		let superDevHandler = document.createElement('superdev-handler');
-		superDevHandler.id = 'superDevHandler';
-		superDevHandler.style.cssText = `
+			let superDevHandler = document.createElement('superdev-handler');
+			superDevHandler.id = 'superDevHandler';
+			superDevHandler.style.cssText = `
 			display: block !important;
 			position: relative !important;
 			padding: 0 !important;
@@ -118,14 +119,14 @@ async function showHideExtension(activeTab, port, request) {
 			margin-bottom: -38.5px !important;
 			border-radius: 8px !important;
 			z-index: 2147483647 !important;`;
-		superDevWrapper.appendChild(superDevHandler);
+			superDevWrapper.appendChild(superDevHandler);
 
-		let superDevPopup = document.createElement('iframe');
-		superDevPopup.src = chrome.runtime.getURL('index.html');
-		superDevPopup.id = 'superDevPopup';
-		superDevPopup.scrolling = 'no';
-		superDevPopup.allow = 'clipboard-write';
-		superDevPopup.style.cssText = `
+			let superDevPopup = document.createElement('iframe');
+			superDevPopup.src = chrome.runtime.getURL('index.html');
+			superDevPopup.id = 'superDevPopup';
+			superDevPopup.scrolling = 'no';
+			superDevPopup.allow = 'clipboard-write';
+			superDevPopup.style.cssText = `
 			display: block !important;
 			padding: 0 !important;
 			margin: 0 !important;
@@ -138,43 +139,44 @@ async function showHideExtension(activeTab, port, request) {
 			width: 335px !important;
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
-		superDevWrapper.appendChild(superDevPopup);
+			superDevWrapper.appendChild(superDevPopup);
 
-		$('#superDevWrapper').draggable({
-			handle: '#superDevHandler',
-			iframeFix: true,
-			containment: 'document',
-		});
-		port.postMessage({action: 'popupCreated'});
-	}
-
-	// If Popup Exists, Show/Hide
-	else if (document.querySelector('#superDevWrapper') !== null) {
-		let superDevWrapper = document.querySelector('#superDevWrapper');
-
-		// If Popup Visible, Set Hidden
-		if (superDevWrapper.style.getPropertyValue('visibility') !== 'hidden') {
-			superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
-			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
-			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
-			port.postMessage({action: 'popupHidden'});
+			$('#superDevWrapper').draggable({
+				handle: '#superDevHandler',
+				iframeFix: true,
+				containment: 'document',
+			});
+			port.postMessage({action: 'popupCreated'});
 		}
 
-		// If Popup Hidden, Set Visible
-		else {
-			// Reset on Visible
-			await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
-			await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
-			await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false}); // True, False
-			await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false}); // True, False
-			await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+		// If Popup Exists, Show/Hide
+		else if (document.querySelector('#superDevWrapper') !== null) {
+			let superDevWrapper = document.querySelector('#superDevWrapper');
 
-			superDevWrapper.style.setProperty('top', '18px', 'important');
-			superDevWrapper.style.setProperty('right', '18px', 'important');
-			superDevWrapper.style.setProperty('bottom', '', 'important');
-			superDevWrapper.style.setProperty('left', '', 'important');
-			superDevWrapper.style.setProperty('visibility', 'visible', 'important');
-			port.postMessage({action: 'popupVisible'});
+			// If Popup Visible, Set Hidden
+			if (superDevWrapper.style.getPropertyValue('visibility') !== 'hidden') {
+				superDevWrapper.style.setProperty('visibility', 'hidden', 'important');
+				await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
+				port.postMessage({action: 'popupHidden'});
+			}
+
+			// If Popup Hidden, Set Visible
+			else {
+				// Reset on Visible
+				await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setPopupMinimised' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['setPopupMaximised' + activeTab[0].id]: false}); // True, False
+				await chrome.storage.local.set({['whichFeatureActive' + activeTab[0].id]: null}); // String, Null
+
+				superDevWrapper.style.setProperty('top', '18px', 'important');
+				superDevWrapper.style.setProperty('right', '18px', 'important');
+				superDevWrapper.style.setProperty('bottom', '', 'important');
+				superDevWrapper.style.setProperty('left', '', 'important');
+				superDevWrapper.style.setProperty('visibility', 'visible', 'important');
+				port.postMessage({action: 'popupVisible'});
+			}
 		}
 	}
 }
