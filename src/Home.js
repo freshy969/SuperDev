@@ -52,9 +52,7 @@ export default function Home() {
 		// Set PortThree
 		chrome.tabs.query({active: true, currentWindow: true}, async function (activeTab) {
 			if (
-				!activeTab[0].url.includes('chrome://') &&
-				!activeTab[0].url.includes('chrome-extension://') &&
-				!activeTab[0].url.includes('file://') &&
+				(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 				!activeTab[0].url.includes('https://chrome.google.com/webstore')
 			) {
 				// Initialisation/Reset on First Load

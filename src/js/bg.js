@@ -269,16 +269,47 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 		}
 	});
 
+	// // Content Scripts Reinjection
+	// chrome.tabs.query({}, function (tabs) {
+	// 	tabs.map(function (tab) {
+	// 		chrome.tabs.executeScript(tab.id, {file: 'content.js'});
+	// 	});
+	// });
+
 	// Content Scripts Reinjection
-	chrome.runtime.getManifest().content_scripts.map(function (valueOne, indexOne) {
-		chrome.tabs.query({url: valueOne.matches}, function (result) {
+	chrome.tabs.query({}, function (result) {
+		result.map(function (valueTwo, indexTwo) {
+			if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
+				chrome.scripting.executeScript({
+					target: {tabId: valueTwo.id},
+					files: [
+						'libs/js/jquery.min.js',
+						'libs/js/jquery-ui.min.js',
+						'libs/js/beautify.min.js',
+						'libs/js/beautify-css.min.js',
+						'libs/js/beautify-html.min.js',
+						'js/cs.js',
+					],
+				});
+				chrome.scripting.insertCSS({
+					target: {tabId: valueTwo.id},
+					files: ['css/cs.css'],
+				});
+			}
+		});
+	});
+
+	// Creating Chrome Context Menu
+	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
+});
+
+// Content Scripts Reinjection on Extension Enable
+chrome.management.onEnabled.addListener(function (extension) {
+	if (extension.name === chrome.runtime.getManifest().name) {
+		// Content Scripts Reinjection
+		chrome.tabs.query({}, function (result) {
 			result.map(function (valueTwo, indexTwo) {
-				if (
-					!valueTwo.url.includes('chrome://') &&
-					!valueTwo.url.includes('chrome-extension://') &&
-					!valueTwo.url.includes('file://') &&
-					!valueTwo.url.includes('https://chrome.google.com/webstore')
-				) {
+				if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
 					chrome.scripting.executeScript({
 						target: {tabId: valueTwo.id},
 						files: [
@@ -297,44 +328,6 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 				}
 			});
 		});
-	});
-
-	// Creating Chrome Context Menu
-	chrome.contextMenus.create({title: 'Inspect with SuperDev', id: 'inspectWith', contexts: ['all']});
-});
-
-// Content Scripts Reinjection on Extension Enable
-chrome.management.onEnabled.addListener(function (extension) {
-	if (extension.name === chrome.runtime.getManifest().name) {
-		// Content Scripts Reinjection
-		chrome.runtime.getManifest().content_scripts.map(function (valueOne, indexOne) {
-			chrome.tabs.query({url: valueOne.matches}, function (result) {
-				result.map(function (valueTwo, indexTwo) {
-					if (
-						!valueTwo.url.includes('chrome://') &&
-						!valueTwo.url.includes('chrome-extension://') &&
-						!valueTwo.url.includes('file://') &&
-						!valueTwo.url.includes('https://chrome.google.com/webstore')
-					) {
-						chrome.scripting.executeScript({
-							target: {tabId: valueTwo.id},
-							files: [
-								'libs/js/jquery.min.js',
-								'libs/js/jquery-ui.min.js',
-								'libs/js/beautify.min.js',
-								'libs/js/beautify-css.min.js',
-								'libs/js/beautify-html.min.js',
-								'js/cs.js',
-							],
-						});
-						chrome.scripting.insertCSS({
-							target: {tabId: valueTwo.id},
-							files: ['css/cs.css'],
-						});
-					}
-				});
-			});
-		});
 	}
 });
 
@@ -342,9 +335,7 @@ chrome.management.onEnabled.addListener(function (extension) {
 chrome.action.onClicked.addListener(function (tab) {
 	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 		if (
-			!activeTab[0].url.includes('chrome://') &&
-			!activeTab[0].url.includes('chrome-extension://') &&
-			!activeTab[0].url.includes('file://') &&
+			(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
 			// All Features Initialisation
@@ -378,9 +369,7 @@ chrome.action.onClicked.addListener(function (tab) {
 chrome.contextMenus.onClicked.addListener(function (tab) {
 	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 		if (
-			!activeTab[0].url.includes('chrome://') &&
-			!activeTab[0].url.includes('chrome-extension://') &&
-			!activeTab[0].url.includes('file://') &&
+			(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
 			// All Features Initialisation
@@ -414,9 +403,7 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 chrome.commands.onCommand.addListener(function (command) {
 	chrome.tabs.query({active: true, currentWindow: true}, function (activeTab) {
 		if (
-			!activeTab[0].url.includes('chrome://') &&
-			!activeTab[0].url.includes('chrome-extension://') &&
-			!activeTab[0].url.includes('file://') &&
+			(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
 			if (command === 'clearAllCache') {
@@ -637,7 +624,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 										!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
 										!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
 										!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
-										!valueTwo[1].replace(/\\/g, '').includes('://')
+										!valueTwo[1].replace(/\\/g, '').startsWith('http://') &&
+										!valueTwo[1].replace(/\\/g, '').startsWith('https://')
 									) {
 										if (valueTwo[1].startsWith('/')) {
 											finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1]);

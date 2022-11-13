@@ -1759,7 +1759,8 @@ async function activateExportElement(activeTab, port, request) {
 							!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
 							!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
 							!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
-							!valueTwo[1].replace(/\\/g, '').includes('://')
+							!valueTwo[1].replace(/\\/g, '').startsWith('http://') &&
+							!valueTwo[1].replace(/\\/g, '').startsWith('https://')
 						) {
 							if (valueTwo[1].startsWith('/')) {
 								finalMatchURLs[indexTwo] = valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1]);
@@ -2044,7 +2045,8 @@ async function activateExportElement(activeTab, port, request) {
 						!value[2].replace(/\\/g, '').startsWith('//') &&
 						!value[2].replace(/\\/g, '').startsWith('blob:') &&
 						!value[2].replace(/\\/g, '').startsWith('data:') &&
-						!value[2].replace(/\\/g, '').includes('://')
+						!value[2].replace(/\\/g, '').startsWith('http://') &&
+						!value[2].replace(/\\/g, '').startsWith('https://')
 					) {
 						if (value[2].startsWith('/')) {
 							finalMatchURLs[index] = value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]);
