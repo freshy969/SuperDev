@@ -1742,7 +1742,7 @@ async function activateExportElement(activeTab, port, request) {
 	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm); // CSS variables declaration
 	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm); // Search for href and src attributes
 	let regexFour = new RegExp(/<script([\S\s]*?)<\/script>/gm); // Remove script tags
-	let regexFive = new RegExp(/(srcset=['"]|srcSet=['"])(.*?)(['"])/gm); // Search for srcset and srcSet attributes
+	let regexFive = new RegExp(/(srcset=['"]|srcSet=['"])(.*?)(['"])/gm); // Search for srcset and srcSet
 	let regexSix = new RegExp(/\\/gm); // Remove backslashes
 	let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
 
