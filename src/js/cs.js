@@ -2082,7 +2082,7 @@ async function activateExportElement(activeTab, port, request) {
 				JSON.parse(result['allFeatures']).map(function (value, index) {
 					if (value.id === 'exportElement') {
 						// Export to Codepen
-						if (value.settings.checkboxExportElement2 === true) {
+						if (value.settings.checkboxExportElement1 === true) {
 							let codepenValue = JSON.stringify({
 								title: 'SuperDev - Exported Element',
 								description: 'Copied with SuperDev',
@@ -2101,7 +2101,7 @@ async function activateExportElement(activeTab, port, request) {
 							codepenForm.remove();
 						}
 						// Export to File
-						else if (value.settings.checkboxExportElement3 === true) {
+						else if (value.settings.checkboxExportElement2 === true) {
 							let text = `${filteredHTML} <style> ${filteredCSS} </style>`;
 							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
 							let saveToFileAnchor = document.createElement('a');
