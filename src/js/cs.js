@@ -2078,7 +2078,8 @@ async function activateExportElement(activeTab, port, request) {
 			if (filteredHTML.includes('srcset=') || filteredHTML.includes('srcSet=')) {
 				let matchHTMLURLs = [...filteredHTML.matchAll(regexFive)];
 				matchHTMLURLs.map(function (valueOne, indexOne) {
-					valueOne[0]
+					let valueOnee = valueOne[0];
+					valueOnee
 						.replaceAll(/(\s+[0-9]+(\.[0-9]+)?[wx])/gm, '')
 						.replaceAll(/ /gm, '')
 						.replaceAll(/(srcset=['"]|srcSet=['"])/gm, '')
@@ -2093,17 +2094,15 @@ async function activateExportElement(activeTab, port, request) {
 								!valueTwo.replaceAll(regexSix, '').startsWith('https://')
 							) {
 								if (valueTwo.startsWith('/')) {
-									filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOne[0].replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo));
+									valueOnee = valueOnee.replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
 								} else {
-									filteredHTML = filteredHTML.replaceAll(
-										valueOne[0],
-										valueOne[0].replaceAll(valueTwo, document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo)
-									);
+									valueOnee = valueOnee.replaceAll(valueTwo, document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo);
 								}
 							} else if (valueTwo.replaceAll(regexSix, '').startsWith('//')) {
-								filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOne[0].replaceAll(valueTwo, 'https:' + valueTwo));
+								valueOnee = valueOnee.replaceAll(valueTwo, 'https:' + valueTwo);
 							}
 						});
+					filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOnee);
 				});
 			}
 
