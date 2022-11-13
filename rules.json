@@ -1,7 +1,7 @@
 [
 	{
-		"id": 10,
-		"priority": 2,
+		"id": 1,
+		"priority": 1,
 		"action": {
 			"type": "modifyHeaders",
 			"responseHeaders": [
@@ -9,6 +9,6 @@
 				{"header": "Content-Security-Policy", "operation": "remove"}
 			]
 		},
-		"condition": {"urlFilter": "*", "resourceTypes": ["main_frame", "sub_frame", "stylesheet", "script", "image", "media", "font"]}
+		"condition": {"urlFilter": "https://codepen.io/pen", "resourceTypes": ["main_frame", "sub_frame", "stylesheet", "script", "image", "media", "font"]}
 	}
 ]
