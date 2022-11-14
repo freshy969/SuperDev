@@ -1995,6 +1995,13 @@ async function activateExportElement(activeTab, port, request) {
 				Comments.remove();
 			});
 
+			// Remove @Media Print
+			filteredCSS.walkAtRules(function (atRule) {
+				if (atRule.name === 'media' && atRule.params === 'print') {
+					atRule.remove();
+				}
+			});
+
 			// Filter Unused Keyframes
 			filteredCSS.walkDecls(function (decl) {
 				if (decl.prop.endsWith('animation-name')) {
