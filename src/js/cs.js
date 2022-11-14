@@ -1844,7 +1844,6 @@ async function activateExportElement(activeTab, port, request) {
 
 	async function mainWorker(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
-			console.log(event);
 			const postcss = require('postcss');
 			const selectorparser = require('postcss-selector-parser');
 			const discardcomments = require('postcss-discard-comments');
@@ -2064,7 +2063,6 @@ async function activateExportElement(activeTab, port, request) {
 					});
 				});
 			}
-
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
 				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
@@ -2146,6 +2144,9 @@ async function activateExportElement(activeTab, port, request) {
 			// Format Before Codepen/Save File
 			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
 			filteredCSS = css_beautify(filteredCSS, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+
+			// Remove Inherited Class from DOM
+			event.target.classList.remove('inherited-styles');
 
 			//CodePen or Save to File
 			chrome.storage.local.get(['allFeatures'], function (result) {
