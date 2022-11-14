@@ -1832,16 +1832,16 @@ async function activateExportElement(activeTab, port, request) {
 
 		if (event.isTrusted === true) {
 			let intId = setInterval(function () {
-				event.target.style.setProperty('cursor', 'wait', 'important');
+				document.body.style.setProperty('cursor', 'wait', 'important');
 				if (!allStyleSheets.includes(null)) {
 					clearInterval(intId);
-					event.target.style.removeProperty('cursor');
+					document.body.style.removeProperty('cursor');
 					mainWorker(event);
 				}
 			}, 50);
 			setTimeout(function () {
 				clearInterval(intId);
-				event.target.style.removeProperty('cursor');
+				document.body.style.removeProperty('cursor');
 			}, 5000);
 		}
 	}
