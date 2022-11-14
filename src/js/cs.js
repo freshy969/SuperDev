@@ -243,7 +243,7 @@ function setFirstRender(activeTab, port, request) {
 async function activateTextEditor(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
@@ -306,6 +306,8 @@ async function activateTextEditor(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -318,7 +320,7 @@ async function activateTextEditor(activeTab, port, request) {
 	function destroyTextEditor() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
 			document.querySelector('.pageGuidelineOutline').blur();
@@ -366,7 +368,7 @@ function activatePageRuler(activeTab, port, request) {
 	document.addEventListener('touchmove', onMouseMove);
 	document.addEventListener('scroll', onPageScroll);
 	window.addEventListener('resize', onWindowResize);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	disableCursor();
@@ -530,6 +532,8 @@ function activatePageRuler(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -545,7 +549,7 @@ function activatePageRuler(activeTab, port, request) {
 		document.removeEventListener('touchmove', onMouseMove);
 		document.removeEventListener('scroll', onPageScroll);
 		window.removeEventListener('resize', onWindowResize);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
@@ -587,7 +591,7 @@ function activateColorPicker(activeTab, port, request) {
 	document.addEventListener('scroll', onPageScroll);
 	document.addEventListener('click', onMouseClick, true);
 	window.addEventListener('resize', onWindowResize);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	disableCursor();
@@ -764,6 +768,8 @@ function activateColorPicker(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -780,7 +786,7 @@ function activateColorPicker(activeTab, port, request) {
 		document.removeEventListener('scroll', onPageScroll);
 		document.removeEventListener('click', onMouseClick, true);
 		window.removeEventListener('resize', onWindowResize);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
@@ -801,7 +807,7 @@ function deactivateColorPicker(activeTab, port, request) {
 }
 
 function activateColorPalette(activeTab, port, request) {
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	// Get All Colors
@@ -882,6 +888,8 @@ function activateColorPalette(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -892,7 +900,7 @@ function activateColorPalette(activeTab, port, request) {
 	}
 
 	async function destroyColorPalette() {
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 		await chrome.storage.local.set({['setHomePageActive' + activeTab[0].id]: true});
 	}
 
@@ -907,7 +915,7 @@ function deactivateColorPalette(activeTab, port, request) {
 async function activatePageGuideline(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
@@ -963,6 +971,8 @@ async function activatePageGuideline(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -975,7 +985,7 @@ async function activatePageGuideline(activeTab, port, request) {
 	function destroyPageGuideline() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
 			document.querySelector('.pageGuidelineOutline').blur();
@@ -1001,7 +1011,7 @@ function deactivatePageGuideline(activeTab, port, request) {
 }
 
 async function activatePageHighlight(activeTab, port, request) {
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	chrome.storage.local.get(['allFeatures'], function (result) {
@@ -1215,6 +1225,8 @@ async function activatePageHighlight(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -1225,7 +1237,7 @@ async function activatePageHighlight(activeTab, port, request) {
 	}
 
 	function destroyPageHighlight() {
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		chrome.storage.local.get(['howLongPopupIs' + activeTab[0].id], async function (result) {
 			if (result['howLongPopupIs' + activeTab[0].id] === 40.5) {
@@ -1444,7 +1456,7 @@ async function activateMoveElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick, true);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
@@ -1543,6 +1555,8 @@ async function activateMoveElement(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -1556,7 +1570,7 @@ async function activateMoveElement(activeTab, port, request) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('click', onMouseClick, true);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
 			document.querySelector('.pageGuidelineOutline').blur();
@@ -1593,7 +1607,7 @@ async function activateDeleteElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick, true);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
@@ -1676,6 +1690,8 @@ async function activateDeleteElement(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -1689,7 +1705,7 @@ async function activateDeleteElement(activeTab, port, request) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('click', onMouseClick, true);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
 			document.querySelector('.pageGuidelineOutline').blur();
@@ -1718,7 +1734,7 @@ async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
 	document.addEventListener('click', onMouseClick, true);
-	document.addEventListener('keyup', onEscape);
+	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
@@ -2203,6 +2219,8 @@ async function activateExportElement(activeTab, port, request) {
 
 	async function onEscape(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (event.key === 'Escape') {
 			if (event.isTrusted === true) {
 				await chrome.storage.local.set({['setActFeatDisabled' + activeTab[0].id]: true});
@@ -2216,7 +2234,7 @@ async function activateExportElement(activeTab, port, request) {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
 		document.removeEventListener('click', onMouseClick, true);
-		document.removeEventListener('keyup', onEscape);
+		document.removeEventListener('keyup', onEscape, true);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
 			document.querySelector('.pageGuidelineOutline').blur();
