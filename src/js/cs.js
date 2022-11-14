@@ -703,9 +703,11 @@ function activateColorPicker(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		if (document.querySelector('.colorPickerTooltipChild')) {
-			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipChild').innerText);
-			document.querySelector('.colorPickerTooltipChild').innerText = 'Copied';
+		if (event.isTrusted === true) {
+			if (document.querySelector('.colorPickerTooltipChild')) {
+				navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipChild').innerText);
+				document.querySelector('.colorPickerTooltipChild').innerText = 'Copied';
+			}
 		}
 	}
 
@@ -1487,31 +1489,33 @@ async function activateMoveElement(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
-			event.target.style.setProperty('cursor', 'move', 'important');
-			event.target.classList.add('moveElementDraggable');
-			$('.moveElementDraggable').draggable({
-				iframeFix: true,
-				containment: 'document',
-				cancel: false,
-				create: function () {
-					renderPageGuideline(false);
-				},
-				start: function () {
-					document.removeEventListener('mouseover', onMouseOver);
-					document.removeEventListener('mouseout', onMouseOut);
-				},
-				stop: function () {
-					document.addEventListener('mouseover', onMouseOver);
-					document.addEventListener('mouseout', onMouseOut);
-				},
-			});
+		if (event.isTrusted === true) {
+			if (
+				event.target.id !== 'superDevHandler' &&
+				event.target.id !== 'superDevPopup' &&
+				event.target.id !== 'superDevWrapper' &&
+				event.target.tagName !== 'HTML' &&
+				event.target.tagName !== 'BODY'
+			) {
+				event.target.style.setProperty('cursor', 'move', 'important');
+				event.target.classList.add('moveElementDraggable');
+				$('.moveElementDraggable').draggable({
+					iframeFix: true,
+					containment: 'document',
+					cancel: false,
+					create: function () {
+						renderPageGuideline(false);
+					},
+					start: function () {
+						document.removeEventListener('mouseover', onMouseOver);
+						document.removeEventListener('mouseout', onMouseOut);
+					},
+					stop: function () {
+						document.addEventListener('mouseover', onMouseOver);
+						document.addEventListener('mouseout', onMouseOut);
+					},
+				});
+			}
 		}
 	}
 
@@ -1636,15 +1640,17 @@ async function activateDeleteElement(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
-			event.target.classList.add('deleteElementWrapper');
-			document.querySelector('.deleteElementWrapper').remove();
+		if (event.isTrusted === true) {
+			if (
+				event.target.id !== 'superDevHandler' &&
+				event.target.id !== 'superDevPopup' &&
+				event.target.id !== 'superDevWrapper' &&
+				event.target.tagName !== 'HTML' &&
+				event.target.tagName !== 'BODY'
+			) {
+				event.target.classList.add('deleteElementWrapper');
+				document.querySelector('.deleteElementWrapper').remove();
+			}
 		}
 	}
 
@@ -1824,18 +1830,21 @@ async function activateExportElement(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		let intId = setInterval(function () {
-			event.target.style.setProperty('cursor', 'wait', 'important');
-			if (!allStyleSheets.includes(null)) {
-				clearInterval(intId);
-				event.target.style.removeProperty('cursor');
-				mainWorker(event);
-			}
-		}, 50);
+		if (event.isTrusted === true) {
+			let intId = setInterval(function () {
+				event.target.style.setProperty('cursor', 'wait', 'important');
+				if (!allStyleSheets.includes(null)) {
+					clearInterval(intId);
+					event.target.style.removeProperty('cursor');
+					mainWorker(event);
+				}
+			}, 50);
+		}
 	}
 
 	async function mainWorker(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			console.log(event);
 			const postcss = require('postcss');
 			const selectorparser = require('postcss-selector-parser');
 			const discardcomments = require('postcss-discard-comments');
@@ -2162,7 +2171,7 @@ async function activateExportElement(activeTab, port, request) {
 							saveToFileAnchor.href = URL.createObjectURL(file);
 							saveToFileAnchor.download = 'exported-element.html';
 							document.documentElement.appendChild(saveToFileAnchor);
-							let clickEvent = new MouseEvent('click', {bubbles: false});
+							let clickEvent = new MouseEvent('click');
 							saveToFileAnchor.dispatchEvent(clickEvent);
 							setTimeout(function () {
 								URL.revokeObjectURL(saveToFileAnchor.href);
