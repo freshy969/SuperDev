@@ -1807,7 +1807,10 @@ async function activateExportElement(activeTab, port, request) {
 			fetchStylesURL[indexOne] = valueOne.href;
 		}
 	});
-	portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
+
+	if (fetchStylesURL.join(', ').includes('http')) {
+		portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
+	}
 
 	// All Different Origin Stylesheets
 	portTwo.onMessage.addListener(function (request) {
