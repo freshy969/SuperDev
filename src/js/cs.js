@@ -1900,12 +1900,10 @@ async function activateExportElement(activeTab, port, request) {
 			});
 			usedSelectors = [...new Set(usedSelectors.flat())];
 
-			// HTML Entities Removal
+			// Set filteredHTML
 			event.target.classList.remove('pageGuidelineOutline');
 			event.target.classList.add('inherited-styles');
-			filteredHTML = document.createElement('textarea');
-			filteredHTML.innerHTML = event.target.outerHTML;
-			filteredHTML = filteredHTML.value;
+			filteredHTML = event.target.outerHTML;
 
 			// Render Event Target Into ShadowRoot
 			let exportElementWrapper = document.createElement('export-element-wrapper');
