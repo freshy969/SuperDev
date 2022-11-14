@@ -585,7 +585,7 @@ function activateColorPicker(activeTab, port, request) {
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('touchmove', onMouseMove);
 	document.addEventListener('scroll', onPageScroll);
-	document.addEventListener('click', onMouseClick);
+	document.addEventListener('click', onMouseClick, true);
 	window.addEventListener('resize', onWindowResize);
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
@@ -700,6 +700,9 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function onMouseClick(event) {
+		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (document.querySelector('.colorPickerTooltipChild')) {
 			navigator.clipboard.writeText(document.querySelector('.colorPickerTooltipChild').innerText);
 			document.querySelector('.colorPickerTooltipChild').innerText = 'Copied';
@@ -1440,7 +1443,7 @@ function deactivatePageHighlight(activeTab, port, request) {
 async function activateMoveElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
+	document.addEventListener('click', onMouseClick, true);
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -1478,6 +1481,8 @@ async function activateMoveElement(activeTab, port, request) {
 
 	async function onMouseClick(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1587,7 +1592,7 @@ function deactivateMoveElement(activeTab, port, request) {
 async function activateDeleteElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
+	document.addEventListener('click', onMouseClick, true);
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -1625,6 +1630,8 @@ async function activateDeleteElement(activeTab, port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1710,7 +1717,7 @@ function deactivateDeleteElement(activeTab, port, request) {
 async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick);
+	document.addEventListener('click', onMouseClick, true);
 	document.addEventListener('keyup', onEscape);
 	window.focus({preventScroll: true});
 
@@ -1811,6 +1818,8 @@ async function activateExportElement(activeTab, port, request) {
 
 	function onMouseClick(event) {
 		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		let intId = setInterval(function () {
 			event.target.style.setProperty('cursor', 'wait', 'important');
 			if (!allStyleSheets.includes(null)) {
