@@ -778,7 +778,7 @@ function activateColorPicker(activeTab, port, request) {
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('touchmove', onMouseMove);
 		document.removeEventListener('scroll', onPageScroll);
-		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('click', onMouseClick, true);
 		window.removeEventListener('resize', onWindowResize);
 		document.removeEventListener('keyup', onEscape);
 
@@ -1555,7 +1555,7 @@ async function activateMoveElement(activeTab, port, request) {
 	function destroyMoveElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('click', onMouseClick, true);
 		document.removeEventListener('keyup', onEscape);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
@@ -1688,7 +1688,7 @@ async function activateDeleteElement(activeTab, port, request) {
 	function destroyDeleteElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('click', onMouseClick, true);
 		document.removeEventListener('keyup', onEscape);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
@@ -2215,7 +2215,7 @@ async function activateExportElement(activeTab, port, request) {
 	function destroyExportElement() {
 		document.removeEventListener('mouseover', onMouseOver);
 		document.removeEventListener('mouseout', onMouseOut);
-		document.removeEventListener('click', onMouseClick);
+		document.removeEventListener('click', onMouseClick, true);
 		document.removeEventListener('keyup', onEscape);
 
 		if (document.querySelector('.pageGuidelineOutline')) {
