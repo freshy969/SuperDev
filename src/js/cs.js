@@ -1831,7 +1831,7 @@ async function activateExportElement(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		if (event.isTrusted === true) {
+		if (event.isTrusted === true && allStyleSheets.length !== 0) {
 			let intId = setInterval(function () {
 				document.body.style.setProperty('cursor', 'wait', 'important');
 				if (!allStyleSheets.includes(null)) {
