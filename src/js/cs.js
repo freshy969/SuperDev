@@ -1818,7 +1818,7 @@ async function activateExportElement(activeTab, port, request) {
 					else return value;
 				});
 				allStyleSheets = allStyleSheets.filter(function (value, index) {
-					return value !== null;
+					return value !== null && value !== undefined && value !== '';
 				});
 			}
 		}
