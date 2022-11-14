@@ -1839,6 +1839,10 @@ async function activateExportElement(activeTab, port, request) {
 					mainWorker(event);
 				}
 			}, 50);
+			setTimeout(function () {
+				clearInterval(intId);
+				event.target.style.removeProperty('cursor');
+			}, 5000);
 		}
 	}
 
