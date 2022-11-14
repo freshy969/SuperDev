@@ -27,7 +27,9 @@ export default function Home() {
 					await chrome.storage.local.set({['colorTheme']: 'dark'});
 					setIsLoadingOne(false);
 				} else {
-					await chrome.storage.local.set({['colorTheme']: 'light'});
+					document.documentElement.classList.add('dark');
+					await chrome.storage.local.set({['colorTheme']: 'dark'});
+					//await chrome.storage.local.set({['colorTheme']: 'light'});
 					setIsLoadingOne(false);
 				}
 			} else if (result['colorTheme'] === 'dark') {
