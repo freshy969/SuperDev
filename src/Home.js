@@ -88,17 +88,20 @@ export default function Home() {
 
 				allKeys = allKeys.map(function (value, index) {
 					if (value.match(/(\d+)/)) return +value.split(/(\d+)/)[1];
+					else return null;
 				});
 
 				allKeys = allKeys.filter(function (value, index) {
-					return value !== undefined;
+					return value !== null;
 				});
-				allKeys = [...new Set(allKeys)];
+
 				if (allKeys.length === 0) return false;
+				allKeys = [...new Set(allKeys)];
 
 				let oldState = allKeys.filter(function (value, index) {
 					return allTabs.indexOf(value) === -1;
 				});
+
 				if (oldState.length === 0) return false;
 
 				oldState.map(async function (value, index) {

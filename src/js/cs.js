@@ -1840,7 +1840,7 @@ async function activateExportElement(activeTab, port, request) {
 			let usedSelectors = [];
 			let usedSelecOne = [];
 			let usedSelecTwo = [];
-			let usedRuleSelectors;
+			let usedRuleSelectors = [];
 			let filteredHTML;
 			let selectedElement;
 			let allStylesRef = allStyleSheets.join('\n');
