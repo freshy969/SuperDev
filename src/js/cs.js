@@ -1791,7 +1791,7 @@ async function activateExportElement(activeTab, port, request) {
 						} else {
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 								valueTwo[0],
-								valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(regexSeven, '') + '/' + valueTwo[1])
+								valueTwo[0].replaceAll(valueTwo[1], document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo[1])
 							);
 						}
 					} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
