@@ -628,16 +628,19 @@ chrome.runtime.onConnect.addListener(function (port) {
 										if (valueTwo[1].startsWith('/')) {
 											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
 												valueTwo[0],
-												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne).origin + valueTwo[1])
+												valueTwo[0].replaceAll(valueTwo[1], new URL(new URL(valueOne).origin + valueTwo[1]).href)
 											);
 										} else {
 											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
 												valueTwo[0],
-												valueTwo[0].replaceAll(valueTwo[1], valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1])
+												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]).href)
 											);
 										}
 									} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
-										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
+										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+											valueTwo[0],
+											valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
+										);
 									}
 								});
 							}

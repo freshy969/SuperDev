@@ -1786,16 +1786,19 @@ async function activateExportElement(activeTab, port, request) {
 						if (valueTwo[1].startsWith('/')) {
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 								valueTwo[0],
-								valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1])
+								valueTwo[0].replaceAll(valueTwo[1], new URL(new URL(document.baseURI).origin + valueTwo[1]).href)
 							);
 						} else {
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 								valueTwo[0],
-								valueTwo[0].replaceAll(valueTwo[1], document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo[1])
+								valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo[1]).href)
 							);
 						}
 					} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
-						allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
+						allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+							valueTwo[0],
+							valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
+						);
 					}
 				});
 			}
@@ -2093,12 +2096,15 @@ async function activateExportElement(activeTab, port, request) {
 						!value[2].replaceAll(regexSix, '').startsWith('https://')
 					) {
 						if (value[2].startsWith('/')) {
-							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL(document.baseURI).origin + value[2]));
+							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL(new URL(document.baseURI).origin + value[2]).href));
 						} else {
-							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], document.baseURI.replaceAll(regexSeven, '') + '/' + value[2]));
+							filteredHTML = filteredHTML.replaceAll(
+								value[0],
+								value[0].replaceAll(value[2], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + value[2]).href)
+							);
 						}
 					} else if (value[2].replaceAll(regexSix, '').startsWith('//')) {
-						filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], 'https:' + value[2]));
+						filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL('https:' + value[2]).href));
 					}
 				});
 			}
@@ -2123,12 +2129,12 @@ async function activateExportElement(activeTab, port, request) {
 								!valueTwo.replaceAll(regexSix, '').startsWith('https://')
 							) {
 								if (valueTwo.startsWith('/')) {
-									valueOnee = valueOnee.replaceAll(valueTwo, new URL(document.baseURI).origin + valueTwo);
+									valueOnee = valueOnee.replaceAll(valueTwo, new URL(new URL(document.baseURI).origin + valueTwo).href);
 								} else {
-									valueOnee = valueOnee.replaceAll(valueTwo, document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo);
+									valueOnee = valueOnee.replaceAll(valueTwo, new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo).href);
 								}
 							} else if (valueTwo.replaceAll(regexSix, '').startsWith('//')) {
-								valueOnee = valueOnee.replaceAll(valueTwo, 'https:' + valueTwo);
+								valueOnee = valueOnee.replaceAll(valueTwo, new URL('https:' + valueTwo).href);
 							}
 						});
 					filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOnee);
@@ -2142,7 +2148,7 @@ async function activateExportElement(activeTab, port, request) {
 				filteredHTML = filteredHTML.replaceAll(' cursor: default !important;', '');
 			}
 
-			// Remove Scripts
+			// Remove Scripts and Custom Elements
 			filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
 			filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
 			filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
