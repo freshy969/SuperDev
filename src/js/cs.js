@@ -1764,52 +1764,50 @@ async function activateExportElement(activeTab, port, request) {
 	let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
 
 	// All Same Origin Stylesheets
-	if ([...document.styleSheets].length !== 0) {
-		[...document.styleSheets].map(function (valueOne, indexOne) {
-			try {
-				allStyleSheets[indexOne] = [...valueOne.cssRules]
-					.map(function (valueTwo, indexTwo) {
-						return valueTwo.cssText;
-					})
-					.filter(Boolean)
-					.join('');
+	[...document.styleSheets].map(function (valueOne, indexOne) {
+		try {
+			allStyleSheets[indexOne] = [...valueOne.cssRules]
+				.map(function (valueTwo, indexTwo) {
+					return valueTwo.cssText;
+				})
+				.filter(Boolean)
+				.join('');
 
-				// Relative CSS URL to Absolute CSS URL
-				if (allStyleSheets[indexOne].includes('url(')) {
-					let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
-					matchStyleURLs.map(function (valueTwo, indexTwo) {
-						if (
-							!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
-							!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
-							!valueTwo[1].replaceAll(regexSix, '').startsWith('data:') &&
-							!valueTwo[1].replaceAll(regexSix, '').startsWith('http://') &&
-							!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
-						) {
-							if (valueTwo[1].startsWith('/')) {
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
-									valueTwo[0],
-									valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1])
-								);
-							} else {
-								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
-									valueTwo[0],
-									valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(regexSeven, '') + '/' + valueTwo[1])
-								);
-							}
-						} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
-							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
+			// Relative CSS URL to Absolute CSS URL
+			if (allStyleSheets[indexOne].includes('url(')) {
+				let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
+				matchStyleURLs.map(function (valueTwo, indexTwo) {
+					if (
+						!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
+						!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
+						!valueTwo[1].replaceAll(regexSix, '').startsWith('data:') &&
+						!valueTwo[1].replaceAll(regexSix, '').startsWith('http://') &&
+						!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
+					) {
+						if (valueTwo[1].startsWith('/')) {
+							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+								valueTwo[0],
+								valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI).origin + valueTwo[1])
+							);
+						} else {
+							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+								valueTwo[0],
+								valueTwo[0].replaceAll(valueTwo[1], valueOne.href.replaceAll(regexSeven, '') + '/' + valueTwo[1])
+							);
 						}
-					});
-				}
-
-				fetchStylesURL[indexOne] = null;
-			} catch (e) {
-				allStyleSheets[indexOne] = null;
-				fetchStylesURL[indexOne] = valueOne.href;
+					} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
+						allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(valueTwo[0], valueTwo[0].replaceAll(valueTwo[1], 'https:' + valueTwo[1]));
+					}
+				});
 			}
-		});
-		portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
-	}
+
+			fetchStylesURL[indexOne] = null;
+		} catch (e) {
+			allStyleSheets[indexOne] = null;
+			fetchStylesURL[indexOne] = valueOne.href;
+		}
+	});
+	portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
 
 	// All Different Origin Stylesheets
 	portTwo.onMessage.addListener(function (request) {
