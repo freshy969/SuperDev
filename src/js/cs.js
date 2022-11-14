@@ -1758,7 +1758,6 @@ async function activateExportElement(activeTab, port, request) {
 	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm); // CSS variables used in CSS
 	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm); // CSS variables declaration
 	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm); // Search for href and src attributes
-	let regexFour = new RegExp(/<script([\S\s]*?)<\/script>/gm); // Remove script tags
 	let regexFive = new RegExp(/(srcset=['"]|srcSet=['"])(.*?)(['"])/gm); // Search for srcset and srcSet
 	let regexSix = new RegExp(/\\/gm); // Remove backslashes
 	let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
@@ -2144,7 +2143,10 @@ async function activateExportElement(activeTab, port, request) {
 			}
 
 			// Remove Scripts
-			filteredHTML = filteredHTML.replaceAll(regexFour, '');
+			filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
+			filteredHTML = filteredHTML.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
 
 			// Format Before Codepen/Save File
 			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
