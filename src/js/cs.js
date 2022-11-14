@@ -250,7 +250,6 @@ async function activateTextEditor(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
@@ -263,7 +262,6 @@ async function activateTextEditor(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
@@ -466,7 +464,6 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function onMouseMove(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
@@ -688,7 +685,6 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function onMouseMove(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
@@ -923,7 +919,6 @@ async function activatePageGuideline(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -931,7 +926,6 @@ async function activatePageGuideline(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1464,7 +1458,6 @@ async function activateMoveElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		event.preventDefault();
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1478,7 +1471,6 @@ async function activateMoveElement(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		event.preventDefault();
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1615,7 +1607,6 @@ async function activateDeleteElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		event.preventDefault();
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1629,7 +1620,6 @@ async function activateDeleteElement(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		event.preventDefault();
 		if (
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
@@ -1742,7 +1732,6 @@ async function activateExportElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1750,7 +1739,6 @@ async function activateExportElement(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		event.preventDefault();
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
