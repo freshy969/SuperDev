@@ -163,6 +163,29 @@ const allFeatures = [
 
 // On Extension Install/Update
 chrome.runtime.onInstalled.addListener(function (reason) {
+	// Content Scripts Reinjection
+	chrome.tabs.query({}, function (result) {
+		result.map(function (valueTwo, indexTwo) {
+			if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
+				chrome.scripting.executeScript({
+					target: {tabId: valueTwo.id},
+					files: [
+						'libs/js/jquery.min.js',
+						'libs/js/jquery-ui.min.js',
+						'libs/js/beautify.min.js',
+						'libs/js/beautify-css.min.js',
+						'libs/js/beautify-html.min.js',
+						'js/cs.js',
+					],
+				});
+				chrome.scripting.insertCSS({
+					target: {tabId: valueTwo.id},
+					files: ['css/cs.css'],
+				});
+			}
+		});
+	});
+
 	// All Features Initialisation
 	chrome.storage.local.get(['allFeatures'], async function (result) {
 		if (result['allFeatures'] === undefined) {
@@ -267,36 +290,6 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 				});
 			}
 		}
-	});
-
-	// // Content Scripts Reinjection
-	// chrome.tabs.query({}, function (tabs) {
-	// 	tabs.map(function (tab) {
-	// 		chrome.tabs.executeScript(tab.id, {file: 'content.js'});
-	// 	});
-	// });
-
-	// Content Scripts Reinjection
-	chrome.tabs.query({}, function (result) {
-		result.map(function (valueTwo, indexTwo) {
-			if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
-				chrome.scripting.executeScript({
-					target: {tabId: valueTwo.id},
-					files: [
-						'libs/js/jquery.min.js',
-						'libs/js/jquery-ui.min.js',
-						'libs/js/beautify.min.js',
-						'libs/js/beautify-css.min.js',
-						'libs/js/beautify-html.min.js',
-						'js/cs.js',
-					],
-				});
-				chrome.scripting.insertCSS({
-					target: {tabId: valueTwo.id},
-					files: ['css/cs.css'],
-				});
-			}
-		});
 	});
 
 	// Creating Chrome Context Menu

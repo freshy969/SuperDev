@@ -2049,6 +2049,7 @@ async function activateExportElement(activeTab, port, request) {
 					});
 				});
 			}
+
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
 				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
