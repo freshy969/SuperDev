@@ -10,6 +10,7 @@ specifiers:
   postcss-discard-comments: ^5.1.2
   postcss-discard-duplicates: ^5.1.0
   postcss-discard-empty: ^5.1.1
+  postcss-discard-overridden: ^5.1.0
   postcss-discard-unused: ^5.1.0
   postcss-import-url: ^7.0.0
   postcss-merge-longhand: ^5.1.7
@@ -38,6 +39,7 @@ devDependencies:
   postcss-discard-comments: 5.1.2_postcss@8.4.18
   postcss-discard-duplicates: 5.1.0_postcss@8.4.18
   postcss-discard-empty: 5.1.1_postcss@8.4.18
+  postcss-discard-overridden: 5.1.0_postcss@8.4.18
   postcss-discard-unused: 5.1.0_postcss@8.4.18
   postcss-import-url: 7.0.0_postcss@8.4.18
   postcss-merge-longhand: 5.1.7_postcss@8.4.18
@@ -7044,7 +7046,6 @@ packages:
       postcss: ^8.2.15
     dependencies:
       postcss: 8.4.18
-    dev: false
 
   /postcss-discard-unused/5.1.0_postcss@8.4.18:
     resolution: {integrity: sha512-KwLWymI9hbwXmJa0dkrzpRbSJEh0vVUd7r8t0yOGPcfKzyJJxFM8kLyC5Ev9avji6nY95pOp1W6HqIrfT+0VGw==}

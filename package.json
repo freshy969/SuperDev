@@ -42,6 +42,7 @@
 		"postcss-discard-comments": "^5.1.2",
 		"postcss-discard-duplicates": "^5.1.0",
 		"postcss-discard-empty": "^5.1.1",
+		"postcss-discard-overridden": "^5.1.0",
 		"postcss-discard-unused": "^5.1.0",
 		"postcss-import-url": "^7.0.0",
 		"postcss-merge-longhand": "^5.1.7",

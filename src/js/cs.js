@@ -1857,9 +1857,9 @@ async function activateExportElement(activeTab, port, request) {
 			const autoprefixer = require('autoprefixer'); //CSSNano
 			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
 			const mergelonghand = require('postcss-merge-longhand');
-			const colornamestohex = require('postcss-colornames-to-hex');
 			const mergerules = require('postcss-merge-rules');
 			const discardempty = require('postcss-discard-empty');
+			const discardoverridden = require('postcss-discard-overridden');
 			const discardduplicates = require('postcss-discard-duplicates');
 			const discardunused = require('postcss-discard-unused');
 			const orderedvalues = require('postcss-ordered-values');
@@ -1878,7 +1878,6 @@ async function activateExportElement(activeTab, port, request) {
 			let usedVars = [];
 			let filteredVars = [];
 			let finalCSS = '';
-			let count = 0;
 
 			// Which Pseudo Selectors to Remove
 			const dePseudify = (function () {
@@ -1916,7 +1915,6 @@ async function activateExportElement(activeTab, port, request) {
 				});
 
 				return function (selector) {
-					console.log(count, processor.processSync(selector)), ++count;
 					return processor.processSync(selector);
 				};
 			})();
@@ -1975,23 +1973,19 @@ async function activateExportElement(activeTab, port, request) {
 			// Remove Unused CSS
 			filteredCSS.walk(function (rule) {
 				if (rule.type === 'rule') {
-					if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) {
-						return;
-					}
+					// Return From Function If Keyframe
+					if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) return;
 
+					// Find Used & Filter Unused Selectors
 					usedRuleSelectors = rule.selectors.filter(function (selector) {
-						selector = dePseudify(selector);
-						if (selector[0] === '@') {
-							return true;
-						}
-						return usedSelectors.indexOf(selector) !== -1;
+						selector = dePseudify(selector); // Remove Pseudos
+						if (selector[0] === '@') return true; // Don't Filter AtRules
+						return usedSelectors.indexOf(selector) !== -1; // Filter Unused Selectors
 					});
 
-					if (usedRuleSelectors.length === 0) {
-						rule.remove();
-					} else {
-						rule.selectors = usedRuleSelectors;
-					}
+					// Remove Rule If No Selectors are Used
+					if (usedRuleSelectors.length === 0) rule.remove();
+					else rule.selectors = usedRuleSelectors;
 				}
 			});
 
@@ -2000,9 +1994,11 @@ async function activateExportElement(activeTab, port, request) {
 				Comments.remove();
 			});
 
-			// Remove @Media Print
+			// Remove @Media Print + Empty AtRules
 			filteredCSS.walkAtRules(function (atRule) {
 				if (atRule.name === 'media' && atRule.params === 'print') {
+					atRule.remove();
+				} else if (atRule.nodes.length === 0) {
 					atRule.remove();
 				}
 			});
@@ -2029,25 +2025,6 @@ async function activateExportElement(activeTab, port, request) {
 				finalCSS += result;
 			});
 			filteredCSS = finalCSS;
-
-			// CSSNano Checks
-			await postcss([
-				discardcomments,
-				autoprefixer,
-				cssdeclarationsorter,
-				mergelonghand,
-				colornamestohex,
-				mergerules,
-				discardempty,
-				discardduplicates,
-				discardunused,
-				orderedvalues,
-				uniqueselectors,
-			])
-				.process(filteredCSS, {from: undefined})
-				.then(function (result) {
-					filteredCSS = result.css;
-				});
 
 			// CSS Variables Replace
 			usedVars = allStylesRef.match(regexOne);
@@ -2082,6 +2059,25 @@ async function activateExportElement(activeTab, port, request) {
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
 			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
+
+			// CSSNano Checks
+			await postcss([
+				discardcomments,
+				autoprefixer,
+				cssdeclarationsorter,
+				mergelonghand,
+				mergerules,
+				discardempty,
+				discardoverridden,
+				discardduplicates,
+				discardunused,
+				orderedvalues,
+				uniqueselectors,
+			])
+				.process(filteredCSS, {from: undefined})
+				.then(function (result) {
+					filteredCSS = result.css;
+				});
 
 			// Relative to Absolute, HREF + SRC
 			if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
