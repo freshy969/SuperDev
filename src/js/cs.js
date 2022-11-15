@@ -2031,12 +2031,15 @@ async function activateExportElement(activeTab, port, request) {
 			if (usedVars && usedVars.length !== 0) {
 				usedVars = [...new Set(usedVars.flat())];
 				usedVars.map(function (valueOne, indexOne) {
-					valueOne.match(regexTwo).map(function (valueTwo, indexTwo) {
-						if (allVars.getPropertyValue(valueTwo) !== '') {
-							valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
-							filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
-						} else filteredVars.push(valueOne);
-					});
+					let userVarsInner = valueOne.match(regexTwo);
+					if (userVarsInner && userVarsInner.length !== 0) {
+						userVarsInner.map(function (valueTwo, indexTwo) {
+							if (allVars.getPropertyValue(valueTwo) !== '') {
+								valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
+								filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
+							} else filteredVars.push(valueOne);
+						});
+					}
 				});
 				usedVars.map(function (valueOne, indexOne) {
 					filteredVars.map(function (valueTwo, indexTwo) {
@@ -2048,13 +2051,13 @@ async function activateExportElement(activeTab, port, request) {
 			}
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
-				`.inherited-styles { margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue(
-					'padding'
-				)}; color:${selectedElement.getPropertyValue('color')}; font-family:${selectedElement.getPropertyValue(
-					'font-family'
+				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
+					'color'
+				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
+					'font-weight'
 				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
 					'line-height'
-				)};  box-sizing:${selectedElement.getPropertyValue('box-sizing')}; }` + filteredCSS;
+				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
