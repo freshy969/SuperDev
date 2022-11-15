@@ -338,10 +338,13 @@ chrome.action.onClicked.addListener(function (tab) {
 			(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
-			// All Features Initialisation
+			// All Features Initialisation || Start
 			chrome.storage.local.get(['allFeatures'], async function (result) {
 				if (result['allFeatures'] === undefined) {
 					await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+				} else {
+					let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+					portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 				}
 			});
 
@@ -359,9 +362,6 @@ chrome.action.onClicked.addListener(function (tab) {
 				}
 			});
 		}
-
-		let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
-		portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 	});
 });
 
@@ -372,10 +372,13 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 			(activeTab[0].url.startsWith('http://') || activeTab[0].url.startsWith('https://')) &&
 			!activeTab[0].url.includes('https://chrome.google.com/webstore')
 		) {
-			// All Features Initialisation
+			// All Features Initialisation || Start
 			chrome.storage.local.get(['allFeatures'], async function (result) {
 				if (result['allFeatures'] === undefined) {
 					await chrome.storage.local.set({['allFeatures']: JSON.stringify(allFeatures)});
+				} else {
+					let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
+					portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 				}
 			});
 
@@ -392,9 +395,6 @@ chrome.contextMenus.onClicked.addListener(function (tab) {
 					await chrome.storage.local.set({['allFeaturesRef']: JSON.stringify(allFeatures)});
 				}
 			});
-
-			let portOne = chrome.tabs.connect(activeTab[0].id, {name: 'portOne'});
-			portOne.postMessage({action: 'showHideExtension', activeTab: activeTab});
 		}
 	});
 });

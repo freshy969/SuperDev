@@ -1878,6 +1878,7 @@ async function activateExportElement(activeTab, port, request) {
 			let usedVars = [];
 			let filteredVars = [];
 			let finalCSS = '';
+			let count = 0;
 
 			// Which Pseudo Selectors to Remove
 			const dePseudify = (function () {
@@ -1906,18 +1907,16 @@ async function activateExportElement(activeTab, port, request) {
 					'::?-(?:moz|ms|webkit|o)-[a-z0-9-]+',
 				];
 				const pseudosRegex = new RegExp('^(' + ignoredPseudos.join('|') + ')$', 'i');
-
-				function transform(selectors) {
+				const processor = selectorparser(function (selectors) {
 					selectors.walkPseudos(function (selector) {
 						if (pseudosRegex.test(selector.value)) {
 							selector.remove();
 						}
 					});
-				}
-
-				const processor = selectorparser(transform);
+				});
 
 				return function (selector) {
+					console.log(count, processor.processSync(selector)), ++count;
 					return processor.processSync(selector);
 				};
 			})();
