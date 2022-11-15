@@ -42,8 +42,9 @@ pnpm install && pnpm run build && pnpm run move && pnpm run copy && pnpm run rem
 
 ```
 @Imports
-CJS Disconnection
 NoIframe
 Missing Font-Face
-Elementor Issue
+Elementor/IFTTT Issue
+Var Replace Context Issue
+Selectors Selection Issue
 ```
