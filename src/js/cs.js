@@ -1460,26 +1460,14 @@ async function activateMoveElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
-		if (
-			event.target.id !== 'superDevHandler' &&
-			event.target.id !== 'superDevPopup' &&
-			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
-		) {
+		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1490,13 +1478,7 @@ async function activateMoveElement(activeTab, port, request) {
 		event.stopImmediatePropagation();
 
 		if (event.isTrusted === true) {
-			if (
-				event.target.id !== 'superDevHandler' &&
-				event.target.id !== 'superDevPopup' &&
-				event.target.id !== 'superDevWrapper' &&
-				event.target.tagName !== 'HTML' &&
-				event.target.tagName !== 'BODY'
-			) {
+			if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 				event.target.style.setProperty('cursor', 'move', 'important');
 				event.target.classList.add('moveElementDraggable');
 				$('.moveElementDraggable').draggable({
