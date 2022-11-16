@@ -97,7 +97,7 @@ async function showHideExtension(activeTab, port, request) {
 			width: 335px !important;
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
-			document.body.appendChild(superDevWrapper);
+			document.documentElement.appendChild(superDevWrapper);
 
 			let superDevHandler = document.createElement('superdev-handler');
 			superDevHandler.id = 'superDevHandler';
@@ -247,7 +247,7 @@ async function activateTextEditor(activeTab, port, request) {
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
@@ -276,12 +276,12 @@ async function activateTextEditor(activeTab, port, request) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replaceAll('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replaceAll('px', ''))));
-			let scrollHeight = document.body.scrollHeight;
+				document.documentElement.scrollWidth -
+				(document.documentElement.scrollWidth -
+					(document.documentElement.offsetWidth +
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
+			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
 			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
@@ -419,7 +419,7 @@ function activatePageRuler(activeTab, port, request) {
 
 	function removeDimensions() {
 		let dimensions = document.querySelector('.pageRulerWrapper');
-		if (dimensions) document.body.removeChild(dimensions);
+		if (dimensions) document.documentElement.removeChild(dimensions);
 	}
 
 	function onPageScroll() {
@@ -456,11 +456,11 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		document.body.appendChild(pageRulerCursor);
+		document.documentElement.appendChild(pageRulerCursor);
 	}
 
 	function enableCursor() {
-		document.body.removeChild(pageRulerCursor);
+		document.documentElement.removeChild(pageRulerCursor);
 	}
 
 	function onMouseMove(event) {
@@ -524,7 +524,7 @@ function activatePageRuler(activeTab, port, request) {
 		pageRulerWrapper.appendChild(yAxis);
 		pageRulerWrapper.appendChild(pageRulerTooltip);
 
-		document.body.appendChild(pageRulerWrapper);
+		document.documentElement.appendChild(pageRulerWrapper);
 	}
 
 	async function onEscape(event) {
@@ -641,7 +641,7 @@ function activateColorPicker(activeTab, port, request) {
 
 	function removeColorPicker() {
 		let colorPickerWrapper = document.querySelector('.colorPickerWrapper');
-		if (colorPickerWrapper) document.body.removeChild(colorPickerWrapper);
+		if (colorPickerWrapper) document.documentElement.removeChild(colorPickerWrapper);
 	}
 
 	function onPageScroll() {
@@ -677,11 +677,11 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function disableCursor() {
-		document.body.appendChild(colorPickerCursor);
+		document.documentElement.appendChild(colorPickerCursor);
 	}
 
 	function enableCursor() {
-		document.body.removeChild(colorPickerCursor);
+		document.documentElement.removeChild(colorPickerCursor);
 	}
 
 	function onMouseMove(event) {
@@ -761,7 +761,7 @@ function activateColorPicker(activeTab, port, request) {
 		colorPickerTooltip.appendChild(colorPickerTooltipBG);
 		colorPickerTooltip.appendChild(colorPickerTooltipChild);
 		colorPickerWrapper.appendChild(colorPickerTooltip);
-		document.body.appendChild(colorPickerWrapper);
+		document.documentElement.appendChild(colorPickerWrapper);
 	}
 
 	async function onEscape(event) {
@@ -918,7 +918,7 @@ async function activatePageGuideline(activeTab, port, request) {
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
@@ -938,13 +938,13 @@ async function activatePageGuideline(activeTab, port, request) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replaceAll('px', '').replaceAll('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replaceAll('px', '').replaceAll('px', ''))));
+				document.documentElement.scrollWidth -
+				(document.documentElement.scrollWidth -
+					(document.documentElement.offsetWidth +
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', '').replaceAll('px', ''))));
 
-			let scrollHeight = document.body.scrollHeight;
+			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
 			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
@@ -1457,7 +1457,7 @@ async function activateMoveElement(activeTab, port, request) {
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		if (
@@ -1523,12 +1523,12 @@ async function activateMoveElement(activeTab, port, request) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replaceAll('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replaceAll('px', ''))));
-			let scrollHeight = document.body.scrollHeight;
+				document.documentElement.scrollWidth -
+				(document.documentElement.scrollWidth -
+					(document.documentElement.offsetWidth +
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
+			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
 			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
@@ -1608,7 +1608,7 @@ async function activateDeleteElement(activeTab, port, request) {
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		if (
@@ -1658,12 +1658,12 @@ async function activateDeleteElement(activeTab, port, request) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replaceAll('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replaceAll('px', ''))));
-			let scrollHeight = document.body.scrollHeight;
+				document.documentElement.scrollWidth -
+				(document.documentElement.scrollWidth -
+					(document.documentElement.offsetWidth +
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
+			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
 			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
@@ -1735,7 +1735,7 @@ async function activateExportElement(activeTab, port, request) {
 
 	let pageGuidelineWrapper = document.createElement('page-guideline-wrapper');
 	pageGuidelineWrapper.classList.add('pageGuidelineWrapper');
-	document.body.appendChild(pageGuidelineWrapper);
+	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
 		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
@@ -1871,7 +1871,6 @@ async function activateExportElement(activeTab, port, request) {
 			let usedRuleSelectors = [];
 			let filteredHTML;
 			let selectedElement;
-			let bodyElement;
 			let allStylesRef = allStyleSheets.join('\n');
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
@@ -1941,7 +1940,7 @@ async function activateExportElement(activeTab, port, request) {
 				<head><style>${allStylesRef}</style></head>
 				${filteredHTML}
 				</html>`;
-				document.body.appendChild(exportElementWrapper);
+				document.documentElement.appendChild(exportElementWrapper);
 			} else {
 				exportElementShaRoot.innerHTML = `
 				<!DOCTYPE html>
@@ -1949,7 +1948,7 @@ async function activateExportElement(activeTab, port, request) {
 				<head><style>${allStylesRef}</style></head>
 				<body>${filteredHTML}</body>
 				</html>`;
-				document.body.appendChild(exportElementWrapper);
+				document.documentElement.appendChild(exportElementWrapper);
 			}
 
 			// Filter Unused Selectors
@@ -2181,7 +2180,7 @@ async function activateExportElement(activeTab, port, request) {
 							codepenForm.setAttribute('target', '_blank');
 							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
 							codepenForm.querySelector('#codepenValue').value = codepenValue;
-							document.body.appendChild(codepenForm);
+							document.documentElement.appendChild(codepenForm);
 							codepenForm.submit();
 							codepenForm.remove();
 						}
@@ -2192,12 +2191,12 @@ async function activateExportElement(activeTab, port, request) {
 							let saveToFileAnchor = document.createElement('a');
 							saveToFileAnchor.href = URL.createObjectURL(file);
 							saveToFileAnchor.download = 'exported-element.html';
-							document.body.appendChild(saveToFileAnchor);
+							document.documentElement.appendChild(saveToFileAnchor);
 							let clickEvent = new MouseEvent('click');
 							saveToFileAnchor.dispatchEvent(clickEvent);
 							setTimeout(function () {
 								URL.revokeObjectURL(saveToFileAnchor.href);
-								document.body.removeChild(saveToFileAnchor);
+								document.documentElement.removeChild(saveToFileAnchor);
 							}, 50);
 						}
 					}
@@ -2210,12 +2209,12 @@ async function activateExportElement(activeTab, port, request) {
 		if (toShow === true) {
 			let pageGuidelinePosition = document.querySelector('.pageGuidelineOutline').getBoundingClientRect();
 			let scrollWidth =
-				document.body.scrollWidth -
-				(document.body.scrollWidth -
-					(document.body.offsetWidth +
-						(+window.getComputedStyle(document.body).getPropertyValue('margin-left').replaceAll('px', '') +
-							+window.getComputedStyle(document.body).getPropertyValue('margin-right').replaceAll('px', ''))));
-			let scrollHeight = document.body.scrollHeight;
+				document.documentElement.scrollWidth -
+				(document.documentElement.scrollWidth -
+					(document.documentElement.offsetWidth +
+						(+window.getComputedStyle(document.documentElement).getPropertyValue('margin-left').replaceAll('px', '') +
+							+window.getComputedStyle(document.documentElement).getPropertyValue('margin-right').replaceAll('px', ''))));
+			let scrollHeight = document.documentElement.scrollHeight;
 			let top = pageGuidelinePosition.top + document.documentElement.scrollTop;
 			let bottom = pageGuidelinePosition.bottom + document.documentElement.scrollTop;
 			let left = pageGuidelinePosition.left + document.documentElement.scrollLeft;
