@@ -2031,9 +2031,9 @@ async function activateExportElement(activeTab, port, request) {
 			if (usedVars && usedVars.length !== 0) {
 				usedVars = [...new Set(usedVars.flat())];
 				usedVars.map(function (valueOne, indexOne) {
-					let userVarsInner = valueOne.match(regexTwo);
-					if (userVarsInner && userVarsInner.length !== 0) {
-						userVarsInner.map(function (valueTwo, indexTwo) {
+					let usedVarsName = valueOne.match(regexTwo);
+					if (usedVarsName && usedVarsName.length !== 0) {
+						usedVarsName.map(function (valueTwo, indexTwo) {
 							if (targetVars.getPropertyValue(valueTwo) !== '') {
 								valueOne = valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(valueTwo).trim());
 								filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
