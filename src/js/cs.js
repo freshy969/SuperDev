@@ -1597,8 +1597,7 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
+			event.target.tagName !== 'HTML'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1610,8 +1609,7 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML' &&
-			event.target.tagName !== 'BODY'
+			event.target.tagName !== 'HTML'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1627,8 +1625,7 @@ async function activateDeleteElement(activeTab, port, request) {
 				event.target.id !== 'superDevHandler' &&
 				event.target.id !== 'superDevPopup' &&
 				event.target.id !== 'superDevWrapper' &&
-				event.target.tagName !== 'HTML' &&
-				event.target.tagName !== 'BODY'
+				event.target.tagName !== 'HTML'
 			) {
 				event.target.classList.add('deleteElementWrapper');
 				document.querySelector('.deleteElementWrapper').remove();
