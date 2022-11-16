@@ -1857,7 +1857,6 @@ async function activateExportElement(activeTab, port, request) {
 			const autoprefixer = require('autoprefixer'); //CSSNano
 			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
 			const mergelonghand = require('postcss-merge-longhand');
-			const colornamestohex = require('postcss-colornames-to-hex');
 			const mergerules = require('postcss-merge-rules');
 			const discardempty = require('postcss-discard-empty');
 			const discardoverridden = require('postcss-discard-overridden');
@@ -2071,7 +2070,6 @@ async function activateExportElement(activeTab, port, request) {
 				autoprefixer,
 				cssdeclarationsorter(),
 				mergelonghand,
-				colornamestohex(),
 				mergerules,
 				discardempty,
 				discardoverridden,
