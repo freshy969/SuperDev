@@ -1871,6 +1871,7 @@ async function activateExportElement(activeTab, port, request) {
 			let usedRuleSelectors = [];
 			let filteredHTML;
 			let selectedElement;
+			let bodyElement;
 			let allStylesRef = allStyleSheets.join('\n');
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
@@ -2019,27 +2020,28 @@ async function activateExportElement(activeTab, port, request) {
 			});
 
 			// Remove CSS Variables
+			let toBeRemoved = [];
 			filteredCSS.walkDecls(function (decl) {
-				let toBeRemoved = [];
 				if (decl.value.includes('var(')) {
 					let usedVars = [...new Set(decl.value.match(regexOne))];
 					usedVars.map(function (valueOne, indexOne) {
 						let usedVarsName = valueOne.match(regexTwo);
 						if (targetVars.getPropertyValue(usedVarsName[0]) !== '') {
-							toBeRemoved.push(usedVarsName[0]);
 							decl.value = decl.value.replaceAll(
 								valueOne,
 								valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(usedVarsName[0]).trim()).slice(4).slice(0, -1)
 							);
+						} else {
+							toBeRemoved.push(usedVarsName[0]);
 						}
 					});
 				}
+			});
+			filteredCSS.walkDecls(function (decl) {
 				if (decl.prop.startsWith('--')) {
-					toBeRemoved.map(function (valueTwo, indexTwo) {
-						if (decl.prop.includes(valueTwo)) {
-							decl.remove();
-						}
-					});
+					if (!toBeRemoved.includes(decl.prop)) {
+						decl.remove();
+					}
 				}
 			});
 
@@ -2049,15 +2051,28 @@ async function activateExportElement(activeTab, port, request) {
 			});
 			filteredCSS = finalCSS;
 
+			// Adding Inherited CSS
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
-			filteredCSS =
-				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
-					'color'
-				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
-					'font-weight'
-				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
-					'line-height'
-				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
+			if (filteredHTML.includes('</body>')) {
+				bodyElement = window.getComputedStyle(document.body);
+				filteredCSS =
+					`body { box-sizing:${bodyElement.getPropertyValue('box-sizing')}; color:${bodyElement.getPropertyValue(
+						'color'
+					)}; font-family:${bodyElement.getPropertyValue('font-family')}; font-weight:${bodyElement.getPropertyValue(
+						'font-weight'
+					)}; font-size:${bodyElement.getPropertyValue('font-size')}; line-height:${bodyElement.getPropertyValue(
+						'line-height'
+					)}; margin:${bodyElement.getPropertyValue('margin')}; padding:${bodyElement.getPropertyValue('padding')}; }` + filteredCSS;
+			} else {
+				filteredCSS =
+					`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
+						'color'
+					)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
+						'font-weight'
+					)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
+						'line-height'
+					)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
+			}
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');

@@ -4,11 +4,11 @@
 		"priority": 1,
 		"action": {
 			"type": "modifyHeaders",
-			"responseHeaders": [
-				{"header": "Access-Control-Allow-Origin", "operation": "set", "value": "*"},
-				{"header": "Content-Security-Policy", "operation": "remove"}
-			]
+			"responseHeaders": [{"header": "Access-Control-Allow-Origin", "operation": "set", "value": "*"}]
 		},
-		"condition": {"urlFilter": "https://codepen.io/pen", "resourceTypes": ["main_frame", "sub_frame", "stylesheet", "script", "image", "media", "font"]}
+		"condition": {
+			"urlFilter": "*",
+			"resourceTypes": ["stylesheet", "image", "font", "media"]
+		}
 	}
 ]
