@@ -1876,6 +1876,7 @@ async function activateExportElement(activeTab, port, request) {
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
 			let targetVars = window.getComputedStyle(event.target);
+			let notToBeRemoved = [];
 			let finalCSS = '';
 
 			// Which Pseudo Selectors to Remove
@@ -2020,7 +2021,6 @@ async function activateExportElement(activeTab, port, request) {
 			});
 
 			// Remove CSS Variables
-			let toBeRemoved = [];
 			filteredCSS.walkDecls(function (decl) {
 				if (decl.value.includes('var(')) {
 					let usedVars = [...new Set(decl.value.match(regexOne))];
@@ -2032,14 +2032,14 @@ async function activateExportElement(activeTab, port, request) {
 								valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(usedVarsName[0]).trim()).slice(4).slice(0, -1)
 							);
 						} else {
-							toBeRemoved.push(usedVarsName[0]);
+							notToBeRemoved.push(usedVarsName[0]);
 						}
 					});
 				}
 			});
 			filteredCSS.walkDecls(function (decl) {
 				if (decl.prop.startsWith('--')) {
-					if (!toBeRemoved.includes(decl.prop)) {
+					if (!notToBeRemoved.includes(decl.prop)) {
 						decl.remove();
 					}
 				}
@@ -2053,26 +2053,14 @@ async function activateExportElement(activeTab, port, request) {
 
 			// Adding Inherited CSS
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
-			if (filteredHTML.includes('</body>')) {
-				bodyElement = window.getComputedStyle(document.body);
-				filteredCSS =
-					`body { box-sizing:${bodyElement.getPropertyValue('box-sizing')}; color:${bodyElement.getPropertyValue(
-						'color'
-					)}; font-family:${bodyElement.getPropertyValue('font-family')}; font-weight:${bodyElement.getPropertyValue(
-						'font-weight'
-					)}; font-size:${bodyElement.getPropertyValue('font-size')}; line-height:${bodyElement.getPropertyValue(
-						'line-height'
-					)}; margin:${bodyElement.getPropertyValue('margin')}; padding:${bodyElement.getPropertyValue('padding')}; }` + filteredCSS;
-			} else {
-				filteredCSS =
-					`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
-						'color'
-					)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
-						'font-weight'
-					)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
-						'line-height'
-					)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
-			}
+			filteredCSS =
+				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
+					'color'
+				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
+					'font-weight'
+				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
+					'line-height'
+				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
