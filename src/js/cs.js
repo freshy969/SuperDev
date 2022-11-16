@@ -1875,8 +1875,6 @@ async function activateExportElement(activeTab, port, request) {
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
 			let targetVars = window.getComputedStyle(event.target);
-			let usedVars = [];
-			let filteredVars = [];
 			let finalCSS = '';
 
 			// Which Pseudo Selectors to Remove
@@ -2020,35 +2018,36 @@ async function activateExportElement(activeTab, port, request) {
 				}
 			});
 
+			// Remove CSS Variables
+			filteredCSS.walkDecls(function (decl) {
+				let toBeRemoved = [];
+				if (decl.value.includes('var(')) {
+					let usedVars = [...new Set(decl.value.match(regexOne))];
+					usedVars.map(function (valueOne, indexOne) {
+						let usedVarsName = valueOne.match(regexTwo);
+						if (targetVars.getPropertyValue(usedVarsName[0]) !== '') {
+							toBeRemoved.push(usedVarsName[0]);
+							decl.value = decl.value.replaceAll(
+								valueOne,
+								valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(usedVarsName[0]).trim()).slice(4).slice(0, -1)
+							);
+						}
+					});
+				}
+				if (decl.prop.startsWith('--')) {
+					toBeRemoved.map(function (valueTwo, indexTwo) {
+						if (decl.prop.includes(valueTwo)) {
+							decl.remove();
+						}
+					});
+				}
+			});
+
 			// Stringify FilteredCSS
 			postcss.stringify(filteredCSS, function (result) {
 				finalCSS += result;
 			});
 			filteredCSS = finalCSS;
-
-			// CSS Variables Replace
-			usedVars = allStylesRef.match(regexOne);
-			if (usedVars && usedVars.length !== 0) {
-				usedVars = [...new Set(usedVars.flat())];
-				usedVars.map(function (valueOne, indexOne) {
-					let usedVarsName = valueOne.match(regexTwo);
-					if (usedVarsName && usedVarsName.length !== 0) {
-						usedVarsName.map(function (valueTwo, indexTwo) {
-							if (targetVars.getPropertyValue(valueTwo) !== '') {
-								valueOne = valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(valueTwo).trim());
-								filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
-							} else filteredVars.push(valueOne);
-						});
-					}
-				});
-				usedVars.map(function (valueOne, indexOne) {
-					filteredVars.map(function (valueTwo, indexTwo) {
-						if (indexOne === indexTwo) {
-							filteredCSS = filteredCSS.replaceAll(valueOne, valueTwo);
-						}
-					});
-				});
-			}
 
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
