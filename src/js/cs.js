@@ -1857,6 +1857,7 @@ async function activateExportElement(activeTab, port, request) {
 			const autoprefixer = require('autoprefixer'); //CSSNano
 			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
 			const mergelonghand = require('postcss-merge-longhand');
+			const colornamestohex = require('postcss-colornames-to-hex');
 			const mergerules = require('postcss-merge-rules');
 			const discardempty = require('postcss-discard-empty');
 			const discardoverridden = require('postcss-discard-overridden');
@@ -1874,7 +1875,7 @@ async function activateExportElement(activeTab, port, request) {
 			let allStylesRef = allStyleSheets.join('\n');
 			let filteredCSS = postcss.parse(allStylesRef);
 			let usedAnimations = [];
-			let allVars = window.getComputedStyle(document.body);
+			let targetVars = window.getComputedStyle(event.target);
 			let usedVars = [];
 			let filteredVars = [];
 			let finalCSS = '';
@@ -2034,8 +2035,8 @@ async function activateExportElement(activeTab, port, request) {
 					let userVarsInner = valueOne.match(regexTwo);
 					if (userVarsInner && userVarsInner.length !== 0) {
 						userVarsInner.map(function (valueTwo, indexTwo) {
-							if (allVars.getPropertyValue(valueTwo) !== '') {
-								valueOne = valueOne.replaceAll(regexTwo, allVars.getPropertyValue(valueTwo));
+							if (targetVars.getPropertyValue(valueTwo) !== '') {
+								valueOne = valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(valueTwo).trim());
 								filteredVars.push(valueOne.slice(4).slice(0, -1).trim());
 							} else filteredVars.push(valueOne);
 						});
@@ -2068,8 +2069,9 @@ async function activateExportElement(activeTab, port, request) {
 			await postcss([
 				discardcomments,
 				autoprefixer,
-				cssdeclarationsorter,
+				cssdeclarationsorter(),
 				mergelonghand,
+				colornamestohex(),
 				mergerules,
 				discardempty,
 				discardoverridden,
