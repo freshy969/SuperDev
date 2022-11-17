@@ -594,10 +594,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 	function fetchStyles(allStyleSheets) {
 		let promiseAllOne = [];
 		let promiseAllTwo = [];
-		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url('') or url("")
+		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url()
 		let regexSix = new RegExp(/\\/gm); // Remove backslashes
 		let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
-		let regexEight = new RegExp(/@import.*?url\(['"]?(.*?)['"]?\).*?;/gm); // Search for @import * url('') *;
+		let regexEight = new RegExp(/@import.*?url\(['"]?(.*?)['"]?\).*?;/gm); // Search for @import url()
+		// let regexNine = new RegExp(/@import.*?[^(]['"](.*?)['"].*?;/gm); // Search for @import '';
 
 		allStyleSheets.map(async function (valueOne, indexOne) {
 			if (valueOne.startsWith('http://') || valueOne.startsWith('https://')) {

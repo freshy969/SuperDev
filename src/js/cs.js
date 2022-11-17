@@ -1731,7 +1731,7 @@ async function activateExportElement(activeTab, port, request) {
 
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
-	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url('') or url("")
+	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url()
 	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm); // CSS variables used in CSS
 	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm); // CSS variables declaration
 	let regexThree = new RegExp(/(href=['"]|src=['"])(.*?)(['"])/gm); // Search for href and src attributes
