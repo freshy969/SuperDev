@@ -1761,7 +1761,6 @@ async function activateExportElement(activeTab, port, request) {
 						!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
 					) {
 						if (valueTwo[1].startsWith('/')) {
-							console.log(valueTwo[1]);
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 								valueTwo[0],
 								valueTwo[0].replaceAll(valueTwo[1], new URL(new URL(document.baseURI).origin + valueTwo[1]).href)
@@ -1780,7 +1779,6 @@ async function activateExportElement(activeTab, port, request) {
 							}
 						}
 					} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
-						console.log(valueTwo[1]);
 						allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 							valueTwo[0],
 							valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
