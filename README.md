@@ -1,4 +1,4 @@
-## SuperDev
+### SuperDev
 
 A Swiss Army Toolbox for Web Designers and Developers.
 List of Free Feature below -
@@ -16,19 +16,19 @@ List of Free Feature below -
 10. Clear All Cache
 ```
 
-## Screenshots
+### Screenshots
 
 <p align="center">
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png">
 </p>
 
-## Install From Chrome Store
+### Install From Chrome Store
 
 ```
 [SuperDev - Chrome Web Store](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl)
 ```
 
-## Or Build and Run
+### Or Build and Run
 
 ```
 pnpm install && pnpm run build
@@ -41,7 +41,7 @@ browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js
 Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension from build folder.
 ```
 
-## TODO:
+### TODO:
 
 ```
 Fix Re-Render Issue on Moving Popup
