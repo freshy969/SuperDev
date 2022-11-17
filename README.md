@@ -31,9 +31,13 @@ https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlc
 ## Or Build and Run
 
 ```
-pnpm install && pnpm run build && pnpm run move && pnpm run copy && pnpm run remove && pnpm run renameCSS && pnpm run renameHTML && browserify ./src/js/cs.js | terser -c -f ascii_only > ./build/js/cs.js && browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js && clear
-Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension from build folder.
+pnpm install && pnpm run build
+pnpm run move && pnpm run copy && pnpm run remove && pnpm run renameCSS && pnpm run renameHTML
+browserify ./src/js/cs.js | terser -c -f ascii_only > ./build/js/cs.js
+browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js
 ```
+
+Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension from build folder.
 
 ## TODO:
 
