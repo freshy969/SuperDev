@@ -25,7 +25,7 @@ List of Free Feature below -
 ## Install From Chrome Store
 
 ```
-https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl
+[SuperDev - Chrome Web Store](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl)
 ```
 
 ## Or Build and Run
@@ -37,7 +37,9 @@ browserify ./src/js/cs.js | terser -c -f ascii_only > ./build/js/cs.js
 browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js
 ```
 
+```
 Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension from build folder.
+```
 
 ## TODO:
 
