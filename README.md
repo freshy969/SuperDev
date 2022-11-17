@@ -19,7 +19,7 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 ```
 - I Am Working At Least 12Hrs A Day On This So Bug Reports Are Most Welcome
 - While Creating Issues, Check If The Bug Is Reproducable on Your Device
-- Give Details About Your OS & Browser Name/Version & The Site URL Where It Happened
+- Provide Your OS And Browser Name/Version Plus The Site URL Where It Happened
 ```
 
 ### Privacy Note
