@@ -1,4 +1,4 @@
-## SuperDev
+## SuperDev &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders that Minimises the Development/Designing Time and Provides Various Tools to Debug The Web Without Any Hassle.
 
