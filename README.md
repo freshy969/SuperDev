@@ -3,24 +3,26 @@
 An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders that Minimises the Development/Designing Time and Provides Various Tools to Debug The Web Without Any Hassle.
 
 ```
-- Text Editor - Edit Any Website's Text Easily   
-- Page Ruler - Measure Distance Between Two Points   
-- Color Picker - Pick Site Colors, Even From Images in RGB/Hex   
-- Color Palette - Website's Colors Palette In RGB/Hex   
-- Page Guideline - Check Alignments In Real-time With Guidelines    
-- Page Highlight - Highlight Page Elements With Different Colors   
-- Move Element - Move Any Element Within The Page   
-- Delete Element - Delete Any Element From The Page   
-- Export Element - Export HTML + Used CSS of Any Page Element   
-- Clear All Cache - Clear Cache/Cookie/LocalStorage   
+- Text Editor - Edit Any Website's Text Easily
+- Page Ruler - Measure Distance Between Two Points
+- Color Picker - Pick Site Colors, Even From Images in RGB/Hex
+- Color Palette - Website's Colors Palette In RGB/Hex
+- Page Guideline - Check Alignments In Real-time With Guidelines
+- Page Highlight - Highlight Page Elements With Different Colors
+- Move Element - Move Any Element Within The Page
+- Delete Element - Delete Any Element From The Page
+- Export Element - Export HTML + Used CSS of Any Page Element
+- Clear All Cache - Clear Cache/Cookie/LocalStorage
 ```
 
 ### Screenshots
+
 <p align="center">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png">
+  <img src="https://github.com/twoabd/SuperDev/blob/main/github/1.png">
 </p>
 
 ### Privacy Note
+
 ```
 - It Does Not Collect Any Data At All
 - The Extension Is Fully Offline Except Two Fetch Requests
@@ -30,6 +32,7 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 ```
 
 ### Additional Features
+
 ```
 - Dark/Light Theme - Choose Theme, Dark or Light
 - Minimise Popup - Manual/Auto Minimise Popup
@@ -39,10 +42,10 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 
 ### Install On
 
-* [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
-* [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
-* [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
-* [Mozilla Firefox]() - Coming Really Soon<br>
+- [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+- [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+- [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+- [Mozilla Firefox]() - Coming Really Soon<br>
 
 ### Build Manually
 
@@ -58,6 +61,7 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 ```
 
 ### Built With
+
 ```
 ReactJS - SuperDev Popup
 TailWindCSS - SuperDev Popup
@@ -66,6 +70,7 @@ JSBeautify - Used By Export Element
 ```
 
 ### Troubleshooting
+
 ```
 - I Am Working At Least 12Hrs A Day On This So Bug Reports Are Most Welcome
 - If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page
