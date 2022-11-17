@@ -1813,7 +1813,6 @@ async function activateExportElement(activeTab, port, request) {
 					clearInterval(intId);
 					document.body.style.removeProperty('cursor');
 					mainWorker(event);
-					console.log(allStyleSheets);
 				}
 			}, 50);
 			setTimeout(function () {
@@ -2027,13 +2026,15 @@ async function activateExportElement(activeTab, port, request) {
 			// Adding Inherited CSS
 			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
 			filteredCSS =
+				`body { background-color:${window.getComputedStyle(document.body).getPropertyValue('background-color')}; }` +
 				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
 					'color'
 				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
 					'font-weight'
 				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
 					'line-height'
-				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` + filteredCSS;
+				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` +
+				filteredCSS;
 
 			// If CSS Uses REM?
 			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
