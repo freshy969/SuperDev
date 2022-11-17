@@ -638,8 +638,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 							}
 						})
 				);
-			} else {
-				allStyleSheets[indexOne] = null;
 			}
 		});
 
