@@ -11,7 +11,7 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 - Page Highlight - Highlight Page Elements With Different Colors   
 - Move Element - Move Any Element Within The Page   
 - Delete Element - Delete Any Element From The Page   
-- Export Element - Export HTML + CSS of Any Page Element   
+- Export Element - Export HTML + Used CSS of Any Page Element   
 - Clear All Cache - Clear Cache/Cookie/LocalStorage   
 ```
 
@@ -19,8 +19,9 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 ```
 - It Does Not Collect Any Data At All
 - The Extension Is Fully Offline Except Two Fetch Requests
-- Those Fetch Request Are Used To Fetch Site's External Stylesheets
+- Those Fetch Requests Are Used To Fetch Site's External Stylesheets
 - And Those Stylesheets Are Needed By Export Element Feature
+- Plus Every Bit of SuperDev Free Is Open Source Code
 ```
 
 ### Additional Features
@@ -36,8 +37,8 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
-* [Mozilla Firefox]() - Coming Really Soon   
-<br>
+* [Mozilla Firefox]() - Coming Really Soon<br>
+
 ### Build Manually
 
 ```
