@@ -1708,7 +1708,6 @@ function deactivateDeleteElement(activeTab, port, request) {
 async function activateExportElement(activeTab, port, request) {
 	document.addEventListener('mouseover', onMouseOver);
 	document.addEventListener('mouseout', onMouseOut);
-	document.addEventListener('click', onMouseClick, true);
 	document.addEventListener('keyup', onEscape, true);
 	window.focus({preventScroll: true});
 
@@ -1787,395 +1786,381 @@ async function activateExportElement(activeTab, port, request) {
 
 	// All Different Origin Stylesheets
 	portTwo.postMessage({action: 'fetchStyles', allStyleSheets: allStyleSheets});
+	document.body.style.setProperty('cursor', 'wait', 'important');
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'allStyleSheets') {
 			if (allStyleSheets.length !== 0) {
-				allStyleSheets = allStyleSheets.map(function (value, index) {
-					if (value.startsWith('http://') || value.startsWith('https://')) return request.allStyleSheets[index];
-					else return value;
-				});
+				allStyleSheets = request.allStyleSheets;
 				allStyleSheets = allStyleSheets.filter(function (value, index) {
 					return value !== null && value !== undefined && value !== '';
 				});
 			}
+			document.body.style.removeProperty('cursor');
+			document.addEventListener('click', onMouseClick, true);
 		}
 	});
 
-	function onMouseClick(event) {
+	async function onMouseClick(event) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
+		// Check If Diffrent Origin Stylesheets Are Loaded
 		if (event.isTrusted === true && allStyleSheets.length !== 0) {
-			let intId = setInterval(function () {
-				document.body.style.setProperty('cursor', 'wait', 'important');
-				if (!allStyleSheets.includes(null)) {
-					clearInterval(intId);
-					document.body.style.removeProperty('cursor');
-					mainWorker(event);
-				}
-			}, 50);
-			setTimeout(function () {
-				clearInterval(intId);
-				document.body.style.removeProperty('cursor');
-			}, 5000);
-		}
-	}
+			if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+				const postcss = require('postcss');
+				const selectorparser = require('postcss-selector-parser');
+				const discardcomments = require('postcss-discard-comments');
+				const autoprefixer = require('autoprefixer'); //CSSNano
+				const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
+				const mergelonghand = require('postcss-merge-longhand');
+				const mergerules = require('postcss-merge-rules');
+				const discardempty = require('postcss-discard-empty');
+				const discardoverridden = require('postcss-discard-overridden');
+				const discardduplicates = require('postcss-discard-duplicates');
+				const discardunused = require('postcss-discard-unused');
+				const orderedvalues = require('postcss-ordered-values');
+				const uniqueselectors = require('postcss-unique-selectors');
 
-	async function mainWorker(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
-			const postcss = require('postcss');
-			const selectorparser = require('postcss-selector-parser');
-			const discardcomments = require('postcss-discard-comments');
-			const autoprefixer = require('autoprefixer'); //CSSNano
-			const cssdeclarationsorter = require('css-declaration-sorter'); //CSSNano
-			const mergelonghand = require('postcss-merge-longhand');
-			const mergerules = require('postcss-merge-rules');
-			const discardempty = require('postcss-discard-empty');
-			const discardoverridden = require('postcss-discard-overridden');
-			const discardduplicates = require('postcss-discard-duplicates');
-			const discardunused = require('postcss-discard-unused');
-			const orderedvalues = require('postcss-ordered-values');
-			const uniqueselectors = require('postcss-unique-selectors');
+				let usedSelectors = [];
+				let usedSelecOne = [];
+				let usedSelecTwo = [];
+				let usedRuleSelectors = [];
+				let filteredHTML;
+				let selectedElement;
+				let allStylesRef = allStyleSheets.join('\n');
+				let filteredCSS = postcss.parse(allStylesRef);
+				let usedAnimations = [];
+				let targetVars = window.getComputedStyle(event.target);
+				let notToBeRemoved = [];
+				let finalCSS = '';
 
-			let usedSelectors = [];
-			let usedSelecOne = [];
-			let usedSelecTwo = [];
-			let usedRuleSelectors = [];
-			let filteredHTML;
-			let selectedElement;
-			let allStylesRef = allStyleSheets.join('\n');
-			let filteredCSS = postcss.parse(allStylesRef);
-			let usedAnimations = [];
-			let targetVars = window.getComputedStyle(event.target);
-			let notToBeRemoved = [];
-			let finalCSS = '';
-
-			// Which Pseudo Selectors to Remove
-			const dePseudify = (function () {
-				const ignoredPseudos = [
-					':link',
-					':visited',
-					':hover',
-					':active',
-					':focus',
-					':focus-within',
-					':enabled',
-					':disabled',
-					':checked',
-					':indeterminate',
-					':required',
-					':invalid',
-					':valid',
-					'::first-line',
-					'::first-letter',
-					'::selection',
-					'::before',
-					'::after',
-					':target',
-					':before',
-					':after',
-					'::?-(?:moz|ms|webkit|o)-[a-z0-9-]+',
-				];
-				const pseudosRegex = new RegExp('^(' + ignoredPseudos.join('|') + ')$', 'i');
-				const processor = selectorparser(function (selectors) {
-					selectors.walkPseudos(function (selector) {
-						if (pseudosRegex.test(selector.value)) {
-							selector.remove();
-						}
-					});
-				});
-
-				return function (selector) {
-					return processor.processSync(selector);
-				};
-			})();
-
-			// Remove Pseudos from Selectors
-			filteredCSS.walkRules(function (rule) {
-				usedSelectors.push(rule.selectors.map(dePseudify));
-			});
-			usedSelectors = [...new Set(usedSelectors.flat())];
-
-			// Set filteredHTML
-			event.target.classList.remove('pageGuidelineOutline');
-			event.target.classList.add('inherited-styles');
-			filteredHTML = event.target.outerHTML;
-
-			// Render Event Target Into ShadowRoot
-			let exportElementWrapper = document.createElement('export-element-wrapper');
-			let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
-			exportElementWrapper.style.setProperty('display', 'none', 'important');
-			if (filteredHTML.includes('</body>')) {
-				exportElementShaRoot.innerHTML = `
-				<!DOCTYPE html>
-				<html>
-				<head><style>${allStylesRef}</style></head>
-				${filteredHTML}
-				</html>`;
-				document.documentElement.appendChild(exportElementWrapper);
-			} else {
-				exportElementShaRoot.innerHTML = `
-				<!DOCTYPE html>
-				<html>
-				<head><style>${allStylesRef}</style></head>
-				<body>${filteredHTML}</body>
-				</html>`;
-				document.documentElement.appendChild(exportElementWrapper);
-			}
-
-			// Filter Unused Selectors
-			usedSelecOne = usedSelectors.filter(function (selector) {
-				try {
-					return exportElementShaRoot.querySelector(selector) !== null;
-				} catch (e) {
-					return false;
-				}
-			});
-			usedSelecTwo = usedSelectors.filter(function (selector) {
-				try {
-					return event.target.querySelector(selector) !== null;
-				} catch (e) {
-					return false;
-				}
-			});
-			exportElementWrapper.remove();
-			usedSelectors = [...new Set(usedSelecOne.concat(usedSelecTwo))];
-
-			// Remove Unused CSS
-			filteredCSS.walk(function (rule) {
-				if (rule.type === 'rule') {
-					// Return From Function If Keyframe
-					if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) return;
-
-					// Find Used & Filter Unused Selectors
-					usedRuleSelectors = rule.selectors.filter(function (selector) {
-						selector = dePseudify(selector); // Remove Pseudos
-						if (selector[0] === '@') return true; // Don't Filter AtRules
-						return usedSelectors.indexOf(selector) !== -1; // Filter Unused Selectors
-					});
-
-					// Remove Rule If No Selectors are Used
-					if (usedRuleSelectors.length === 0) rule.remove();
-					else rule.selectors = usedRuleSelectors;
-				}
-			});
-
-			// Remove Comments
-			filteredCSS.walkComments(function (Comments) {
-				Comments.remove();
-			});
-
-			// Remove @Media Print + Empty AtRules
-			filteredCSS.walkAtRules(function (atRule) {
-				if (atRule.name === 'media' && atRule.params === 'print') {
-					atRule.remove();
-				} else if (atRule.nodes.length === 0) {
-					atRule.remove();
-				}
-			});
-
-			// Filter Unused Keyframes
-			filteredCSS.walkDecls(function (decl) {
-				if (decl.prop.endsWith('animation-name')) {
-					usedAnimations.push(...postcss.list.comma(decl.value));
-				} else if (decl.prop.endsWith('animation')) {
-					postcss.list.comma(decl.value).forEach(function (anim) {
-						usedAnimations.push(...postcss.list.space(anim));
-					});
-				}
-			});
-			usedAnimations = new Set(usedAnimations);
-			filteredCSS.walkAtRules(/keyframes$/, function (atRule) {
-				if (!usedAnimations.has(atRule.params)) {
-					atRule.remove();
-				}
-			});
-
-			// Remove CSS Variables
-			filteredCSS.walkDecls(function (decl) {
-				if (decl.value.includes('var(')) {
-					let usedVars = [...new Set(decl.value.match(regexOne))];
-					usedVars.map(function (valueOne, indexOne) {
-						let usedVarsName = valueOne.match(regexTwo);
-						if (targetVars.getPropertyValue(usedVarsName[0]) !== '') {
-							decl.value = decl.value.replaceAll(
-								valueOne,
-								valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(usedVarsName[0]).trim()).slice(4).slice(0, -1)
-							);
-						} else {
-							notToBeRemoved.push(usedVarsName[0]);
-						}
-					});
-				}
-			});
-			filteredCSS.walkDecls(function (decl) {
-				if (decl.prop.startsWith('--')) {
-					if (!notToBeRemoved.includes(decl.prop)) {
-						decl.remove();
-					}
-				}
-			});
-
-			// Stringify FilteredCSS
-			postcss.stringify(filteredCSS, function (result) {
-				finalCSS += result;
-			});
-			filteredCSS = finalCSS;
-
-			// Adding Inherited CSS
-			selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
-			filteredCSS =
-				`body { background-color:${window.getComputedStyle(document.body).getPropertyValue('background-color')}; }` +
-				`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
-					'color'
-				)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
-					'font-weight'
-				)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
-					'line-height'
-				)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` +
-				filteredCSS;
-
-			// If CSS Uses REM?
-			let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
-			if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
-
-			// CSSNano Checks
-			await postcss([
-				discardcomments,
-				autoprefixer,
-				cssdeclarationsorter(),
-				mergelonghand,
-				mergerules,
-				discardempty,
-				discardoverridden,
-				discardduplicates,
-				discardunused,
-				orderedvalues,
-				uniqueselectors,
-			])
-				.process(filteredCSS, {from: undefined})
-				.then(function (result) {
-					filteredCSS = result.css;
-				});
-
-			// Relative to Absolute, HREF + SRC
-			if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
-				let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
-				matchHTMLURLs.map(function (value, index) {
-					if (
-						!value[2].replaceAll(regexSix, '').startsWith('//') &&
-						!value[2].replaceAll(regexSix, '').startsWith('blob:') &&
-						!value[2].replaceAll(regexSix, '').startsWith('data:') &&
-						!value[2].replaceAll(regexSix, '').startsWith('http://') &&
-						!value[2].replaceAll(regexSix, '').startsWith('https://')
-					) {
-						if (value[2].startsWith('/')) {
-							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL(new URL(document.baseURI).origin + value[2]).href));
-						} else {
-							filteredHTML = filteredHTML.replaceAll(
-								value[0],
-								value[0].replaceAll(value[2], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + value[2]).href)
-							);
-						}
-					} else if (value[2].replaceAll(regexSix, '').startsWith('//')) {
-						filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL('https:' + value[2]).href));
-					}
-				});
-			}
-
-			// Relative to Absolute, SRCSET
-			if (filteredHTML.includes('srcset=') || filteredHTML.includes('srcSet=')) {
-				let matchHTMLURLs = [...filteredHTML.matchAll(regexFive)];
-				matchHTMLURLs.map(function (valueOne, indexOne) {
-					let valueOnee = valueOne[0];
-					valueOnee
-						.replaceAll(/(\s+[0-9]+(\.[0-9]+)?[wx])/gm, '')
-						.replaceAll(/ /gm, '')
-						.replaceAll(/(srcset=['"]|srcSet=['"])/gm, '')
-						.replaceAll(/['"]/gm, '')
-						.split(',')
-						.map(function (valueTwo, indexTwo) {
-							if (
-								!valueTwo.replaceAll(regexSix, '').startsWith('//') &&
-								!valueTwo.replaceAll(regexSix, '').startsWith('blob:') &&
-								!valueTwo.replaceAll(regexSix, '').startsWith('data:') &&
-								!valueTwo.replaceAll(regexSix, '').startsWith('http://') &&
-								!valueTwo.replaceAll(regexSix, '').startsWith('https://')
-							) {
-								if (valueTwo.startsWith('/')) {
-									valueOnee = valueOnee.replaceAll(valueTwo, new URL(new URL(document.baseURI).origin + valueTwo).href);
-								} else {
-									valueOnee = valueOnee.replaceAll(valueTwo, new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo).href);
-								}
-							} else if (valueTwo.replaceAll(regexSix, '').startsWith('//')) {
-								valueOnee = valueOnee.replaceAll(valueTwo, new URL('https:' + valueTwo).href);
+				// Which Pseudo Selectors to Remove
+				const dePseudify = (function () {
+					const ignoredPseudos = [
+						':link',
+						':visited',
+						':hover',
+						':active',
+						':focus',
+						':focus-within',
+						':enabled',
+						':disabled',
+						':checked',
+						':indeterminate',
+						':required',
+						':invalid',
+						':valid',
+						'::first-line',
+						'::first-letter',
+						'::selection',
+						'::before',
+						'::after',
+						':target',
+						':before',
+						':after',
+						'::?-(?:moz|ms|webkit|o)-[a-z0-9-]+',
+					];
+					const pseudosRegex = new RegExp('^(' + ignoredPseudos.join('|') + ')$', 'i');
+					const processor = selectorparser(function (selectors) {
+						selectors.walkPseudos(function (selector) {
+							if (pseudosRegex.test(selector.value)) {
+								selector.remove();
 							}
 						});
-					filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOnee);
+					});
+
+					return function (selector) {
+						return processor.processSync(selector);
+					};
+				})();
+
+				// Remove Pseudos from Selectors
+				filteredCSS.walkRules(function (rule) {
+					usedSelectors.push(rule.selectors.map(dePseudify));
 				});
-			}
+				usedSelectors = [...new Set(usedSelectors.flat())];
 
-			// Remove MoveElement Cursor From OuterHTML
-			if (filteredHTML.includes('cursor: default !important; ')) {
-				filteredHTML = filteredHTML.replaceAll('cursor: default !important; ', '');
-			} else if (filteredHTML.includes(' cursor: default !important;')) {
-				filteredHTML = filteredHTML.replaceAll(' cursor: default !important;', '');
-			}
+				// Set filteredHTML
+				event.target.classList.remove('pageGuidelineOutline');
+				event.target.classList.add('inherited-styles');
+				filteredHTML = event.target.outerHTML;
 
-			// Remove Scripts and Custom Elements
-			filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
-			filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
-			filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
-			filteredHTML = filteredHTML.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
+				// Render Event Target Into ShadowRoot
+				let exportElementWrapper = document.createElement('export-element-wrapper');
+				let exportElementShaRoot = exportElementWrapper.attachShadow({mode: 'closed'});
+				exportElementWrapper.style.setProperty('display', 'none', 'important');
+				if (filteredHTML.includes('</body>')) {
+					exportElementShaRoot.innerHTML = `
+					<!DOCTYPE html>
+					<html>
+					<head><style>${allStylesRef}</style></head>
+					${filteredHTML}
+					</html>`;
+					document.documentElement.appendChild(exportElementWrapper);
+				} else {
+					exportElementShaRoot.innerHTML = `
+					<!DOCTYPE html>
+					<html>
+					<head><style>${allStylesRef}</style></head>
+					<body>${filteredHTML}</body>
+					</html>`;
+					document.documentElement.appendChild(exportElementWrapper);
+				}
 
-			// Format Before Codepen/Save File
-			filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
-			filteredCSS = css_beautify(filteredCSS, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+				// Filter Unused Selectors
+				usedSelecOne = usedSelectors.filter(function (selector) {
+					try {
+						return exportElementShaRoot.querySelector(selector) !== null;
+					} catch (e) {
+						return false;
+					}
+				});
+				usedSelecTwo = usedSelectors.filter(function (selector) {
+					try {
+						return event.target.querySelector(selector) !== null;
+					} catch (e) {
+						return false;
+					}
+				});
+				exportElementWrapper.remove();
+				usedSelectors = [...new Set(usedSelecOne.concat(usedSelecTwo))];
 
-			// Remove Inherited Class from DOM
-			event.target.classList.remove('inherited-styles');
+				// Remove Unused CSS
+				filteredCSS.walk(function (rule) {
+					if (rule.type === 'rule') {
+						// Return From Function If Keyframe
+						if (rule.parent.type === 'atrule' && rule.parent.name.endsWith('keyframes')) return;
 
-			//CodePen or Save to File
-			chrome.storage.local.get(['allFeatures'], function (result) {
-				JSON.parse(result['allFeatures']).map(function (value, index) {
-					if (value.id === 'exportElement') {
-						// Export to Codepen
-						if (value.settings.checkboxExportElement1 === true) {
-							let codepenValue = JSON.stringify({
-								title: 'SuperDev - Exported Element',
-								description: 'Copied with SuperDev',
-								html: filteredHTML,
-								css: filteredCSS,
-								tags: ['SuperDev'],
-							});
-							let codepenForm = document.createElement('form');
-							codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
-							codepenForm.setAttribute('method', 'POST');
-							codepenForm.setAttribute('target', '_blank');
-							codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
-							codepenForm.querySelector('#codepenValue').value = codepenValue;
-							document.documentElement.appendChild(codepenForm);
-							codepenForm.submit();
-							codepenForm.remove();
-						}
-						// Export to File
-						else if (value.settings.checkboxExportElement2 === true) {
-							let text = `${filteredHTML} <style> ${filteredCSS} </style>`;
-							let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
-							let saveToFileAnchor = document.createElement('a');
-							saveToFileAnchor.href = URL.createObjectURL(file);
-							saveToFileAnchor.download = 'exported-element.html';
-							document.documentElement.appendChild(saveToFileAnchor);
-							let clickEvent = new MouseEvent('click');
-							saveToFileAnchor.dispatchEvent(clickEvent);
-							setTimeout(function () {
-								URL.revokeObjectURL(saveToFileAnchor.href);
-								document.documentElement.removeChild(saveToFileAnchor);
-							}, 50);
+						// Find Used & Filter Unused Selectors
+						usedRuleSelectors = rule.selectors.filter(function (selector) {
+							selector = dePseudify(selector); // Remove Pseudos
+							if (selector[0] === '@') return true; // Don't Filter AtRules
+							return usedSelectors.indexOf(selector) !== -1; // Filter Unused Selectors
+						});
+
+						// Remove Rule If No Selectors are Used
+						if (usedRuleSelectors.length === 0) rule.remove();
+						else rule.selectors = usedRuleSelectors;
+					}
+				});
+
+				// Remove Comments
+				filteredCSS.walkComments(function (Comments) {
+					Comments.remove();
+				});
+
+				// Remove @Media Print + Empty AtRules
+				filteredCSS.walkAtRules(function (atRule) {
+					if (atRule.name === 'media' && atRule.params === 'print') {
+						atRule.remove();
+					} else if (atRule.nodes.length === 0) {
+						atRule.remove();
+					}
+				});
+
+				// Filter Unused Keyframes
+				filteredCSS.walkDecls(function (decl) {
+					if (decl.prop.endsWith('animation-name')) {
+						usedAnimations.push(...postcss.list.comma(decl.value));
+					} else if (decl.prop.endsWith('animation')) {
+						postcss.list.comma(decl.value).forEach(function (anim) {
+							usedAnimations.push(...postcss.list.space(anim));
+						});
+					}
+				});
+				usedAnimations = new Set(usedAnimations);
+				filteredCSS.walkAtRules(/keyframes$/, function (atRule) {
+					if (!usedAnimations.has(atRule.params)) {
+						atRule.remove();
+					}
+				});
+
+				// Remove CSS Variables
+				filteredCSS.walkDecls(function (decl) {
+					if (decl.value.includes('var(')) {
+						let usedVars = [...new Set(decl.value.match(regexOne))];
+						usedVars.map(function (valueOne, indexOne) {
+							let usedVarsName = valueOne.match(regexTwo);
+							if (targetVars.getPropertyValue(usedVarsName[0]) !== '') {
+								decl.value = decl.value.replaceAll(
+									valueOne,
+									valueOne.replaceAll(regexTwo, targetVars.getPropertyValue(usedVarsName[0]).trim()).slice(4).slice(0, -1)
+								);
+							} else {
+								notToBeRemoved.push(usedVarsName[0]);
+							}
+						});
+					}
+				});
+				filteredCSS.walkDecls(function (decl) {
+					if (decl.prop.startsWith('--')) {
+						if (!notToBeRemoved.includes(decl.prop)) {
+							decl.remove();
 						}
 					}
 				});
-			});
+
+				// Stringify FilteredCSS
+				postcss.stringify(filteredCSS, function (result) {
+					finalCSS += result;
+				});
+				filteredCSS = finalCSS;
+
+				// Adding Inherited CSS
+				selectedElement = window.getComputedStyle(document.querySelector('.inherited-styles'));
+				filteredCSS =
+					`body { background-color:${window.getComputedStyle(document.body).getPropertyValue('background-color')}; }` +
+					`.inherited-styles { box-sizing:${selectedElement.getPropertyValue('box-sizing')}; color:${selectedElement.getPropertyValue(
+						'color'
+					)}; font-family:${selectedElement.getPropertyValue('font-family')}; font-weight:${selectedElement.getPropertyValue(
+						'font-weight'
+					)}; font-size:${selectedElement.getPropertyValue('font-size')}; line-height:${selectedElement.getPropertyValue(
+						'line-height'
+					)}; margin:${selectedElement.getPropertyValue('margin')}; padding:${selectedElement.getPropertyValue('padding')}; }` +
+					filteredCSS;
+
+				// If CSS Uses REM?
+				let oneRemValue = window.getComputedStyle(document.querySelector('html')).getPropertyValue('font-size');
+				if (filteredCSS.includes('rem')) filteredCSS = filteredCSS + `html { font-size: ${oneRemValue}; }`;
+
+				// CSSNano Checks
+				await postcss([
+					discardcomments,
+					autoprefixer,
+					cssdeclarationsorter(),
+					mergelonghand,
+					mergerules,
+					discardempty,
+					discardoverridden,
+					discardduplicates,
+					discardunused,
+					orderedvalues,
+					uniqueselectors,
+				])
+					.process(filteredCSS, {from: undefined})
+					.then(function (result) {
+						filteredCSS = result.css;
+					});
+
+				// Relative to Absolute, HREF + SRC
+				if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
+					let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
+					matchHTMLURLs.map(function (value, index) {
+						if (
+							!value[2].replaceAll(regexSix, '').startsWith('//') &&
+							!value[2].replaceAll(regexSix, '').startsWith('blob:') &&
+							!value[2].replaceAll(regexSix, '').startsWith('data:') &&
+							!value[2].replaceAll(regexSix, '').startsWith('http://') &&
+							!value[2].replaceAll(regexSix, '').startsWith('https://')
+						) {
+							if (value[2].startsWith('/')) {
+								filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL(new URL(document.baseURI).origin + value[2]).href));
+							} else {
+								filteredHTML = filteredHTML.replaceAll(
+									value[0],
+									value[0].replaceAll(value[2], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + value[2]).href)
+								);
+							}
+						} else if (value[2].replaceAll(regexSix, '').startsWith('//')) {
+							filteredHTML = filteredHTML.replaceAll(value[0], value[0].replaceAll(value[2], new URL('https:' + value[2]).href));
+						}
+					});
+				}
+
+				// Relative to Absolute, SRCSET
+				if (filteredHTML.includes('srcset=') || filteredHTML.includes('srcSet=')) {
+					let matchHTMLURLs = [...filteredHTML.matchAll(regexFive)];
+					matchHTMLURLs.map(function (valueOne, indexOne) {
+						let valueOnee = valueOne[0];
+						valueOnee
+							.replaceAll(/(\s+[0-9]+(\.[0-9]+)?[wx])/gm, '')
+							.replaceAll(/ /gm, '')
+							.replaceAll(/(srcset=['"]|srcSet=['"])/gm, '')
+							.replaceAll(/['"]/gm, '')
+							.split(',')
+							.map(function (valueTwo, indexTwo) {
+								if (
+									!valueTwo.replaceAll(regexSix, '').startsWith('//') &&
+									!valueTwo.replaceAll(regexSix, '').startsWith('blob:') &&
+									!valueTwo.replaceAll(regexSix, '').startsWith('data:') &&
+									!valueTwo.replaceAll(regexSix, '').startsWith('http://') &&
+									!valueTwo.replaceAll(regexSix, '').startsWith('https://')
+								) {
+									if (valueTwo.startsWith('/')) {
+										valueOnee = valueOnee.replaceAll(valueTwo, new URL(new URL(document.baseURI).origin + valueTwo).href);
+									} else {
+										valueOnee = valueOnee.replaceAll(valueTwo, new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo).href);
+									}
+								} else if (valueTwo.replaceAll(regexSix, '').startsWith('//')) {
+									valueOnee = valueOnee.replaceAll(valueTwo, new URL('https:' + valueTwo).href);
+								}
+							});
+						filteredHTML = filteredHTML.replaceAll(valueOne[0], valueOnee);
+					});
+				}
+
+				// Remove MoveElement Cursor From OuterHTML
+				if (filteredHTML.includes('cursor: default !important; ')) {
+					filteredHTML = filteredHTML.replaceAll('cursor: default !important; ', '');
+				} else if (filteredHTML.includes(' cursor: default !important;')) {
+					filteredHTML = filteredHTML.replaceAll(' cursor: default !important;', '');
+				}
+
+				// Remove Scripts and Custom Elements
+				filteredHTML = filteredHTML.replaceAll(/<script([\S\s]*?)<\/script>/gm, '');
+				filteredHTML = filteredHTML.replaceAll(/<superdev-wrapper([\S\s]*?)<\/superdev-wrapper>/gm, '');
+				filteredHTML = filteredHTML.replaceAll(/<page-guideline-wrapper([\S\s]*?)<\/page-guideline-wrapper>/gm, '');
+				filteredHTML = filteredHTML.replaceAll(/<export-element-wrapper([\S\s]*?)<\/export-element-wrapper>/gm, '');
+
+				// Format Before Codepen/Save File
+				filteredHTML = html_beautify(filteredHTML, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+				filteredCSS = css_beautify(filteredCSS, {indent_size: 2, indent_with_tabs: true, preserve_newlines: false});
+
+				// Remove Inherited Class from DOM
+				event.target.classList.remove('inherited-styles');
+
+				//CodePen or Save to File
+				chrome.storage.local.get(['allFeatures'], function (result) {
+					JSON.parse(result['allFeatures']).map(function (value, index) {
+						if (value.id === 'exportElement') {
+							// Export to Codepen
+							if (value.settings.checkboxExportElement1 === true) {
+								let codepenValue = JSON.stringify({
+									title: 'SuperDev - Exported Element',
+									description: 'Copied with SuperDev',
+									html: filteredHTML,
+									css: filteredCSS,
+									tags: ['SuperDev'],
+								});
+								let codepenForm = document.createElement('form');
+								codepenForm.setAttribute('action', 'https://codepen.io/pen/define');
+								codepenForm.setAttribute('method', 'POST');
+								codepenForm.setAttribute('target', '_blank');
+								codepenForm.innerHTML = '<input type="hidden" name="data" value=\'\' id="codepenValue" />';
+								codepenForm.querySelector('#codepenValue').value = codepenValue;
+								document.documentElement.appendChild(codepenForm);
+								codepenForm.submit();
+								codepenForm.remove();
+							}
+							// Export to File
+							else if (value.settings.checkboxExportElement2 === true) {
+								let text = `${filteredHTML} <style> ${filteredCSS} </style>`;
+								let file = new Blob([text], {type: 'text/plain;charset=utf-8'});
+								let saveToFileAnchor = document.createElement('a');
+								saveToFileAnchor.href = URL.createObjectURL(file);
+								saveToFileAnchor.download = 'exported-element.html';
+								document.documentElement.appendChild(saveToFileAnchor);
+								let clickEvent = new MouseEvent('click');
+								saveToFileAnchor.dispatchEvent(clickEvent);
+								setTimeout(function () {
+									URL.revokeObjectURL(saveToFileAnchor.href);
+									document.documentElement.removeChild(saveToFileAnchor);
+								}, 50);
+							}
+						}
+					});
+				});
+			}
 		}
 	}
 
