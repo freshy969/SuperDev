@@ -1802,7 +1802,6 @@ async function activateExportElement(activeTab, port, request) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		// Check If Diffrent Origin Stylesheets Are Loaded
 		if (event.isTrusted === true && allStyleSheets.length !== 0) {
 			if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
 				const postcss = require('postcss');
