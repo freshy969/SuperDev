@@ -12,35 +12,13 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 		<section id='toggleInfo' className='hidden'>
 			<div className='border border-t-0 border-borderOne dark:border-borderOneD box-border rounded-b-lg'>
 				<div id='toggleInfoChild' className='rounded-md p-4'>
-					{/* Click To Change Shortcuts */}
+					{/* SuperDev Default Shortcuts */}
 					<div>
 						<div
 							className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none cursor-pointer'
 							onClick={openShortcutPage}>
 							<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
 							Click To Change Shortcuts
-						</div>
-						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
-							{['Default Shortcuts Might Not Work', "Change Them If That's The Case"].map(function (value, index) {
-								return (
-									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
-										<h6
-											className='inline-block text-xs text-allText dark:text-allTextD font-normal select-none'
-											htmlFor={'checkboxExportElement' + (index + 1)}>
-											<i className='fa-regular fa-square-info pr-[5px] text-allText dark:text-allTextD'></i>
-											{value}
-										</h6>
-									</div>
-								);
-							})}
-						</div>
-					</div>
-
-					{/* SuperDev Default Shortcuts */}
-					<div>
-						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
-							<i className='fa-regular fa-command px-[5px] text-allText dark:text-allTextD'></i>
-							SuperDev Default Shortcuts
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{[
@@ -70,6 +48,27 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 						</div>
 						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
 							{["It Won't Work On Moving Elements", 'Since It Uses Screenshot For Data :('].map(function (value, index) {
+								return (
+									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
+										<h6
+											className='inline-block text-xs text-allText dark:text-allTextD font-normal select-none'
+											htmlFor={'checkboxExportElement' + (index + 1)}>
+											<i className='fa-regular fa-square-info pr-[5px] text-allText dark:text-allTextD'></i>
+											{value}
+										</h6>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					{/* About Export Element Feature */}
+					<div>
+						<div className='rounded-md text-left bg-bgTwo dark:bg-bgTwoD border box-border border-borderTwo dark:border-borderTwoD shadow text-xs text-allText dark:text-allTextD p-2 mb-3 font-normal select-none'>
+							<i className='fa-regular fa-up-right-from-square px-[5px] text-allText dark:text-allTextD'></i>About Export Element Feature
+						</div>
+						<div className='rounded-md border bg-bgTwo dark:bg-bgTwoD border-borderTwo dark:border-borderTwoD shadow p-3 mb-3'>
+							{["Export Won't Work on Secure Sites", "Choose Save As File If That's The Case"].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
 										<h6
