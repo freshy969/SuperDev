@@ -592,12 +592,16 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 	// Export Element
 	function fetchStyles(allStyleSheets) {
-		let promiseAll = [];
-		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
+		let promiseAllOne = [];
+		let promiseAllTwo = [];
+		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url('') or url("")
+		let regexSix = new RegExp(/\\/gm); // Remove backslashes
+		let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
+		let regexEight = new RegExp(/@import.*?url\(["'](.*?)["')]+.*?;/gm); // Search for @import * url('') *;
 
 		allStyleSheets.map(async function (valueOne, indexOne) {
 			if (valueOne.startsWith('http://') || valueOne.startsWith('https://')) {
-				promiseAll.push(
+				promiseAllOne.push(
 					fetch(valueOne)
 						.then(function (response) {
 							if (response.status >= 200 && response.status < 300) return response.text();
@@ -611,11 +615,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 								let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
 								matchStyleURLs.map(function (valueTwo, indexTwo) {
 									if (
-										!valueTwo[1].replaceAll(/\\/g, '').startsWith('//') &&
-										!valueTwo[1].replaceAll(/\\/g, '').startsWith('blob:') &&
-										!valueTwo[1].replaceAll(/\\/g, '').startsWith('data:') &&
-										!valueTwo[1].replaceAll(/\\/g, '').startsWith('http://') &&
-										!valueTwo[1].replaceAll(/\\/g, '').startsWith('https://')
+										!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
+										!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
+										!valueTwo[1].replaceAll(regexSix, '').startsWith('data:') &&
+										!valueTwo[1].replaceAll(regexSix, '').startsWith('http://') &&
+										!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
 									) {
 										if (valueTwo[1].startsWith('/')) {
 											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
@@ -625,10 +629,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 										} else {
 											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 												valueTwo[0],
-												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replaceAll(/\/[^/]*$/, '') + '/' + valueTwo[1]).href)
+												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replaceAll(regexSeven, '') + '/' + valueTwo[1]).href)
 											);
 										}
-									} else if (valueTwo[1].replaceAll(/\\/g, '').startsWith('//')) {
+									} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
 										allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 											valueTwo[0],
 											valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
@@ -641,7 +645,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 			}
 		});
 
-		Promise.all(promiseAll).then(function () {
+		Promise.all(promiseAllOne).then(function () {
 			port.postMessage({action: 'allStyleSheets', allStyleSheets: allStyleSheets});
 		});
 	}
