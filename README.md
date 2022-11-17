@@ -1,31 +1,26 @@
-### SuperDev
+## SuperDev
 
-A Swiss Army Toolbox for Web Designers and Developers.
-List of Free Feature below -
+An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders that Minimises the Development/Designing Time and Provides Various Tools to Debug The Web Without Any Hassle.
 
 ```
-📍 Text Editor - Edit Any Website's Text Easily
-📍 Page Ruler - Measure Distance Between Two Points
-📍 Color Picker - Pick Site Colors, Even From Images in RGB/Hex
-📍 Color Palette - Website's Colors Palette In RGB/Hex
-📍 Page Guideline - Check Alignments In Real-time With Guidelines 
-📍 Page Highlight - Highlight Page Elements With Different Colors
-📍 Move Element - Move Any Element Within The Page
-📍 Delete Element - Delete Any Element From The Page
-📍 Export Element - Export HTML + CSS of Any Page Element
-📍 Clear All Cache - Clear Cache/Cookie/LocalStorage
+- Text Editor - Edit Any Website's Text Easily   
+- Page Ruler - Measure Distance Between Two Points   
+- Color Picker - Pick Site Colors, Even From Images in RGB/Hex   
+- Color Palette - Website's Colors Palette In RGB/Hex   
+- Page Guideline - Check Alignments In Real-time With Guidelines    
+- Page Highlight - Highlight Page Elements With Different Colors   
+- Move Element - Move Any Element Within The Page   
+- Delete Element - Delete Any Element From The Page   
+- Export Element - Export HTML + CSS of Any Page Element   
+- Clear All Cache - Clear Cache/Cookie/LocalStorage   
 ```
 
-### Screenshots
+### Install On
 
-<p align="center">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png">
-</p>
-
-### Install From Chrome Store
-
-[SuperDev - Chrome Web Store](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl)
-
+* [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+* [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+* [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
+* [Mozilla Firefox]() - Coming Really Soon
 
 ### Or Build and Run
 
@@ -45,8 +40,5 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension from b
 ```
 Fix Re-Render Issue on Moving Popup
 Optimise Export Element Algorithm
-Optimise Code For Performance
-Optimise Code For Design Patterns
-CSP Form-Action Issue While Exporting to Codepen
-CORS Issue (Image, Fonts, Media) On Codepen
+Optimise Code For Performance/Design
 ```
