@@ -36,9 +36,8 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
-* [Mozilla Firefox]() - Coming Really Soon
-
-
+* [Mozilla Firefox]() - Coming Really Soon   
+<br>
 ### Build Manually
 
 ```
@@ -53,12 +52,12 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 ```
 
 ### Built With
-
-* [ReactJs](https://reactjs.org/) - SuperDev Popup
-* [PostCSS](https://postcss.org/) - Used By Export Element
-* [TailWind](https://tailwindcss.com/) - SuperDev Popup
-* [JSBeautify](https://beautifier.io/) - Used By Export Element
-
+```
+ReactJs - SuperDev Popup
+PostCSS - Used By Export Element
+TailWind - SuperDev Popup
+JSBeautify - Used By Export Element
+```
 
 ### TODO:
 
