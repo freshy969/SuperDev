@@ -1785,9 +1785,8 @@ async function activateExportElement(activeTab, port, request) {
 		}
 	});
 
-	portTwo.postMessage({action: 'fetchStyles', allStyleSheets: allStyleSheets});
-
 	// All Different Origin Stylesheets
+	portTwo.postMessage({action: 'fetchStyles', allStyleSheets: allStyleSheets});
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'allStyleSheets') {
 			if (allStyleSheets.length !== 0) {
