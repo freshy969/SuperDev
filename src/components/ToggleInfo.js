@@ -101,6 +101,7 @@ export default function ToggleInfo({allFeatures, activeTab, portThree, allFeatur
 								`Take Full Site Screenshot`,
 								`Site Responsive Viewer`,
 								`Site Info/Technology Lookup`,
+								`Quick Source Code Viewer`,
 							].map(function (value, index) {
 								return (
 									<div className={index + 1 === 1 ? '' : 'mt-2'} key={index + 1}>
