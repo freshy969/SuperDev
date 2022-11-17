@@ -1799,9 +1799,6 @@ async function activateExportElement(activeTab, port, request) {
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'allStyleSheets') {
 			allStyleSheets = request.allStyleSheets;
-			allStyleSheets = allStyleSheets.filter(function (value, index) {
-				return value !== null && value !== undefined && value !== '';
-			});
 			document.body.style.removeProperty('cursor');
 			document.addEventListener('click', onMouseClick, true);
 		}
@@ -1833,7 +1830,7 @@ async function activateExportElement(activeTab, port, request) {
 				let usedRuleSelectors = [];
 				let filteredHTML;
 				let selectedElement;
-				let allStylesRef = allStyleSheets.join('\n');
+				let allStylesRef = allStyleSheets;
 				let filteredCSS = postcss.parse(allStylesRef);
 				let usedAnimations = [];
 				let targetVars = window.getComputedStyle(event.target);

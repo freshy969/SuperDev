@@ -605,7 +605,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 					fetch(valueOne)
 						.then(function (response) {
 							if (response.status >= 200 && response.status < 300) return response.text();
-							else return null;
+							else return '';
 						})
 						.then(function (data) {
 							allStyleSheets[indexOne] = data;
@@ -646,7 +646,29 @@ chrome.runtime.onConnect.addListener(function (port) {
 		});
 
 		Promise.all(promiseAllOne).then(function () {
-			port.postMessage({action: 'allStyleSheets', allStyleSheets: allStyleSheets});
+			allStyleSheets = allStyleSheets
+				.filter(function (value, index) {
+					return value !== null && value !== undefined && value !== '';
+				})
+				.join('');
+			let matchImportURLs = [...allStyleSheets.matchAll(regexEight)];
+			matchImportURLs.map(function (valueOne, indexTwo) {
+				if (valueOne[1].replaceAll(regexSix, '').startsWith('http://') || valueOne[1].replaceAll(regexSix, '').startsWith('https://')) {
+					promiseAllTwo.push(
+						fetch(valueOne[1])
+							.then(function (response) {
+								if (response.status >= 200 && response.status < 300) return response.text();
+								else return '';
+							})
+							.then(function (data) {
+								allStyleSheets = allStyleSheets.replaceAll(valueOne[0], data);
+							})
+					);
+				}
+			});
+			Promise.all(promiseAllTwo).then(function () {
+				port.postMessage({action: 'allStyleSheets', allStyleSheets: allStyleSheets});
+			});
 		});
 	}
 
