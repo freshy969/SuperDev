@@ -18,7 +18,7 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 ### Screenshots
 
 <p align="center">
-  <img src="https://github.com/twoabd/SuperDev/blob/main/github/1.png">
+  <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/1.png">
 </p>
 
 ### Privacy Note
