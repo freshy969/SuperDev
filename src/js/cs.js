@@ -1789,12 +1789,10 @@ async function activateExportElement(activeTab, port, request) {
 	document.body.style.setProperty('cursor', 'wait', 'important');
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'allStyleSheets') {
-			if (allStyleSheets.length !== 0) {
-				allStyleSheets = request.allStyleSheets;
-				allStyleSheets = allStyleSheets.filter(function (value, index) {
-					return value !== null && value !== undefined && value !== '';
-				});
-			}
+			allStyleSheets = request.allStyleSheets;
+			allStyleSheets = allStyleSheets.filter(function (value, index) {
+				return value !== null && value !== undefined && value !== '';
+			});
 			document.body.style.removeProperty('cursor');
 			document.addEventListener('click', onMouseClick, true);
 		}
