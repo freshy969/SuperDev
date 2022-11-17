@@ -35,4 +35,6 @@ Fix Re-Render Issue on Moving Popup
 Optimise Export Element Algorithm
 Optimise Code For Performance
 Optimise Code For Design Patterns
+CSP Form-Action Issue While Exporting to Codepen
+CORS Issue (Image, Fonts, Media) On Codepen
 ```
