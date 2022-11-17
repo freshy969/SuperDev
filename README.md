@@ -22,7 +22,7 @@ List of Free Feature below -
   <img src="https://github.com/twoabd/SuperDev/blob/main/screenshots/1.png">
 </p>
 
-## Commands
+## Build
 
 ```
 pnpm install && pnpm run build && pnpm run move && pnpm run copy && pnpm run remove && pnpm run renameCSS && pnpm run renameHTML && browserify ./src/js/cs.js | terser -c -f ascii_only > ./build/js/cs.js && browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js && clear
