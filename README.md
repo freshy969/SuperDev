@@ -15,11 +15,13 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 - Clear All Cache - Clear Cache/Cookie/LocalStorage   
 ```
 
-### Author's Note
+### Troubleshooting
 ```
 - I Am Working At Least 12Hrs A Day On This So Bug Reports Are Most Welcome
-- While Creating Issues, Check If The Bug Is Reproducable on Your Device
-- Provide Your OS And Browser Name/Version Plus The Site URL Where It Happened
+- If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page
+- If It's Still Not Working, Uninstall and Reinstall The Extension
+- Make Sure You're Running The Latest Version of SuperDev + The Browser
+- If None of This Work, Submit An Issue
 ```
 
 ### Privacy Note
@@ -61,9 +63,9 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 
 ### Built With
 ```
-ReactJs - SuperDev Popup
+ReactJS - SuperDev Popup
+TailWindCSS - SuperDev Popup
 PostCSS - Used By Export Element
-TailWind - SuperDev Popup
 JSBeautify - Used By Export Element
 ```
 
