@@ -24,9 +24,7 @@ List of Free Feature below -
 
 ### Install From Chrome Store
 
-```
 [SuperDev - Chrome Web Store](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl)
-```
 
 ### Or Build and Run
 
