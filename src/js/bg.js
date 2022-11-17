@@ -593,7 +593,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 	// Export Element
 	function fetchStyles(allStyleSheets) {
 		let promiseAll = [];
-		let fetchedStyles = [];
 		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
 
 		allStyleSheets.map(async function (valueOne, indexOne) {
@@ -605,11 +604,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 							else return null;
 						})
 						.then(function (data) {
-							fetchedStyles[indexOne] = data;
+							allStyleSheets[indexOne] = data;
 
 							// Relative CSS URL to Absolute CSS URL
-							if (fetchedStyles[indexOne].includes('url(')) {
-								let matchStyleURLs = [...fetchedStyles[indexOne].matchAll(regexZero)];
+							if (allStyleSheets[indexOne].includes('url(')) {
+								let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
 								matchStyleURLs.map(function (valueTwo, indexTwo) {
 									if (
 										!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
@@ -619,18 +618,18 @@ chrome.runtime.onConnect.addListener(function (port) {
 										!valueTwo[1].replace(/\\/g, '').startsWith('https://')
 									) {
 										if (valueTwo[1].startsWith('/')) {
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 												valueTwo[0],
 												valueTwo[0].replaceAll(valueTwo[1], new URL(new URL(valueOne).origin + valueTwo[1]).href)
 											);
 										} else {
-											fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 												valueTwo[0],
 												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]).href)
 											);
 										}
 									} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
-										fetchedStyles[indexOne] = fetchedStyles[indexOne].replaceAll(
+										allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 											valueTwo[0],
 											valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
 										);
@@ -640,12 +639,12 @@ chrome.runtime.onConnect.addListener(function (port) {
 						})
 				);
 			} else {
-				fetchedStyles[indexOne] = null;
+				allStyleSheets[indexOne] = null;
 			}
 		});
 
 		Promise.all(promiseAll).then(function () {
-			port.postMessage({action: 'fetchedStyles', fetchedStyles: fetchedStyles});
+			port.postMessage({action: 'allStyleSheets', allStyleSheets: allStyleSheets});
 		});
 	}
 

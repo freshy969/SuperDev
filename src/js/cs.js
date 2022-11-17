@@ -1789,10 +1789,10 @@ async function activateExportElement(activeTab, port, request) {
 
 	// All Different Origin Stylesheets
 	portTwo.onMessage.addListener(function (request) {
-		if (request.action === 'fetchedStyles') {
+		if (request.action === 'allStyleSheets') {
 			if (allStyleSheets.length !== 0) {
 				allStyleSheets = allStyleSheets.map(function (value, index) {
-					if (value.startsWith('http://') || value.startsWith('https://')) return request.fetchedStyles[index];
+					if (value.startsWith('http://') || value.startsWith('https://')) return request.allStyleSheets[index];
 					else return value;
 				});
 				allStyleSheets = allStyleSheets.filter(function (value, index) {
@@ -1813,6 +1813,7 @@ async function activateExportElement(activeTab, port, request) {
 					clearInterval(intId);
 					document.body.style.removeProperty('cursor');
 					mainWorker(event);
+					console.log(allStyleSheets);
 				}
 			}, 50);
 			setTimeout(function () {
