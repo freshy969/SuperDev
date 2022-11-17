@@ -447,7 +447,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 			// Export Element
 			case 'fetchStyles':
-				fetchStyles(request.fetchStylesURL);
+				fetchStyles(request.allStyleSheets);
 				break;
 
 			// Clear All Cache
@@ -591,13 +591,13 @@ chrome.runtime.onConnect.addListener(function (port) {
 	}
 
 	// Export Element
-	function fetchStyles(fetchStylesURL) {
+	function fetchStyles(allStyleSheets) {
 		let promiseAll = [];
 		let fetchedStyles = [];
 		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm);
 
-		fetchStylesURL.map(async function (valueOne, indexOne) {
-			if (valueOne !== null) {
+		allStyleSheets.map(async function (valueOne, indexOne) {
+			if (valueOne.startsWith('http://') || valueOne.startsWith('https://')) {
 				promiseAll.push(
 					fetch(valueOne)
 						.then(function (response) {

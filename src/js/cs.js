@@ -1732,7 +1732,6 @@ async function activateExportElement(activeTab, port, request) {
 
 	let portTwo = chrome.runtime.connect({name: 'portTwo'});
 	let allStyleSheets = [];
-	let fetchStylesURL = [];
 	let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url('') or url("")
 	let regexOne = new RegExp(/var\(([a-zA-Z-0-9_,#."%\s]+)\)/gm); // CSS variables used in CSS
 	let regexTwo = new RegExp(/(--[a-zA-Z0-9-_]+)/gm); // CSS variables declaration
@@ -1781,24 +1780,19 @@ async function activateExportElement(activeTab, port, request) {
 					}
 				});
 			}
-
-			fetchStylesURL[indexOne] = null;
 		} catch (e) {
-			allStyleSheets[indexOne] = null;
-			fetchStylesURL[indexOne] = valueOne.href;
+			allStyleSheets[indexOne] = valueOne.href;
 		}
 	});
 
-	if (fetchStylesURL.join(', ').includes('http')) {
-		portTwo.postMessage({action: 'fetchStyles', fetchStylesURL: fetchStylesURL});
-	}
+	portTwo.postMessage({action: 'fetchStyles', allStyleSheets: allStyleSheets});
 
 	// All Different Origin Stylesheets
 	portTwo.onMessage.addListener(function (request) {
 		if (request.action === 'fetchedStyles') {
 			if (allStyleSheets.length !== 0) {
 				allStyleSheets = allStyleSheets.map(function (value, index) {
-					if (value === null) return request.fetchedStyles[index];
+					if (value.startsWith('http://') || value.startsWith('https://')) return request.fetchedStyles[index];
 					else return value;
 				});
 				allStyleSheets = allStyleSheets.filter(function (value, index) {
