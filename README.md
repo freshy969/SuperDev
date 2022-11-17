@@ -15,15 +15,6 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 - Clear All Cache - Clear Cache/Cookie/LocalStorage   
 ```
 
-### Troubleshooting
-```
-- I Am Working At Least 12Hrs A Day On This So Bug Reports Are Most Welcome
-- If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page
-- If It's Still Not Working, Uninstall and Reinstall The Extension
-- Make Sure You're Running The Latest Version of SuperDev + The Browser
-- If None of This Work, Submit An Issue
-```
-
 ### Privacy Note
 ```
 - It Does Not Collect Any Data At All
@@ -69,10 +60,20 @@ PostCSS - Used By Export Element
 JSBeautify - Used By Export Element
 ```
 
+### Troubleshooting
+```
+- I Am Working At Least 12Hrs A Day On This So Bug Reports Are Most Welcome
+- If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page
+- If It's Still Not Working, Uninstall and Reinstall The Extension
+- Make Sure You're Running The Latest Version of SuperDev + The Browser
+- If None of This Work, Submit An Issue
+```
+
 ### TODO:
 
 ```
 Fix DOM Reflow on Moving Popup
 Optimise Export Element Algorithm
 Optimise Code For Performance/Design
+Add Support for Mozilla Firefox
 ```
