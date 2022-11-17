@@ -38,6 +38,7 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Mozilla Firefox]() - Coming Really Soon
 
+
 ### Build Manually
 
 ```
@@ -51,12 +52,13 @@ browserify ./src/js/bg.js | terser -c -f ascii_only > ./build/js/bg.js
 Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From Build Folder.
 ```
 
-## Built With
+### Built With
 
 * [ReactJs](https://reactjs.org/) - SuperDev Popup
 * [PostCSS](https://postcss.org/) - Used By Export Element
 * [TailWind](https://tailwindcss.com/) - SuperDev Popup
 * [JSBeautify](https://beautifier.io/) - Used By Export Element
+
 
 ### TODO:
 
