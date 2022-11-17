@@ -611,11 +611,11 @@ chrome.runtime.onConnect.addListener(function (port) {
 								let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
 								matchStyleURLs.map(function (valueTwo, indexTwo) {
 									if (
-										!valueTwo[1].replace(/\\/g, '').startsWith('//') &&
-										!valueTwo[1].replace(/\\/g, '').startsWith('blob:') &&
-										!valueTwo[1].replace(/\\/g, '').startsWith('data:') &&
-										!valueTwo[1].replace(/\\/g, '').startsWith('http://') &&
-										!valueTwo[1].replace(/\\/g, '').startsWith('https://')
+										!valueTwo[1].replaceAll(/\\/g, '').startsWith('//') &&
+										!valueTwo[1].replaceAll(/\\/g, '').startsWith('blob:') &&
+										!valueTwo[1].replaceAll(/\\/g, '').startsWith('data:') &&
+										!valueTwo[1].replaceAll(/\\/g, '').startsWith('http://') &&
+										!valueTwo[1].replaceAll(/\\/g, '').startsWith('https://')
 									) {
 										if (valueTwo[1].startsWith('/')) {
 											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
@@ -625,10 +625,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 										} else {
 											allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 												valueTwo[0],
-												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replace(/\/[^/]*$/, '') + '/' + valueTwo[1]).href)
+												valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.replaceAll(/\/[^/]*$/, '') + '/' + valueTwo[1]).href)
 											);
 										}
-									} else if (valueTwo[1].replace(/\\/g, '').startsWith('//')) {
+									} else if (valueTwo[1].replaceAll(/\\/g, '').startsWith('//')) {
 										allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 											valueTwo[0],
 											valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)

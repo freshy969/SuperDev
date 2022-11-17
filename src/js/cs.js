@@ -1761,17 +1761,26 @@ async function activateExportElement(activeTab, port, request) {
 						!valueTwo[1].replaceAll(regexSix, '').startsWith('https://')
 					) {
 						if (valueTwo[1].startsWith('/')) {
+							console.log(valueTwo[1]);
 							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 								valueTwo[0],
 								valueTwo[0].replaceAll(valueTwo[1], new URL(new URL(document.baseURI).origin + valueTwo[1]).href)
 							);
 						} else {
-							allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
-								valueTwo[0],
-								valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo[1]).href)
-							);
+							if (valueOne.href) {
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+									valueTwo[0],
+									valueTwo[0].replaceAll(valueTwo[1], new URL(valueOne.href.replaceAll(regexSeven, '') + '/' + valueTwo[1]).href)
+								);
+							} else {
+								allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
+									valueTwo[0],
+									valueTwo[0].replaceAll(valueTwo[1], new URL(document.baseURI.replaceAll(regexSeven, '') + '/' + valueTwo[1]).href)
+								);
+							}
 						}
 					} else if (valueTwo[1].replaceAll(regexSix, '').startsWith('//')) {
+						console.log(valueTwo[1]);
 						allStyleSheets[indexOne] = allStyleSheets[indexOne].replaceAll(
 							valueTwo[0],
 							valueTwo[0].replaceAll(valueTwo[1], new URL('https:' + valueTwo[1]).href)
@@ -1950,7 +1959,7 @@ async function activateExportElement(activeTab, port, request) {
 				filteredCSS.walkAtRules(function (atRule) {
 					if (atRule.name === 'media' && atRule.params === 'print') {
 						atRule.remove();
-					} else if (atRule.nodes.length === 0) {
+					} else if (atRule.nodes && atRule.nodes.length === 0) {
 						atRule.remove();
 					}
 				});
