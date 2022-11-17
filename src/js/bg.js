@@ -597,8 +597,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 		let regexZero = new RegExp(/url\(['"]?(.*?)['"]?\)/gm); // Search for url()
 		let regexSix = new RegExp(/\\/gm); // Remove backslashes
 		let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
-		let regexEight = new RegExp(/@import.*?url\(['"]?(.*?)['"]?\).*?;/gm); // Search for @import url()
-		// let regexNine = new RegExp(/@import.*?[^(]['"](.*?)['"].*?;/gm); // Search for @import '';
+		let regexEight = new RegExp(/@import url\(['"]?(.*?)['"]?\).*?;/gm); // Search for @import url()
+		let regexNine = new RegExp(/@import ['"](.*?)['"].*?;/gm); // Search for @import '';
 
 		allStyleSheets.map(async function (valueOne, indexOne) {
 			if (valueOne.startsWith('http://') || valueOne.startsWith('https://')) {
@@ -652,8 +652,10 @@ chrome.runtime.onConnect.addListener(function (port) {
 					return value !== null && value !== undefined && value !== '';
 				})
 				.join('');
-			let matchImportURLs = [...allStyleSheets.matchAll(regexEight)];
-			console.log(matchImportURLs);
+			let matchImportURLsOne = [...allStyleSheets.matchAll(regexEight)];
+			let matchImportURLsTwo = [...allStyleSheets.matchAll(regexNine)];
+			let matchImportURLs = [...new Set(matchImportURLsOne.concat(matchImportURLsTwo))];
+
 			matchImportURLs.map(function (valueOne, indexTwo) {
 				if (valueOne[1].replaceAll(regexSix, '').startsWith('http://') || valueOne[1].replaceAll(regexSix, '').startsWith('https://')) {
 					promiseAllTwo.push(
@@ -669,7 +671,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 				}
 			});
 			Promise.all(promiseAllTwo).then(function () {
-				console.log(allStyleSheets);
 				port.postMessage({action: 'allStyleSheets', allStyleSheets: allStyleSheets});
 			});
 		});
