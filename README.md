@@ -4,16 +4,16 @@ A Swiss Army Toolbox for Web Designers and Developers.
 List of Free Feature below -
 
 ```
-1. Text Editor
-2. Page Ruler
-3. Color Picker
-4. Color Palette
-5. Page Guideline
-6. Page Highlight
-7. Move Element
-8. Delete Element
-9. Export Element
-10. Clear All Cache
+📍 Text Editor - Edit Any Website's Text Easily
+📍 Page Ruler - Measure Distance Between Two Points
+📍 Color Picker - Pick Site Colors, Even From Images in RGB/Hex
+📍 Color Palette - Website's Colors Palette In RGB/Hex
+📍 Page Guideline - Check Alignments In Real-time With Guidelines 
+📍 Page Highlight - Highlight Page Elements With Different Colors
+📍 Move Element - Move Any Element Within The Page
+📍 Delete Element - Delete Any Element From The Page
+📍 Export Element - Export HTML + CSS of Any Page Element
+📍 Clear All Cache - Clear Cache/Cookie/LocalStorage
 ```
 
 ### Screenshots
