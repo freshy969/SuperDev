@@ -2231,7 +2231,7 @@ async function activateExportElement(activeTab, port, request) {
 									description: 'Copied with SuperDev',
 									html: filteredHTML,
 									css: filteredCSS,
-									js: `Github - 'https://github.com/twoabd/superdev'`,
+									js: `/* https://github.com/twoabd/superdev */`,
 									tags: ['SuperDev'],
 								});
 								let codepenForm = document.createElement('form');
