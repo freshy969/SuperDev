@@ -21,7 +21,6 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
   <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/1.png">
 </p>
 
-
 ### Click to Watch on Youtube
 
 <p align="center">
@@ -91,7 +90,6 @@ JSBeautify - Used By Export Element
 ### TODO:
 
 ```
-Fix DOM Reflow on Moving Popup
 Optimise Export Element Algorithm
 Optimise Code For Performance/Design
 Add Support for Mozilla Firefox

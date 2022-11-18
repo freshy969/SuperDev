@@ -78,6 +78,7 @@ async function showHideExtension(activeTab, port, request) {
 	if (document.contentType === 'text/html') {
 		// If Popup Doesn't Exists, Create
 		if (document.querySelector('#superDevWrapper') === null) {
+			let secondBody = document.createElement('body');
 			let superDevWrapper = document.createElement('superdev-wrapper');
 			superDevWrapper.id = 'superDevWrapper';
 			superDevWrapper.style.cssText = `
@@ -97,7 +98,6 @@ async function showHideExtension(activeTab, port, request) {
 			width: 335px !important;
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
-			document.documentElement.appendChild(superDevWrapper);
 
 			let superDevHandler = document.createElement('superdev-handler');
 			superDevHandler.id = 'superDevHandler';
@@ -119,7 +119,6 @@ async function showHideExtension(activeTab, port, request) {
 			margin-bottom: -38.5px !important;
 			border-radius: 8px !important;
 			z-index: 2147483647 !important;`;
-			superDevWrapper.appendChild(superDevHandler);
 
 			let superDevPopup = document.createElement('iframe');
 			superDevPopup.src = chrome.runtime.getURL('index.html');
@@ -139,6 +138,10 @@ async function showHideExtension(activeTab, port, request) {
 			width: 335px !important;
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
+
+			document.documentElement.appendChild(secondBody);
+			secondBody.appendChild(superDevWrapper);
+			superDevWrapper.appendChild(superDevHandler);
 			superDevWrapper.appendChild(superDevPopup);
 
 			$('#superDevWrapper').draggable({
