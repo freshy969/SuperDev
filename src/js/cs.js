@@ -78,8 +78,8 @@ async function showHideExtension(activeTab, port, request) {
 	if (document.contentType === 'text/html') {
 		// If Popup Doesn't Exists, Create
 		if (document.querySelector('#superDevWrapper') === null) {
-			let secondBody = document.createElement('body');
-			secondBody.id = 'secondBody';
+			let superDev = document.createElement('body');
+			superDev.id = 'superDev';
 
 			let superDevWrapper = document.createElement('superdev-wrapper');
 			superDevWrapper.id = 'superDevWrapper';
@@ -141,8 +141,8 @@ async function showHideExtension(activeTab, port, request) {
 			border-radius: 8px !important;
 			z-index: 2147483646 !important;`;
 
-			document.documentElement.appendChild(secondBody);
-			secondBody.appendChild(superDevWrapper);
+			document.documentElement.appendChild(superDev);
+			superDev.appendChild(superDevWrapper);
 			superDevWrapper.appendChild(superDevHandler);
 			superDevWrapper.appendChild(superDevPopup);
 
@@ -260,7 +260,7 @@ async function activateTextEditor(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
@@ -278,7 +278,7 @@ async function activateTextEditor(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
@@ -486,7 +486,7 @@ function activatePageRuler(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
@@ -713,7 +713,7 @@ function activateColorPicker(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
@@ -955,7 +955,7 @@ async function activatePageGuideline(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -968,7 +968,7 @@ async function activatePageGuideline(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1064,7 +1064,7 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.id !== 'superDevPopup' &&
 							element.id !== 'superDevWrapper' &&
 							element.tagName !== 'HTML' &&
-							element.id !== 'secondBody'
+							element.id !== 'superDev'
 						) {
 							let color = rgba();
 							if (value.settings.checkboxPageHighlight6 !== true) {
@@ -1085,7 +1085,7 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.id !== 'superDevPopup' &&
 							element.id !== 'superDevWrapper' &&
 							element.tagName !== 'HTML' &&
-							element.id !== 'secondBody'
+							element.id !== 'superDev'
 						) {
 							if (
 								element.tagName === 'ADDRESS' ||
@@ -1143,7 +1143,7 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.id !== 'superDevPopup' &&
 							element.id !== 'superDevWrapper' &&
 							element.tagName !== 'HTML' &&
-							element.id !== 'secondBody'
+							element.id !== 'superDev'
 						) {
 							if (
 								element.tagName === 'A' ||
@@ -1200,7 +1200,7 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.id !== 'superDevPopup' &&
 							element.id !== 'superDevWrapper' &&
 							element.tagName !== 'HTML' &&
-							element.id !== 'secondBody'
+							element.id !== 'superDev'
 						) {
 							if (
 								element.tagName === 'ARTICLE' ||
@@ -1237,7 +1237,7 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.id !== 'superDevPopup' &&
 							element.id !== 'superDevWrapper' &&
 							element.tagName !== 'HTML' &&
-							element.id !== 'secondBody'
+							element.id !== 'superDev'
 						) {
 							if (
 								element.tagName === 'H1' ||
@@ -1305,7 +1305,7 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.id !== 'superDevPopup' &&
 								element.id !== 'superDevWrapper' &&
 								element.tagName !== 'HTML' &&
-								element.id !== 'secondBody'
+								element.id !== 'superDev'
 							) {
 								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.removeProperty('box-sizing');
@@ -1325,7 +1325,7 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.id !== 'superDevPopup' &&
 								element.id !== 'superDevWrapper' &&
 								element.tagName !== 'HTML' &&
-								element.id !== 'secondBody'
+								element.id !== 'superDev'
 							) {
 								if (
 									element.tagName === 'ADDRESS' ||
@@ -1382,7 +1382,7 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.id !== 'superDevPopup' &&
 								element.id !== 'superDevWrapper' &&
 								element.tagName !== 'HTML' &&
-								element.id !== 'secondBody'
+								element.id !== 'superDev'
 							) {
 								if (
 									element.tagName === 'A' ||
@@ -1438,7 +1438,7 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.id !== 'superDevPopup' &&
 								element.id !== 'superDevWrapper' &&
 								element.tagName !== 'HTML' &&
-								element.id !== 'secondBody'
+								element.id !== 'superDev'
 							) {
 								if (
 									element.tagName === 'ARTICLE' ||
@@ -1474,7 +1474,7 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.id !== 'superDevPopup' &&
 								element.id !== 'superDevWrapper' &&
 								element.tagName !== 'HTML' &&
-								element.id !== 'secondBody'
+								element.id !== 'superDev'
 							) {
 								if (
 									element.tagName === 'H1' ||
@@ -1526,7 +1526,7 @@ async function activateMoveElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1539,7 +1539,7 @@ async function activateMoveElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1556,7 +1556,7 @@ async function activateMoveElement(activeTab, port, request) {
 				event.target.id !== 'superDevPopup' &&
 				event.target.id !== 'superDevWrapper' &&
 				event.target.tagName !== 'HTML' &&
-				event.target.id !== 'secondBody'
+				event.target.id !== 'superDev'
 			) {
 				event.target.style.setProperty('cursor', 'move', 'important');
 				event.target.classList.add('moveElementDraggable');
@@ -1677,7 +1677,7 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1690,7 +1690,7 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1707,7 +1707,7 @@ async function activateDeleteElement(activeTab, port, request) {
 				event.target.id !== 'superDevPopup' &&
 				event.target.id !== 'superDevWrapper' &&
 				event.target.tagName !== 'HTML' &&
-				event.target.id !== 'secondBody'
+				event.target.id !== 'superDev'
 			) {
 				event.target.classList.add('deleteElementWrapper');
 				document.querySelector('.deleteElementWrapper').remove();
@@ -1803,7 +1803,7 @@ async function activateExportElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1816,7 +1816,7 @@ async function activateExportElement(activeTab, port, request) {
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
 			event.target.tagName !== 'HTML' &&
-			event.target.id !== 'secondBody'
+			event.target.id !== 'superDev'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1906,7 +1906,7 @@ async function activateExportElement(activeTab, port, request) {
 				event.target.id !== 'superDevPopup' &&
 				event.target.id !== 'superDevWrapper' &&
 				event.target.tagName !== 'HTML' &&
-				event.target.id !== 'secondBody'
+				event.target.id !== 'superDev'
 			) {
 				const postcss = require('postcss');
 				const selectorparser = require('postcss-selector-parser');
