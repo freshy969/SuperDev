@@ -79,6 +79,8 @@ async function showHideExtension(activeTab, port, request) {
 		// If Popup Doesn't Exists, Create
 		if (document.querySelector('#superDevWrapper') === null) {
 			let secondBody = document.createElement('body');
+			secondBody.id = 'secondBody';
+
 			let superDevWrapper = document.createElement('superdev-wrapper');
 			superDevWrapper.id = 'superDevWrapper';
 			superDevWrapper.style.cssText = `
@@ -253,7 +255,13 @@ async function activateTextEditor(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			if (event.target.innerText !== '') {
 				event.target.setAttribute('contenteditable', true);
 				event.target.setAttribute('spellcheck', false);
@@ -265,7 +273,13 @@ async function activateTextEditor(activeTab, port, request) {
 	}
 
 	function onMouseOut(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			if (event.target.classList.contains('pageGuidelineOutline')) {
 				event.target.removeAttribute('contenteditable', true);
 				event.target.removeAttribute('spellcheck', false);
@@ -467,7 +481,13 @@ function activatePageRuler(activeTab, port, request) {
 	}
 
 	function onMouseMove(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -688,7 +708,13 @@ function activateColorPicker(activeTab, port, request) {
 	}
 
 	function onMouseMove(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			if (event.touches) {
 				inputX = event.touches[0].clientX;
 				inputY = event.touches[0].clientY;
@@ -924,14 +950,26 @@ async function activatePageGuideline(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1024,7 +1062,9 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDevWrapper'
+							element.id !== 'superDevWrapper' &&
+							element.tagName !== 'HTML' &&
+							element.id !== 'secondBody'
 						) {
 							let color = rgba();
 							if (value.settings.checkboxPageHighlight6 !== true) {
@@ -1043,7 +1083,9 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDevWrapper'
+							element.id !== 'superDevWrapper' &&
+							element.tagName !== 'HTML' &&
+							element.id !== 'secondBody'
 						) {
 							if (
 								element.tagName === 'ADDRESS' ||
@@ -1099,7 +1141,9 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDevWrapper'
+							element.id !== 'superDevWrapper' &&
+							element.tagName !== 'HTML' &&
+							element.id !== 'secondBody'
 						) {
 							if (
 								element.tagName === 'A' ||
@@ -1154,7 +1198,9 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDevWrapper'
+							element.id !== 'superDevWrapper' &&
+							element.tagName !== 'HTML' &&
+							element.id !== 'secondBody'
 						) {
 							if (
 								element.tagName === 'ARTICLE' ||
@@ -1189,7 +1235,9 @@ async function activatePageHighlight(activeTab, port, request) {
 							element.offsetWidth !== 0 &&
 							element.id !== 'superDevHandler' &&
 							element.id !== 'superDevPopup' &&
-							element.id !== 'superDevWrapper'
+							element.id !== 'superDevWrapper' &&
+							element.tagName !== 'HTML' &&
+							element.id !== 'secondBody'
 						) {
 							if (
 								element.tagName === 'H1' ||
@@ -1255,7 +1303,9 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDevWrapper'
+								element.id !== 'superDevWrapper' &&
+								element.tagName !== 'HTML' &&
+								element.id !== 'secondBody'
 							) {
 								if (value.settings.checkboxPageHighlight6 !== true) {
 									element.style.removeProperty('box-sizing');
@@ -1273,7 +1323,9 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDevWrapper'
+								element.id !== 'superDevWrapper' &&
+								element.tagName !== 'HTML' &&
+								element.id !== 'secondBody'
 							) {
 								if (
 									element.tagName === 'ADDRESS' ||
@@ -1328,7 +1380,9 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDevWrapper'
+								element.id !== 'superDevWrapper' &&
+								element.tagName !== 'HTML' &&
+								element.id !== 'secondBody'
 							) {
 								if (
 									element.tagName === 'A' ||
@@ -1382,7 +1436,9 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDevWrapper'
+								element.id !== 'superDevWrapper' &&
+								element.tagName !== 'HTML' &&
+								element.id !== 'secondBody'
 							) {
 								if (
 									element.tagName === 'ARTICLE' ||
@@ -1416,7 +1472,9 @@ async function activatePageHighlight(activeTab, port, request) {
 								element.offsetWidth !== 0 &&
 								element.id !== 'superDevHandler' &&
 								element.id !== 'superDevPopup' &&
-								element.id !== 'superDevWrapper'
+								element.id !== 'superDevWrapper' &&
+								element.tagName !== 'HTML' &&
+								element.id !== 'secondBody'
 							) {
 								if (
 									element.tagName === 'H1' ||
@@ -1463,14 +1521,26 @@ async function activateMoveElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1481,7 +1551,13 @@ async function activateMoveElement(activeTab, port, request) {
 		event.stopImmediatePropagation();
 
 		if (event.isTrusted === true) {
-			if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			if (
+				event.target.id !== 'superDevHandler' &&
+				event.target.id !== 'superDevPopup' &&
+				event.target.id !== 'superDevWrapper' &&
+				event.target.tagName !== 'HTML' &&
+				event.target.id !== 'secondBody'
+			) {
 				event.target.style.setProperty('cursor', 'move', 'important');
 				event.target.classList.add('moveElementDraggable');
 				$('.moveElementDraggable').draggable({
@@ -1600,7 +1676,8 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML'
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
 		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
@@ -1612,7 +1689,8 @@ async function activateDeleteElement(activeTab, port, request) {
 			event.target.id !== 'superDevHandler' &&
 			event.target.id !== 'superDevPopup' &&
 			event.target.id !== 'superDevWrapper' &&
-			event.target.tagName !== 'HTML'
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
 		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
@@ -1628,7 +1706,8 @@ async function activateDeleteElement(activeTab, port, request) {
 				event.target.id !== 'superDevHandler' &&
 				event.target.id !== 'superDevPopup' &&
 				event.target.id !== 'superDevWrapper' &&
-				event.target.tagName !== 'HTML'
+				event.target.tagName !== 'HTML' &&
+				event.target.id !== 'secondBody'
 			) {
 				event.target.classList.add('deleteElementWrapper');
 				document.querySelector('.deleteElementWrapper').remove();
@@ -1719,14 +1798,26 @@ async function activateExportElement(activeTab, port, request) {
 	document.documentElement.appendChild(pageGuidelineWrapper);
 
 	function onMouseOver(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			event.target.classList.add('pageGuidelineOutline');
 			renderPageGuideline(true);
 		}
 	}
 
 	function onMouseOut(event) {
-		if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+		if (
+			event.target.id !== 'superDevHandler' &&
+			event.target.id !== 'superDevPopup' &&
+			event.target.id !== 'superDevWrapper' &&
+			event.target.tagName !== 'HTML' &&
+			event.target.id !== 'secondBody'
+		) {
 			renderPageGuideline(false);
 			event.target.classList.remove('pageGuidelineOutline');
 		}
@@ -1810,7 +1901,13 @@ async function activateExportElement(activeTab, port, request) {
 		event.stopImmediatePropagation();
 
 		if (event.isTrusted === true && allStyleSheets.length !== 0) {
-			if (event.target.id !== 'superDevHandler' && event.target.id !== 'superDevPopup' && event.target.id !== 'superDevWrapper') {
+			if (
+				event.target.id !== 'superDevHandler' &&
+				event.target.id !== 'superDevPopup' &&
+				event.target.id !== 'superDevWrapper' &&
+				event.target.tagName !== 'HTML' &&
+				event.target.id !== 'secondBody'
+			) {
 				const postcss = require('postcss');
 				const selectorparser = require('postcss-selector-parser');
 				const discardcomments = require('postcss-discard-comments');
