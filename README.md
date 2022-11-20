@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/1.png">
+</p>
+
 ## SuperDev &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders that Minimises the Development/Designing Time and Provides Various Tools to Debug The Web Without Any Hassle.
@@ -12,18 +16,6 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * ```Delete Element``` - Delete Any Element From The Page
 * ```Export Element``` - Export HTML + Used CSS of Any Page Element
 * ```Clear All Cache``` - Clear Cache/Cookie/LocalStorage
-
-### Screenshots
-<p align="center">
-  <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/1.png">
-</p>
-
-### Click to Watch on Youtube
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=KWj-TqCuoHo">
-    <img src="https://github.com/twoabd/superdev/blob/main/screenshots/youtube/1.png">
-  </a>
-</p>
 
 ### Privacy Note
 * It Does Not Collect Any Data At All And Is Fully Offline Except For Two Fetch Requests.
@@ -60,7 +52,7 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 
 
 ### Troubleshooting
-* I Am Working At Least 12Hrs A Day On This, So Bug Reports Are Most Welcome.
+* Bug Reports Are Most Welcome.
 * If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page.
 * If It's Still Not Working, Uninstall and Reinstall The Extension.
 * Make Sure You're Running The Latest Version of SuperDev + The Browser.
@@ -77,4 +69,4 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 * ```Add Support``` for Mozilla Firefox
 
 ### Support
-```Superdev``` Is Saving You And Your Team a Good Amount of Time And Effort? [Buy Me A Coffee](https://www.buymeacoffee.com/abdollah) ☕
+* ```Superdev``` Is Saving You And Your Team a Good Amount of Time And Effort? [Buy Me A Coffee](https://www.buymeacoffee.com/abdollah) ☕
