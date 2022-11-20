@@ -5,7 +5,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	useEffect(function () {
 		// Set Visible Settings
 
-		allFeatures.map(function (value, index) {
+		allFeatures.forEach(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				document.querySelector('#checkboxPageHighlight1').checked = value.settings.checkboxPageHighlight1;
 				document.querySelector('#checkboxPageHighlight2').checked = value.settings.checkboxPageHighlight2;
@@ -40,7 +40,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	function colorPickerSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPicker1':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker1').checked === true) {
 							value.settings.checkboxColorPicker1 = true;
@@ -56,7 +56,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxColorPicker2':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'colorPicker') {
 						if (document.querySelector('#checkboxColorPicker2').checked === true) {
 							value.settings.checkboxColorPicker1 = false;
@@ -72,8 +72,8 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxColorPicker3':
-				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesRef.map(function (valueTwo, indexTwo) {
+				allFeatures.forEach(function (valueOne, indexTwo) {
+					allFeaturesRef.forEach(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'colorPicker' && valueTwo.id === 'colorPicker') {
 							if (document.querySelector('#checkboxColorPicker3').checked === true) {
 								setTimeout(async function () {
@@ -96,7 +96,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	function colorPaletteSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxColorPalette1':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'colorPalette') {
 						if (document.querySelector('#checkboxColorPalette1').checked === true) {
 							value.settings.checkboxColorPalette1 = true;
@@ -112,7 +112,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxColorPalette2':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'colorPalette') {
 						if (document.querySelector('#checkboxColorPalette2').checked === true) {
 							value.settings.checkboxColorPalette1 = false;
@@ -128,8 +128,8 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxColorPalette3':
-				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesRef.map(function (valueTwo, indexTwo) {
+				allFeatures.forEach(function (valueOne, indexTwo) {
+					allFeaturesRef.forEach(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'colorPalette' && valueTwo.id === 'colorPalette') {
 							if (document.querySelector('#checkboxColorPalette3').checked === true) {
 								setTimeout(async function () {
@@ -152,7 +152,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	function pageHighlightSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxPageHighlight1':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight1').checked === true) {
 							value.settings.checkboxPageHighlight1 = true;
@@ -174,7 +174,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight2':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight2').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -196,7 +196,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight3':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight3').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -218,7 +218,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight4':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight4').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -240,7 +240,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight5':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight5').checked === true) {
 							value.settings.checkboxPageHighlight1 = false;
@@ -262,7 +262,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight6':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'pageHighlight') {
 						if (document.querySelector('#checkboxPageHighlight6').checked === true) {
 							value.settings.checkboxPageHighlight6 = true;
@@ -275,8 +275,8 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxPageHighlight7':
-				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesRef.map(function (valueTwo, indexTwo) {
+				allFeatures.forEach(function (valueOne, indexTwo) {
+					allFeaturesRef.forEach(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'pageHighlight' && valueTwo.id === 'pageHighlight') {
 							if (document.querySelector('#checkboxPageHighlight7').checked === true) {
 								setTimeout(async function () {
@@ -307,7 +307,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	function exportElementSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxExportElement1':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'exportElement') {
 						if (document.querySelector('#checkboxExportElement1').checked === true) {
 							value.settings.checkboxExportElement1 = true;
@@ -323,7 +323,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxExportElement2':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'exportElement') {
 						if (document.querySelector('#checkboxExportElement2').checked === true) {
 							value.settings.checkboxExportElement1 = false;
@@ -339,8 +339,8 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxExportElement3':
-				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesRef.map(function (valueTwo, indexTwo) {
+				allFeatures.forEach(function (valueOne, indexTwo) {
+					allFeaturesRef.forEach(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'exportElement' && valueTwo.id === 'exportElement') {
 							if (document.querySelector('#checkboxExportElement3').checked === true) {
 								setTimeout(async function () {
@@ -363,7 +363,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 	function clearAllCacheSettings(checkbox) {
 		switch (checkbox) {
 			case 'checkboxClearAllCache1':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache1').checked === true) {
 							value.settings.checkboxClearAllCache1 = true;
@@ -376,7 +376,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxClearAllCache2':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache2').checked === true) {
 							value.settings.checkboxClearAllCache2 = true;
@@ -389,7 +389,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxClearAllCache3':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache3').checked === true) {
 							value.settings.checkboxClearAllCache3 = true;
@@ -402,7 +402,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxClearAllCache4':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache4').checked === true) {
 							value.settings.checkboxClearAllCache4 = true;
@@ -415,7 +415,7 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxClearAllCache5':
-				allFeatures.map(async function (value, index) {
+				allFeatures.forEach(async function (value, index) {
 					if (value.id === 'clearAllCache') {
 						if (document.querySelector('#checkboxClearAllCache5').checked === true) {
 							value.settings.checkboxClearAllCache5 = true;
@@ -428,8 +428,8 @@ export default function ToggleSettings({allFeatures, activeTab, portThree, allFe
 				});
 				break;
 			case 'checkboxClearAllCache6':
-				allFeatures.map(function (valueOne, indexTwo) {
-					allFeaturesRef.map(function (valueTwo, indexTwo) {
+				allFeatures.forEach(function (valueOne, indexTwo) {
+					allFeaturesRef.forEach(function (valueTwo, indexTwo) {
 						if (valueOne.id === 'clearAllCache' && valueTwo.id === 'clearAllCache') {
 							if (document.querySelector('#checkboxClearAllCache6').checked === true) {
 								setTimeout(async function () {

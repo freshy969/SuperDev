@@ -165,7 +165,7 @@ const allFeatures = [
 chrome.runtime.onInstalled.addListener(function (reason) {
 	// Content Scripts Reinjection
 	chrome.tabs.query({}, function (result) {
-		result.map(function (valueTwo, indexTwo) {
+		result.forEach(function (valueTwo, indexTwo) {
 			if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
 				chrome.scripting.executeScript({
 					target: {tabId: valueTwo.id},
@@ -219,7 +219,7 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 
 					// Add Any Feature From Local To Stored Storage
 					// That's Missing From Stored Storage
-					localAllFeatures.map(function (value, index) {
+					localAllFeatures.forEach(function (value, index) {
 						if (storedAllFeatures.indexOf(value) === -1) {
 							storedAllFeatures.splice(index, 0, value);
 						}
@@ -234,8 +234,8 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 
 					// If A Feature Exists in Both Stored Data And
 					// Local Storage, Sync That Feature's Data + Settings
-					localAllFeatures.map(function (valueOne, indexOne) {
-						storedAllFeatures.map(function (valueTwo, indexTwo) {
+					localAllFeatures.forEach(function (valueOne, indexOne) {
+						storedAllFeatures.forEach(function (valueTwo, indexTwo) {
 							if (valueOne.id === valueTwo.id) {
 								// Update Icon If Mismatch
 								if (valueOne.icon !== valueTwo.icon) valueTwo.icon = valueOne.icon;
@@ -260,7 +260,7 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 								if (Object.keys(valueOne.settings).length !== 0) {
 									if (Object.keys(valueTwo.settings).length !== 0) {
 										// Iterating Local Settings Keys
-										Object.keys(valueOne.settings).map(function (valueThree, indexThree) {
+										Object.keys(valueOne.settings).forEach(function (valueThree, indexThree) {
 											// Put Local Settings Key to Stored Settings
 											// Undefined Means That Key Doesn't Exists in Stored,
 											// Add That Key-Value Pair to Stored Settings
@@ -270,7 +270,7 @@ chrome.runtime.onInstalled.addListener(function (reason) {
 										});
 
 										// Iterating Stored Settings Keys
-										Object.keys(valueTwo.settings).map(function (valueThree, indexThree) {
+										Object.keys(valueTwo.settings).forEach(function (valueThree, indexThree) {
 											// Put Stored Settings Key to Local Settings
 											// Undefined Means That Key Doesn't Exists in Local
 											// Delete That Key from Stored Settings
@@ -301,7 +301,7 @@ chrome.management.onEnabled.addListener(function (extension) {
 	if (extension.name === chrome.runtime.getManifest().name) {
 		// Content Scripts Reinjection
 		chrome.tabs.query({}, function (result) {
-			result.map(function (valueTwo, indexTwo) {
+			result.forEach(function (valueTwo, indexTwo) {
 				if ((valueTwo.url.startsWith('http://') || valueTwo.url.startsWith('https://')) && !valueTwo.url.includes('https://chrome.google.com/webstore')) {
 					chrome.scripting.executeScript({
 						target: {tabId: valueTwo.id},
@@ -600,7 +600,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 		let regexEight = new RegExp(/@import url\(['"]?(.*?)['"]?\).*?;/gm); // Search for @import url()
 		let regexNine = new RegExp(/@import ['"](.*?)['"].*?;/gm); // Search for @import '';
 
-		allStyleSheets.map(async function (valueOne, indexOne) {
+		allStyleSheets.forEach(async function (valueOne, indexOne) {
 			if (valueOne.startsWith('http://') || valueOne.startsWith('https://')) {
 				promiseAllOne.push(
 					fetch(valueOne)
@@ -614,7 +614,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 							// Relative CSS URL to Absolute CSS URL
 							if (allStyleSheets[indexOne].includes('url(')) {
 								let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
-								matchStyleURLs.map(function (valueTwo, indexTwo) {
+								matchStyleURLs.forEach(function (valueTwo, indexTwo) {
 									if (
 										!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
 										!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
@@ -656,7 +656,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 			let matchImportURLsTwo = [...allStyleSheets.matchAll(regexNine)];
 			let matchImportURLs = [...new Set(matchImportURLsOne.concat(matchImportURLsTwo))];
 
-			matchImportURLs.map(function (valueOne, indexTwo) {
+			matchImportURLs.forEach(function (valueOne, indexTwo) {
 				if (valueOne[1].replaceAll(regexSix, '').startsWith('http://') || valueOne[1].replaceAll(regexSix, '').startsWith('https://')) {
 					promiseAllTwo.push(
 						fetch(valueOne[1])

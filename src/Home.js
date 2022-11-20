@@ -106,7 +106,7 @@ export default function Home() {
 
 				if (oldState.length === 0) return false;
 
-				oldState.map(async function (value, index) {
+				oldState.forEach(async function (value, index) {
 					await chrome.storage.local.remove(['setHomePageActive' + value]);
 					await chrome.storage.local.remove(['setActFeatDisabled' + value]);
 					await chrome.storage.local.remove(['setPopupMinimised' + value]);

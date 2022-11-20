@@ -1,6 +1,6 @@
 export default function ActDeactFeature(allFeatures, activeTab, portThree, featureId) {
 	// Disable All
-	allFeatures.map(function (value, index) {
+	allFeatures.forEach(function (value, index) {
 		if (value.id !== featureId) {
 			if (value.id === 'clearAllCache' || value.id === 'colorPalette') JustHideMeExcep(activeTab, portThree, value.id);
 			else JustHideMe(activeTab, portThree, value.id);
@@ -8,7 +8,7 @@ export default function ActDeactFeature(allFeatures, activeTab, portThree, featu
 	});
 
 	// Except The One Clicked
-	allFeatures.map(function (value, index) {
+	allFeatures.forEach(function (value, index) {
 		if (value.id === featureId) {
 			if (value.id === 'clearAllCache' || value.id === 'colorPalette') HideMeShowMeExcep(activeTab, portThree, value.id);
 			else HideMeShowMe(activeTab, portThree, value.id);

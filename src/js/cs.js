@@ -770,7 +770,7 @@ function activateColorPicker(activeTab, port, request) {
 		colorPickerTooltipChild.className = 'colorPickerTooltipChild';
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result['allFeatures']).map(function (value, index) {
+			JSON.parse(result['allFeatures']).forEach(function (value, index) {
 				if (value.id === 'colorPicker') {
 					if (value.settings.checkboxColorPicker1 === true) {
 						colorPickerTooltipBG.style.setProperty('background-color', `${spotColor.hex}`, 'important');
@@ -890,7 +890,7 @@ function activateColorPalette(activeTab, port, request) {
 
 			// RGB or Hex?
 			chrome.storage.local.get(['allFeatures'], function (result) {
-				JSON.parse(result['allFeatures']).map(function (value, index) {
+				JSON.parse(result['allFeatures']).forEach(function (value, index) {
 					if (value.id === 'colorPalette') {
 						if (value.settings.checkboxColorPalette1 === true) {
 							allColors = allColors.map(function (value, index) {
@@ -1052,7 +1052,7 @@ async function activatePageHighlight(activeTab, port, request) {
 	window.focus({preventScroll: true});
 
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result['allFeatures']).map(function (value, index) {
+		JSON.parse(result['allFeatures']).forEach(function (value, index) {
 			if (value.id === 'pageHighlight') {
 				if (value.settings.checkboxPageHighlight1 === true) {
 					// All Page Elements
@@ -1293,7 +1293,7 @@ async function activatePageHighlight(activeTab, port, request) {
 		});
 
 		chrome.storage.local.get(['allFeatures'], function (result) {
-			JSON.parse(result['allFeatures']).map(function (value, index) {
+			JSON.parse(result['allFeatures']).forEach(function (value, index) {
 				if (value.id === 'pageHighlight') {
 					if (value.settings.checkboxPageHighlight1 === true) {
 						// All Page Elements
@@ -1834,7 +1834,7 @@ async function activateExportElement(activeTab, port, request) {
 	let regexSeven = new RegExp(/\/[^/]*$/gm); // Remove everything after last slash
 
 	// All Same Origin Stylesheets
-	[...document.styleSheets].map(function (valueOne, indexOne) {
+	[...document.styleSheets].forEach(function (valueOne, indexOne) {
 		try {
 			allStyleSheets[indexOne] = [...valueOne.cssRules]
 				.map(function (valueTwo, indexTwo) {
@@ -1846,7 +1846,7 @@ async function activateExportElement(activeTab, port, request) {
 			// Relative CSS URL to Absolute CSS URL
 			if (allStyleSheets[indexOne].includes('url(')) {
 				let matchStyleURLs = [...allStyleSheets[indexOne].matchAll(regexZero)];
-				matchStyleURLs.map(function (valueTwo, indexTwo) {
+				matchStyleURLs.forEach(function (valueTwo, indexTwo) {
 					if (
 						!valueTwo[1].replaceAll(regexSix, '').startsWith('//') &&
 						!valueTwo[1].replaceAll(regexSix, '').startsWith('blob:') &&
@@ -2080,7 +2080,7 @@ async function activateExportElement(activeTab, port, request) {
 				filteredCSS.walkDecls(function (decl) {
 					if (decl.value.includes('var(')) {
 						let usedVars = [...new Set(decl.value.match(regexOne))];
-						usedVars.map(function (valueOne, indexOne) {
+						usedVars.forEach(function (valueOne, indexOne) {
 							let usedVarsName = valueOne.match(regexTwo);
 							if (targetVars.getPropertyValue(usedVarsName[0]) !== '') {
 								decl.value = decl.value.replaceAll(
@@ -2146,7 +2146,7 @@ async function activateExportElement(activeTab, port, request) {
 				// Relative to Absolute, HREF + SRC
 				if (filteredHTML.includes('href=') || filteredHTML.includes('src=')) {
 					let matchHTMLURLs = [...filteredHTML.matchAll(regexThree)];
-					matchHTMLURLs.map(function (value, index) {
+					matchHTMLURLs.forEach(function (value, index) {
 						if (
 							!value[2].replaceAll(regexSix, '').startsWith('//') &&
 							!value[2].replaceAll(regexSix, '').startsWith('blob:') &&
@@ -2171,7 +2171,7 @@ async function activateExportElement(activeTab, port, request) {
 				// Relative to Absolute, SRCSET
 				if (filteredHTML.includes('srcset=') || filteredHTML.includes('srcSet=')) {
 					let matchHTMLURLs = [...filteredHTML.matchAll(regexFive)];
-					matchHTMLURLs.map(function (valueOne, indexOne) {
+					matchHTMLURLs.forEach(function (valueOne, indexOne) {
 						let valueOnee = valueOne[0];
 						valueOnee
 							.replaceAll(/(\s+[0-9]+(\.[0-9]+)?[wx])/gm, '')
@@ -2179,7 +2179,7 @@ async function activateExportElement(activeTab, port, request) {
 							.replaceAll(/(srcset=['"]|srcSet=['"])/gm, '')
 							.replaceAll(/['"]/gm, '')
 							.split(',')
-							.map(function (valueTwo, indexTwo) {
+							.forEach(function (valueTwo, indexTwo) {
 								if (
 									!valueTwo.replaceAll(regexSix, '').startsWith('//') &&
 									!valueTwo.replaceAll(regexSix, '').startsWith('blob:') &&
@@ -2222,7 +2222,7 @@ async function activateExportElement(activeTab, port, request) {
 
 				//CodePen or Save to File
 				chrome.storage.local.get(['allFeatures'], function (result) {
-					JSON.parse(result['allFeatures']).map(function (value, index) {
+					JSON.parse(result['allFeatures']).forEach(function (value, index) {
 						if (value.id === 'exportElement') {
 							// Export to Codepen
 							if (value.settings.checkboxExportElement1 === true) {
@@ -2340,7 +2340,7 @@ function deactivateExportElement(activeTab, port, request) {
 
 function activateClearAllCache(activeTab, port, request) {
 	chrome.storage.local.get(['allFeatures'], function (result) {
-		JSON.parse(result['allFeatures']).map(function (value, index) {
+		JSON.parse(result['allFeatures']).forEach(function (value, index) {
 			if (value.id === 'clearAllCache') {
 				let portTwo = chrome.runtime.connect({name: 'portTwo'});
 				portTwo.postMessage({action: 'clearAllCache', settings: value.settings});
