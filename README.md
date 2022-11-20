@@ -34,13 +34,6 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * [Brave Browser](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Mozilla Firefox]() - Coming Really Soon<br>
 
-### Build Manually
-```
-pnpm install
-pnpm run build
-pnpm browserify
-```
-
 ### Built With
 * ```ReactJS``` - Used By SuperDev Popup
 * ```TailWindCSS``` - Used By SuperDev Popup
