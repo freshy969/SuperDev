@@ -61,3 +61,6 @@ https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-
 * ```Optimise``` Export Element Algorithm
 * ```Optimise``` Code For Performance/Design
 * ```Add Support``` for Mozilla Firefox
+
+#
+Feel free to reach out to me through email at magnetonx@gmail.com or [on LinkedIn](https://www.linkedin.com/in/abdullahchoudhary/) if you have any questions or feedback! Hope you find this useful 😀
