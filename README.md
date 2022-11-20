@@ -8,14 +8,14 @@ An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders Th
 
 * ```Text Editor``` - Edit Any Website's Text Easily
 * ```Page Ruler``` - Measure Distance Between Two Points
-* ```Color Picker``` - Pick Site Colors, Even From Images in Rgb/hex
+* ```Color Picker``` - Pick Site Colors, Even From Images in RGB/HEX
 * ```Color Palette``` - Website's Colors Palette in Rgb/hex
 * ```Ppage Guideline``` - Check Alignments in Real-time With Guidelines
 * ```Page Highlight``` - Highlight Page Elements With Different Colors
 * ```Move Element``` - Move Any Element Within the Page
 * ```Delete Element``` - Delete Any Element From the Page
-* ```Export Element``` - Export Html + Used Css of Any Page Element
-* ```Clear All Cache``` - Clear Cache/cookie/localstorage
+* ```Export Element``` - Export HTML + Used CSS of Any Page Element
+* ```Clear All Cache``` - Clear Cache/Cookie/LocalStorage
 <br>
 
 https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-94a1-0fca804ba7ad.mov
@@ -25,8 +25,8 @@ https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-
 * Those Fetch Requests Are Used to Fetch the Site's External Stylesheets by Export Element Feature.
 
 ### Additional Features
-* ```Dark/light Theme``` - Choose Between Dark and Light Mode
-* ```Minimise Popup``` - Manual/auto Minimise Popup
+* ```Dark/Light Mode``` - Choose Between Dark and Light Mode
+* ```Minimise Popup``` - Manual/Auto Minimise Popup
 * ```Move Popup``` - Move Popup Anywhere on the Page
 * ```Customise Settings``` - Choose From Multiple Settings
 
