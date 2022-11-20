@@ -50,17 +50,17 @@ https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-
 * if None of This Work, Submit an Issue [here](Https://github.com/twoabd/superdev/issues/new).
 
 ### Important Note
-* ```Page Ruler``` and ```color Picker``` Both Takes Page Screenshots, Process That Image to Find the Distance Between Two Objects and the Color of That Area. It Means It Won't Work Properly on Sliders and Moving Elements of the Page.
+* ```Page Ruler``` and ```Color Picker``` Both Takes Page Screenshots, Process That Image to Find the Distance Between Two Objects and the Color of That Area. It Means It Won't Work Properly on Sliders and Moving Elements of the Page.
 * ```Export to Codepen``` Functionality of Export Element Features Won't Work on Some Super Secure Sites Because of Csp (Form Action) Header, Save to File Instead in That Case. Due to Issues in Chrome Api Mv3, Csp Header Can't Be Modified Programmatically, and Disabling Csp Will Be a Major Security Risk, That's Why I Am Leaving It as It is.
 * ```Export Element``` Feature Currently Disables Cors on All Fonts, Images, and Media Files Across All Websites. This is to Ensure All Fonts, Images, and Media Files Load Correctly on Codepen and Exported Files on the User's Device. However, I Still Need to Figure Out Whether to Retain This Feature or Remove It.
-* ```Superdev``` is Saving You and Your Team a Good Amount of Time and Effort? [buy Me a Coffee](Https://www.buymeacoffee.com/abdollah) ☕
+* ```Superdev``` is Saving You and Your Team a Good Amount of Time and Effort? [Buy Me a Coffee](Https://www.buymeacoffee.com/abdollah) ☕
 
 ### Manual Install
 You Can Run Superdev Locally Without Having to Install It From the Chrome Store. Here's How:
 
 * Download the Code. In the Web Version of Github, You Can Do That by Clicking the Green "Code" Button, and Then "Download Zip".
 * Go to chrome://extensions/ in Your Browser, and Enable Developer Mode
-* Unzip First and Drag the Build Folder or Click on the "Load Unpacked" Button and Locate the Folder.
+* Unzip First and Drag the Build Folder or Click on the "Load Unpacked" Button and Locate the Build Folder.
 * That's It, You Will Now Be Able to Use Superdev Locally. Make Sure You Pin It on the Toolbar by Clicking the "Puzzle" Icon in the Toolbar and Pinning Superdev.
 
 ### Todo:
