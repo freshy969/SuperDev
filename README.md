@@ -52,11 +52,9 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * ```Page Ruler``` and ```Color Picker``` Both Takes Page Screenshots, Process That Image to Find the Distance Between Two Objects and The Color of That Area. It Means It Won't Work Properly on Sliders and Moving Elements of The Page.
 * ```Export to Codepen``` Functionality of Export Element Features Won't Work on Some Super Secure Sites Because of CSP (Form Action) Header, Save to File Instead in That Case. Due to Issues in Chrome API MV3, CSP Header Can't Be Modified Programmatically, and Disabling CSP Will Be A Major Security Risk, That's Why I Am Leaving It As It Is.
 * ```Export Element``` Feature Currently Disables CORS on All Fonts, Images, and Media Files Across All Websites. This Is To Ensure All Fonts, Images, and Media Files Load Correctly on Codepen and Exported Files on The User's Device. However, I Still Need to Figure Out Whether to Retain This Feature or Remove It.
+* ```Superdev``` Is Saving You And Your Team a Good Amount of Time And Effort? [Buy Me A Coffee](https://www.buymeacoffee.com/abdollah) ☕
 
 ### TODO:
 * ```Optimise``` Export Element Algorithm
 * ```Optimise``` Code For Performance/Design
 * ```Add Support``` for Mozilla Firefox
-
-### Support
-* ```Superdev``` Is Saving You And Your Team a Good Amount of Time And Effort? [Buy Me A Coffee](https://www.buymeacoffee.com/abdollah) ☕
