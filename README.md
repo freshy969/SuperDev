@@ -16,8 +16,9 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * ```Delete Element``` - Delete Any Element From The Page
 * ```Export Element``` - Export HTML + Used CSS of Any Page Element
 * ```Clear All Cache``` - Clear Cache/Cookie/LocalStorage
+<br>
 
-https://blog.sixsilicon.com/blog/others/4.mp4
+https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-94a1-0fca804ba7ad.mov
 
 ### Privacy Note
 * It Does Not Collect Any Data At All And Is Fully Offline Except For Two Fetch Requests.
