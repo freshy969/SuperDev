@@ -61,7 +61,7 @@ You Can Run Superdev Locally Without Having to Install It From the Chrome Store.
 * Download the Code. In the Web Version of Github, You Can Do That by Clicking the Green "Code" Button, and Then "Download Zip".
 * Go to chrome://extensions/ in Your Browser, and Enable Developer Mode
 * Unzip First and Drag the Build Folder or Click on the "Load Unpacked" Button and Locate the Build Folder.
-* That's It, You Will Now Be Able to Use Superdev Locally. Make Sure You Pin It on the Toolbar by Clicking the "Puzzle" Icon in the Toolbar and Pinning Superdev.
+* That's It, You Will Now Be Able to Use Superdev Locally. Make Sure You Pin It on the Toolbar by Clicking the "Puzzle" Icon in the Toolbar (Top Right) and Pinning Superdev.
 
 ### Todo:
 * ```Optimise``` Export Element Algorithm
