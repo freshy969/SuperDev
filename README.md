@@ -68,7 +68,7 @@ Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From B
 * If It's Not Working On A Site, Try Turning It Off And/Or Refreshing The Page
 * If It's Still Not Working, Uninstall and Reinstall The Extension
 *  Make Sure You're Running The Latest Version of SuperDev + The Browser
-* If None of This Work, Submit An Issue
+* If None of This Work, Submit An Issue [Here](https://github.com/twoabd/SuperDev/issues/ne)
 
 ### Important Note
 * Page Ruler and Color Picker Both Takes Page Screenshots, Process That Image to Find the Distance Between Two Objects and The Color of That Area. It Means It Won't Work Properly on Sliders and Moving Elements of The Page
