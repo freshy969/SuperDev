@@ -17,6 +17,8 @@ An Open-Source Swiss Army Toolbox for Web Designers, Developers, and Founders th
 * ```Export Element``` - Export HTML + Used CSS of Any Page Element
 * ```Clear All Cache``` - Clear Cache/Cookie/LocalStorage
 
+https://blog.sixsilicon.com/blog/others/4.mp4
+
 ### Privacy Note
 * It Does Not Collect Any Data At All And Is Fully Offline Except For Two Fetch Requests.
 * Those Fetch Requests Are Used To Fetch The Site's External Stylesheets By Export Element Feature.
