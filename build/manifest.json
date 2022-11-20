@@ -1,0 +1,70 @@
+{
+	"name": "SuperDev",
+	"version": "1.1.2",
+	"author": "Choudhary Abdullah",
+	"description": "A Swiss Army Toolbox for Web Designers and Developers.",
+	"manifest_version": 3,
+	"minimum_chrome_version": "88",
+	"permissions": ["storage", "activeTab", "contextMenus", "tabs", "scripting", "management", "browsingData", "declarativeNetRequest"],
+	"host_permissions": ["http://*/*", "https://*/*"],
+	"background": {
+		"service_worker": "js/bg.js",
+		"type": "module"
+	},
+	"commands": {
+		"_execute_action": {
+			"suggested_key": {
+				"chromeos": "Ctrl+Shift+S",
+				"linux": "Ctrl+Shift+S",
+				"mac": "Ctrl+Shift+S",
+				"windows": "Ctrl+Shift+S"
+			}
+		},
+		"clearAllCache": {
+			"description": "Clear All Cache",
+			"suggested_key": {
+				"chromeos": "Ctrl+Shift+E",
+				"linux": "Ctrl+Shift+E",
+				"mac": "Ctrl+Shift+E",
+				"windows": "Ctrl+Shift+E"
+			}
+		}
+	},
+	"action": {
+		"default_title": "SuperDev"
+	},
+	"icons": {
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"content_scripts": [
+		{
+			"css": ["css/cs.css"],
+			"js": [
+				"libs/js/jquery.min.js",
+				"libs/js/jquery-ui.min.js",
+				"libs/js/beautify.min.js",
+				"libs/js/beautify-css.min.js",
+				"libs/js/beautify-html.min.js",
+				"js/cs.js"
+			],
+			"matches": ["http://*/*", "https://*/*"]
+		}
+	],
+	"web_accessible_resources": [
+		{
+			"matches": ["http://*/*", "https://*/*"],
+			"resources": ["index.html", "css/*", "icons/*", "js/*", "libs/*", "media/*"]
+		}
+	],
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"id": "1",
+				"enabled": true,
+				"path": "rules.json"
+			}
+		]
+	}
+}
