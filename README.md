@@ -41,9 +41,6 @@ pnpm run build
 pnpm browserify
 ```
 
-Now Enable Developer Mode in Chrome Extension and Load Unpacked Extension From Build Folder.
-
-
 ### Built With
 * ```ReactJS``` - Used By SuperDev Popup
 * ```TailWindCSS``` - Used By SuperDev Popup
