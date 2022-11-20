@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/2.png">
+  <img src="https://github.com/twoabd/superdev/blob/main/screenshots/github/1.png">
 </p>
 
 ## SuperDev &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
