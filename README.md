@@ -4,6 +4,8 @@
 
 ## SuperDev &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+<a href="https://www.producthunt.com/posts/superdev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-superdev" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=368130&theme=light" alt="SuperDev - All&#0045;in&#0045;one&#0032;browser&#0032;extension&#0032;for&#0032;web&#0032;designers&#0032;&#0038;&#0032;developers | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders That Minimises the Development/Designing Time and Provides Various Tools to Debug the Web Without Any Hassle.
 
 * ```Text Editor``` - Edit Any Website's Text Easily
