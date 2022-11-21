@@ -55,11 +55,11 @@ https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-
 * ```JSBeautify``` - Used by Export Element
 
 ### Troubleshooting
-* Bug Reports Are Most Welcome.
-* if It's Not Working on a Site, Try Turning It Off and/or Refreshing the Page.
-* if It's Still Not Working, Uninstall and Reinstall the Extension.
+* This is a Very Active Project, and Bug Reports Are Most Welcome.
+* If It's Not Working on a Site, Try Turning It Off and/or Refreshing the Page.
+* If It's Still Not Working, Uninstall and Reinstall the Extension.
 * Make Sure You're Running the Latest Version of Superdev + the Browser.
-* if None of This Work, Submit an Issue [Here](Https://github.com/twoabd/superdev/issues/new).
+* If None of This Work, Submit an Issue [Here](Https://github.com/twoabd/superdev/issues/new).
 
 ### Important Note
 * ```Page Ruler``` and ```Color Picker``` Both Takes Page Screenshots, Process That Image to Find the Distance Between Two Objects and the Color of That Area. It Means It Won't Work Properly on Sliders and Moving Elements of the Page.
