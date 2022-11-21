@@ -32,6 +32,16 @@ https://user-images.githubusercontent.com/52224233/202926098-43390400-63e2-4ede-
 * ```Move Popup``` - Move Popup Anywhere on the Page
 * ```Customise Settings``` - Choose From Multiple Settings
 
+### About Export Element
+* It Removes All ```Unused CSS``` From the Exported Element, So Only Used CSS Will Be Included in the Results.
+* It Converts All Relative Urls to Absolute, It Means All ```href```, ```src```, ```srcset``` or CSS ```url()``` Will Work Perfectly After Export.
+* It Works Perfectly Well With ```@media```, ```@font-face```, ```@supports```, ```@imports``` and ```@keyframes``` and Retains Only the Used Ones.
+* It Works Perfectly Well With CSS ```vars()```, and Converts CSS Variable Values to Actual Value.
+* It Removes Comments From CSS, Add Browser Prefixes Such as ```-moz```, ```-webkit``` Wherever Necessary.
+* It Removes Overridden, Discarded, Unused CSS Rules Completely.
+* It Converts to Shorthands Wherever Necessary and Formats Everything Before Export.
+* It's Algorithm (500+ Lines) is Second to None Except CSS Scan's (Paid) That Too With a Negligible 5-10% Difference in Precision.
+
 ### Install On
 * [Google Chrome](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
 * [Microsoft Edge](https://chrome.google.com/webstore/detail/superdev/jlkikimlceonbmfjieipbonnglnlchhl) - Working Perfectly
