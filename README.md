@@ -6,7 +6,7 @@
 
 <a href="https://www.producthunt.com/posts/superdev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-superdev" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=368130&theme=light" alt="SuperDev - All&#0045;in&#0045;one&#0032;browser&#0032;extension&#0032;for&#0032;web&#0032;designers&#0032;&#0038;&#0032;developers | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
-An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders That Minimises the Development/Designing Time and Provides Various Tools to Debug the Web Without Any Hassle.
+An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders That Minimises the Development/Designing Time and Provides Various Tools to Debug the Web Without Any Hassle. List of Features Below -
 
 * ```Text Editor``` - Edit Any Website's Text Easily
 * ```Page Ruler``` - Measure Distance Between Two Points
@@ -74,6 +74,19 @@ You Can Run Superdev Locally Without Having to Install It From the Chrome Store.
 * Go to chrome://extensions/ in Your Browser, and Enable Developer Mode
 * Unzip First and Drag the Build Folder or Click on the "Load Unpacked" Button and Locate the Build Folder.
 * That's It, You Will Now Be Able to Use Superdev Locally. Make Sure You Pin It on the Toolbar by Clicking the "Puzzle" Icon in the Toolbar (Top Right) and Pinning Superdev.
+
+### Coming in Pro
+* ```CSS Inspector and Viewer```
+* ```Padding/Margin Visualiser```
+* ```Add Custom JS and CSS```
+* ```Fonts Inspector and Fonts List```
+* ```Website Font Changer```
+* ```Extract Media/Images/SVGs```
+* ```Take Full Site Screenshots```
+* ```Responsive Site Viewer```
+* ```Quick Source Code Viewer```
+* ```Site Info + Technology Lookup```
+* ```And More ++```
 
 ### Todo:
 * ```Document Codebase``` Properly
