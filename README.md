@@ -4,13 +4,15 @@
 
 ## SuperDev &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders That Minimises the Development/designing Time and Provides Various Tools to Debug the Web Without Any Hassle.
+<a href="https://www.producthunt.com/posts/superdev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-superdev" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=368130&theme=light" alt="SuperDev - All&#0045;in&#0045;one&#0032;browser&#0032;extension&#0032;for&#0032;web&#0032;designers&#0032;&#0038;&#0032;developers | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
+An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders That Minimises the Development/Designing Time and Provides Various Tools to Debug the Web Without Any Hassle.
 
 * ```Text Editor``` - Edit Any Website's Text Easily
 * ```Page Ruler``` - Measure Distance Between Two Points
 * ```Color Picker``` - Pick Site Colors, Even From Images in RGB/HEX
 * ```Color Palette``` - Website's Colors Palette in Rgb/hex
-* ```Ppage Guideline``` - Check Alignments in Real-time With Guidelines
+* ```Page Guideline``` - Check Alignments in Real-time With Guidelines
 * ```Page Highlight``` - Highlight Page Elements With Different Colors
 * ```Move Element``` - Move Any Element Within the Page
 * ```Delete Element``` - Delete Any Element From the Page
@@ -65,10 +67,10 @@ You Can Run Superdev Locally Without Having to Install It From the Chrome Store.
 
 ### Todo:
 * ```Optimise``` Export Element Algorithm
-* ```Optimise``` Code for Performance/Design
+* ```Optimise``` Codebase for Performance/Design
 * ```Add Support``` for Mozilla Firefox
 * ```Translate``` to Other Languages
-* ```Convert``` Code to TypeScript
+* ```Move``` Codebase to TypeScript
 
 #
 Feel Free to Reach Out to Me Through Email at magnetonx@gmail.com or [Linkedin](https://www.linkedin.com/in/abdullahchoudhary/) if You Have Any Questions or Feedback! Hope You Find This Useful 😀
