@@ -10,7 +10,7 @@ An Open-source Swiss Army Toolbox for Web Designers, Developers, and Founders Th
 * ```Page Ruler``` - Measure Distance Between Two Points
 * ```Color Picker``` - Pick Site Colors, Even From Images in RGB/HEX
 * ```Color Palette``` - Website's Colors Palette in Rgb/hex
-* ```Ppage Guideline``` - Check Alignments in Real-time With Guidelines
+* ```Page Guideline``` - Check Alignments in Real-time With Guidelines
 * ```Page Highlight``` - Highlight Page Elements With Different Colors
 * ```Move Element``` - Move Any Element Within the Page
 * ```Delete Element``` - Delete Any Element From the Page
