@@ -65,10 +65,10 @@ You Can Run Superdev Locally Without Having to Install It From the Chrome Store.
 
 ### Todo:
 * ```Optimise``` Export Element Algorithm
-* ```Optimise``` Code for Performance/Design
+* ```Optimise``` Codebase for Performance/Design
 * ```Add Support``` for Mozilla Firefox
 * ```Translate``` to Other Languages
-* ```Convert``` Code to TypeScript
+* ```Move``` Codebase to TypeScript
 
 #
 Feel Free to Reach Out to Me Through Email at magnetonx@gmail.com or [Linkedin](https://www.linkedin.com/in/abdullahchoudhary/) if You Have Any Questions or Feedback! Hope You Find This Useful 😀
